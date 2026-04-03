@@ -838,6 +838,130 @@
       line-height: 1.7;
     }
 
+    /* ── CONTACT MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 16, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 2.5rem;
+      max-width: 480px;
+      width: 90%;
+      position: relative;
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.2rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-soft);
+      cursor: pointer;
+      padding: 0.25rem;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--leather);
+    }
+
+    .modal-title {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--leather);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-family: var(--display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: var(--leather);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--terracotta);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--dust);
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: 0.9rem;
+      font-family: var(--display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: white;
+      background: var(--terracotta);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .form-submit:hover {
+      background: var(--terracotta-light);
+      transform: translateY(-1px);
+    }
+
     /* ── SALOON DOOR ── */
     .saloon-door-section {
       padding: 3rem 2rem;
@@ -1109,7 +1233,7 @@
 
   <!-- LEDE -->
   <div class="lede">
-    <p class="line-mask">I make products, tools + growth playbooks for founders + operators.</p>
+    <p class="line-mask">I make products, tools + growth engines for founders + operators.</p>
     <div class="stamp scroll-reveal" style="margin-top: 3rem;">
       <img src="images/logo-p.png" alt="Provisions" class="stamp-logo">
     </div>
@@ -1135,7 +1259,7 @@
         <p>Reddit plays, short-form UGC, quiz funnels, interactive tools. Customers from content, not ad spend.</p>
       </div>
     </div>
-    <p class="work-cta scroll-reveal">Taking on new client work. <a href="#contact">Let's talk &darr;</a></p>
+    <p class="work-cta scroll-reveal">Taking on new client work. <a href="#contact" onclick="event.preventDefault(); openContactModal();">Let's talk &darr;</a></p>
   </section>
 
   <!-- WORK -->
@@ -1200,19 +1324,19 @@
 
   <!-- WHAT IT'S LIKE -->
   <section class="section" id="experience">
-    <p class="section-label scroll-reveal">What Working With Me Feels Like</p>
+    <p class="section-label scroll-reveal">The Easiest Person You'll Work With</p>
     <div class="experience-grid">
       <div class="experience-item">
-        <h3>I reply fast.</h3>
-        <p>Not "within 24 hours" fast. Actually fast. You'll wonder if I sleep.</p>
+        <h3>I work fast.</h3>
+        <p>Most things go from a conversation to a working product in a couple weeks.</p>
       </div>
       <div class="experience-item">
-        <h3>I'm easy.</h3>
-        <p>No scope creep drama, no jargon, no disappearing for two weeks. You'll feel like you're texting a friend who happens to make software.</p>
+        <h3>I figure it out.</h3>
+        <p>I'm a student of the game. I'll find the right solution.</p>
       </div>
       <div class="experience-item">
-        <h3>I deliver, not present.</h3>
-        <p>No decks. No roadmaps. No "discovery phases." You tell me the problem in plain English, you get a working product.</p>
+        <h3>I deliver.</h3>
+        <p>No ego, all output.</p>
       </div>
     </div>
   </section>
@@ -1249,11 +1373,37 @@
   <section class="cta" id="contact">
     <div class="cta-inner">
       <p class="section-label scroll-reveal">Contact</p>
-      <p class="cta-headline scroll-reveal scroll-reveal-delay-1">You've hired people before who made it hard.<br>I make it easy.</p>
-      <p class="scroll-reveal scroll-reveal-delay-2">Tell me what you need. I'll tell you how fast I can have it done.</p>
-      <a href="mailto:sam@provisions.studio?subject=I%20need%20something%20made&body=Here%E2%80%99s%20what%20I%20need%3A%0A%0A" class="cta-link scroll-reveal scroll-reveal-delay-3">Get in Touch</a>
+      <p class="cta-headline scroll-reveal scroll-reveal-delay-1">Come on in.</p>
+      <p class="scroll-reveal scroll-reveal-delay-2">The shelves are stocked.</p>
+      <button class="cta-link scroll-reveal scroll-reveal-delay-3" onclick="openContactModal()">Get in Touch</button>
     </div>
   </section>
+
+  <!-- CONTACT MODAL -->
+  <div class="modal-overlay" id="contactModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeContactModal()" aria-label="Close">&times;</button>
+      <h3 class="modal-title">What do you need?</h3>
+      <form class="modal-form" action="https://formsubmit.co/sam@provisions.work" method="POST">
+        <input type="hidden" name="_subject" value="New inquiry from provisions.work">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://www.provisions.work">
+        <div class="form-group">
+          <label for="contact-name">Name</label>
+          <input type="text" id="contact-name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="contact-email">Email</label>
+          <input type="email" id="contact-email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="contact-message">Tell me what you're working on</label>
+          <textarea id="contact-message" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send it over</button>
+      </form>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer>
@@ -1309,6 +1459,25 @@
       document.querySelector('.hamburger').classList.remove('open');
       document.body.style.overflow = '';
     }
+
+    // Contact modal
+    function openContactModal() {
+      document.getElementById('contactModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeContactModal() {
+      document.getElementById('contactModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('contactModal').addEventListener('click', function(e) {
+      if (e.target === this) closeContactModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeContactModal();
+    });
 
     // ── GSAP ANIMATIONS ──
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText, ScrambleTextPlugin, DrawSVGPlugin, CustomEase);
