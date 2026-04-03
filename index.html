@@ -499,10 +499,11 @@
 
     .offer-lane h3 {
       font-family: var(--display);
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: var(--leather);
       margin-bottom: 0.75rem;
+      white-space: nowrap;
     }
 
     .offer-lane p {
@@ -547,7 +548,7 @@
 
     .work-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-top: 2rem;
     }
@@ -571,34 +572,30 @@
       box-shadow: 0 4px 20px rgba(26, 23, 20, 0.06);
     }
 
-    .work-card-icon {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      line-height: 1;
-    }
-
-    .work-card-tag {
-      font-family: var(--display);
-      font-size: 0.55rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--terracotta);
-      margin-bottom: 0.6rem;
-    }
-
     .work-card h3 {
       font-family: var(--display);
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--leather);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
     }
 
     .work-card p {
       font-size: 0.8rem;
       color: var(--text-soft);
       line-height: 1.55;
+    }
+
+    .work-card-role {
+      margin-top: auto;
+      padding-top: 1rem;
+      font-family: var(--display);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      opacity: 0.7;
     }
 
     .work-cta {
@@ -1124,7 +1121,7 @@
     <div class="offer-lanes">
       <div class="offer-lane">
         <p class="lane-label">Service &rarr; Software</p>
-        <h3>Scale without hiring.</h3>
+        <h3>One process. Infinite scale.</h3>
         <p>You deliver the same service to every client. I turn that into software so you can take on more without adding headcount.</p>
       </div>
       <div class="offer-lane">
@@ -1133,50 +1130,52 @@
         <p>I take your existing workflows and make them intelligent. Custom tools that use your data to save hours every week.</p>
       </div>
       <div class="offer-lane">
-        <p class="lane-label">Custom Projects</p>
-        <h3>From idea to live product.</h3>
-        <p>You describe it, I design and deliver it. Websites, apps, internal tools. Done in weeks.</p>
+        <p class="lane-label">Growth Engines</p>
+        <h3>Organic reach at paid scale.</h3>
+        <p>Reddit plays, short-form UGC, quiz funnels, interactive tools. Customers from content, not ad spend.</p>
       </div>
     </div>
+    <p class="work-cta scroll-reveal">Taking on new client work. <a href="#contact">Let's talk &darr;</a></p>
   </section>
 
   <!-- WORK -->
   <section class="work-section" id="work">
     <p class="section-label scroll-reveal">Work</p>
-    <h2 class="scroll-reveal" style="font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--leather); margin-bottom: 0;">The Goods.</h2>
+    <h2 class="scroll-reveal" style="font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--leather); margin-bottom: 0.6rem;">The Goods.</h2>
+    <p class="scroll-reveal" style="color: var(--text-soft); font-size: 1rem; margin-bottom: 2rem;">Custom goods for clients. A few house brands of my own.</p>
     <div class="work-grid" id="workGrid">
-      <a class="work-card" data-work="0">
-        <div class="work-card-icon">&#9878;</div>
-        <p class="work-card-tag">Client Work</p>
-        <h3>Agency Platform</h3>
-        <p>Client analysis + delivery system for a marketing agency.</p>
-      </a>
-      <a class="work-card" data-work="1">
-        <div class="work-card-icon">&#9873;</div>
-        <p class="work-card-tag">Client Work</p>
-        <h3>Lead Intake System</h3>
-        <p>Construction database + lead pipeline for a realtor.</p>
-      </a>
-      <a href="https://ourlittlereveal.com" target="_blank" rel="noopener" class="work-card" data-work="2">
-        <div class="work-card-icon">&#10084;</div>
-        <p class="work-card-tag">Own Product</p>
-        <h3>Little Reveal</h3>
-        <p>The most beautiful way to share your pregnancy news.</p>
-      </a>
-      <a href="https://getplacecard.com" target="_blank" rel="noopener" class="work-card" data-work="3">
-        <div class="work-card-icon">&#9830;</div>
-        <p class="work-card-tag">Own Product</p>
+      <a href="https://getplacecard.com" target="_blank" rel="noopener" class="work-card" data-work="0">
         <h3>PlaceCard</h3>
         <p>Wedding planning tool. Budget, guests, seating, vendors.</p>
+        <p class="work-card-role">Founder</p>
       </a>
-      <a href="https://www.mylawnhq.com" target="_blank" rel="noopener" class="work-card" data-work="4">
-        <div class="work-card-icon">&#9752;</div>
-        <p class="work-card-tag">Own Product</p>
+      <a class="work-card" data-work="1">
+        <h3>Internal Agency Platform</h3>
+        <p>AI-powered content intelligence, performance analytics, and client reporting platform for a marketing agency — trained on their own data.</p>
+        <p class="work-card-role">Client Work</p>
+      </a>
+      <a href="https://www.mylawnhq.com" target="_blank" rel="noopener" class="work-card" data-work="2">
         <h3>LawnHQ</h3>
         <p>AI lawn care advisor for your zip code + grass type.</p>
+        <p class="work-card-role">Partner</p>
+      </a>
+      <a class="work-card" data-work="3">
+        <h3>Reddit Responder</h3>
+        <p>Scrapes niche-relevant subreddits, scores posts by relevance, and drafts value-add replies. Not an agent.</p>
+        <p class="work-card-role">House Tool</p>
+      </a>
+      <a href="https://ourlittlereveal.com" target="_blank" rel="noopener" class="work-card" data-work="4">
+        <h3>Little Reveal</h3>
+        <p>The most beautiful way to share pregnancy news + updates with your inner circle.</p>
+        <p class="work-card-role">Founder</p>
+      </a>
+      <a class="work-card" data-work="5">
+        <h3>Interactive Lead Magnets</h3>
+        <p>Mini games, quiz funnels and engaging tools for your audience.</p>
+        <p class="work-card-role">Client Work</p>
       </a>
     </div>
-    <p class="work-cta scroll-reveal">Available for select client work. <a href="#contact">Let's talk &darr;</a></p>
+    <p class="scroll-reveal" style="color: var(--text-soft); font-size: 0.9rem; margin-top: 1.5rem; font-style: italic;">+ a rotating shelf of side projects and experiments.</p>
   </section>
 
   <div class="divider"><svg class="divider-svg" viewBox="0 0 1100 2" preserveAspectRatio="none"><line class="divider-draw" x1="0" y1="1" x2="1100" y2="1"/></svg></div>
