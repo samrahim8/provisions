@@ -1819,9 +1819,13 @@
     function updateActiveNav() {
       var scrollPos = window.scrollY + 150;
       var current = '';
+      var heroBottom = document.querySelector('.hero').offsetTop + document.querySelector('.hero').offsetHeight;
       var atBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50;
 
-      if (atBottom) {
+      if (scrollPos < heroBottom) {
+        // Still in hero — no active nav
+        current = '';
+      } else if (atBottom) {
         current = 'contact';
       } else {
         sections.forEach(function(section) {
