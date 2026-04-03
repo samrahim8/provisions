@@ -775,6 +775,95 @@
       line-height: 1.7;
     }
 
+    /* ── LINK PREVIEW MODAL ── */
+    .link-preview-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 16, 0.5);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .link-preview-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .link-preview {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 90vh;
+      background: var(--bg);
+      border-radius: 16px 16px 0 0;
+      z-index: 1000;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .link-preview.open {
+      transform: translateY(0);
+    }
+
+    .link-preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .link-preview-url {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      margin-right: 1rem;
+    }
+
+    .link-preview-close {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: var(--text-soft);
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .link-preview-close:hover {
+      color: var(--leather);
+    }
+
+    .link-preview iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
+
+    .link-preview-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 0.5rem auto 0;
+      flex-shrink: 0;
+    }
+
     /* ── CONTACT MODAL ── */
     .modal-overlay {
       position: fixed;
@@ -1400,6 +1489,17 @@
     </div>
   </div>
 
+  <!-- LINK PREVIEW -->
+  <div class="link-preview-overlay" id="linkPreviewOverlay"></div>
+  <div class="link-preview" id="linkPreview">
+    <div class="link-preview-handle"></div>
+    <div class="link-preview-header">
+      <span class="link-preview-url" id="linkPreviewUrl"></span>
+      <button class="link-preview-close" onclick="closeLinkPreview()">Done</button>
+    </div>
+    <iframe id="linkPreviewFrame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+  </div>
+
   <!-- GSAP + Plugins -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
@@ -1422,6 +1522,36 @@
       document.getElementById('navMenu').classList.remove('open');
       document.querySelector('.hamburger').classList.remove('open');
       document.body.style.overflow = '';
+    }
+
+    // Link preview slide-up (mobile)
+    function openLinkPreview(url) {
+      document.getElementById('linkPreviewUrl').textContent = url.replace(/^https?:\/\//, '');
+      document.getElementById('linkPreviewFrame').src = url;
+      document.getElementById('linkPreview').classList.add('open');
+      document.getElementById('linkPreviewOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLinkPreview() {
+      document.getElementById('linkPreview').classList.remove('open');
+      document.getElementById('linkPreviewOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(function() {
+        document.getElementById('linkPreviewFrame').src = '';
+      }, 350);
+    }
+
+    document.getElementById('linkPreviewOverlay').addEventListener('click', closeLinkPreview);
+
+    // Intercept external links on mobile
+    if (window.innerWidth <= 768) {
+      document.querySelectorAll('a[target="_blank"]').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          openLinkPreview(this.href);
+        });
+      });
     }
 
     // Contact modal
