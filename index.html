@@ -1055,6 +1055,8 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) and (min-width: 769px) {
       .work-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { white-space: normal; }
+      .offer-lane h3 { white-space: normal; }
     }
 
     @media (max-width: 768px) {
@@ -1126,6 +1128,14 @@
       .cta .cta-headline { font-size: clamp(1.8rem, 8vw, 3rem); }
 
       nav ul a { color: var(--text-soft); }
+
+      .work-cta { text-align: center; }
+
+      .stamp-logo { width: 55px; }
+
+      .cta-link { width: 100%; max-width: 320px; justify-content: center; }
+
+      footer { padding: 2.5rem 1.5rem; }
 
     }
 
@@ -1334,7 +1344,7 @@
     <div class="cta-inner">
       <p class="cta-headline scroll-reveal scroll-reveal-delay-1">Come on in.</p>
       <p class="scroll-reveal scroll-reveal-delay-2">The shelves are stocked.</p>
-      <button class="cta-link scroll-reveal scroll-reveal-delay-3" onclick="openContactModal()">Get in Touch</button>
+      <button class="cta-link scroll-reveal scroll-reveal-delay-3" onclick="openContactModal()">Let's Talk</button>
     </div>
   </section>
 
