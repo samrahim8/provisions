@@ -32,18 +32,6 @@
       --sans: 'Inter', -apple-system, sans-serif;
     }
 
-    [data-theme="dark"] {
-      --bg: #141210;
-      --bg-elevated: #1E1B18;
-      --leather: #F5F1EB;
-      --leather-mid: #C4B49A;
-      --terracotta: #C45A3A;
-      --terracotta-light: #D46B4A;
-      --dust: #3A332B;
-      --border: #332E28;
-      --text: #F5F1EB;
-      --text-soft: #A89880;
-    }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -131,10 +119,6 @@
       border-bottom-color: var(--border);
     }
 
-    [data-theme="dark"] nav.scrolled {
-      background: rgba(20, 18, 16, 0.92);
-    }
-
     .nav-inner {
       max-width: 1100px;
       margin: 0 auto;
@@ -188,35 +172,8 @@
       background: rgba(160, 125, 79, 0.1);
     }
 
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
 
-    .theme-toggle {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: rgba(255, 255, 255, 0.75);
-      padding: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: color 0.4s ease;
-      position: relative;
-      z-index: 200;
-    }
 
-    .theme-toggle:hover { color: white; }
-
-    nav.scrolled .theme-toggle { color: var(--text-soft); }
-    nav.scrolled .theme-toggle:hover { color: var(--leather); }
-
-    .theme-toggle .sun-icon { display: block; }
-    .theme-toggle .moon-icon { display: none; }
-    [data-theme="dark"] .theme-toggle .sun-icon { display: none; }
-    [data-theme="dark"] .theme-toggle .moon-icon { display: block; }
 
     .hamburger {
       display: none;
@@ -967,10 +924,6 @@
       transition: opacity 0.3s;
     }
 
-    [data-theme="dark"] .saloon-door-img {
-      filter: invert(0.85) sepia(0.2) saturate(0.5) brightness(1.1);
-      opacity: 0.5;
-    }
 
     /* ── CTA ── */
     .cta {
@@ -1112,9 +1065,6 @@
         background: var(--bg);
       }
 
-      [data-theme="dark"] nav.scrolled {
-        background: var(--bg);
-      }
 
       .hamburger { display: flex; }
 
@@ -1145,27 +1095,37 @@
       }
 
       .hero { padding: 5rem 1.2rem 3rem; }
+      .hero h1 { white-space: normal; }
       .hero-frame { padding: 2.5rem 1.5rem 2rem; }
 
       .section, .lede { padding: 3.5rem 1.5rem; }
       .offer { padding: 3.5rem 1.5rem; }
-      .cta { padding: 3.5rem 1.5rem; }
+      .cta { padding: 4rem 1.5rem; }
 
-      /* Hide desktop layouts, show carousels */
       .offer-lanes { grid-template-columns: 1fr; }
       .about { padding: 3.5rem 1.5rem; }
       .about-grid { grid-template-columns: 1fr; text-align: center; }
       .about-photo { width: 160px; height: 160px; margin: 0 auto; }
-      .about-cta { width: 100%; max-width: 280px; justify-content: center; }
-      .testimonials { padding: 5rem 1.5rem; }
+      .about-cta { width: 100%; max-width: 280px; justify-content: center; margin: 0 auto; }
+      .testimonials { padding: 3.5rem 1.5rem; }
       .testimonials-stage { min-height: 260px; }
       .work-grid { grid-template-columns: 1fr 1fr; }
-      .mobile-carousel { display: block; }
       .offer-terms { gap: 1.5rem; }
 
       .divider { padding: 0 1.5rem; }
 
       .work-section { padding: 3.5rem 1.5rem; }
+
+      .saloon-door-section { padding: 2rem 1.5rem; }
+      .saloon-door-img { width: 140px; }
+
+      .experience-grid { padding: 0; }
+
+      .modal { padding: 1.8rem; width: 95%; }
+
+      .cta .cta-headline { font-size: clamp(1.8rem, 8vw, 3rem); }
+
+      nav ul a { color: var(--text-soft); }
 
     }
 
@@ -1310,7 +1270,7 @@
       <img src="images/sam.webp" alt="Sam Rahim" class="about-photo scroll-reveal" data-speed="0.85" data-lag="0.3">
       <div class="about-text">
         <p class="section-label scroll-reveal">The Proprietor</p>
-        <h2 class="scroll-reveal">I'm Sam.</h2>
+        <h2 class="scroll-reveal">I'm <a href="https://samrahim.com" target="_blank" rel="noopener" style="color: var(--leather); text-decoration: underline; text-decoration-color: var(--terracotta); text-underline-offset: 4px; text-decoration-thickness: 2px;">Sam</a>.</h2>
         <p class="line-mask">A decade of doing the work. From Disney to venture-backed startups. Now, I run the counter.</p>
         <a href="#contact" class="about-cta scroll-reveal">Let's Talk</a>
       </div>
@@ -1440,25 +1400,6 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/CustomEase.min.js"></script>
 
   <script>
-    // Theme
-    (function() {
-      var stored = localStorage.getItem('theme');
-      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (stored === 'dark' || (!stored && prefersDark)) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
-    })();
-
-    function toggleTheme() {
-      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      if (isDark) {
-        document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    }
 
     // Mobile menu
     function toggleMenu() {
