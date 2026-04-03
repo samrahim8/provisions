@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Provisions — Sam Rahim</title>
-  <meta name="description" content="Provisions — a one-man product studio. Everything you'd hire a team for, behind one counter. Sam Rahim, Proprietor.">
+  <meta name="description" content="Provisions — products, tools + growth engines for founders and operators. Sam Rahim, Proprietor.">
   <meta property="og:title" content="Provisions — Sam Rahim">
-  <meta property="og:description" content="A one-man product studio. Everything you'd hire a team for, behind one counter.">
+  <meta property="og:description" content="Products, tools + growth engines for founders and operators. Sam Rahim, Proprietor.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.provisions.work">
+  <meta property="og:image" content="https://www.provisions.work/images/hero-bg.webp">
   <link rel="icon" type="image/png" href="images/logo-p.png">
   <link rel="apple-touch-icon" href="images/logo-p.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +25,7 @@
       --terracotta-light: #B8533A;
       --sage: #4A5E3E;
       --dust: #C4B49A;
-      --text: #1A1714;
+      --text: #2C2118;
       --text-soft: #6B6259;
       --border: #DDD7CC;
       --display: 'Syne', sans-serif;
@@ -81,18 +83,6 @@
       padding: 0 2rem;
     }
 
-    .divider-inner {
-      display: flex;
-      align-items: center;
-      gap: 0;
-    }
-
-    .divider-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
     .divider-svg {
       width: 100%;
       height: 2px;
@@ -104,19 +94,9 @@
       stroke-width: 1;
     }
 
-    .divider-ornament {
-      display: none;
-    }
-
     /* ── LINE-MASK REVEAL ── */
     .line-mask .split-line {
       overflow: hidden;
-    }
-
-    .rule {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 0;
     }
 
     /* ── SECTION LABEL ── */
@@ -294,7 +274,7 @@
       text-align: center;
       padding: 6rem 2rem 4rem;
       position: relative;
-      background: url('images/hero-bg.png') center center / cover no-repeat;
+      background: url('images/hero-bg.webp') center center / cover no-repeat;
     }
 
     .hero::before {
@@ -350,7 +330,7 @@
       font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #E8A88A;
+      color: var(--terracotta-light);
       margin-bottom: 0.2rem;
     }
 
@@ -994,7 +974,7 @@
 
     /* ── CTA ── */
     .cta {
-      background: url('images/cta-bg.png') center center / cover no-repeat;
+      background: url('images/cta-bg.webp') center center / cover no-repeat;
       padding: 8rem 2rem;
       text-align: center;
       position: relative;
@@ -1120,7 +1100,12 @@
     }
 
     /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) and (min-width: 769px) {
+      .work-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     @media (max-width: 768px) {
+      .offer-lane h3 { white-space: normal; }
       nav.scrolled {
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
@@ -1222,7 +1207,7 @@
         <li><a href="#offer" onclick="closeMenu()">The Offer</a></li>
         <li><a href="#work" onclick="closeMenu()">Work</a></li>
         <li><a href="#experience" onclick="closeMenu()">Working With Me</a></li>
-        <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+        <li><a href="#contact" onclick="closeMenu(); event.preventDefault(); openContactModal();">Contact</a></li>
       </ul>
     </div>
   </nav>
@@ -1288,31 +1273,31 @@
         <p>Wedding planning tool. Budget, guests, seating, vendors.</p>
         <p class="work-card-role">Founder</p>
       </a>
-      <a class="work-card" data-work="1">
+      <div class="work-card" data-work="1">
         <h3>Internal Agency Platform</h3>
         <p>AI-powered content intelligence, performance analytics, and client reporting platform for a marketing agency — trained on their own data.</p>
         <p class="work-card-role">Client Work</p>
-      </a>
+      </div>
       <a href="https://www.mylawnhq.com" target="_blank" rel="noopener" class="work-card" data-work="2">
         <h3>LawnHQ</h3>
         <p>AI lawn care advisor for your zip code + grass type.</p>
         <p class="work-card-role">Partner</p>
       </a>
-      <a class="work-card" data-work="3">
+      <div class="work-card" data-work="3">
         <h3>Reddit Responder</h3>
         <p>Scrapes niche-relevant subreddits, scores posts by relevance, and drafts value-add replies. Not an agent.</p>
         <p class="work-card-role">House Tool</p>
-      </a>
+      </div>
       <a href="https://ourlittlereveal.com" target="_blank" rel="noopener" class="work-card" data-work="4">
         <h3>Little Reveal</h3>
         <p>The most beautiful way to share pregnancy news + updates with your inner circle.</p>
         <p class="work-card-role">Founder</p>
       </a>
-      <a class="work-card" data-work="5">
+      <div class="work-card" data-work="5">
         <h3>Interactive Lead Magnets</h3>
         <p>Mini games, quiz funnels and engaging tools for your audience.</p>
         <p class="work-card-role">Client Work</p>
-      </a>
+      </div>
     </div>
     <p class="scroll-reveal" style="color: var(--text-soft); font-size: 0.9rem; margin-top: 1.5rem; font-style: italic;">+ a rotating shelf of side projects and experiments.</p>
   </section>
@@ -1322,7 +1307,7 @@
   <!-- ABOUT -->
   <section class="about" id="about">
     <div class="about-grid">
-      <img src="images/sam.png" alt="Sam Rahim" class="about-photo scroll-reveal" data-speed="0.85" data-lag="0.3">
+      <img src="images/sam.webp" alt="Sam Rahim" class="about-photo scroll-reveal" data-speed="0.85" data-lag="0.3">
       <div class="about-text">
         <p class="section-label scroll-reveal">The Proprietor</p>
         <h2 class="scroll-reveal">I'm Sam.</h2>
@@ -1334,7 +1319,7 @@
 
   <!-- SALOON DOOR (acts as divider) -->
   <div class="saloon-door-section">
-    <img src="images/saloon-door.png" alt="" class="saloon-door-img scroll-reveal" aria-hidden="true" data-speed="0.9">
+    <img src="images/saloon-door.webp" alt="" class="saloon-door-img scroll-reveal" aria-hidden="true" data-speed="0.9">
   </div>
 
   <!-- WHAT IT'S LIKE -->
