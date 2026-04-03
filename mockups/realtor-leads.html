@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, sans-serif;
+      background: #F8F7F4;
+      color: #1a1714;
+      width: 390px;
+      min-height: 844px;
+      overflow: hidden;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #E8E4DD;
+      background: white;
+    }
+    .topbar-logo {
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+    .topbar-logo span { color: #2E5A3E; }
+    .topbar-right { display: flex; gap: 12px; align-items: center; }
+    .topbar-badge {
+      background: #2E5A3E;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+    .topbar-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #2E5A3E;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #E8E4DD;
+      background: white;
+      padding: 0 20px;
+    }
+    .tab {
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #999;
+      border-bottom: 2px solid transparent;
+    }
+    .tab.active {
+      color: #1a1714;
+      border-bottom-color: #2E5A3E;
+    }
+    .content { padding: 20px; }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #2E5A3E;
+      margin-bottom: 12px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 14px;
+      border: 1px solid #E8E4DD;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1714;
+      margin-bottom: 2px;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: #999;
+      font-weight: 500;
+    }
+    .stat-change {
+      font-size: 10px;
+      font-weight: 600;
+      color: #2E5A3E;
+      margin-top: 4px;
+    }
+    .lead-card {
+      background: white;
+      border-radius: 10px;
+      padding: 14px;
+      border: 1px solid #E8E4DD;
+      margin-bottom: 10px;
+    }
+    .lead-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .lead-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .lead-tag {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .lead-tag.hot { background: #FDE8E4; color: #B5634B; }
+    .lead-tag.warm { background: #FDF4E4; color: #C49A3C; }
+    .lead-tag.new { background: #E4F0E8; color: #2E5A3E; }
+    .lead-details {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .lead-detail {
+      font-size: 11px;
+      color: #666;
+    }
+    .lead-detail strong {
+      color: #1a1714;
+    }
+    .lead-property {
+      font-size: 11px;
+      color: #999;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .lead-property-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #ccc;
+    }
+    .map-card {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #E8E4DD;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .map-placeholder {
+      height: 120px;
+      background: linear-gradient(135deg, #E8E4DD 0%, #D4CFC4 50%, #E0DBD2 100%);
+      position: relative;
+    }
+    .map-pin {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .map-pin.p1 { background: #B5634B; top: 30%; left: 25%; }
+    .map-pin.p2 { background: #2E5A3E; top: 50%; left: 55%; }
+    .map-pin.p3 { background: #C49A3C; top: 35%; left: 70%; }
+    .map-pin.p4 { background: #2E5A3E; top: 65%; left: 35%; }
+    .map-pin.p5 { background: #B5634B; top: 55%; left: 80%; }
+    .map-pin.p6 { background: #2E5A3E; top: 25%; left: 45%; }
+    .map-info {
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .map-stat { text-align: center; }
+    .map-stat-value {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .map-stat-label {
+      font-size: 9px;
+      color: #999;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-logo">Build<span>Base</span></div>
+    <div class="topbar-right">
+      <div class="topbar-badge">5 new</div>
+      <div class="topbar-avatar">JM</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab active">Leads</div>
+    <div class="tab">Properties</div>
+    <div class="tab">Pipeline</div>
+    <div class="tab">Map</div>
+  </div>
+  <div class="content">
+    <div class="section-title">New Construction Leads</div>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-value">142</div>
+        <div class="stat-label">Total Leads</div>
+        <div class="stat-change">+18 this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">$2.4M</div>
+        <div class="stat-label">Pipeline Value</div>
+        <div class="stat-change">+$340K new</div>
+      </div>
+    </div>
+
+    <div class="map-card">
+      <div class="map-placeholder">
+        <div class="map-pin p1"></div>
+        <div class="map-pin p2"></div>
+        <div class="map-pin p3"></div>
+        <div class="map-pin p4"></div>
+        <div class="map-pin p5"></div>
+        <div class="map-pin p6"></div>
+      </div>
+      <div class="map-info">
+        <div class="map-stat">
+          <div class="map-stat-value">6</div>
+          <div class="map-stat-label">Active Areas</div>
+        </div>
+        <div class="map-stat">
+          <div class="map-stat-value">23</div>
+          <div class="map-stat-label">New Builds</div>
+        </div>
+        <div class="map-stat">
+          <div class="map-stat-value">$485K</div>
+          <div class="map-stat-label">Avg. Price</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Recent Leads</div>
+    <div class="lead-card">
+      <div class="lead-top">
+        <div class="lead-name">Sarah & Mike Thompson</div>
+        <div class="lead-tag hot">Hot</div>
+      </div>
+      <div class="lead-details">
+        <div class="lead-detail"><strong>$520K</strong> budget</div>
+        <div class="lead-detail"><strong>4 bed</strong> / 3 bath</div>
+      </div>
+      <div class="lead-property">Windermere <span class="lead-property-dot"></span> Move-in Q3 2026</div>
+    </div>
+    <div class="lead-card">
+      <div class="lead-top">
+        <div class="lead-name">James Rivera</div>
+        <div class="lead-tag new">New</div>
+      </div>
+      <div class="lead-details">
+        <div class="lead-detail"><strong>$380K</strong> budget</div>
+        <div class="lead-detail"><strong>3 bed</strong> / 2 bath</div>
+      </div>
+      <div class="lead-property">Horizon West <span class="lead-property-dot"></span> Pre-approval ready</div>
+    </div>
+    <div class="lead-card">
+      <div class="lead-top">
+        <div class="lead-name">The Patel Family</div>
+        <div class="lead-tag warm">Warm</div>
+      </div>
+      <div class="lead-details">
+        <div class="lead-detail"><strong>$650K</strong> budget</div>
+        <div class="lead-detail"><strong>5 bed</strong> / 4 bath</div>
+      </div>
+      <div class="lead-property">Lake Nona <span class="lead-property-dot"></span> Touring Q2 2026</div>
+    </div>
+  </div>
+</body>
+</html>

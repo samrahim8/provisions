@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" fill="none">
+  <defs>
+    <!-- Rope strand colors -->
+    <linearGradient id="ropeMain" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8B6F47"/>
+      <stop offset="30%" stop-color="#A68556"/>
+      <stop offset="50%" stop-color="#C9A86C"/>
+      <stop offset="70%" stop-color="#A68556"/>
+      <stop offset="100%" stop-color="#7A5F3A"/>
+    </linearGradient>
+    <linearGradient id="ropeHighlight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#D4BA8A"/>
+      <stop offset="50%" stop-color="#E8D5A8"/>
+      <stop offset="100%" stop-color="#D4BA8A"/>
+    </linearGradient>
+    <linearGradient id="ropeShadow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5C4428"/>
+      <stop offset="50%" stop-color="#6B5232"/>
+      <stop offset="100%" stop-color="#5C4428"/>
+    </linearGradient>
+
+    <!-- Rope twist pattern along the path -->
+    <filter id="ropeTexture">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03 0.15" numOctaves="4" seed="2" result="noise"/>
+      <feColorMatrix type="saturate" values="0" in="noise" result="gray"/>
+      <feComponentTransfer in="gray" result="contrast">
+        <feFuncR type="linear" slope="0.4" intercept="0.3"/>
+        <feFuncG type="linear" slope="0.4" intercept="0.3"/>
+        <feFuncB type="linear" slope="0.4" intercept="0.3"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="contrast" mode="multiply"/>
+    </filter>
+
+    <filter id="subtleShadow">
+      <feDropShadow dx="1.5" dy="2" stdDeviation="2" flood-color="#3A2A15" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#subtleShadow)">
+    <!-- P shape: vertical stroke + bowl -->
+    <!-- Main rope body (thickest, base layer) -->
+    <path d="M 70 250
+             L 70 50
+             C 70 50, 70 28, 95 18
+             C 120 8, 155 15, 162 45
+             C 170 78, 160 118, 135 128
+             C 115 136, 90 133, 70 125"
+          stroke="url(#ropeShadow)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" filter="url(#ropeTexture)"/>
+
+    <!-- Middle rope strand -->
+    <path d="M 70 250
+             L 70 50
+             C 70 50, 70 28, 95 18
+             C 120 8, 155 15, 162 45
+             C 170 78, 160 118, 135 128
+             C 115 136, 90 133, 70 125"
+          stroke="url(#ropeMain)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" filter="url(#ropeTexture)"/>
+
+    <!-- Twist lines - left strand -->
+    <path d="M 70 250
+             L 70 50
+             C 70 50, 70 28, 95 18
+             C 120 8, 155 15, 162 45
+             C 170 78, 160 118, 135 128
+             C 115 136, 90 133, 70 125"
+          stroke="#7A5F3A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"
+          stroke-dasharray="2 12" stroke-dashoffset="0" opacity="0.6"/>
+
+    <!-- Twist lines - right strand -->
+    <path d="M 70 250
+             L 70 50
+             C 70 50, 70 28, 95 18
+             C 120 8, 155 15, 162 45
+             C 170 78, 160 118, 135 128
+             C 115 136, 90 133, 70 125"
+          stroke="#7A5F3A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"
+          stroke-dasharray="2 12" stroke-dashoffset="7" opacity="0.5"/>
+
+    <!-- Highlight strand -->
+    <path d="M 70 250
+             L 70 50
+             C 70 50, 70 28, 95 18
+             C 120 8, 155 15, 162 45
+             C 170 78, 160 118, 135 128
+             C 115 136, 90 133, 70 125"
+          stroke="url(#ropeHighlight)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
+          stroke-dasharray="3 11" stroke-dashoffset="2" opacity="0.5"/>
+
+    <!-- Frayed end at top of vertical (where rope starts) -->
+    <line x1="68" y1="252" x2="62" y2="265" stroke="#8B6F47" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+    <line x1="70" y1="253" x2="70" y2="268" stroke="#A68556" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+    <line x1="72" y1="252" x2="78" y2="264" stroke="#8B6F47" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+    <line x1="74" y1="251" x2="82" y2="260" stroke="#7A5F3A" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <line x1="66" y1="251" x2="58" y2="261" stroke="#7A5F3A" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Frayed end at bowl terminus -->
+    <line x1="69" y1="127" x2="63" y2="138" stroke="#8B6F47" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+    <line x1="71" y1="128" x2="71" y2="141" stroke="#A68556" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+    <line x1="73" y1="127" x2="78" y2="137" stroke="#8B6F47" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  </g>
+</svg>
