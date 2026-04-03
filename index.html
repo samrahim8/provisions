@@ -1055,12 +1055,12 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) and (min-width: 769px) {
       .work-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero h1 { white-space: normal; }
       .offer-lane h3 { white-space: normal; }
     }
 
     @media (max-width: 768px) {
       .offer-lane h3 { white-space: normal; }
+      .hero h1 { font-size: clamp(2rem, 10vw, 3.5rem); }
       nav.scrolled {
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
@@ -1097,7 +1097,6 @@
       }
 
       .hero { padding: 5rem 1.2rem 3rem; }
-      .hero h1 { white-space: normal; }
       .hero-frame { padding: 2.5rem 1.5rem 2rem; }
 
       .section, .lede { padding: 3.5rem 1.5rem; }
@@ -1140,7 +1139,7 @@
     }
 
     @media (max-width: 480px) {
-      .hero h1 { font-size: clamp(2.2rem, 12vw, 3.5rem); }
+      .hero h1 { font-size: clamp(1.8rem, 9vw, 2.8rem); }
       .hero-tagline { font-size: 1rem; }
 
       .section-label { font-size: 0.75rem; }
