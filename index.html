@@ -915,6 +915,7 @@
       margin-bottom: 0.4rem;
     }
 
+    .form-group select,
     .form-group input,
     .form-group textarea {
       width: 100%;
@@ -930,6 +931,17 @@
       resize: vertical;
     }
 
+    .form-group select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6259' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.9rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    .form-group select:focus,
     .form-group input:focus,
     .form-group textarea:focus {
       border-color: var(--terracotta);
@@ -983,7 +995,7 @@
     /* ── CTA ── */
     .cta {
       background: url('images/cta-bg.png') center center / cover no-repeat;
-      padding: 6rem 2rem;
+      padding: 8rem 2rem;
       text-align: center;
       position: relative;
     }
@@ -1013,22 +1025,25 @@
 
     .cta .cta-headline {
       font-family: var(--display);
-      font-size: clamp(1.4rem, 2.5vw, 1.8rem);
-      font-weight: 700;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
       color: white;
-      margin-bottom: 1rem;
-      line-height: 1.4;
+      margin-bottom: 1.2rem;
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
     }
 
     .cta p {
       max-width: 440px;
       margin-left: auto;
       margin-right: auto;
-      margin-bottom: 2.5rem;
-      font-size: 0.95rem;
-      font-weight: 300;
-      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 3rem;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.8);
       line-height: 1.7;
+      letter-spacing: 0.02em;
     }
 
     .cta-link {
@@ -1372,18 +1387,29 @@
   <!-- CTA -->
   <section class="cta" id="contact">
     <div class="cta-inner">
-      <p class="section-label scroll-reveal">Contact</p>
       <p class="cta-headline scroll-reveal scroll-reveal-delay-1">Come on in.</p>
       <p class="scroll-reveal scroll-reveal-delay-2">The shelves are stocked.</p>
       <button class="cta-link scroll-reveal scroll-reveal-delay-3" onclick="openContactModal()">Get in Touch</button>
     </div>
   </section>
 
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-stamp">
+      <p class="footer-name">Provisions</p>
+      <p class="footer-est">Est. 2025 &ndash; Orlando, FL</p>
+    </div>
+    <p class="footer-links">Sam Rahim &ensp;&middot;&ensp; <a href="https://x.com/samrahim" target="_blank" rel="noopener">X</a> &ensp;&middot;&ensp; <a href="https://linkedin.com/in/samrahim" target="_blank" rel="noopener">LinkedIn</a></p>
+  </footer>
+
+  </div><!-- /smooth-content -->
+  </div><!-- /smooth-wrapper -->
+
   <!-- CONTACT MODAL -->
   <div class="modal-overlay" id="contactModal">
     <div class="modal">
       <button class="modal-close" onclick="closeContactModal()" aria-label="Close">&times;</button>
-      <h3 class="modal-title">What do you need?</h3>
+      <h3 class="modal-title">How can I help?</h3>
       <form class="modal-form" action="https://formsubmit.co/sam@provisions.work" method="POST">
         <input type="hidden" name="_subject" value="New inquiry from provisions.work">
         <input type="hidden" name="_captcha" value="false">
@@ -1397,25 +1423,27 @@
           <input type="email" id="contact-email" name="email" required>
         </div>
         <div class="form-group">
-          <label for="contact-message">Tell me what you're working on</label>
+          <label for="contact-company">Company (if applicable)</label>
+          <input type="text" id="contact-company" name="company">
+        </div>
+        <div class="form-group">
+          <label for="contact-type">What are you looking for?</label>
+          <select id="contact-type" name="type" required>
+            <option value="" disabled selected>Select one</option>
+            <option value="Service → Software">Service → Software</option>
+            <option value="AI-Powered Tools">AI-Powered Tools</option>
+            <option value="Growth Engines">Growth Engines</option>
+            <option value="Custom Work">Custom Work</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="contact-message">Tell me more</label>
           <textarea id="contact-message" name="message" rows="4" required></textarea>
         </div>
         <button type="submit" class="form-submit">Send it over</button>
       </form>
     </div>
   </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-stamp">
-      <p class="footer-name">Provisions</p>
-      <p class="footer-est">Est. 2025 &ndash; Orlando, FL</p>
-    </div>
-    <p class="footer-links">Sam Rahim &ensp;&middot;&ensp; <a href="https://x.com/samrahim" target="_blank" rel="noopener">X</a> &ensp;&middot;&ensp; <a href="https://linkedin.com/in/samrahim" target="_blank" rel="noopener">LinkedIn</a></p>
-  </footer>
-
-  </div><!-- /smooth-content -->
-  </div><!-- /smooth-wrapper -->
 
   <!-- GSAP + Plugins -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
