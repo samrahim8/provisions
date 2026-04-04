@@ -525,6 +525,15 @@
       cursor: default;
     }
 
+    div.work-card-cta {
+      cursor: pointer;
+    }
+
+    div.work-card-cta:hover {
+      border-color: var(--terracotta);
+      box-shadow: 0 4px 20px rgba(26, 23, 20, 0.06);
+    }
+
     .work-card h3 {
       font-family: var(--display);
       font-size: 1.05rem;
@@ -1352,7 +1361,7 @@
         <p>Wedding planning tool. Budget, guests, seating, vendors.</p>
         <p class="work-card-role">Founder</p>
       </a>
-      <div class="work-card" data-work="1">
+      <div class="work-card work-card-cta" data-work="1" onclick="openContactModal()">
         <h3>Internal Agency Platform</h3>
         <p>AI-powered content intelligence, performance analytics, and client reporting platform for a marketing agency — trained on their own data.</p>
         <p class="work-card-role">Client Work</p>
@@ -1372,7 +1381,7 @@
         <p>The most beautiful way to share pregnancy news + updates with your inner circle.</p>
         <p class="work-card-role">Founder</p>
       </a>
-      <div class="work-card" data-work="5">
+      <div class="work-card work-card-cta" data-work="5" onclick="openContactModal()">
         <h3>Interactive Lead Magnets</h3>
         <p>Mini games, quiz funnels and engaging tools for your audience.</p>
         <p class="work-card-role">Client Work</p>
