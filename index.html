@@ -82,6 +82,23 @@
       stroke-width: 1;
     }
 
+    /* ── GRID BACKGROUND ── */
+    .page-body {
+      position: relative;
+    }
+
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(221, 215, 204, 0.35) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(221, 215, 204, 0.35) 1px, transparent 1px);
+      background-size: 80px 80px;
+      background-position: center top;
+      pointer-events: none;
+      z-index: 0;
+    }
+
     /* ── LINE-MASK REVEAL ── */
     .line-mask .split-line {
       overflow: hidden;
@@ -1316,6 +1333,9 @@
     <a href="#" class="hero-scroll" onclick="event.preventDefault(); if(smoother){smoother.scrollTo('.lede',true)}else{document.querySelector('.lede').scrollIntoView({behavior:'smooth'})}">Scroll</a>
   </section>
 
+  <div class="page-body">
+  <div class="grid-lines"></div>
+
   <div class="divider"><svg class="divider-svg" viewBox="0 0 1100 2" preserveAspectRatio="none"><line class="divider-draw" x1="0" y1="1" x2="1100" y2="1"/></svg></div>
 
   <!-- LEDE -->
@@ -1456,6 +1476,8 @@
   </section>
 
   <div class="divider"><svg class="divider-svg" viewBox="0 0 1100 2" preserveAspectRatio="none"><line class="divider-draw" x1="0" y1="1" x2="1100" y2="1"/></svg></div>
+
+  </div><!-- /page-body -->
 
   <!-- CTA -->
   <section class="cta" id="contact">
