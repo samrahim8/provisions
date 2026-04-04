@@ -516,9 +516,13 @@
       will-change: transform;
     }
 
-    .work-card:hover {
+    a.work-card:hover {
       border-color: var(--terracotta);
       box-shadow: 0 4px 20px rgba(26, 23, 20, 0.06);
+    }
+
+    div.work-card {
+      cursor: default;
     }
 
     .work-card h3 {
@@ -1295,7 +1299,7 @@
     <div class="hero-content">
       <div class="hero-frame scroll-reveal">
         <h1 class="scroll-reveal scroll-reveal-delay-1">Provisions</h1>
-        <p class="hero-tagline scroll-reveal scroll-reveal-delay-2">A one-man outfit. Uncommon goods.</p>
+        <p class="hero-tagline scroll-reveal scroll-reveal-delay-2">A one-man outfit of services + products.</p>
         <div class="hero-rule scroll-reveal scroll-reveal-delay-2"></div>
         <p class="hero-proprietor scroll-reveal scroll-reveal-delay-3">Sam Rahim</p>
         <p class="hero-proprietor-title scroll-reveal scroll-reveal-delay-3">Proprietor</p>
@@ -1387,7 +1391,7 @@
         <p class="section-label scroll-reveal">The Proprietor</p>
         <h2 class="scroll-reveal">I'm <a href="https://samrahim.com" target="_blank" rel="noopener" style="color: var(--leather); text-decoration: underline; text-decoration-color: var(--terracotta); text-underline-offset: 4px; text-decoration-thickness: 2px;">Sam</a>.</h2>
         <p class="line-mask">A decade of doing the work. From Disney to venture-backed startups. Now, I run the counter.</p>
-        <a href="#contact" class="about-cta scroll-reveal">Let's Talk</a>
+        <a href="#contact" onclick="event.preventDefault(); openContactModal();" class="about-cta scroll-reveal">Let's Talk</a>
       </div>
     </div>
   </section>
@@ -1418,6 +1422,7 @@
 
   <!-- TESTIMONIALS -->
   <section class="testimonials" id="testimonials">
+    <p class="section-label scroll-reveal" style="text-align: center;">What People Say</p>
     <div class="testimonials-stage">
       <div class="testimonial active" data-testimonial="0">
         <p class="testimonial-quote">"Sam is a legend."</p>
