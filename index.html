@@ -141,6 +141,18 @@
       transition: color 0.4s;
     }
 
+    .nav-name-logo {
+      display: none;
+      height: 28px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      transition: filter 0.4s;
+    }
+
+    nav.scrolled .nav-name-logo {
+      filter: none;
+    }
+
     nav.scrolled .nav-name { color: var(--leather); }
 
     nav ul {
@@ -1159,7 +1171,9 @@
 
       .hamburger { display: flex; }
       .nav-inner { padding: 0.5rem 1rem; }
-      .nav-name { font-size: 0.8rem; display: flex; align-items: center; height: 44px; }
+      .nav-name { display: flex; align-items: center; height: 44px; }
+      .nav-name-text { display: none; }
+      .nav-name-logo { display: block; }
 
       nav ul {
         position: fixed;
@@ -1260,7 +1274,7 @@
   <!-- NAV -->
   <nav>
     <div class="nav-inner">
-      <a href="#" class="nav-name">Provisions</a>
+      <a href="#" class="nav-name"><span class="nav-name-text">Provisions</span><img src="images/logo-p.png" alt="Provisions" class="nav-name-logo"></a>
       <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
         <span></span>
       </button>
