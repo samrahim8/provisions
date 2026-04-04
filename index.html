@@ -9,7 +9,7 @@
   <meta property="og:description" content="Products, tools + growth engines for founders and operators. Sam Rahim, Proprietor.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.provisions.work">
-  <meta property="og:image" content="https://www.provisions.work/images/hero-bg.webp">
+  <meta property="og:image" content="https://www.provisions.work/images/og-image.png">
   <link rel="icon" type="image/png" href="images/logo-p.png">
   <link rel="apple-touch-icon" href="images/logo-p.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1041,22 +1041,21 @@
 
     /* ── CTA ── */
     .cta {
-      background: url('images/cta-bg.webp') center center / cover no-repeat;
+      background: var(--leather);
       padding: 8rem 2rem;
       text-align: center;
       position: relative;
+      overflow: hidden;
     }
 
     .cta::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(26, 23, 20, 0.5) 0%,
-        rgba(26, 23, 20, 0.4) 50%,
-        rgba(26, 23, 20, 0.55) 100%
-      );
+      background:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      background-size: 200px;
     }
 
     .cta-inner {
@@ -1484,10 +1483,7 @@
     <div class="modal">
       <button class="modal-close" onclick="closeContactModal()" aria-label="Close">&times;</button>
       <h3 class="modal-title">How can I help?</h3>
-      <form class="modal-form" action="https://formsubmit.co/sam@provisions.work" method="POST">
-        <input type="hidden" name="_subject" value="New inquiry from provisions.work">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://www.provisions.work">
+      <form class="modal-form" id="contactForm" onsubmit="submitContactForm(event)">
         <div class="form-group">
           <label for="contact-name">Name</label>
           <input type="text" id="contact-name" name="name" required>
@@ -1552,6 +1548,45 @@
       document.getElementById('navMenu').classList.remove('open');
       document.querySelector('.hamburger').classList.remove('open');
       document.body.style.overflow = '';
+    }
+
+    // Contact form submission via Google Apps Script
+    var GOOGLE_SCRIPT_URL = 'PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE';
+
+    function submitContactForm(e) {
+      e.preventDefault();
+      var form = document.getElementById('contactForm');
+      var btn = form.querySelector('.form-submit');
+      var originalText = btn.textContent;
+      btn.textContent = 'SENDING...';
+      btn.disabled = true;
+
+      var data = {
+        name: form.querySelector('#contact-name').value,
+        email: form.querySelector('#contact-email').value,
+        company: form.querySelector('#contact-company').value,
+        type: form.querySelector('#contact-type').value,
+        message: form.querySelector('#contact-message').value
+      };
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(function() {
+        btn.textContent = 'SENT!';
+        form.reset();
+        setTimeout(function() {
+          btn.textContent = originalText;
+          btn.disabled = false;
+          closeContactModal();
+        }, 2000);
+      }).catch(function() {
+        btn.textContent = 'ERROR — TRY AGAIN';
+        btn.disabled = false;
+        setTimeout(function() { btn.textContent = originalText; }, 3000);
+      });
     }
 
     // Link preview slide-up (mobile)
