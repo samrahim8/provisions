@@ -1314,7 +1314,7 @@
         <p class="hero-proprietor-title scroll-reveal scroll-reveal-delay-3">Proprietor</p>
       </div>
     </div>
-    <a href="#lede" class="hero-scroll">Scroll</a>
+    <a href="#" class="hero-scroll" onclick="event.preventDefault(); if(smoother){smoother.scrollTo('.lede',true)}else{document.querySelector('.lede').scrollIntoView({behavior:'smooth'})}">Scroll</a>
   </section>
 
   <div class="divider"><svg class="divider-svg" viewBox="0 0 1100 2" preserveAspectRatio="none"><line class="divider-draw" x1="0" y1="1" x2="1100" y2="1"/></svg></div>
