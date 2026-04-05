@@ -14,6 +14,7 @@
   <link rel="apple-touch-icon" href="images/logo-p.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" as="style">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -1342,7 +1343,7 @@
   <div class="lede" id="lede">
     <p class="line-mask">I make products, tools + growth engines for founders + operators.</p>
     <div class="stamp scroll-reveal" style="margin-top: 3rem;">
-      <img src="images/logo-p.png" alt="Provisions" class="stamp-logo">
+      <img src="images/logo-p.png" alt="Provisions" class="stamp-logo" loading="lazy">
     </div>
   </div>
 
@@ -1414,11 +1415,12 @@
   <!-- ABOUT -->
   <section class="about" id="about">
     <div class="about-grid">
-      <img src="images/sam.webp" alt="Sam Rahim" class="about-photo scroll-reveal" data-speed="0.85" data-lag="0.3">
+      <img src="images/sam.webp" alt="Sam Rahim" class="about-photo scroll-reveal" data-speed="0.85" data-lag="0.3" loading="lazy">
       <div class="about-text">
         <p class="section-label scroll-reveal">The Proprietor</p>
         <h2 class="scroll-reveal">I'm <a href="https://samrahim.com" target="_blank" rel="noopener" style="color: var(--leather); text-decoration: underline; text-decoration-color: var(--terracotta); text-underline-offset: 4px; text-decoration-thickness: 2px;">Sam</a>.</h2>
-        <p class="line-mask">A decade of doing the work. From Disney to venture-backed startups. Now, I run the counter.</p>
+        <p class="line-mask">A decade of doing the work. Disney, venture-backed startups, scaling ops for global brands. I've been in the room where things get built and shipped.</p>
+        <p class="scroll-reveal" style="margin-top: 0.8rem;">Now, I run the counter. I make products for myself and tools for people who run businesses like I do. If it can be made, I'll figure out how.</p>
         <a href="#contact" onclick="event.preventDefault(); openContactModal();" class="about-cta scroll-reveal">Let's Talk</a>
       </div>
     </div>
@@ -1426,7 +1428,7 @@
 
   <!-- SALOON DOOR (acts as divider) -->
   <div class="saloon-door-section">
-    <img src="images/saloon-door.webp" alt="" class="saloon-door-img scroll-reveal" aria-hidden="true" data-speed="0.9">
+    <img src="images/saloon-door.webp" alt="" class="saloon-door-img scroll-reveal" aria-hidden="true" data-speed="0.9" loading="lazy">
   </div>
 
   <!-- WHAT IT'S LIKE -->
