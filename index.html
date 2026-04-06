@@ -450,6 +450,10 @@
       will-change: transform;
     }
 
+    .offer-lanes-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
     .offer-lane:hover {
       border-color: var(--terracotta);
     }
@@ -1349,16 +1353,11 @@
   <!-- OFFER -->
   <section class="offer" id="offer">
     <h2 class="offer-headline scroll-reveal">Your business, supercharged.</h2>
-    <div class="offer-lanes">
+    <div class="offer-lanes offer-lanes-2">
       <div class="offer-lane">
-        <p class="lane-label">Service &rarr; Software</p>
-        <h3>One process. Infinite scale.</h3>
-        <p>You deliver the same service to every client. I turn that into software so you can take on more without adding headcount.</p>
-      </div>
-      <div class="offer-lane">
-        <p class="lane-label">AI-Powered Tools</p>
-        <h3>Smart tools. Faster conversions.</h3>
-        <p>I take your existing workflows and make them intelligent. Less time on ops, more time closing.</p>
+        <p class="lane-label">Custom Tools</p>
+        <h3>Do more with less.</h3>
+        <p>I build software + AI-powered tools for your business. Move faster, scale without the overhead.</p>
       </div>
       <div class="offer-lane">
         <p class="lane-label">Growth Engines</p>
@@ -1523,10 +1522,9 @@
           <label for="contact-type">What are you looking for?</label>
           <select id="contact-type" name="type" required>
             <option value="" disabled selected>Select one</option>
-            <option value="Service → Software">Service → Software</option>
-            <option value="AI-Powered Tools">AI-Powered Tools</option>
+            <option value="Custom Tools">Custom Tools</option>
             <option value="Growth Engines">Growth Engines</option>
-            <option value="Custom Work">Custom Work</option>
+            <option value="Something Else">Something Else</option>
           </select>
         </div>
         <div class="form-group">
