@@ -794,6 +794,14 @@
     }
 
     /* ── EXPERIENCE ── */
+    .experience-headline {
+      font-family: var(--display);
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--leather);
+      line-height: 1.1;
+      margin-bottom: 2.5rem;
+    }
     .experience-grid {
       display: grid;
       gap: 0;
@@ -1365,7 +1373,7 @@
         <p>I build software + AI-powered tools for your business. Move faster, scale without the overhead.</p>
       </div>
     </div>
-    <p class="work-cta scroll-reveal">Taking on new client work. <a href="#contact" onclick="event.preventDefault(); openContactModal();">Let's grow something &darr;</a></p>
+    <p class="work-cta scroll-reveal">Available for select client work. <a href="#contact" onclick="event.preventDefault(); openContactModal();">Let's talk &rarr;</a></p>
   </section>
 
   <!-- WORK -->
@@ -1431,7 +1439,7 @@
 
   <!-- WHAT IT'S LIKE -->
   <section class="section" id="experience">
-    <p class="section-label scroll-reveal">The Easiest Person You'll Work With</p>
+    <h2 class="experience-headline scroll-reveal">The easiest person you'll work with.</h2>
     <div class="experience-grid">
       <div class="experience-item">
         <h3>I work fast.</h3>
