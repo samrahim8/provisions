@@ -141,10 +141,14 @@
       max-width: 1100px;
       margin: 0 auto;
       padding: 0.9rem 2rem;
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
     }
+    .nav-name { justify-self: start; }
+    nav .nav-inner > ul { justify-self: center; }
+    .nav-cta-desktop { justify-self: end; }
+    .nav-cta-mobile { display: none; }
 
     .nav-name {
       font-family: var(--display);
@@ -674,16 +678,14 @@
     .work-cta a:hover { color: var(--leather); }
 
     /* Nav CTA button — "Start Your Order" */
-    nav ul a.nav-cta,
-    nav.scrolled ul a.nav-cta {
+    nav a.nav-cta {
       background: var(--terracotta);
       color: #fff;
       padding: 0.6rem 1.1rem;
       border-radius: 4px;
       transition: background 0.25s, transform 0.2s;
     }
-    nav ul a.nav-cta:hover,
-    nav.scrolled ul a.nav-cta:hover {
+    nav a.nav-cta:hover {
       background: var(--leather);
       color: #fff;
       transform: translateY(-1px);
@@ -1490,7 +1492,13 @@
 
 
       .hamburger { display: flex; }
-      .nav-inner { padding: 0.5rem 1rem; }
+      .nav-inner {
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+      }
+      .nav-cta-desktop { display: none; }
+      .nav-cta-mobile { display: list-item; }
       .nav-name { display: flex; align-items: center; height: 44px; }
       .nav-name-text { display: none; }
       .nav-name-logo { display: block; }
@@ -1610,8 +1618,9 @@
         <li><a href="#lede" onclick="event.preventDefault(); navTo('#lede')">What I Do</a></li>
         <li><a href="#working" onclick="event.preventDefault(); navTo('#working')">Working With Me</a></li>
         <li><a href="#work" onclick="event.preventDefault(); navTo('#work')">Work</a></li>
-        <li><a href="#contact" class="nav-cta" onclick="closeMenu(); event.preventDefault(); openContactModal();">Start Your Order</a></li>
+        <li class="nav-cta-mobile"><a href="#contact" class="nav-cta" onclick="closeMenu(); event.preventDefault(); openContactModal();">Start Your Order</a></li>
       </ul>
+      <a href="#contact" class="nav-cta nav-cta-desktop" onclick="event.preventDefault(); openContactModal();">Start Your Order</a>
     </div>
   </nav>
 
