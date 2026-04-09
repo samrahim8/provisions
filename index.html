@@ -673,6 +673,22 @@
 
     .work-cta a:hover { color: var(--leather); }
 
+    /* Nav CTA button — "Start Your Order" */
+    nav ul a.nav-cta,
+    nav.scrolled ul a.nav-cta {
+      background: var(--terracotta);
+      color: #fff;
+      padding: 0.6rem 1.1rem;
+      border-radius: 4px;
+      transition: background 0.25s, transform 0.2s;
+    }
+    nav ul a.nav-cta:hover,
+    nav.scrolled ul a.nav-cta:hover {
+      background: var(--leather);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
     /* ── ABOUT ── */
     .about {
       padding: 5rem 2rem;
@@ -1594,7 +1610,7 @@
         <li><a href="#lede" onclick="event.preventDefault(); navTo('#lede')">What I Do</a></li>
         <li><a href="#working" onclick="event.preventDefault(); navTo('#working')">Working With Me</a></li>
         <li><a href="#work" onclick="event.preventDefault(); navTo('#work')">Work</a></li>
-        <li><a href="#contact" onclick="closeMenu(); event.preventDefault(); openContactModal();">Contact</a></li>
+        <li><a href="#contact" class="nav-cta" onclick="closeMenu(); event.preventDefault(); openContactModal();">Start Your Order</a></li>
       </ul>
     </div>
   </nav>
@@ -1694,7 +1710,6 @@
         <p class="lane-label" style="margin-top: auto; padding-top: 1rem;">Custom Tools</p>
       </div>
     </div>
-    <p class="work-cta scroll-reveal">Available for select client work. <a href="#contact" onclick="event.preventDefault(); openContactModal();">Let's talk &rarr;</a></p>
   </section>
 
   <!-- RECEIPT -->
