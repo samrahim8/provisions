@@ -440,6 +440,41 @@
       margin: 0 auto;
     }
 
+    /* ── RECEIPT ── */
+    .receipt {
+      padding: 1rem 2rem 5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .receipt-figure {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.1rem;
+    }
+    .receipt-figure img {
+      width: 100%;
+      max-width: 780px;
+      height: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(44, 33, 24, 0.08);
+      box-shadow:
+        0 30px 60px -30px rgba(44, 33, 24, 0.28),
+        0 12px 24px -16px rgba(44, 33, 24, 0.15);
+    }
+    .receipt-caption {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 500;
+      color: var(--text-soft);
+      font-size: 1rem;
+      margin: 0;
+    }
+    @media (max-width: 720px) {
+      .receipt { padding: 0.5rem 1.5rem 3rem; }
+    }
+
     .offer-headline {
       font-family: var(--display);
       font-size: clamp(1.6rem, 3vw, 2.2rem);
@@ -1640,6 +1675,14 @@
       </div>
     </div>
     <p class="work-cta scroll-reveal">Available for select client work. <a href="#contact" onclick="event.preventDefault(); openContactModal();">Let's talk &rarr;</a></p>
+  </section>
+
+  <!-- RECEIPT -->
+  <section class="receipt">
+    <figure class="receipt-figure scroll-reveal">
+      <img src="images/testimonial-receipt.png" alt="Client email: 'Thanks so much for this - you have overdelivered on Day 1 for me.'" />
+      <figcaption class="receipt-caption">Day 1.</figcaption>
+    </figure>
   </section>
 
   <!-- WHAT IT'S LIKE -->
