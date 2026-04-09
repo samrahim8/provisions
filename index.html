@@ -446,6 +446,14 @@
       max-width: 900px;
       margin: 0 auto;
     }
+    .receipt-card {
+      background: var(--bg-elevated);
+      border: 1px solid rgba(44, 33, 24, 0.1);
+      border-radius: 18px;
+      padding: 1.75rem 1.75rem 1.5rem;
+      max-width: 820px;
+      margin: 0 auto;
+    }
     .receipt-figure {
       margin: 0;
       display: flex;
@@ -473,8 +481,11 @@
     }
     #experience { padding-top: 2.5rem; }
     @media (max-width: 720px) {
-      .receipt { padding: 0.5rem 0.5rem 0.5rem; }
-      #experience { padding-top: 1.5rem; }
+      .receipt { padding: 0.5rem 1rem 1rem; }
+      .receipt-card { padding: 1rem 1rem 0.9rem; border-radius: 14px; }
+      .receipt-figure { gap: 0.9rem; }
+      .receipt-caption { font-size: 0.92rem; }
+      #experience { padding-top: 2rem; }
     }
 
     .offer-headline {
@@ -1688,10 +1699,12 @@
 
   <!-- RECEIPT -->
   <section class="receipt" id="working">
-    <figure class="receipt-figure scroll-reveal">
-      <img src="images/testimonial-receipt.png" alt="Client email: 'Thanks so much for this - you have overdelivered on Day 1 for me.'" />
-      <figcaption class="receipt-caption">The work, not the warm-up. Day 1.</figcaption>
-    </figure>
+    <div class="receipt-card scroll-reveal">
+      <figure class="receipt-figure">
+        <img src="images/testimonial-receipt.png" alt="Client email: 'Thanks so much for this - you have overdelivered on Day 1 for me.'" />
+        <figcaption class="receipt-caption">The work, not the warm-up. Day 1.</figcaption>
+      </figure>
+    </div>
   </section>
 
   <!-- WHAT IT'S LIKE -->
