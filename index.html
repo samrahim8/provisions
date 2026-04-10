@@ -1366,8 +1366,9 @@
       border: none;
       border-bottom: 1.5px solid var(--border);
       color: var(--leather);
-      font-family: var(--mono, monospace);
-      font-size: 0.9rem;
+      font-family: var(--display);
+      font-size: 1rem;
+      font-weight: 500;
       padding: 0.15rem 0.3rem;
       outline: none;
       transition: border-color 0.25s;
@@ -1382,7 +1383,8 @@
     .order-line input::placeholder,
     .order-line textarea::placeholder {
       color: var(--text-soft);
-      font-style: italic;
+      font-style: normal;
+      font-weight: 400;
     }
 
     .order-line input { width: 160px; }
@@ -1410,18 +1412,19 @@
     .order-pill {
       background: var(--bg);
       border: 1px solid var(--border);
-      color: var(--text-soft);
-      font-family: var(--mono, monospace);
-      font-size: 0.8rem;
-      padding: 0.35rem 0.8rem;
-      border-radius: 20px;
+      color: var(--leather);
+      font-family: var(--display);
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .order-pill:hover {
       border-color: var(--leather-mid);
-      color: var(--leather);
+      background: var(--bg-elevated);
     }
 
     .order-pill.selected {
