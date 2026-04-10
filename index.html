@@ -342,6 +342,8 @@
 
     .hero-frame {
       padding: 2rem;
+      opacity: 0; /* prevent flash before GSAP loads */
+      transform: scale(0.96);
     }
 
     .hero h1 {
@@ -2201,17 +2203,20 @@
       });
     }
 
+    // Clear h1 text before timeline so it scrambles IN, not out
+    document.querySelector('.hero h1').textContent = '\u00A0';
+
     // Hero entrance timeline
     var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
 
     heroTl
-      .from('.hero-frame', { opacity: 0, scale: 0.96, duration: 1 })
-      .from('.hero h1', {
-        duration: 1.4,
+      .to('.hero-frame', { opacity: 1, scale: 1, duration: 1 })
+      .to('.hero h1', {
+        duration: 1.2,
         scrambleText: {
           text: 'Provisions',
           chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-          speed: 0.3,
+          speed: 0.4,
           revealDelay: 0.5
         }
       }, '-=0.5')
