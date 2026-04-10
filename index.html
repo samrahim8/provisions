@@ -575,6 +575,7 @@
       font-size: 0.95rem;
       color: var(--text-soft);
       line-height: 1.65;
+      min-height: 4.95em; /* reserves ~3 lines so both card bodies stay visually aligned */
     }
 
     .offer-terms {
@@ -917,6 +918,20 @@
     }
 
     /* ── COMPARISON ── */
+    .comparison-card {
+      background: var(--bg-elevated);
+      border: 1px solid rgba(44, 33, 24, 0.1);
+      border-radius: 18px;
+      padding: 1.75rem 2rem 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .comparison-card .comparison-row:last-child {
+      margin-bottom: 1.25rem;
+    }
+    @media (max-width: 768px) {
+      .comparison-card { padding: 1.25rem 1.25rem 0.25rem; border-radius: 14px; }
+    }
+
     .comparison {
       padding: 5rem 2rem;
       max-width: 1100px;
@@ -1838,20 +1853,22 @@
   <section class="comparison">
     <div class="comparison-inner">
       <h2 class="scroll-reveal" style="font-family: var(--display); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; color: var(--leather); line-height: 1.2; margin-bottom: 0.8rem;">Bias to action.</h2>
-      <p class="scroll-reveal" style="font-family: var(--display); font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--text-soft); font-weight: 500; margin-bottom: 3rem;">Skip the search. Start the work.</p>
-      <div class="comparison-row scroll-reveal">
-        <p class="comparison-label comparison-label--bright">With Provisions</p>
-        <div class="comparison-bars">
-          <span class="comparison-bar comparison-bar--filled">Talk</span>
-          <span class="comparison-bar comparison-bar--filled">Make</span>
-          <span class="comparison-bar comparison-bar--filled">Live</span>
+      <p class="scroll-reveal" style="font-family: var(--display); font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--text-soft); font-weight: 500; margin-bottom: 2rem;">Skip the search. Start the work.</p>
+      <div class="comparison-card scroll-reveal">
+        <div class="comparison-row">
+          <p class="comparison-label comparison-label--bright">With Provisions</p>
+          <div class="comparison-bars">
+            <span class="comparison-bar comparison-bar--filled">Talk</span>
+            <span class="comparison-bar comparison-bar--filled">Make</span>
+            <span class="comparison-bar comparison-bar--filled">Live</span>
+          </div>
         </div>
-      </div>
-      <div class="comparison-row scroll-reveal">
-        <p class="comparison-label">The usual way</p>
-        <div class="comparison-bars">
-          <span class="comparison-bar comparison-bar--outline">Research</span>
-          <span class="comparison-bar comparison-bar--outline">Hiring process</span>
+        <div class="comparison-row">
+          <p class="comparison-label">The usual way</p>
+          <div class="comparison-bars">
+            <span class="comparison-bar comparison-bar--outline">Research</span>
+            <span class="comparison-bar comparison-bar--outline">Hiring process</span>
+          </div>
         </div>
       </div>
     </div>
