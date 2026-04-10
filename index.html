@@ -381,31 +381,27 @@
       bottom: 2.5rem;
       left: 50%;
       transform: translateX(-50%);
-      color: rgba(245, 241, 235, 0.5);
-      font-family: var(--display);
-      z-index: 1;
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
+      z-index: 2;
       text-decoration: none;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0.5rem;
     }
-
-    .hero-scroll::after {
-      content: '';
-      width: 1px;
-      height: 28px;
-      background: rgba(245, 241, 235, 0.5);
-      animation: scrollPulse 2s ease infinite;
+    .scroll-chevron {
+      width: 28px;
+      height: 16px;
     }
-
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
+    .scroll-chevron path {
+      stroke: rgba(245, 241, 235, 0.5);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .hero-scroll:hover .scroll-chevron path {
+      stroke: rgba(245, 241, 235, 0.8);
     }
 
     /* ── SECTIONS ── */
@@ -1729,7 +1725,7 @@
         <p class="hero-proprietor-title scroll-reveal scroll-reveal-delay-3">Proprietor</p>
       </div>
     </div>
-    <a href="#" class="hero-scroll" onclick="event.preventDefault(); if(smoother){smoother.scrollTo('.lede',true)}else{document.querySelector('.lede').scrollIntoView({behavior:'smooth'})}">Scroll</a>
+    <a href="#" class="hero-scroll" onclick="event.preventDefault(); if(smoother){smoother.scrollTo('.lede',true)}else{document.querySelector('.lede').scrollIntoView({behavior:'smooth'})}"><svg class="scroll-chevron" viewBox="0 0 28 16" fill="none"><path d="M2 2 L14 13 L26 2"/></svg></a>
   </section>
 
   <div class="page-body">
@@ -2214,6 +2210,16 @@
       }, '-=0.3')
       .from('.hero-proprietor-title', { opacity: 0, y: 10, duration: 0.4 }, '-=0.4')
       .from('.hero-scroll', { opacity: 0, duration: 0.6 }, '-=0.2');
+
+    // DrawSVG animated scroll chevron — draws itself, pauses, fades, loops
+    var chevronPath = document.querySelector('.scroll-chevron path');
+    if (chevronPath) {
+      gsap.set(chevronPath, { drawSVG: '0%' });
+      gsap.timeline({ repeat: -1, repeatDelay: 0.8, delay: 1.5 })
+        .to(chevronPath, { drawSVG: '100%', duration: 0.7, ease: 'provisions' })
+        .to(chevronPath, { opacity: 0, duration: 0.4, ease: 'power2.in', delay: 0.6 })
+        .set(chevronPath, { drawSVG: '0%', opacity: 1 });
+    }
 
     // DrawSVG divider lines — draw from center outward
     document.querySelectorAll('.divider-draw').forEach(function(line) {
