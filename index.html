@@ -2201,21 +2201,19 @@
       });
     }
 
-    // SplitText on hero title
-    var heroSplit = new SplitText('.hero h1', { type: 'chars' });
-
     // Hero entrance timeline
     var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
 
     heroTl
       .from('.hero-frame', { opacity: 0, scale: 0.96, duration: 1 })
-      .from(heroSplit.chars, {
-        opacity: 0,
-        y: 60,
-        rotateX: -40,
-        duration: 0.8,
-        stagger: 0.04,
-        ease: 'power3.out'
+      .from('.hero h1', {
+        duration: 1.4,
+        scrambleText: {
+          text: 'Provisions',
+          chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+          speed: 0.3,
+          revealDelay: 0.5
+        }
       }, '-=0.5')
       .from('.hero-tagline', { opacity: 0, y: 20, duration: 0.6 }, '-=0.3')
       .from('.hero-rule', { scaleX: 0, duration: 0.5, transformOrigin: 'center' }, '-=0.3')
