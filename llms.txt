@@ -1,0 +1,38 @@
+# Provisions — Sam Rahim
+
+> Special projects for founders + operators.
+
+## About
+
+Provisions is a one-person studio run by Sam Rahim. It makes growth engines, custom tools, and software products for founders and operators who have a special project with no one to run it.
+
+Sam Rahim is a full stack operator with over a decade of experience, from Disney to venture-backed startups. He now runs Provisions full-time, making custom software, AI-powered tools, and growth engines for small-to-mid-size businesses.
+
+## What Provisions Does
+
+- **Growth Engines**: Niche Reddit tools, converting UGC, vertical-specific products, and other novel customer acquisition tactics.
+- **Custom Tools**: Dashboards, AI agents, internal apps, and automations. Custom software made for how your business actually works.
+- **Interactive Marketing Materials**: Demos, one-pagers, case studies, and decks made interactive and memorable.
+
+## Products and Work
+
+- **PlaceCard** (getplacecard.com): Wedding planning tool for budget, guests, seating, and vendors.
+- **LawnHQ** (mylawnhq.com): AI lawn care advisor for your zip code and grass type.
+- **Little Reveal** (ourlittlereveal.com): The most beautiful way to share pregnancy news and updates with your inner circle.
+- **Internal Agency Platform**: AI-powered content intelligence, performance analytics, and client reporting for a marketing agency.
+- **Reddit Responder**: Scrapes niche-relevant subreddits, scores posts by relevance, and drafts value-add replies.
+
+## Contact
+
+- Website: https://provisions.work
+- Personal site: https://samrahim.com
+- LinkedIn: https://linkedin.com/in/samrahim
+- X / Twitter: https://x.com/samdape
+- Email: Contact via provisions.work
+
+## Key Facts
+
+- Location: United States
+- Studio type: One-person studio (solo operator)
+- Typical engagement: 1-3 weeks, $1K-$3K
+- Positioning: "Every founder has a special project with no one to run it."
