@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Brief — Provisions</title>
+
+  <!-- Fonts (same as main site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════════════
+       PROVISIONS DESIGN SYSTEM — BRIEF TEMPLATE
+       ══════════════════════════════════════════════ */
+
+    :root {
+      --bg: #F5F1EB;
+      --bg-elevated: #F8F5EF;
+      --leather: #2C2118;
+      --leather-mid: #4A3D32;
+      --terracotta: #A0422A;
+      --terracotta-light: #B8533A;
+      --sage: #4A5E3E;
+      --dust: #C4B49A;
+      --text: #2C2118;
+      --text-soft: #6B6259;
+      --border: #DDD7CC;
+      --display: 'Syne', sans-serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+      --mono: monospace;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    .page-wrap { position: relative; }
+
+    .grid-lines {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(200, 190, 175, 0.15) 0.5px, transparent 0.5px),
+        linear-gradient(to bottom, rgba(200, 190, 175, 0.15) 0.5px, transparent 0.5px);
+      background-size: 16px 16px;
+      background-position: center top;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NAV (simplified for brief) ── */
+    .brief-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(245, 241, 235, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brief-nav-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brief-nav-brand {
+      font-family: var(--display);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--leather);
+      text-decoration: none;
+    }
+
+    .brief-nav-cta {
+      font-family: var(--display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      background: var(--terracotta);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background 0.25s;
+    }
+    .brief-nav-cta:hover { background: var(--leather); }
+
+    /* ── HERO ── */
+    .brief-hero {
+      padding: 8rem 0 4rem;
+      text-align: center;
+    }
+
+    .brief-hero-label {
+      font-family: var(--display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1.2rem;
+    }
+
+    .brief-hero h1 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--leather);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .brief-hero-sub {
+      font-family: var(--sans);
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      font-weight: 400;
+      color: var(--text-soft);
+      line-height: 1.7;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .brief-hero-meta {
+      margin-top: 2.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .brief-meta-item {
+      text-align: center;
+    }
+
+    .brief-meta-label {
+      font-family: var(--display);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 0.3rem;
+    }
+
+    .brief-meta-value {
+      font-family: var(--display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--leather);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .divider svg { width: 100%; height: 2px; overflow: visible; }
+    .divider-line { stroke: var(--border); stroke-width: 1; }
+
+    /* ── SECTIONS ── */
+    .brief-section {
+      padding: 3.5rem 0;
+    }
+
+    .brief-section-label {
+      font-family: var(--display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1rem;
+    }
+
+    .brief-section h2 {
+      font-family: var(--display);
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-weight: 700;
+      color: var(--leather);
+      line-height: 1.25;
+      margin-bottom: 1.2rem;
+    }
+
+    .brief-section p,
+    .brief-section li {
+      font-size: 1rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+    }
+
+    .brief-section p + p { margin-top: 0.8rem; }
+
+    /* ── NOTION-STYLE TOGGLE/DROPDOWN ── */
+    .toggle {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+      transition: border-color 0.25s;
+    }
+
+    .toggle:hover { border-color: var(--leather-mid); }
+
+    .toggle-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.1rem 1.4rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .toggle-header:hover { background: rgba(44, 33, 24, 0.02); }
+
+    .toggle-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .toggle-icon path {
+      stroke: var(--text-soft);
+      stroke-width: 2;
+      stroke-linecap: round;
+      fill: none;
+    }
+
+    .toggle.open .toggle-icon {
+      transform: rotate(90deg);
+    }
+
+    .toggle-title {
+      font-family: var(--display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--leather);
+      flex: 1;
+    }
+
+    .toggle-tag {
+      font-family: var(--display);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      padding: 0.2rem 0.5rem;
+      background: rgba(160, 66, 42, 0.08);
+      border-radius: 3px;
+    }
+
+    .toggle-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.19, 1, 0.22, 1),
+                  padding 0.3s ease;
+    }
+
+    .toggle.open .toggle-body {
+      max-height: 800px;
+      padding: 0 1.4rem 1.4rem;
+    }
+
+    .toggle-body p,
+    .toggle-body li {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+    }
+
+    .toggle-body p + p { margin-top: 0.6rem; }
+
+    .toggle-body ul {
+      list-style: none;
+      margin-top: 0.5rem;
+    }
+
+    .toggle-body ul li {
+      position: relative;
+      padding-left: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .toggle-body ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      opacity: 0.4;
+    }
+
+    /* ── SCOPE CARDS ── */
+    .scope-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .scope-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-elevated);
+    }
+
+    .scope-card h4 {
+      font-family: var(--display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--leather);
+      margin-bottom: 0.5rem;
+    }
+
+    .scope-card p {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      margin-top: 1.2rem;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 1.2rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-week {
+      font-family: var(--display);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      min-width: 60px;
+      padding-top: 0.15rem;
+    }
+
+    .timeline-content h4 {
+      font-family: var(--display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--leather);
+      margin-bottom: 0.3rem;
+    }
+
+    .timeline-content p {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    /* ── INVESTMENT ── */
+    .investment-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 1.2rem;
+      text-align: center;
+    }
+
+    .investment-amount {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 800;
+      color: var(--leather);
+      margin-bottom: 0.5rem;
+    }
+
+    .investment-note {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    /* ── CTA ── */
+    .brief-cta {
+      text-align: center;
+      padding: 4rem 0 6rem;
+    }
+
+    .brief-cta h2 {
+      font-family: var(--display);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      color: var(--leather);
+      margin-bottom: 0.8rem;
+    }
+
+    .brief-cta p {
+      font-size: 1rem;
+      color: var(--text-soft);
+      margin-bottom: 2rem;
+    }
+
+    .brief-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.9rem 2.5rem;
+      font-family: var(--display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #fff;
+      background: var(--terracotta);
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+      min-height: 44px;
+    }
+
+    .brief-cta-btn:hover {
+      background: var(--leather);
+      transform: translateY(-1px);
+    }
+
+    /* ── FOOTER ── */
+    .brief-footer {
+      padding: 2.5rem 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .brief-footer p {
+      font-family: var(--display);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    .brief-footer a {
+      color: var(--terracotta);
+      text-decoration: none;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .container { padding: 0 1.5rem; }
+      .brief-hero { padding: 7rem 0 3rem; }
+      .brief-section { padding: 2.5rem 0; }
+      .scope-grid { grid-template-columns: 1fr; }
+      .brief-hero-meta { gap: 1.5rem; }
+      .brief-cta { padding: 3rem 0 5rem; }
+      .toggle-header { padding: 1rem 1.2rem; }
+      .toggle.open .toggle-body { padding: 0 1.2rem 1.2rem; }
+    }
+
+    @media (max-width: 480px) {
+      .brief-hero h1 { font-size: clamp(1.6rem, 8vw, 2.4rem); }
+      .timeline-item { flex-direction: column; gap: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- GRID LINES -->
+  <div class="grid-lines"></div>
+
+  <!-- NAV -->
+  <nav class="brief-nav">
+    <div class="brief-nav-inner">
+      <a href="https://provisions.work" class="brief-nav-brand">Provisions</a>
+      <a href="#approve" class="brief-nav-cta">Approve Brief</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+  <div class="container">
+
+    <!-- HERO -->
+    <section class="brief-hero">
+      <p class="brief-hero-label reveal">Project Brief</p>
+      <h1 class="reveal">{{PROJECT_TITLE}}</h1>
+      <p class="brief-hero-sub reveal">{{ONE_LINE_SUMMARY}}</p>
+
+      <div class="brief-hero-meta reveal">
+        <div class="brief-meta-item">
+          <p class="brief-meta-label">Client</p>
+          <p class="brief-meta-value">{{CLIENT_NAME}}</p>
+        </div>
+        <div class="brief-meta-item">
+          <p class="brief-meta-label">Timeline</p>
+          <p class="brief-meta-value">{{TIMELINE}}</p>
+        </div>
+        <div class="brief-meta-item">
+          <p class="brief-meta-label">Type</p>
+          <p class="brief-meta-value">{{PROJECT_TYPE}}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"><svg viewBox="0 0 720 2" preserveAspectRatio="none"><line class="divider-line divider-draw" x1="0" y1="1" x2="720" y2="1"/></svg></div>
+
+    <!-- OVERVIEW -->
+    <section class="brief-section">
+      <p class="brief-section-label reveal">Overview</p>
+      <h2 class="reveal">What we're making.</h2>
+      <p class="reveal">{{OVERVIEW_PARAGRAPH_1}}</p>
+      <p class="reveal">{{OVERVIEW_PARAGRAPH_2}}</p>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"><svg viewBox="0 0 720 2" preserveAspectRatio="none"><line class="divider-line divider-draw" x1="0" y1="1" x2="720" y2="1"/></svg></div>
+
+    <!-- SCOPE (Notion-style toggles) -->
+    <section class="brief-section">
+      <p class="brief-section-label reveal">Scope</p>
+      <h2 class="reveal">What's included.</h2>
+
+      <div class="toggle reveal">
+        <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+          <svg class="toggle-icon" viewBox="0 0 18 18"><path d="M6 4 L12 9 L6 14"/></svg>
+          <span class="toggle-title">{{DELIVERABLE_1_TITLE}}</span>
+          <span class="toggle-tag">{{TAG}}</span>
+        </div>
+        <div class="toggle-body">
+          <p>{{DELIVERABLE_1_DESCRIPTION}}</p>
+          <ul>
+            <li>{{DETAIL_1}}</li>
+            <li>{{DETAIL_2}}</li>
+            <li>{{DETAIL_3}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="toggle reveal">
+        <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+          <svg class="toggle-icon" viewBox="0 0 18 18"><path d="M6 4 L12 9 L6 14"/></svg>
+          <span class="toggle-title">{{DELIVERABLE_2_TITLE}}</span>
+          <span class="toggle-tag">{{TAG}}</span>
+        </div>
+        <div class="toggle-body">
+          <p>{{DELIVERABLE_2_DESCRIPTION}}</p>
+          <ul>
+            <li>{{DETAIL_1}}</li>
+            <li>{{DETAIL_2}}</li>
+            <li>{{DETAIL_3}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="toggle reveal">
+        <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+          <svg class="toggle-icon" viewBox="0 0 18 18"><path d="M6 4 L12 9 L6 14"/></svg>
+          <span class="toggle-title">{{DELIVERABLE_3_TITLE}}</span>
+          <span class="toggle-tag">{{TAG}}</span>
+        </div>
+        <div class="toggle-body">
+          <p>{{DELIVERABLE_3_DESCRIPTION}}</p>
+          <ul>
+            <li>{{DETAIL_1}}</li>
+            <li>{{DETAIL_2}}</li>
+            <li>{{DETAIL_3}}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"><svg viewBox="0 0 720 2" preserveAspectRatio="none"><line class="divider-line divider-draw" x1="0" y1="1" x2="720" y2="1"/></svg></div>
+
+    <!-- PROCESS -->
+    <section class="brief-section">
+      <p class="brief-section-label reveal">Process</p>
+      <h2 class="reveal">How it works.</h2>
+
+      <div class="scope-grid">
+        <div class="scope-card reveal">
+          <h4>1. Talk</h4>
+          <p>{{PROCESS_STEP_1}}</p>
+        </div>
+        <div class="scope-card reveal">
+          <h4>2. Make</h4>
+          <p>{{PROCESS_STEP_2}}</p>
+        </div>
+        <div class="scope-card reveal">
+          <h4>3. Review</h4>
+          <p>{{PROCESS_STEP_3}}</p>
+        </div>
+        <div class="scope-card reveal">
+          <h4>4. Live</h4>
+          <p>{{PROCESS_STEP_4}}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"><svg viewBox="0 0 720 2" preserveAspectRatio="none"><line class="divider-line divider-draw" x1="0" y1="1" x2="720" y2="1"/></svg></div>
+
+    <!-- TIMELINE -->
+    <section class="brief-section">
+      <p class="brief-section-label reveal">Timeline</p>
+      <h2 class="reveal">When it happens.</h2>
+
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <span class="timeline-week">Week 1</span>
+          <div class="timeline-content">
+            <h4>{{MILESTONE_1_TITLE}}</h4>
+            <p>{{MILESTONE_1_DESCRIPTION}}</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal">
+          <span class="timeline-week">Week 2</span>
+          <div class="timeline-content">
+            <h4>{{MILESTONE_2_TITLE}}</h4>
+            <p>{{MILESTONE_2_DESCRIPTION}}</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal">
+          <span class="timeline-week">Week 3</span>
+          <div class="timeline-content">
+            <h4>{{MILESTONE_3_TITLE}}</h4>
+            <p>{{MILESTONE_3_DESCRIPTION}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"><svg viewBox="0 0 720 2" preserveAspectRatio="none"><line class="divider-line divider-draw" x1="0" y1="1" x2="720" y2="1"/></svg></div>
+
+    <!-- INVESTMENT -->
+    <section class="brief-section">
+      <p class="brief-section-label reveal">Investment</p>
+      <h2 class="reveal">What it costs.</h2>
+
+      <div class="investment-card reveal">
+        <p class="investment-amount">{{PRICE}}</p>
+        <p class="investment-note">{{PAYMENT_TERMS}}</p>
+      </div>
+
+      <div class="toggle reveal" style="margin-top: 1rem;">
+        <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+          <svg class="toggle-icon" viewBox="0 0 18 18"><path d="M6 4 L12 9 L6 14"/></svg>
+          <span class="toggle-title">What's included in the price</span>
+        </div>
+        <div class="toggle-body">
+          <ul>
+            <li>{{INCLUDED_1}}</li>
+            <li>{{INCLUDED_2}}</li>
+            <li>{{INCLUDED_3}}</li>
+            <li>{{INCLUDED_4}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="toggle reveal">
+        <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+          <svg class="toggle-icon" viewBox="0 0 18 18"><path d="M6 4 L12 9 L6 14"/></svg>
+          <span class="toggle-title">What's not included</span>
+        </div>
+        <div class="toggle-body">
+          <ul>
+            <li>{{NOT_INCLUDED_1}}</li>
+            <li>{{NOT_INCLUDED_2}}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider"><svg viewBox="0 0 720 2" preserveAspectRatio="none"><line class="divider-line divider-draw" x1="0" y1="1" x2="720" y2="1"/></svg></div>
+
+    <!-- CTA -->
+    <section class="brief-cta" id="approve">
+      <h2 class="reveal">Ready to go?</h2>
+      <p class="reveal">If this looks right, let's start Day 1.</p>
+      <a href="mailto:{{EMAIL}}?subject=Brief%20Approved%3A%20{{PROJECT_TITLE}}" class="brief-cta-btn reveal">Approve This Brief</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="brief-footer">
+      <p><a href="https://provisions.work">Provisions</a> &middot; Sam Rahim</p>
+    </footer>
+
+  </div><!-- /container -->
+  </div><!-- /page-wrap -->
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/DrawSVGPlugin.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrambleTextPlugin.min.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, ScrambleTextPlugin);
+
+    // Scroll-triggered reveals
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    // DrawSVG divider lines
+    document.querySelectorAll('.divider-draw').forEach(function(line) {
+      gsap.from(line, {
+        drawSVG: '50% 50%',
+        duration: 1.2,
+        ease: 'power2.inOut',
+        scrollTrigger: {
+          trigger: line.closest('.divider'),
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    // Hero title scramble
+    var heroH1 = document.querySelector('.brief-hero h1');
+    if (heroH1) {
+      var originalText = heroH1.textContent;
+      heroH1.textContent = '\u00A0';
+      gsap.to(heroH1, {
+        duration: 1.4,
+        delay: 0.3,
+        scrambleText: {
+          text: originalText,
+          chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+          speed: 0.4,
+          revealDelay: 0.6
+        }
+      });
+    }
+
+    // Magnetic cursor on CTA
+    document.querySelectorAll('.brief-cta-btn, .brief-nav-cta').forEach(function(el) {
+      el.addEventListener('mousemove', function(e) {
+        var rect = el.getBoundingClientRect();
+        var x = e.clientX - rect.left - rect.width / 2;
+        var y = e.clientY - rect.top - rect.height / 2;
+        gsap.to(el, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: 'power2.out' });
+      });
+      el.addEventListener('mouseleave', function() {
+        gsap.to(el, { x: 0, y: 0, duration: 0.4, ease: 'power2.out' });
+      });
+    });
+  </script>
+
+</body>
+</html>
