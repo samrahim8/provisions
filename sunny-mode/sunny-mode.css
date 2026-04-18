@@ -1,0 +1,97 @@
+/* ============================================================
+   SUNNY MODE — animated palm-shadow overlay for light sections
+   Add to your global stylesheet.
+
+   Usage:
+     <section class="sunny-host">            <!-- needs position:relative; overflow:hidden -->
+       <div class="sunny-overlay" data-sunny>
+         <div class="sunny-frond left-a">…</div>
+         <div class="sunny-frond left-b">…</div>
+         <div class="sunny-frond right-a">…</div>
+         <div class="sunny-frond right-b">…</div>
+         <div class="sunny-frond top">…</div>
+       </div>
+       <!-- your content -->
+     </section>
+   ============================================================ */
+
+.sunny-host { position: relative; overflow: hidden; }
+
+.sunny-overlay {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+  mix-blend-mode: multiply;
+  opacity: 0;                       /* faded in on scroll */
+  transition: opacity 900ms ease;
+}
+.sunny-host > *:not(.sunny-overlay) { position: relative; z-index: 2; }
+.sunny-host.sunny-on .sunny-overlay { opacity: .85; }
+
+.sunny-frond {
+  position: absolute;
+  will-change: transform;
+  filter: blur(6px) saturate(0);
+  opacity: .55;
+}
+.sunny-frond svg { display: block; width: 100%; height: 100%; }
+.sunny-frond svg path { fill: #0b0804; }
+
+/* LEFT cluster — anchored top-left */
+.sunny-frond.left-a  { top:-8%;  left:-10%; width:58%; height:90%; transform-origin:5% 8%;  animation: sunny-sway-a 11s ease-in-out infinite; }
+.sunny-frond.left-b  { top:-4%;  left:-14%; width:52%; height:80%; transform-origin:5% 8%;  animation: sunny-sway-b 14s ease-in-out infinite; opacity:.35; filter:blur(10px) saturate(0); }
+
+/* RIGHT cluster — anchored top-right (mirrored via scaleX(-1)) */
+.sunny-frond.right-a { top:-6%;  right:-12%; width:55%; height:95%; transform-origin:95% 6%; animation: sunny-sway-c 13s ease-in-out infinite; transform: scaleX(-1); }
+.sunny-frond.right-b { top:-2%;  right:-16%; width:48%; height:78%; transform-origin:95% 6%; animation: sunny-sway-d 17s ease-in-out infinite; opacity:.3; filter:blur(11px) saturate(0); transform: scaleX(-1); }
+
+/* TOP overhang */
+.sunny-frond.top     { top:-40%; left:22%;  width:60%; height:60%; transform-origin:50% 0%; animation: sunny-sway-top 19s ease-in-out infinite; opacity:.3; filter:blur(9px) saturate(0); }
+
+@keyframes sunny-sway-a   { 0%,100% { transform: rotate(-1.8deg) translateY(0); }   50% { transform: rotate( 2.2deg) translateY(6px); } }
+@keyframes sunny-sway-b   { 0%,100% { transform: rotate( 1deg)   translateX(0); }   50% { transform: rotate(-1.5deg) translateX(-4px); } }
+@keyframes sunny-sway-c   { 0%,100% { transform: scaleX(-1) rotate(-1.5deg); }      50% { transform: scaleX(-1) rotate( 2.5deg) translateY(5px); } }
+@keyframes sunny-sway-d   { 0%,100% { transform: scaleX(-1) rotate( 1.2deg); }      50% { transform: scaleX(-1) rotate(-1.8deg) translateX(4px); } }
+@keyframes sunny-sway-top { 0%,100% { transform: rotate(-.8deg); }                  50% { transform: rotate( 1.3deg) translateY(3px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sunny-frond { animation: none !important; }
+}
+
+/* Global kill-switch (toggled via JS). Accepts "off" to disable. */
+html[data-sunny="off"] .sunny-overlay { opacity: 0 !important; }
+html[data-sunny="off"] .sunny-frond   { animation: none !important; }
+
+/* Toggle button */
+.sunny-toggle {
+  font-family: var(--display, 'Syne', sans-serif);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.6);
+  padding: 0.35rem 0.7rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+  white-space: nowrap;
+}
+.sunny-toggle:hover {
+  border-color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.9);
+}
+nav.scrolled .sunny-toggle {
+  border-color: var(--border, #DDD7CC);
+  color: var(--text-soft, #6B6259);
+}
+nav.scrolled .sunny-toggle:hover {
+  border-color: var(--leather-mid, #4A3D32);
+  color: var(--leather, #2C2118);
+}
+
+@media (max-width: 768px) {
+  .sunny-toggle { display: none; }
+}
