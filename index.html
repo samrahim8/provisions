@@ -296,7 +296,6 @@
       width: 22px;
       height: 2px;
       background: white;
-      transition: all 0.3s, background 0.4s;
       transition: all 0.3s;
       position: relative;
     }
@@ -405,7 +404,6 @@
       font-size: clamp(2.8rem, 8vw, 5.5rem);
       white-space: nowrap;
       font-weight: 800;
-      color: white;
       margin-bottom: 1rem;
       line-height: 0.95;
       text-transform: uppercase;
@@ -935,6 +933,54 @@
       .testimonial-card .testimonial-quote { font-size: 1.1rem; }
     }
 
+    /* ── CLIENT REACTION ── */
+    .client-reaction {
+      padding: 4rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .reaction-bubbles {
+      max-width: 480px;
+    }
+
+    .reaction-bubble {
+      background: #E9E9EB;
+      color: #1a1a1a;
+      padding: 0.9rem 1.15rem;
+      border-radius: 18px;
+      border-bottom-left-radius: 4px;
+      font-size: 1rem;
+      line-height: 1.55;
+      margin-bottom: 0.35rem;
+      width: fit-content;
+    }
+
+    .reaction-bubble:first-child {
+      border-bottom-left-radius: 4px;
+      border-top-left-radius: 18px;
+    }
+
+    .reaction-bubble:last-child {
+      border-bottom-left-radius: 18px;
+      border-top-left-radius: 4px;
+    }
+
+    .reaction-attr {
+      margin-top: 1rem;
+      font-family: var(--display);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 768px) {
+      .client-reaction { padding: 3rem 1.5rem; }
+      .reaction-bubble { font-size: 0.95rem; }
+    }
+
     /* ── MOBILE SWIPE CAROUSEL ── */
     .mobile-carousel {
       display: none;
@@ -1407,7 +1453,7 @@
       max-width: 640px;
       margin: 0 auto;
       text-align: left;
-      background: white;
+      background: var(--bg-elevated);
       padding: 2.5rem 2.5rem 2rem;
       border-radius: 8px;
       box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
@@ -1917,6 +1963,15 @@
       </div>
     </div>
     <p class="scroll-reveal" style="color: var(--text-soft); font-size: 0.9rem; margin-top: 1.5rem; font-style: italic;">+ a rotating shelf of side projects and experiments.</p>
+  </section>
+
+  <!-- CLIENT REACTION -->
+  <section class="client-reaction">
+    <div class="reaction-bubbles scroll-reveal">
+      <div class="reaction-bubble">Dude! I read through. This is awesome! Love the presentation.</div>
+      <div class="reaction-bubble">This is also thought through pretty well, seems like you've been able to use tools to your benefit to really ramp up speed and your own personal thinking clarity.</div>
+    </div>
+    <p class="reaction-attr scroll-reveal">Founder, Marketing Agency — after receiving a deliverable</p>
   </section>
 
   <!-- COMPARISON -->
