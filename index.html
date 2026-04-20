@@ -950,6 +950,10 @@
     .reaction-item {
       display: flex;
       flex-direction: column;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
     }
 
     .reaction-bubbles {
@@ -978,49 +982,10 @@
       border-top-left-radius: 4px;
     }
 
-    .reaction-email {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #fff;
-      overflow: hidden;
-    }
-
-    .reaction-email-header {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .reaction-email-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--dust);
-      flex-shrink: 0;
-    }
-
-    .reaction-email-meta {
-      font-size: 0.75rem;
-      color: var(--text-soft);
-      line-height: 1.4;
-    }
-
-    .reaction-email-sender {
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .reaction-email-body {
-      padding: 1.15rem 1rem;
-      font-size: 0.95rem;
-      line-height: 1.65;
-      color: var(--text);
-    }
-
-    .reaction-email-body p + p {
-      margin-top: 0.75rem;
+    .reaction-screenshot {
+      width: 100%;
+      border-radius: 6px;
+      display: block;
     }
 
     .reaction-attr {
@@ -2034,19 +1999,7 @@
         <p class="reaction-attr">Before the work even starts.</p>
       </div>
       <div class="reaction-item scroll-reveal">
-        <div class="reaction-email">
-          <div class="reaction-email-header">
-            <div class="reaction-email-avatar"></div>
-            <div class="reaction-email-meta">
-              <span class="reaction-email-sender">Client</span>
-              <br>to me
-            </div>
-          </div>
-          <div class="reaction-email-body">
-            <p>Well I'm hiring you for next month.</p>
-            <p>I really appreciate you.</p>
-          </div>
-        </div>
+        <img src="/images/client-email.png" alt="Client email: Well I'm hiring you for next month. I really appreciate you." class="reaction-screenshot">
         <p class="reaction-attr">The work, not the warm-up. Day 1.</p>
       </div>
     </div>
