@@ -940,6 +940,18 @@
       margin: 0 auto;
     }
 
+    .reaction-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .reaction-item {
+      display: flex;
+      flex-direction: column;
+    }
+
     .reaction-bubbles {
       max-width: 480px;
     }
@@ -966,6 +978,51 @@
       border-top-left-radius: 4px;
     }
 
+    .reaction-email {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .reaction-email-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .reaction-email-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--dust);
+      flex-shrink: 0;
+    }
+
+    .reaction-email-meta {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      line-height: 1.4;
+    }
+
+    .reaction-email-sender {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .reaction-email-body {
+      padding: 1.15rem 1rem;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--text);
+    }
+
+    .reaction-email-body p + p {
+      margin-top: 0.75rem;
+    }
+
     .reaction-attr {
       margin-top: 1rem;
       font-family: var(--display);
@@ -978,6 +1035,7 @@
 
     @media (max-width: 768px) {
       .client-reaction { padding: 3rem 1.5rem; }
+      .reaction-grid { grid-template-columns: 1fr; gap: 1.5rem; }
       .reaction-bubble { font-size: 0.95rem; }
     }
 
@@ -1967,11 +2025,31 @@
 
   <!-- CLIENT REACTION -->
   <section class="client-reaction">
-    <div class="reaction-bubbles scroll-reveal">
-      <div class="reaction-bubble">Dude! I read through. This is awesome! Love the presentation.</div>
-      <div class="reaction-bubble">This is also thought through pretty well, seems like you've been able to use tools to your benefit to really ramp up speed and your own personal thinking clarity.</div>
+    <div class="reaction-grid">
+      <div class="reaction-item scroll-reveal">
+        <div class="reaction-bubbles">
+          <div class="reaction-bubble">Dude! I read through. This is awesome! Love the presentation.</div>
+          <div class="reaction-bubble">This is also thought through pretty well, seems like you've been able to use tools to your benefit to really ramp up speed and your own personal thinking clarity.</div>
+        </div>
+        <p class="reaction-attr">Before the work even starts.</p>
+      </div>
+      <div class="reaction-item scroll-reveal">
+        <div class="reaction-email">
+          <div class="reaction-email-header">
+            <div class="reaction-email-avatar"></div>
+            <div class="reaction-email-meta">
+              <span class="reaction-email-sender">Client</span>
+              <br>to me
+            </div>
+          </div>
+          <div class="reaction-email-body">
+            <p>Well I'm hiring you for next month.</p>
+            <p>I really appreciate you.</p>
+          </div>
+        </div>
+        <p class="reaction-attr">The work, not the warm-up. Day 1.</p>
+      </div>
     </div>
-    <p class="reaction-attr scroll-reveal">Before the work even starts.</p>
   </section>
 
   <!-- COMPARISON -->
