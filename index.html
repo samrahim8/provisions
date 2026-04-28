@@ -402,7 +402,6 @@
     .hero h1 {
       font-family: var(--display);
       font-size: clamp(2.8rem, 8vw, 5.5rem);
-      white-space: nowrap;
       font-weight: 800;
       margin-bottom: 1rem;
       line-height: 0.95;
@@ -410,6 +409,7 @@
       letter-spacing: -0.02em;
       color: var(--bg);
       text-shadow: none;
+      text-wrap: balance;
     }
 
     .hero-tagline {
@@ -1863,8 +1863,8 @@
     </div>
     <div class="hero-content">
       <div class="hero-frame scroll-reveal">
-        <h1 class="scroll-reveal scroll-reveal-delay-1">Provisions</h1>
-        <p class="hero-tagline scroll-reveal scroll-reveal-delay-2">Special projects for founders + operators.</p>
+        <h1 class="scroll-reveal scroll-reveal-delay-1">Special projects for founders + operators</h1>
+        <p class="hero-tagline scroll-reveal scroll-reveal-delay-2">Business strategy, organic growth + custom tools.</p>
         <div class="hero-rule scroll-reveal scroll-reveal-delay-2"></div>
         <p class="hero-proprietor scroll-reveal scroll-reveal-delay-3">Sam Rahim</p>
         <p class="hero-proprietor-title scroll-reveal scroll-reveal-delay-3">Proprietor</p>
@@ -2359,7 +2359,7 @@
       .to('.hero h1', {
         duration: 1.6,
         scrambleText: {
-          text: 'Provisions',
+          text: 'Special projects for founders + operators',
           chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
           speed: 0.6,
           revealDelay: 0.7
