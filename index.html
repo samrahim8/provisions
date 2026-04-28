@@ -329,9 +329,9 @@
       min-height: 100svh;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      text-align: left;
-      padding: 6rem 3.5rem 6rem;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
       position: relative;
       background: var(--leather);
       overflow: hidden;
@@ -361,7 +361,7 @@
       z-index: 0;
     }
 
-    .hero-content { max-width: 1000px; position: relative; z-index: 2; }
+    .hero-content { max-width: 900px; position: relative; z-index: 2; }
 
     .hero-blueprint {
       position: absolute;
@@ -409,16 +409,16 @@
       text-shadow: none;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
     }
     .hero h1 .h1-line { display: block; line-height: 0.92; }
     .hero h1 .h1-line-1 { font-size: clamp(2.4rem, 7vw, 5rem); }
     .hero h1 .h1-line-2 {
-      font-size: clamp(1.1rem, 2.4vw, 1.75rem);
+      font-size: clamp(1.2rem, 2.6vw, 2rem);
       font-weight: 600;
       letter-spacing: -0.005em;
-      opacity: 0.62;
-      margin-top: 0.5em;
+      opacity: 0.78;
+      margin-top: 0.45em;
       line-height: 1.05;
     }
 
@@ -427,23 +427,17 @@
       font-size: clamp(1.05rem, 1.6vw, 1.25rem);
       font-weight: 500;
       color: rgba(245, 241, 235, 0.78);
-      margin: 0;
+      margin: 0 0 2.25rem;
       line-height: 1.5;
-      max-width: 36ch;
     }
 
     .hero-signature {
-      position: absolute;
-      top: 6rem;
-      right: 3.5rem;
-      z-index: 3;
       font-family: var(--display);
       font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: rgba(245, 241, 235, 0.55);
-      text-align: right;
       margin: 0;
     }
     .hero-signature-sep,
@@ -455,7 +449,8 @@
     .hero-scroll {
       position: absolute;
       bottom: 2.5rem;
-      right: 3.5rem;
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 2;
       text-decoration: none;
       display: flex;
@@ -1714,8 +1709,6 @@
       }
 
       .hero { padding: 5rem 1.5rem 5rem; }
-      .hero-signature { top: 5rem; right: 1.5rem; }
-      .hero-scroll { right: 1.5rem; bottom: 1.5rem; }
 
       .section { padding: 3.5rem 1.5rem; }
       .lede { padding: 3rem 1.5rem 1rem; }
@@ -1875,11 +1868,11 @@
           <span class="h1-line h1-line-2">for founders + operators</span>
         </h1>
         <p class="hero-tagline scroll-reveal scroll-reveal-delay-2">Business strategy, organic growth + custom tools.</p>
+        <p class="hero-signature scroll-reveal scroll-reveal-delay-3">
+          <span class="hero-signature-name">Sam Rahim</span><span class="hero-signature-sep">, </span><span class="hero-signature-title">Proprietor</span>
+        </p>
       </div>
     </div>
-    <p class="hero-signature scroll-reveal scroll-reveal-delay-3">
-      <span class="hero-signature-name">Sam Rahim</span><span class="hero-signature-sep">, </span><span class="hero-signature-title">Proprietor</span>
-    </p>
     <a href="#" class="hero-scroll" onclick="event.preventDefault(); if(smoother){smoother.scrollTo('.lede',true)}else{document.querySelector('.lede').scrollIntoView({behavior:'smooth'})}"><svg class="scroll-chevron" viewBox="0 0 28 16" fill="none"><path d="M2 2 L14 13 L26 2"/></svg></a>
   </section>
 
