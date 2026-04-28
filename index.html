@@ -414,9 +414,9 @@
       gap: 0.1em;
     }
     .hero h1 .h1-line { display: block; white-space: nowrap; }
-    .hero h1 .h1-line-1 { font-size: clamp(2.6rem, 8vw, 5.5rem); }
-    .hero h1 .h1-line-2 { font-size: clamp(1rem, 2.2vw, 1.6rem); font-weight: 600; letter-spacing: 0.08em; opacity: 0.8; margin: 0.2em 0; }
-    .hero h1 .h1-line-3 { font-size: clamp(1.8rem, 5.5vw, 3.6rem); }
+    .hero h1 .h1-line-1 { font-size: clamp(1.8rem, 5.2vw, 3.6rem); }
+    .hero h1 .h1-line-2 { font-size: clamp(0.7rem, 1.4vw, 1rem); font-weight: 600; letter-spacing: 0.12em; opacity: 0.75; margin: 0.25em 0; }
+    .hero h1 .h1-line-3 { font-size: clamp(1.2rem, 3.5vw, 2.4rem); }
 
     .hero-tagline {
       font-family: var(--sans);
@@ -2358,19 +2358,30 @@
       });
     }
 
+    // Cache target text for each h1 line, then blank them so scramble decodes IN
+    var h1Lines = document.querySelectorAll('.hero h1 .h1-line');
+    h1Lines.forEach(function (el) {
+      el.dataset.text = el.textContent;
+      el.textContent = ' ';
+    });
+
     // Hero entrance timeline
     var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
 
-    gsap.set('.hero h1 .h1-line', { opacity: 0, y: 20 });
-
     heroTl
-      .to('.hero-frame', { opacity: 1, scale: 1, duration: 1.2 })
-      .to('.hero h1 .h1-line', {
-        opacity: 1,
-        y: 0,
-        duration: 0.9,
-        stagger: 0.18
-      }, '<0.2')
+      .to('.hero-frame', { opacity: 1, scale: 1, duration: 1.2 });
+
+    h1Lines.forEach(function (el, i) {
+      heroTl.to(el, {
+        duration: 1.1,
+        scrambleText: {
+          text: el.dataset.text,
+          chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+          speed: 0.6,
+          revealDelay: 0.4
+        }
+      }, i === 0 ? '<0.2' : '-=0.7');
+    });
       .from('.hero-tagline', { opacity: 0, y: 20, duration: 0.6 }, '-=0.3')
       .from('.hero-rule', { scaleX: 0, duration: 0.5, transformOrigin: 'center' }, '-=0.3')
       .from('.hero-proprietor', {
