@@ -329,9 +329,9 @@
       min-height: 100svh;
       display: flex;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
+      justify-content: flex-start;
+      text-align: left;
+      padding: 6rem 3.5rem 6rem;
       position: relative;
       background: var(--leather);
       overflow: hidden;
@@ -361,7 +361,7 @@
       z-index: 0;
     }
 
-    .hero-content { max-width: 900px; position: relative; z-index: 2; }
+    .hero-content { max-width: 1000px; position: relative; z-index: 2; }
 
     .hero-blueprint {
       position: absolute;
@@ -394,75 +394,68 @@
     }
 
     .hero-frame {
-      padding: 2rem;
       opacity: 0; /* prevent flash before GSAP loads */
-      transform: scale(0.96);
+      transform: scale(0.99);
     }
 
     .hero h1 {
       font-family: var(--display);
       font-weight: 800;
-      margin-bottom: 1.25rem;
-      line-height: 1;
+      margin: 0 0 1.5rem;
+      line-height: 0.92;
       text-transform: uppercase;
       letter-spacing: -0.02em;
       color: var(--bg);
       text-shadow: none;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
     }
-    .hero h1 .h1-line { display: block; white-space: nowrap; line-height: 0.92; }
-    .hero h1 .h1-line-1 { font-size: clamp(2rem, 5.6vw, 4rem); }
+    .hero h1 .h1-line { display: block; line-height: 0.92; }
+    .hero h1 .h1-line-1 { font-size: clamp(2.4rem, 7vw, 5rem); }
     .hero h1 .h1-line-2 {
-      font-size: clamp(0.65rem, 1.3vw, 0.95rem);
+      font-size: clamp(1.1rem, 2.4vw, 1.75rem);
       font-weight: 600;
-      letter-spacing: 0.28em;
-      text-indent: 0.28em;
-      opacity: 0.55;
-      margin: 0.9em 0;
-      line-height: 1;
+      letter-spacing: -0.005em;
+      opacity: 0.62;
+      margin-top: 0.5em;
+      line-height: 1.05;
     }
-    .hero h1 .h1-line-3 { font-size: clamp(1.2rem, 3.5vw, 2.4rem); }
 
     .hero-tagline {
       font-family: var(--sans);
-      font-size: clamp(1.2rem, 2.1vw, 1.5rem);
-      font-weight: 600;
-      color: rgba(245, 241, 235, 0.85);
-      margin-bottom: 2rem;
+      font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+      font-weight: 500;
+      color: rgba(245, 241, 235, 0.78);
+      margin: 0;
       line-height: 1.5;
+      max-width: 36ch;
     }
 
-    .hero-rule {
-      width: 50px;
-      height: 2px;
-      background: rgba(245, 241, 235, 0.3);
-      margin: 0 auto 1.5rem;
-    }
-
-    .hero-proprietor {
+    .hero-signature {
+      position: absolute;
+      top: 6rem;
+      right: 3.5rem;
+      z-index: 3;
       font-family: var(--display);
       font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(245, 241, 235, 0.7);
-      margin-bottom: 0.2rem;
+      color: rgba(245, 241, 235, 0.55);
+      text-align: right;
+      margin: 0;
     }
-
-    .hero-proprietor-title {
-      font-family: var(--sans);
-      font-size: 0.8rem;
-      font-weight: 400;
-      color: rgba(245, 241, 235, 0.45);
+    .hero-signature-sep,
+    .hero-signature-title {
+      color: rgba(245, 241, 235, 0.4);
+      font-weight: 500;
     }
 
     .hero-scroll {
       position: absolute;
       bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
+      right: 3.5rem;
       z-index: 2;
       text-decoration: none;
       display: flex;
@@ -770,7 +763,7 @@
 
     .work-cta a:hover { color: var(--leather); }
 
-    /* Nav CTA button — "Place Your Order" */
+    /* Nav CTA — text link, not a button (confidence by subtraction) */
     nav a.nav-cta {
       font-family: var(--display);
       font-size: 0.72rem;
@@ -778,16 +771,14 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       text-decoration: none;
-      background: var(--terracotta);
-      color: #fff;
-      padding: 0.6rem 1.1rem;
-      border-radius: 4px;
-      transition: background 0.25s, transform 0.2s;
+      background: transparent;
+      color: var(--bg);
+      padding: 0;
+      transition: opacity 0.25s;
+      opacity: 0.85;
     }
     nav a.nav-cta:hover {
-      background: var(--leather);
-      color: #fff;
-      transform: translateY(-1px);
+      opacity: 1;
     }
 
     /* ── ABOUT ── */
@@ -1675,7 +1666,8 @@
 
     @media (max-width: 768px) {
       .offer-lane h3 { white-space: normal; }
-      .hero h1 { font-size: clamp(2rem, 10vw, 3.5rem); }
+      .hero h1 .h1-line-1 { font-size: clamp(2.2rem, 10vw, 4rem); }
+      .hero h1 .h1-line-2 { font-size: clamp(1.05rem, 4vw, 1.4rem); }
       nav.scrolled {
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
@@ -1721,8 +1713,9 @@
         align-items: center;
       }
 
-      .hero { padding: 5rem 1.2rem 3rem; }
-      .hero-frame { padding: 2.5rem 1.5rem 2rem; }
+      .hero { padding: 5rem 1.5rem 5rem; }
+      .hero-signature { top: 5rem; right: 1.5rem; }
+      .hero-scroll { right: 1.5rem; bottom: 1.5rem; }
 
       .section { padding: 3.5rem 1.5rem; }
       .lede { padding: 3rem 1.5rem 1rem; }
@@ -1771,7 +1764,8 @@
     }
 
     @media (max-width: 480px) {
-      .hero h1 { font-size: clamp(1.8rem, 9vw, 2.8rem); }
+      .hero h1 .h1-line-1 { font-size: clamp(1.9rem, 9vw, 2.8rem); }
+      .hero h1 .h1-line-2 { font-size: clamp(0.95rem, 4vw, 1.2rem); }
       .hero-tagline { font-size: 1rem; }
 
       .section-label { font-size: 0.75rem; }
@@ -1877,16 +1871,15 @@
     <div class="hero-content">
       <div class="hero-frame scroll-reveal">
         <h1 class="scroll-reveal scroll-reveal-delay-1">
-          <span class="h1-line h1-line-1">Special Projects</span>
-          <span class="h1-line h1-line-2">for</span>
-          <span class="h1-line h1-line-3">Founders + Operators</span>
+          <span class="h1-line h1-line-1">Special projects</span>
+          <span class="h1-line h1-line-2">for founders + operators</span>
         </h1>
         <p class="hero-tagline scroll-reveal scroll-reveal-delay-2">Business strategy, organic growth + custom tools.</p>
-        <div class="hero-rule scroll-reveal scroll-reveal-delay-2"></div>
-        <p class="hero-proprietor scroll-reveal scroll-reveal-delay-3">Sam Rahim</p>
-        <p class="hero-proprietor-title scroll-reveal scroll-reveal-delay-3">Proprietor</p>
       </div>
     </div>
+    <p class="hero-signature scroll-reveal scroll-reveal-delay-3">
+      <span class="hero-signature-name">Sam Rahim</span><span class="hero-signature-sep">, </span><span class="hero-signature-title">Proprietor</span>
+    </p>
     <a href="#" class="hero-scroll" onclick="event.preventDefault(); if(smoother){smoother.scrollTo('.lede',true)}else{document.querySelector('.lede').scrollIntoView({behavior:'smooth'})}"><svg class="scroll-chevron" viewBox="0 0 28 16" fill="none"><path d="M2 2 L14 13 L26 2"/></svg></a>
   </section>
 
@@ -2365,39 +2358,36 @@
       });
     }
 
-    // Cache target text for each h1 line, then blank them so scramble decodes IN
+    // Only scramble the lead line; everything else fades in quietly.
     var h1Lines = document.querySelectorAll('.hero h1 .h1-line');
-    h1Lines.forEach(function (el) {
-      el.dataset.text = el.textContent;
-      el.textContent = ' ';
-    });
+    var leadLine = h1Lines[0];
+    if (leadLine) {
+      leadLine.dataset.text = leadLine.textContent;
+      leadLine.textContent = '\u00A0';
+    }
 
     // Hero entrance timeline
     var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
 
-    heroTl.to('.hero-frame', { opacity: 1, scale: 1, duration: 1.2 });
+    heroTl.to('.hero-frame', { opacity: 1, scale: 1, duration: 1.0 });
 
-    h1Lines.forEach(function (el, i) {
-      heroTl.to(el, {
+    if (leadLine) {
+      heroTl.to(leadLine, {
         duration: 1.1,
         scrambleText: {
-          text: el.dataset.text,
+          text: leadLine.dataset.text,
           chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
           speed: 0.6,
-          revealDelay: 0.4
+          revealDelay: 0.35
         }
-      }, i === 0 ? '<0.2' : '-=0.7');
-    });
+      }, '<0.15');
+    }
 
     heroTl
-      .from('.hero-tagline', { opacity: 0, y: 20, duration: 0.6 }, '-=0.3')
-      .from('.hero-rule', { scaleX: 0, duration: 0.5, transformOrigin: 'center' }, '-=0.3')
-      .from('.hero-proprietor', {
-        duration: 0.8,
-        scrambleText: { text: 'Sam Rahim', chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', speed: 0.4 }
-      }, '-=0.3')
-      .from('.hero-proprietor-title', { opacity: 0, y: 10, duration: 0.4 }, '-=0.4')
-      .from('.hero-scroll', { opacity: 0, duration: 0.6 }, '-=0.2');
+      .from('.hero h1 .h1-line-2', { opacity: 0, y: 12, duration: 0.7 }, '-=0.5')
+      .from('.hero-tagline', { opacity: 0, y: 12, duration: 0.7 }, '-=0.45')
+      .from('.hero-signature', { opacity: 0, duration: 0.8 }, '-=0.5')
+      .from('.hero-scroll', { opacity: 0, duration: 0.6 }, '-=0.3');
 
     // DrawSVG animated scroll chevron — draws itself, pauses, fades, loops
     var chevronPath = document.querySelector('.scroll-chevron path');
