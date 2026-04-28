@@ -401,17 +401,22 @@
 
     .hero h1 {
       font-family: var(--display);
-      font-size: clamp(2rem, 5vw, 3.75rem);
       font-weight: 800;
       margin-bottom: 1rem;
-      line-height: 1;
+      line-height: 0.95;
       text-transform: uppercase;
       letter-spacing: -0.02em;
       color: var(--bg);
       text-shadow: none;
-      max-width: 16ch;
-      text-wrap: balance;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1em;
     }
+    .hero h1 .h1-line { display: block; white-space: nowrap; }
+    .hero h1 .h1-line-1 { font-size: clamp(2.6rem, 8vw, 5.5rem); }
+    .hero h1 .h1-line-2 { font-size: clamp(1rem, 2.2vw, 1.6rem); font-weight: 600; letter-spacing: 0.08em; opacity: 0.8; margin: 0.2em 0; }
+    .hero h1 .h1-line-3 { font-size: clamp(1.8rem, 5.5vw, 3.6rem); }
 
     .hero-tagline {
       font-family: var(--sans);
@@ -1864,7 +1869,11 @@
     </div>
     <div class="hero-content">
       <div class="hero-frame scroll-reveal">
-        <h1 class="scroll-reveal scroll-reveal-delay-1">Special projects for founders + operators</h1>
+        <h1 class="scroll-reveal scroll-reveal-delay-1">
+          <span class="h1-line h1-line-1">Special Projects</span>
+          <span class="h1-line h1-line-2">for</span>
+          <span class="h1-line h1-line-3">Founders + Operators</span>
+        </h1>
         <p class="hero-tagline scroll-reveal scroll-reveal-delay-2">Business strategy, organic growth + custom tools.</p>
         <div class="hero-rule scroll-reveal scroll-reveal-delay-2"></div>
         <p class="hero-proprietor scroll-reveal scroll-reveal-delay-3">Sam Rahim</p>
@@ -2349,22 +2358,18 @@
       });
     }
 
-    // Clear h1 text so scramble decodes INTO "Provisions"
-    document.querySelector('.hero h1').textContent = '\u00A0';
-
     // Hero entrance timeline
     var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
 
+    gsap.set('.hero h1 .h1-line', { opacity: 0, y: 20 });
+
     heroTl
       .to('.hero-frame', { opacity: 1, scale: 1, duration: 1.2 })
-      .to('.hero h1', {
-        duration: 1.6,
-        scrambleText: {
-          text: 'Special projects for founders + operators',
-          chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-          speed: 0.6,
-          revealDelay: 0.7
-        }
+      .to('.hero h1 .h1-line', {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        stagger: 0.18
       }, '<0.2')
       .from('.hero-tagline', { opacity: 0, y: 20, duration: 0.6 }, '-=0.3')
       .from('.hero-rule', { scaleX: 0, duration: 0.5, transformOrigin: 'center' }, '-=0.3')
