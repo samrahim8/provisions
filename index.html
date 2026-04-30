@@ -634,10 +634,11 @@
 
     .offer-lane h3 {
       font-family: var(--display);
-      font-size: 1.05rem;
-      font-weight: 600;
+      font-size: clamp(1.35rem, 2vw, 1.7rem);
+      font-weight: 700;
       color: var(--leather);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.85rem;
+      line-height: 1.1;
     }
 
     .offer-lane p {
@@ -1893,17 +1894,22 @@
 
   <!-- OFFER -->
   <section class="offer" id="offer">
-    <p class="scroll-reveal" style="color: var(--text-soft); font-size: 1rem; margin-bottom: 1.5rem;">Here's what I usually hear:</p>
-    <div class="offer-lanes offer-lanes-2">
+    <p class="scroll-reveal" style="color: var(--text-soft); font-size: 1rem; margin-bottom: 1.5rem;">In stock.</p>
+    <div class="offer-lanes">
       <div class="offer-lane">
-        <h3>"I need more customers."</h3>
-        <p>Niche Reddit tools, converting UGC, vertical-specific products (+ even more). The new way to acquire customers.</p>
-        <p class="lane-label" style="margin-top: auto; padding-top: 1rem;">Growth Engines</p>
+        <p class="lane-label">№ 01</p>
+        <h3>The Plan</h3>
+        <p>Operating cadence, P&amp;L, hiring, finance. The plan you've been meaning to write down.</p>
       </div>
       <div class="offer-lane">
-        <h3>"I need to keep up."</h3>
-        <p>Dashboards, AI agents, internal apps, automations. The tool you've been describing in Slack.</p>
-        <p class="lane-label" style="margin-top: auto; padding-top: 1rem;">Custom Tools</p>
+        <p class="lane-label">№ 02</p>
+        <h3>The Customers</h3>
+        <p>Niche Reddit tools, UGC, vertical-specific products. Acquisition that compounds.</p>
+      </div>
+      <div class="offer-lane">
+        <p class="lane-label">№ 03</p>
+        <h3>The Tool</h3>
+        <p>Dashboards, AI agents, internal apps. The thing you've been describing in Slack.</p>
       </div>
     </div>
   </section>
