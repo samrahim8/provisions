@@ -594,58 +594,64 @@
       height: auto;
     }
 
-    /* Offer cards grid */
+    /* Offer ledger — asymmetric two-column rows */
     .offer-lanes {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid rgba(43, 27, 20, 0.14);
       margin-bottom: 2.5rem;
     }
 
     .offer-lane {
-      padding: 2.2rem 2rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg-elevated);
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.25s ease, box-shadow 0.25s ease;
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
-
-    .offer-lanes-2 {
-      grid-template-columns: repeat(2, 1fr);
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 3rem;
+      padding: 2.2rem 0.5rem 2.2rem 0.5rem;
+      border-bottom: 1px solid rgba(43, 27, 20, 0.14);
+      background: transparent;
+      border-radius: 0;
+      align-items: start;
+      transition: background 0.3s ease, padding-left 0.3s ease;
     }
 
     .offer-lane:hover {
-      border-color: var(--terracotta);
+      background: rgba(43, 27, 20, 0.025);
+      padding-left: 1.25rem;
+    }
+
+    .offer-lane .lane-id {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
     }
 
     .offer-lane .lane-label {
       font-family: var(--display);
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--terracotta);
-      margin-bottom: 0.75rem;
+      margin: 0;
     }
 
     .offer-lane h3 {
       font-family: var(--display);
-      font-size: clamp(1.35rem, 2vw, 1.7rem);
+      font-size: clamp(1.6rem, 2.6vw, 2.4rem);
       font-weight: 700;
       color: var(--leather);
-      margin-bottom: 0.85rem;
-      line-height: 1.1;
+      margin: 0;
+      line-height: 1;
+      letter-spacing: -0.01em;
     }
 
-    .offer-lane p {
-      font-size: 0.95rem;
+    .offer-lane .lane-body {
+      font-size: clamp(1rem, 1.3vw, 1.1rem);
       color: var(--text-soft);
-      line-height: 1.65;
-      min-height: 4.95em; /* reserves ~3 lines so both card bodies stay visually aligned */
+      line-height: 1.6;
+      margin: 0;
+      padding-top: 0.4rem;
+      max-width: 56ch;
     }
 
     .offer-terms {
@@ -1770,9 +1776,10 @@
 
       .section-label { font-size: 0.75rem; }
 
-      .offer-lane { height: auto; }
-      .offer-lane h3 { font-size: 1.05rem; }
-      .offer-lane p { font-size: 1rem; }
+      .offer-lane { grid-template-columns: 1fr; gap: 0.5rem; padding: 1.5rem 0.5rem; }
+      .offer-lane:hover { padding-left: 0.5rem; }
+      .offer-lane h3 { font-size: clamp(1.4rem, 7vw, 1.9rem); }
+      .offer-lane .lane-body { font-size: 1rem; padding-top: 0.6rem; }
 
       .section p, .experience-item p { font-size: 1.0625rem; }
 
@@ -1900,19 +1907,25 @@
     <p class="scroll-reveal" style="color: var(--text-soft); font-size: 1rem; margin-bottom: 1.5rem;">What you can hire me for.</p>
     <div class="offer-lanes">
       <div class="offer-lane">
-        <p class="lane-label">№ 01</p>
-        <h3>Operating</h3>
-        <p>Operating cadence, P&amp;L, hiring, finance. The plan you've been meaning to write down.</p>
+        <div class="lane-id">
+          <p class="lane-label">№ 01</p>
+          <h3>Operating</h3>
+        </div>
+        <p class="lane-body">Operating cadence, P&amp;L, hiring, finance. The plan you've been meaning to write down.</p>
       </div>
       <div class="offer-lane">
-        <p class="lane-label">№ 02</p>
-        <h3>Growing</h3>
-        <p>UGC engines, programmatic SEO, Reddit plays, free tools, AI search. Acquisition that compounds after the work.</p>
+        <div class="lane-id">
+          <p class="lane-label">№ 02</p>
+          <h3>Growing</h3>
+        </div>
+        <p class="lane-body">UGC engines, programmatic SEO, Reddit plays, free tools, AI search. Acquisition that compounds after the work.</p>
       </div>
       <div class="offer-lane">
-        <p class="lane-label">№ 03</p>
-        <h3>Making</h3>
-        <p>Dashboards, AI agents, internal apps, automations. The thing you've been describing in Slack.</p>
+        <div class="lane-id">
+          <p class="lane-label">№ 03</p>
+          <h3>Making</h3>
+        </div>
+        <p class="lane-body">Dashboards, AI agents, internal apps, automations. The thing you've been describing in Slack.</p>
       </div>
     </div>
   </section>
@@ -2472,68 +2485,22 @@
       });
     });
 
-    // ── OFFER CARDS: staggered entrance + 3D tilt ──
+    // ── OFFER LEDGER: simple stagger fade-in for the rows ──
     var isMobile = window.innerWidth <= 768;
-
     var offerLanes = document.querySelectorAll('.offer-lane');
 
-    // Offer cards: Apple Wallet stack → unfold into grid
-    if (!isMobile) {
-      var grid = document.querySelector('.offer-lanes');
-      var gridRect = grid.getBoundingClientRect();
-      var gridCenter = grid.offsetWidth / 2;
-
-      // Measure final positions of each card
-      var finalPositions = [];
-      offerLanes.forEach(function(lane) {
-        finalPositions.push({
-          left: lane.offsetLeft,
-          width: lane.offsetWidth
-        });
-      });
-
-      // Calculate center stack position for each card
-      offerLanes.forEach(function(lane, i) {
-        var cardCenter = finalPositions[i].left + finalPositions[i].width / 2;
-        var offsetX = gridCenter - cardCenter;
-
-        gsap.set(lane, {
-          x: offsetX,
-          y: -i * 12,
-          scale: 1 - (2 - i) * 0.025,
-          zIndex: 10 + i,
-          opacity: 1
-        });
-      });
-
-      // Unfold into grid positions
-      gsap.to(offerLanes, {
-        x: 0,
-        y: 0,
-        scale: 1,
-        duration: 1,
-        stagger: 0.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.offer-lanes',
-          start: 'top 80%',
-          toggleActions: 'play none none none'
-        }
-      });
-    } else {
-      gsap.from(offerLanes, {
-        opacity: 0,
-        y: 40,
-        duration: 0.7,
-        stagger: 0.12,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.offer-lanes',
-          start: 'top 80%',
-          toggleActions: 'play none none none'
-        }
-      });
-    }
+    gsap.from(offerLanes, {
+      opacity: 0,
+      y: 24,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.offer-lanes',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
 
       // ── WORK CARDS: stacked → grid reveal ──
       var workGrid = document.getElementById('workGrid');
@@ -2635,45 +2602,7 @@
       initCarousel('offerCarousel', 'offerDots');
     }
 
-    // ── OFFER CARDS: 3D tilt + depth on hover ──
-    document.querySelectorAll('.offer-lane').forEach(function(card) {
-      // Set up for 3D
-      gsap.set(card, { transformPerspective: 800, transformStyle: 'preserve-3d' });
-
-      card.addEventListener('mousemove', function(e) {
-        var rect = card.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
-        var centerX = rect.width / 2;
-        var centerY = rect.height / 2;
-        var rotateX = (y - centerY) / centerY * -8;
-        var rotateY = (x - centerX) / centerX * 8;
-
-        gsap.to(card, {
-          rotateX: rotateX,
-          rotateY: rotateY,
-          scale: 1.03,
-          boxShadow: '0 20px 50px rgba(26, 23, 20, 0.12), 0 8px 16px rgba(26, 23, 20, 0.06)',
-          borderColor: 'var(--terracotta)',
-          duration: 0.3,
-          ease: 'power2.out',
-          overwrite: 'auto'
-        });
-      });
-
-      card.addEventListener('mouseleave', function() {
-        gsap.to(card, {
-          rotateX: 0,
-          rotateY: 0,
-          scale: 1,
-          boxShadow: '0 0 0 rgba(26, 23, 20, 0)',
-          borderColor: 'var(--border)',
-          duration: 0.5,
-          ease: 'power3.out',
-          overwrite: 'auto'
-        });
-      });
-    });
+    // ── OFFER LEDGER: hover handled by CSS (background tint + padding shift) ──
 
     // Experience items: stagger in from left
     gsap.from('.experience-item', {
