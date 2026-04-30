@@ -511,11 +511,18 @@
       font-family: var(--display);
       font-weight: 800;
       font-size: clamp(1.6rem, 3.4vw, 2.7rem);
-      line-height: 1.25;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
       color: var(--leather);
-      max-width: 980px;
+      max-width: 1040px;
       margin: 0 auto;
+      text-wrap: balance;
     }
+    .lede-line {
+      display: block;
+      margin-bottom: 0.42em;
+    }
+    .lede-line:last-child { margin-bottom: 0; }
 
     /* ── OFFER ── */
     .offer {
@@ -1883,7 +1890,7 @@
 
   <!-- LEDE -->
   <div class="lede" id="lede">
-    <p class="line-mask">You've got work to do.<br>No time to do it.<br>And hiring an agency is its own project.</p>
+    <p class="line-mask"><span class="lede-line">You've got work to do.</span><span class="lede-line">No time to do it.</span><span class="lede-line">And hiring an agency is its own project.</span></p>
   </div>
 
   <!-- OFFER -->
