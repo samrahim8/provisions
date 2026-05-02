@@ -727,6 +727,16 @@
       box-shadow: 0 4px 20px rgba(26, 23, 20, 0.06);
     }
 
+    .work-card-tag {
+      font-family: var(--display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 0.6rem;
+    }
+
     .work-card h3 {
       font-family: var(--display);
       font-size: 1.05rem;
@@ -1985,42 +1995,48 @@
 
   <!-- WORK -->
   <section class="work-section" id="work">
-    <p class="section-label scroll-reveal">Work</p>
-    <h2 class="scroll-reveal" style="font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--leather); margin-bottom: 0.6rem;">The Goods.</h2>
-    <p class="scroll-reveal" style="color: var(--text-soft); font-size: 1rem; margin-bottom: 2rem;">Custom goods for clients. A few house brands of my own.</p>
+    <p class="section-label scroll-reveal">Recent orders</p>
+    <h2 class="scroll-reveal" style="font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--leather); margin-bottom: 0.6rem;">From the shop.</h2>
+    <p class="scroll-reveal" style="color: var(--text-soft); font-size: 1rem; margin-bottom: 2rem;">Recent work, grouped by what's on offer.</p>
     <div class="work-grid" id="workGrid">
       <div class="work-card work-card-cta" data-work="0" onclick="openContactModal()">
-        <h3>Internal Agency Platform</h3>
-        <p>AI-powered content intelligence, performance analytics, and client reporting platform for a marketing agency — trained on their own data.</p>
+        <p class="work-card-tag">№ 01 &middot; Operating</p>
+        <h3>AI startup</h3>
+        <p>Pitch deck, landing page, interactive demos, sales materials.</p>
         <p class="work-card-role">Client Work</p>
       </div>
-      <a href="https://getplacecard.com" target="_blank" rel="noopener" class="work-card" data-work="1">
-        <h3>PlaceCard</h3>
-        <p>Wedding planning tool. Budget, guests, seating, vendors.</p>
-        <p class="work-card-role">Proprietor</p>
-      </a>
-      <a href="https://www.mylawnhq.com" target="_blank" rel="noopener" class="work-card" data-work="2">
-        <h3>LawnHQ</h3>
-        <p>AI lawn care advisor for your zip code + grass type.</p>
-        <p class="work-card-role">Partner</p>
-      </a>
-      <div class="work-card" data-work="3">
+      <div class="work-card work-card-cta" data-work="1" onclick="openContactModal()">
+        <p class="work-card-tag">№ 01 &middot; Operating</p>
+        <h3>Global youth sports org</h3>
+        <p>Sponsorship packages + sales materials + outbound playbook.</p>
+        <p class="work-card-role">Client Work</p>
+      </div>
+      <div class="work-card" data-work="2">
+        <p class="work-card-tag">№ 02 &middot; Growing</p>
         <h3>Reddit Responder</h3>
-        <p>Scrapes niche-relevant subreddits, scores posts by relevance, and drafts value-add replies. Not an agent.</p>
+        <p>Custom Reddit infrastructure. Scrapes niche subreddits, scores posts by relevance, drafts value-add replies. Powers client engagements.</p>
         <p class="work-card-role">House Tool</p>
       </div>
-      <a href="https://ourlittlereveal.com" target="_blank" rel="noopener" class="work-card" data-work="4">
-        <h3>Little Reveal</h3>
-        <p>The most beautiful way to share pregnancy news + updates with your inner circle.</p>
-        <p class="work-card-role">Proprietor</p>
-      </a>
-      <div class="work-card work-card-cta" data-work="5" onclick="openContactModal()">
-        <h3>Interactive Marketing Materials</h3>
-        <p>Demos, one-pagers, case studies, decks. The materials you already send, made memorable.</p>
+      <div class="work-card work-card-cta" data-work="3" onclick="openContactModal()">
+        <p class="work-card-tag">№ 02 &middot; Growing</p>
+        <h3>Specialty coffee brand</h3>
+        <p>Monthly newsletter. Owned distribution that builds.</p>
         <p class="work-card-role">Client Work</p>
       </div>
+      <div class="work-card work-card-cta" data-work="4" onclick="openContactModal()">
+        <p class="work-card-tag">№ 03 &middot; Making</p>
+        <h3>Marketing agency platform</h3>
+        <p>AI-powered content intelligence, performance analytics, client reporting. Trained on their own data.</p>
+        <p class="work-card-role">Client Work</p>
+      </div>
+      <a href="https://www.mylawnhq.com" target="_blank" rel="noopener" class="work-card" data-work="5">
+        <p class="work-card-tag">№ 03 &middot; Making</p>
+        <h3>LawnHQ</h3>
+        <p>AI-native lawn care SaaS. The free tools rank. The AI advisor closes.</p>
+        <p class="work-card-role">Partner</p>
+      </a>
     </div>
-    <p class="scroll-reveal" style="color: var(--text-soft); font-size: 0.9rem; margin-top: 1.5rem; font-style: italic;">+ a rotating shelf of side projects and experiments.</p>
+    <p class="scroll-reveal" style="color: var(--text-soft); font-size: 0.9rem; margin-top: 1.5rem; font-style: italic;">+ PlaceCard, Little Reveal &ndash; house brands of my own.</p>
   </section>
 
   <!-- CLIENT REACTION -->
