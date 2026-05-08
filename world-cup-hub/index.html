@@ -1325,10 +1325,14 @@
     }
     .programme-footer .pf-links a:hover { opacity: 1; color: var(--terracotta-glow); }
     .programme-footer .pf-meta {
-      opacity: 0.55;
+      opacity: 0.65;
       font-family: 'Inter', sans-serif;
       font-weight: 400;
       letter-spacing: 0.18em;
+    }
+    .programme-footer .pf-meta a:hover {
+      color: var(--terracotta-glow) !important;
+      border-bottom-color: var(--terracotta-glow) !important;
     }
 
     /* ── RESPONSIVE ── */
@@ -1608,7 +1612,7 @@
           <a href="#repaint" onclick="event.preventDefault(); openRepaintModal();">Repaint</a>
           <a href="mailto:sam@provisions.work?subject=World%20Cup%20commission">Commission</a>
         </nav>
-        <span class="pf-meta">© 2026 · Made by Sam Rahim</span>
+        <span class="pf-meta">© 2026 · A <a href="https://provisions.work" style="color:inherit;border-bottom:1px solid rgba(245,241,235,0.25);padding-bottom:2px;transition:color 0.2s, border-color 0.2s;">Provisions</a> joint, made by <a href="https://samrahim.com" style="color:inherit;border-bottom:1px solid rgba(245,241,235,0.25);padding-bottom:2px;transition:color 0.2s, border-color 0.2s;">Sam Rahim</a></span>
       </footer>
     </div>
   </div>
