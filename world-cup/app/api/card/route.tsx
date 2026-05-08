@@ -45,6 +45,21 @@ function fullName(t: Team): string {
 function isLight(hex: string): boolean {
   const m = hex.replace("#", "");
   if (m.length !== 6) return false;
+  const r = parseInt(m.slice(0, 2), 16) / 255;
+  const g = parseInt(m.slice(2, 4), 16) / 255;
+  const b = parseInt(m.slice(4, 6), 16) / 255;
+  // sRGB → linear, then relative luminance (WCAG)
+  const lin = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+  const L = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  // 0.55 threshold: yellow, light blue, pale colors → light; saturated reds, navy, forest green → dark
+  return L > 0.55;
+}
+
+// Stricter check — only true for near-white. Used by displayPrimary so yellow/light-blue
+// teams still paint themselves and only ENG/GHA/etc. fall through to a contrast color.
+function isNearWhite(hex: string): boolean {
+  const m = hex.replace("#", "");
+  if (m.length !== 6) return false;
   const r = parseInt(m.slice(0, 2), 16);
   const g = parseInt(m.slice(2, 4), 16);
   const b = parseInt(m.slice(4, 6), 16);
@@ -63,7 +78,7 @@ function contrastColor(team: Team): string {
 
 // The "team color" used for visible elements. Falls back when primary is white-ish.
 function displayPrimary(team: Team): string {
-  return isLight(team.primary) ? contrastColor(team) : team.primary;
+  return isNearWhite(team.primary) ? contrastColor(team) : team.primary;
 }
 
 function todayStamp(): string {
@@ -534,7 +549,7 @@ function ArchCard({
             style={{
               fontFamily: "Bebas",
               fontSize: px(54),
-              color: teamColor,
+              color: lightPrimary ? accentColor : teamColor,
               lineHeight: 0.95,
               letterSpacing: "0.04em",
               display: "flex",
