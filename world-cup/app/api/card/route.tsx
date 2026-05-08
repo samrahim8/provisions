@@ -158,6 +158,15 @@ function Signature({ name, color, tilt, size }: { name: string; color: string; t
   );
 }
 
+type BrandOverlay = {
+  mode: "stamp" | "footer" | "stripe";
+  name: string;
+  tagline: string;
+  primary: string;
+  secondary: string;
+  accent: string;
+} | null;
+
 // --- Arch (B) ---
 function ArchCard({
   team,
@@ -168,6 +177,7 @@ function ArchCard({
   rating,
   signature,
   markUrl,
+  brand,
 }: {
   team: Team;
   photo: string;
@@ -177,6 +187,7 @@ function ArchCard({
   rating: string;
   signature: string;
   markUrl: string;
+  brand?: BrandOverlay;
 }) {
   const accentColor = contrastColor(team);
   const teamColor = displayPrimary(team);
@@ -252,19 +263,90 @@ function ArchCard({
         }}
       >
         <BrandMark markUrl={markUrl} />
+        {brand?.mode === "stamp" ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              border: `2px solid ${INK}`,
+              padding: `${px(6)}px ${px(10)}px`,
+              transform: "rotate(-4deg)",
+              background: PAPER,
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "Bebas",
+                fontSize: px(14),
+                letterSpacing: "0.18em",
+                color: INK,
+                lineHeight: 1,
+                display: "flex",
+              }}
+            >
+              {brand.name.toUpperCase()}
+            </div>
+            <div
+              style={{
+                fontFamily: "Plex Mono",
+                fontSize: px(7),
+                letterSpacing: "0.22em",
+                color: INK,
+                opacity: 0.75,
+                marginTop: px(3),
+                display: "flex",
+              }}
+            >
+              {brand.tagline}
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(9),
+              letterSpacing: "0.22em",
+              color: INK,
+              opacity: 0.7,
+              display: "flex",
+            }}
+          >
+            SERIES ONE · {todayStamp()}
+          </div>
+        )}
+      </div>
+
+      {/* Edge stripe (Fellow direction) */}
+      {brand?.mode === "stripe" && (
         <div
           style={{
-            fontFamily: "Plex Mono",
-            fontSize: px(9),
-            letterSpacing: "0.22em",
-            color: INK,
-            opacity: 0.7,
+            position: "absolute",
+            left: px(22),
+            top: px(170),
+            bottom: px(22),
+            width: px(28),
+            background: brand.primary,
             display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          SERIES ONE · {todayStamp()}
+          <div
+            style={{
+              transform: "rotate(-90deg)",
+              fontFamily: "Bebas",
+              fontSize: px(13),
+              letterSpacing: "0.36em",
+              color: brand.accent,
+              whiteSpace: "nowrap",
+              display: "flex",
+            }}
+          >
+            {brand.name.toUpperCase()} · {brand.tagline}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Arched country name — letters placed along Bezier curve */}
       <div
@@ -512,56 +594,71 @@ function ArchCard({
           opacity: 0.6,
         }}
       >
-        <span>{team.confederation}</span>
+        <span>
+          {brand?.mode === "footer"
+            ? `BY ${brand.name.toUpperCase()} · ${brand.tagline}`
+            : team.confederation}
+        </span>
         <span>WORLD CUP '26</span>
       </div>
     </div>
   );
 }
 
-const BRAND_PRESETS: Record<string, Team> = {
+type BrandKitDef = {
+  name: string;
+  tagline: string;
+  primary: string;
+  secondary: string;
+  accent: string;
+  defaultTeam: string;
+  mode: "stamp" | "footer" | "stripe";
+};
+const BRAND_KITS: Record<string, BrandKitDef> = {
   guinness: {
-    code: "GNS",
     name: "Guinness",
-    flag: "",
+    tagline: "EST. 1759",
     primary: "#1A1A1A",
-    secondary: "#C8A24B",
-    accent: "#A8170A",
-    confederation: "UEFA" as Team["confederation"],
+    secondary: "#E8DFC9",
+    accent: "#C8A24B",
+    defaultTeam: "ENG",
+    mode: "stamp",
   },
   mundial: {
-    code: "MND",
     name: "Mundial",
-    flag: "",
+    tagline: "ISSUE XXVI",
     primary: "#D32027",
     secondary: "#F2EFE8",
     accent: "#0F0F0F",
-    confederation: "UEFA" as Team["confederation"],
+    defaultTeam: "BRA",
+    mode: "footer",
   },
   fellow: {
-    code: "FLW",
     name: "Fellow",
-    flag: "",
+    tagline: "BREW · PLAY",
     primary: "#1F1F1F",
-    secondary: "#C9785F",
-    accent: "#E8E0D6",
-    confederation: "UEFA" as Team["confederation"],
+    secondary: "#E8E0D6",
+    accent: "#C9785F",
+    defaultTeam: "JPN",
+    mode: "stripe",
   },
-};
-const BRAND_TAGLINES: Record<string, string> = {
-  guinness: "EST. 1759",
-  mundial: "ISSUE XXVI",
-  fellow: "BREW · PLAY",
 };
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const brandKey = (url.searchParams.get("brand") || "").toLowerCase();
-  const teamCode = (url.searchParams.get("team") || "USA").toUpperCase();
-  const team: Team | null = brandKey && BRAND_PRESETS[brandKey]
-    ? { ...BRAND_PRESETS[brandKey], confederation: (BRAND_TAGLINES[brandKey] || "UEFA") as Team["confederation"] }
-    : (teamByCode(teamCode) || teamByCode("USA") || null);
-  if (!team) return new Response("Unknown team", { status: 400 });
+  const kit = BRAND_KITS[brandKey];
+  const teamCode = (url.searchParams.get("team") || (kit ? kit.defaultTeam : "USA")).toUpperCase();
+  const baseTeam = teamByCode(teamCode) || teamByCode("USA");
+  if (!baseTeam) return new Response("Unknown team", { status: 400 });
+
+  // If brand kit present, override colors but keep the country name + confederation for the arch + footer
+  const team: Team = kit
+    ? { ...baseTeam, primary: kit.primary, secondary: kit.secondary, accent: kit.accent }
+    : baseTeam;
+  const brandOverlay: BrandOverlay = kit
+    ? { mode: kit.mode, name: kit.name, tagline: kit.tagline, primary: kit.primary, secondary: kit.secondary, accent: kit.accent }
+    : null;
 
   const [bs8, bs9, bebas, plex, sig, markDark, markLight, photoData] = await Promise.all([
     loadFont(FONT_URLS.bigShoulders800),
@@ -585,6 +682,7 @@ export async function GET(req: Request) {
     rating: "92",
     signature: "Sam Rahim",
     markUrl,
+    brand: brandOverlay,
   };
 
   const W = px(500);
