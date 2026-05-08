@@ -1285,21 +1285,49 @@
 
     /* ── FOOTER ── */
     footer.programme-footer {
-      padding: 22px 64px;
+      padding: 24px 64px;
       background: var(--leather-mid);
       color: var(--on-leather);
       border-top: 1px solid rgba(245,241,235,0.18);
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 24px;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
       font-size: 10px;
-      letter-spacing: 0.16em;
-      opacity: 0.7;
-      white-space: nowrap;
+      letter-spacing: 0.22em;
       flex-wrap: wrap;
       text-transform: uppercase;
       transition: background 0.35s ease, color 0.35s ease;
+    }
+    .programme-footer .pf-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--on-leather);
+      text-decoration: none;
+      opacity: 0.95;
+    }
+    .programme-footer .pf-brand svg { display: block; }
+    .programme-footer .pf-brand strong { font-weight: 700; }
+    .programme-footer .pf-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+    .programme-footer .pf-links a {
+      color: var(--on-leather);
+      opacity: 0.65;
+      text-decoration: none;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    .programme-footer .pf-links a:hover { opacity: 1; color: var(--terracotta-light); }
+    .programme-footer .pf-meta {
+      opacity: 0.55;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.18em;
     }
 
     /* ── RESPONSIVE ── */
@@ -1565,9 +1593,22 @@
 
       <!-- FOOTER -->
       <footer class="programme-footer">
-        <span>Provisions · Programme I</span>
-        <span>Set in Syne + Inter · Printed on Parchment</span>
-        <span>Sam Rahim, Ed.</span>
+        <a class="pf-brand" href="https://provisions.work">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="6" r="2"/>
+            <path d="M9 8 v3 l-3 4 v6 M9 11 l3 4 v6 M5 14 h8 M11 13 l-2 -3"/>
+          </svg>
+          <strong>Provisions</strong>
+          <span style="opacity:0.5;">·</span>
+          <span>World Cup '26</span>
+        </a>
+        <nav class="pf-links">
+          <a href="https://provisions.work/world-cup/card-generator">Player Card</a>
+          <a href="https://provisions.work/world-cup/kit-index">Kit Index</a>
+          <a href="#repaint" onclick="event.preventDefault(); openRepaintModal();">Repaint</a>
+          <a href="mailto:sam@provisions.work?subject=World%20Cup%20commission">Commission</a>
+        </nav>
+        <span class="pf-meta">© 2026 · Made by Sam Rahim</span>
       </footer>
     </div>
   </div>
