@@ -400,7 +400,7 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
         <div className="hidden lg:flex justify-end">
           <div className="relative" style={{ transform: "rotate(3deg)" }}>
             <img
-              src={asset("/hero-card.png?v=2")}
+              src={asset("/api/card?team=USA")}
               alt="Example player card"
               width={360}
               className="rounded-md"
