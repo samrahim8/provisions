@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Provisions / World Cup '26 — A small programme for a large summer.</title>
-  <meta name="description" content="Six things made for the tournament. A card generator, a poster series, an almanac, a bracket pool, a daily digest + a host-city field guide. Free or near-free, all from the Provisions workshop.">
+  <meta name="description" content="A starting eleven of products made for the '26 World Cup. Player card generator, kit index, page repainter, anthem mixer + heritage check. Free for fans, white-label for brands.">
   <link rel="canonical" href="https://provisions.work/world-cup">
 
   <meta property="og:title" content="Provisions / World Cup '26 — A small programme for a large summer.">
@@ -895,18 +895,27 @@
       box-shadow: 0 12px 28px rgba(0,0,0,0.08);
     }
 
-    /* ── COLOPHON ── */
+    /* ── COLOPHON / CLOSE ── */
     .colophon {
-      padding: 64px 64px 56px;
+      padding: 72px 64px 64px;
       background: var(--leather-mid);
       color: var(--on-leather);
       transition: background 0.35s ease, color 0.35s ease;
     }
     .colophon-grid {
       display: grid;
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 1.25fr 1fr;
       gap: 56px;
-      align-items: center;
+      align-items: stretch;
+    }
+    .colophon-eyebrow {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      font-weight: 700;
+      color: var(--terracotta);
+      margin-bottom: 18px;
+      text-transform: uppercase;
     }
     .colophon h2 {
       font-family: 'Syne', sans-serif;
@@ -922,92 +931,97 @@
       font-weight: 300;
       font-size: 17px;
       line-height: 1.6;
-      margin-top: 18px;
+      margin: 18px 0 0;
       max-width: 520px;
+      color: var(--on-leather);
+      opacity: 0.82;
+    }
+    .colophon-cta {
+      margin-top: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--terracotta);
+      color: var(--on-accent);
+      padding: 14px 22px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--terracotta);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .colophon-cta:hover { background: var(--terracotta-light); transform: translateY(-1px); }
+
+    /* Countdown card */
+    .kickoff-card {
+      border: 1px solid rgba(245,241,235,0.22);
+      padding: 30px 30px 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        repeating-linear-gradient(45deg, rgba(245,241,235,0.025) 0 8px, transparent 8px 16px);
+    }
+    .kickoff-tag {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      font-weight: 700;
+      color: var(--terracotta);
+      text-transform: uppercase;
+    }
+    .kickoff-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 22px 0 18px;
+    }
+    .kickoff-cell {
+      text-align: center;
+      padding: 14px 4px 10px;
+      border: 1px solid rgba(245,241,235,0.18);
+    }
+    .kickoff-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 36px;
+      letter-spacing: -0.02em;
+      color: var(--on-leather);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .kickoff-lbl {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--on-leather);
+      opacity: 0.55;
+      margin-top: 8px;
+    }
+    .kickoff-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 16px;
+      border-top: 1px solid rgba(245,241,235,0.18);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       color: var(--on-leather);
       opacity: 0.78;
     }
-    .colophon-eyebrow {
-      font-family: 'Syne', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      font-weight: 700;
-      color: var(--terracotta);
-      margin-bottom: 16px;
-      text-transform: uppercase;
-    }
-    .digest-form {
-      border: 1px solid var(--on-leather);
-      padding: 24px;
-      opacity: 0.96;
-    }
-    .digest-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      margin-bottom: 14px;
-      color: var(--on-leather);
-      opacity: 0.7;
-      text-transform: uppercase;
-    }
-    .digest-input {
-      display: flex;
-      align-items: stretch;
-      border: 1px solid var(--on-leather);
-    }
-    .digest-input input {
-      flex: 1;
-      padding: 12px 14px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      color: var(--on-leather);
-      background: transparent;
-      border: none;
-      outline: none;
-    }
-    .digest-input input::placeholder { color: var(--on-leather); opacity: 0.55; }
-    .digest-input button {
-      background: var(--terracotta);
-      color: var(--on-accent);
-      padding: 12px 18px;
+    .kickoff-meta strong {
       font-family: 'Syne', sans-serif;
       font-weight: 700;
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .digest-input button:hover { background: var(--terracotta-light); }
-    .digest-fineprint {
-      font-family: 'Inter', sans-serif;
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      margin-top: 10px;
-      color: var(--on-leather);
-      opacity: 0.55;
-      text-transform: uppercase;
-    }
-    .colophon-extra {
-      margin-top: 30px;
-      padding-top: 22px;
-      border-top: 1px solid rgba(245,241,235,0.18);
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
       letter-spacing: 0.16em;
       color: var(--on-leather);
-      opacity: 0.65;
-      text-transform: uppercase;
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
+      opacity: 1;
     }
-    .colophon-extra a {
-      color: var(--terracotta-light);
-      transition: color 0.2s;
-    }
-    .colophon-extra a:hover { color: var(--on-leather); }
 
     /* ── REPAINT MODAL ── */
     .repaint-modal {
@@ -1222,7 +1236,11 @@
       .colophon { padding: 36px 16px 32px; }
       .colophon h2 { font-size: clamp(26px, 7vw, 32px); }
       .colophon p { font-size: 15px; }
-      .digest-form { padding: 18px; }
+      .kickoff-card { padding: 22px 20px; }
+      .kickoff-num { font-size: 28px; }
+      .kickoff-grid { gap: 8px; margin: 18px 0 14px; }
+      .kickoff-cell { padding: 10px 2px 8px; }
+      .kickoff-meta { font-size: 10px; }
       footer.programme-footer { padding: 16px; font-size: 9px; letter-spacing: 0.12em; }
     }
     @media (max-width: 380px) {
@@ -1344,26 +1362,30 @@
         <div class="ledger" id="ledger"></div>
       </section>
 
-      <!-- COLOPHON -->
+      <!-- COMMISSION + KICKOFF -->
       <section class="colophon">
         <div class="colophon-grid">
           <div>
-            <div class="colophon-eyebrow">Colophon</div>
-            <h2>Set in Syne + Inter.<br>Pressed on parchment.</h2>
-            <p>Every chapter ships from the same one-person workshop as the rest of Provisions. New entries get added as the tournament unfolds. Subscribe to the digest + you'll know when.</p>
-            <div class="colophon-extra">
-              <span>Also in the workshop:</span>
-              <a href="https://provisions.work/world-cup/kit-index">The Kit Index ↗</a>
-              <a href="https://provisions.work">Other Provisions ↗</a>
-            </div>
+            <div class="colophon-eyebrow">Commission</div>
+            <h2>Want one for your team?</h2>
+            <p>The whole shelf white-labels. Brands, agencies + clubs can license a custom version of any product here in your colors, with your logo, by your kickoff. One operator, two-week turnaround, fixed price.</p>
+            <a class="colophon-cta" href="mailto:sam@provisions.work?subject=World%20Cup%20commission">Start a commission →</a>
           </div>
-          <div class="digest-form">
-            <div class="digest-label">Join the Digest</div>
-            <div class="digest-input">
-              <input type="email" placeholder="you@example.com" aria-label="Email address">
-              <button type="button">Place order</button>
+          <div class="kickoff-card">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span class="kickoff-tag">First Whistle</span>
+              <span class="kickoff-tag" style="opacity:0.6;">11 Jun · 2026</span>
             </div>
-            <div class="digest-fineprint">One email each morning · No ads · Unsub anytime</div>
+            <div class="kickoff-grid" id="kickoffGrid">
+              <div class="kickoff-cell"><div class="kickoff-num" id="kDays">–</div><div class="kickoff-lbl">Days</div></div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kHrs">–</div><div class="kickoff-lbl">Hrs</div></div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kMin">–</div><div class="kickoff-lbl">Min</div></div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kSec">–</div><div class="kickoff-lbl">Sec</div></div>
+            </div>
+            <div class="kickoff-meta">
+              <span>MEX vs RSA</span>
+              <strong>Estadio Azteca</strong>
+            </div>
           </div>
         </div>
       </section>
@@ -1489,7 +1511,6 @@
       { id: '03', label: 'Repaint', title: 'The Repaint', blurb: 'Pick a country and watch the whole page repaint in that team’s kit colors. White-label the widget to recolor your brand’s digital activations in one click.', cta: 'Open the repainter', status: 'starter', statusLabel: 'Live', href: '#repaint', onClick: 'openRepaintModal' },
       { id: '04', label: 'Anthem', title: 'The Anthem', blurb: 'Pick a nation + a genre. Get a custom hype track that mashes the country’s anthem with your style. Suno-powered.', cta: 'Coming soon', status: 'drafted', statusLabel: 'Coming soon', href: '#' },
       { id: '05', label: 'Heritage', title: 'The Heritage Check', blurb: 'Three doors in (DNA upload, family tree, or vibes quiz). Get your team(s) and a custom family crest. The football family tree.', cta: 'Coming soon', status: 'drafted', statusLabel: 'Coming soon', href: '#' },
-      { id: '06', label: 'Digest', title: 'The Daily Digest', blurb: 'One short email each morning of the tournament. Yesterday in receipts, today in the manifest. Nothing else.', cta: 'Coming soon', status: 'drafted', statusLabel: 'Coming soon', href: '#' },
     ];
 
     // ── Color helpers ──
@@ -1745,6 +1766,26 @@
       scrambleTo(document.getElementById('whistleHome'), 'MEX', 650);
       scrambleTo(document.getElementById('whistleAway'), 'RSA', 850);
     });
+
+    // ── Kickoff countdown — 11 Jun 2026, 19:00 CDT (Mexico City local) ──
+    const KICKOFF = new Date('2026-06-11T19:00:00-06:00').getTime();
+    function tickKickoff() {
+      const diff = Math.max(0, KICKOFF - Date.now());
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      const set = (id, n) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = String(n).padStart(2, '0');
+      };
+      set('kDays', d);
+      set('kHrs', h);
+      set('kMin', m);
+      set('kSec', s);
+    }
+    tickKickoff();
+    setInterval(tickKickoff, 1000);
   </script>
 </body>
 </html>
