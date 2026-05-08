@@ -972,6 +972,110 @@
     }
     .colophon-extra a:hover { color: var(--on-leather); }
 
+    /* ── REPAINT MODAL ── */
+    .repaint-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .repaint-modal[hidden] { display: none; }
+    .repaint-modal-scrim {
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 23, 20, 0.55);
+      opacity: 0;
+      transition: opacity 0.24s ease;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .repaint-modal.open .repaint-modal-scrim { opacity: 1; }
+    .repaint-modal-card {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      background: var(--parchment-el);
+      border: 1px solid var(--leather-mid);
+      padding: 36px 32px 28px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+      transform: translateY(16px) scale(0.98);
+      opacity: 0;
+      transition: transform 0.28s cubic-bezier(0.2,0.8,0.2,1), opacity 0.24s ease, background 0.35s ease, border-color 0.35s ease;
+    }
+    .repaint-modal.open .repaint-modal-card { transform: translateY(0) scale(1); opacity: 1; }
+    .repaint-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--leather-mid);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      border-radius: 99px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .repaint-modal-close:hover { background: var(--leather-mid); color: var(--on-leather); border-color: var(--leather-mid); }
+    .repaint-modal-head { margin-bottom: 22px; }
+    .repaint-modal-tag {
+      display: inline-block;
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: var(--terracotta);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .repaint-modal-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(28px, 3.4vw, 40px);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--leather-mid);
+      margin: 0 0 8px;
+    }
+    .repaint-modal-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text-soft);
+      margin: 0;
+    }
+    .repaint-grid {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 6px;
+    }
+    .repaint-grid button {
+      background: var(--parchment) !important;
+      color: var(--leather-mid) !important;
+      border-color: var(--border) !important;
+    }
+    .repaint-grid button:hover {
+      border-color: var(--leather-mid) !important;
+      background: var(--parchment-el) !important;
+    }
+    .repaint-grid button.active {
+      background: var(--leather-mid) !important;
+      color: var(--on-leather) !important;
+      border-color: var(--leather-mid) !important;
+    }
+    @media (min-width: 720px) {
+      .repaint-grid { grid-template-columns: repeat(4, 1fr) !important; }
+    }
+    @media (max-width: 480px) {
+      .repaint-modal-card { padding: 28px 22px 20px; }
+      .repaint-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+
     /* ── FOOTER ── */
     footer.programme-footer {
       padding: 22px 64px;
@@ -1164,6 +1268,22 @@
     </div>
   </div>
 
+  <!-- REPAINT MODAL -->
+  <div class="repaint-modal" id="repaintModal" hidden>
+    <div class="repaint-modal-scrim" onclick="closeRepaintModal()"></div>
+    <div class="repaint-modal-card" role="dialog" aria-modal="true" aria-labelledby="repaintTitle">
+      <button class="repaint-modal-close" type="button" aria-label="Close" onclick="closeRepaintModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2 L12 12 M12 2 L2 12"/></svg>
+      </button>
+      <div class="repaint-modal-head">
+        <span class="repaint-modal-tag">No. 03 · The Repaint</span>
+        <h3 class="repaint-modal-title" id="repaintTitle">Pick your country.</h3>
+        <p class="repaint-modal-sub">Watch the page repaint behind you.</p>
+      </div>
+      <div class="team-grid repaint-grid" id="repaintTeamGrid"></div>
+    </div>
+  </div>
+
   <script>
     // ── Team data ──
     const WC_TEAMS = [
@@ -1257,7 +1377,7 @@
     // Bench (Nos. 02–06; No. 01 is the starter)
     const PRODUCTS = [
       { id: '02', label: 'Kit Index', title: 'The Kit Index', blurb: 'A visual catalog of all 48 home kits, drawn Lego-style. Browse the design language of every nation’s tournament kit. Reference product, no AI.', cta: 'Browse all 48', status: 'starter', statusLabel: 'Live', href: 'https://provisions.work/world-cup/kit-index' },
-      { id: '03', label: 'Repaint', title: 'The Repaint', blurb: 'Pick a country and watch the whole page repaint in that team’s kit colors. White-label the widget to recolor your brand’s World Cup activation in one click.', cta: 'Try it up top', status: 'starter', statusLabel: 'Live', href: '#teamBar' },
+      { id: '03', label: 'Repaint', title: 'The Repaint', blurb: 'Pick a country and watch the whole page repaint in that team’s kit colors. White-label the widget to recolor your brand’s World Cup activation in one click.', cta: 'Open the repainter', status: 'starter', statusLabel: 'Live', href: '#repaint', onClick: 'openRepaintModal' },
       { id: '04', label: 'Anthem', title: 'The Anthem', blurb: 'Pick a nation + a genre. Get a custom hype track that mashes the country’s anthem with your style. Suno-powered.', cta: 'Coming soon', status: 'drafted', statusLabel: 'Concept locked', href: '#' },
       { id: '05', label: 'Heritage', title: 'The Heritage Check', blurb: 'Three doors in (DNA upload, family tree, or vibes quiz). Get your team(s) and a custom family crest. The football family tree.', cta: 'Coming soon', status: 'drafted', statusLabel: 'Spec’d, not built', href: '#' },
       { id: '06', label: 'Digest', title: 'The Daily Digest', blurb: 'One short email each morning of the tournament. Yesterday in receipts, today in the manifest. Nothing else.', cta: 'Subscribe free', status: 'drafted', statusLabel: 'Drafted', href: '#' },
@@ -1364,8 +1484,9 @@
     }
 
     // ── Render team grid ──
-    function renderTeamGrid(activeCode) {
-      const grid = document.getElementById('teamGrid');
+    function renderTeamGrid(activeCode, gridId = 'teamGrid') {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
       grid.innerHTML = WC_TEAMS.map(t => {
         const [code, name, primary, accents] = t;
         const isActive = code === activeCode;
@@ -1410,10 +1531,33 @@
       updateActiveTeamDisplay(team);
       updateTicket(code);
       renderTeamGrid(code);
-      // Close the bar
+      renderTeamGrid(code, 'repaintTeamGrid');
+      // Close the top bar
       document.getElementById('teamBar').classList.remove('open');
       document.getElementById('teamToggle').setAttribute('aria-expanded', 'false');
+      // Close the modal if open
+      closeRepaintModal();
     }
+
+    // ── Repaint modal ──
+    function openRepaintModal() {
+      const modal = document.getElementById('repaintModal');
+      if (!modal) return;
+      renderTeamGrid(document.getElementById('activeCode')?.textContent === '48 squads' ? null : document.getElementById('activeCode')?.textContent, 'repaintTeamGrid');
+      modal.removeAttribute('hidden');
+      requestAnimationFrame(() => modal.classList.add('open'));
+      document.body.style.overflow = 'hidden';
+    }
+    function closeRepaintModal() {
+      const modal = document.getElementById('repaintModal');
+      if (!modal || modal.hasAttribute('hidden')) return;
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => modal.setAttribute('hidden', ''), 240);
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeRepaintModal();
+    });
 
     // ── Toggle ──
     document.getElementById('teamToggle').addEventListener('click', () => {
@@ -1436,7 +1580,8 @@
           isLeft ? 'col-left' : '',
           (!isLast && !isPenultimate) ? 'row-not-last' : ''
         ].filter(Boolean).join(' ');
-        return `<a href="${p.href}" class="${cls}">
+        const onClickAttr = p.onClick ? ` onclick="event.preventDefault(); ${p.onClick}();"` : '';
+        return `<a href="${p.href}" class="${cls}"${onClickAttr}>
           <div class="ledger-head">
             <div class="ledger-head-left">
               <span class="kit-no">No. ${p.id}</span>
