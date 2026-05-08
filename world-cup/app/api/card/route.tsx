@@ -9,6 +9,9 @@ const FONT_URLS = {
   bebas: "https://cdn.jsdelivr.net/fontsource/fonts/bebas-neue@latest/latin-400-normal.ttf",
   plexMono: "https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-600-normal.ttf",
   homemade: "https://cdn.jsdelivr.net/fontsource/fonts/homemade-apple@latest/latin-400-normal.ttf",
+  garamond: "https://cdn.jsdelivr.net/fontsource/fonts/eb-garamond@latest/latin-700-normal.ttf",
+  garamondItalic: "https://cdn.jsdelivr.net/fontsource/fonts/eb-garamond@latest/latin-500-italic.ttf",
+  playfairSc: "https://cdn.jsdelivr.net/fontsource/fonts/playfair-display-sc@latest/latin-700-normal.ttf",
 };
 
 async function loadFont(url: string): Promise<ArrayBuffer> {
@@ -605,6 +608,379 @@ function ArchCard({
   );
 }
 
+// ─────────────────────────────────────────────
+// GUINNESS FC — full-redesign brand-as-team card
+// ─────────────────────────────────────────────
+function GuinnessCard({
+  photo,
+  name,
+  position,
+  number,
+  rating,
+  signature,
+}: {
+  photo: string;
+  name: string;
+  position: string;
+  number: string;
+  rating: string;
+  signature: string;
+}) {
+  const PAPER_G = "#F2EBD8";
+  const INK_G = "#0D0D0D";
+  const GOLD = "#B8893E";
+  const GOLD_LIGHT = "#D4A85A";
+
+  const Fleuron = ({ size, color }: { size: number; color: string }) => (
+    <div
+      style={{
+        width: 0,
+        height: 0,
+        borderLeft: `${px(size)}px solid transparent`,
+        borderRight: `${px(size)}px solid transparent`,
+        borderBottom: `${px(size * 1.4)}px solid ${color}`,
+        display: "flex",
+        transform: "rotate(180deg)",
+      }}
+    />
+  );
+
+  const Diamond = ({ size, color }: { size: number; color: string }) => (
+    <div
+      style={{
+        width: px(size),
+        height: px(size),
+        background: color,
+        transform: "rotate(45deg)",
+        display: "flex",
+      }}
+    />
+  );
+
+  return (
+    <div
+      style={{
+        width: px(500),
+        height: px(700),
+        background: PAPER_G,
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        padding: px(16),
+      }}
+    >
+      {/* Outer double rule frame */}
+      <div
+        style={{
+          position: "absolute",
+          inset: px(14),
+          border: `${px(2)}px solid ${INK_G}`,
+          display: "flex",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: px(20),
+          border: `${px(0.5)}px solid ${INK_G}`,
+          display: "flex",
+        }}
+      />
+
+      {/* Corner ornaments */}
+      {[
+        { top: px(26), left: px(26) },
+        { top: px(26), right: px(26) },
+        { bottom: px(26), left: px(26) },
+        { bottom: px(26), right: px(26) },
+      ].map((pos, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            ...pos,
+            display: "flex",
+          }}
+        >
+          <Diamond size={5} color={GOLD} />
+        </div>
+      ))}
+
+      {/* Inner content */}
+      <div
+        style={{
+          position: "absolute",
+          left: px(36),
+          right: px(36),
+          top: px(36),
+          bottom: px(36),
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {/* Decorative top ornament */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(10),
+            marginTop: px(2),
+            marginBottom: px(8),
+          }}
+        >
+          <div style={{ width: px(40), height: px(1), background: INK_G, opacity: 0.65, display: "flex" }} />
+          <Diamond size={4} color={INK_G} />
+          <div style={{ width: px(40), height: px(1), background: INK_G, opacity: 0.65, display: "flex" }} />
+        </div>
+
+        {/* GUINNESS wordmark */}
+        <div
+          style={{
+            fontFamily: "Garamond",
+            fontWeight: 700,
+            fontSize: px(72),
+            letterSpacing: "0.02em",
+            color: INK_G,
+            lineHeight: 1,
+            display: "flex",
+          }}
+        >
+          GUINNESS
+        </div>
+
+        {/* Tagline */}
+        <div
+          style={{
+            fontFamily: "PlayfairSc",
+            fontSize: px(10),
+            letterSpacing: "0.32em",
+            color: INK_G,
+            opacity: 0.78,
+            marginTop: px(6),
+            display: "flex",
+            alignItems: "center",
+            gap: px(8),
+          }}
+        >
+          <span>FOOTBALL CLUB</span>
+          <span style={{ color: GOLD, display: "flex" }}>·</span>
+          <span>EST. 1759</span>
+          <span style={{ color: GOLD, display: "flex" }}>·</span>
+          <span>DUBLIN</span>
+        </div>
+
+        {/* Double rule with center fleuron */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(8),
+            width: "100%",
+            marginTop: px(14),
+            marginBottom: px(16),
+          }}
+        >
+          <div style={{ flex: 1, height: px(1), background: INK_G, opacity: 0.9, display: "flex" }} />
+          <Fleuron size={5} color={GOLD} />
+          <div style={{ flex: 1, height: px(1), background: INK_G, opacity: 0.9, display: "flex" }} />
+        </div>
+
+        {/* Photo cameo frame */}
+        <div
+          style={{
+            width: px(280),
+            height: px(280),
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {/* Outer gold ring */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: "50%",
+              background: GOLD,
+              display: "flex",
+            }}
+          />
+          {/* Inner ink ring */}
+          <div
+            style={{
+              position: "absolute",
+              inset: px(6),
+              borderRadius: "50%",
+              background: INK_G,
+              display: "flex",
+            }}
+          />
+          {/* Photo container */}
+          <div
+            style={{
+              position: "absolute",
+              inset: px(10),
+              borderRadius: "50%",
+              overflow: "hidden",
+              display: "flex",
+            }}
+          >
+            <img
+              src={photo}
+              width={px(260)}
+              height={px(260)}
+              style={{
+                width: px(260),
+                height: px(260),
+                objectFit: "cover",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Player name with flourishes */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(14),
+            marginTop: px(20),
+            marginBottom: px(2),
+          }}
+        >
+          <div style={{ width: px(28), height: px(1), background: GOLD, display: "flex" }} />
+          <div
+            style={{
+              fontFamily: "GaramondItalic",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: px(28),
+              letterSpacing: "0.01em",
+              color: INK_G,
+              display: "flex",
+            }}
+          >
+            {name}
+          </div>
+          <div style={{ width: px(28), height: px(1), background: GOLD, display: "flex" }} />
+        </div>
+
+        {/* Stats — pint-label style */}
+        <div
+          style={{
+            display: "flex",
+            gap: px(12),
+            marginTop: px(18),
+          }}
+        >
+          {[
+            { lbl: "POSITION", val: position },
+            { lbl: "NO.", val: number },
+            { lbl: "RATING", val: rating },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              style={{
+                width: px(108),
+                padding: `${px(8)}px ${px(6)}px ${px(10)}px`,
+                background: INK_G,
+                border: `${px(1)}px solid ${GOLD}`,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "PlayfairSc",
+                  fontSize: px(8),
+                  letterSpacing: "0.28em",
+                  color: GOLD_LIGHT,
+                  display: "flex",
+                }}
+              >
+                {stat.lbl}
+              </div>
+              <div
+                style={{
+                  width: px(70),
+                  height: px(0.5),
+                  background: GOLD,
+                  opacity: 0.6,
+                  marginTop: px(3),
+                  marginBottom: px(3),
+                  display: "flex",
+                }}
+              />
+              <div
+                style={{
+                  fontFamily: "Garamond",
+                  fontWeight: 700,
+                  fontSize: px(28),
+                  color: PAPER_G,
+                  lineHeight: 1,
+                  display: "flex",
+                }}
+              >
+                {stat.val}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer ornament + footnote */}
+      <div
+        style={{
+          position: "absolute",
+          left: px(36),
+          right: px(36),
+          bottom: px(40),
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(8),
+            width: "100%",
+          }}
+        >
+          <div style={{ flex: 1, height: px(1), background: INK_G, opacity: 0.6, display: "flex" }} />
+          <Fleuron size={4} color={GOLD} />
+          <div style={{ flex: 1, height: px(1), background: INK_G, opacity: 0.6, display: "flex" }} />
+        </div>
+        <div
+          style={{
+            fontFamily: "PlayfairSc",
+            fontSize: px(9),
+            letterSpacing: "0.32em",
+            color: INK_G,
+            opacity: 0.7,
+            marginTop: px(8),
+            display: "flex",
+            alignItems: "center",
+            gap: px(8),
+          }}
+        >
+          <span>PERFECTLY PRESSED</span>
+          <span style={{ color: GOLD, display: "flex" }}>·</span>
+          <span>WORLD CUP MMXXVI</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 type BrandKitDef = {
   name: string;
   tagline: string;
@@ -660,17 +1036,49 @@ export async function GET(req: Request) {
     ? { mode: kit.mode, name: kit.name, tagline: kit.tagline, primary: kit.primary, secondary: kit.secondary, accent: kit.accent }
     : null;
 
-  const [bs8, bs9, bebas, plex, sig, markDark, markLight, photoData] = await Promise.all([
+  const [bs8, bs9, bebas, plex, sig, garamond, garamondItalic, playfairSc, photoData] = await Promise.all([
     loadFont(FONT_URLS.bigShoulders800),
     loadFont(FONT_URLS.bigShoulders900),
     loadFont(FONT_URLS.bebas),
     loadFont(FONT_URLS.plexMono),
     loadFont(FONT_URLS.homemade),
-    loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark.png"),
-    loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark-white.png"),
+    loadFont(FONT_URLS.garamond),
+    loadFont(FONT_URLS.garamondItalic),
+    loadFont(FONT_URLS.playfairSc),
     loadImageDataUrl(req, "/world-cup/card-generator/sam.png"),
   ]);
 
+  const W = px(500);
+  const H = px(700);
+  const fonts = [
+    { name: "Big Shoulders", data: bs8, weight: 800 as const, style: "normal" as const },
+    { name: "Big Shoulders", data: bs9, weight: 900 as const, style: "normal" as const },
+    { name: "Bebas", data: bebas, weight: 400 as const, style: "normal" as const },
+    { name: "Plex Mono", data: plex, weight: 600 as const, style: "normal" as const },
+    { name: "Homemade Apple", data: sig, weight: 400 as const, style: "normal" as const },
+    { name: "Garamond", data: garamond, weight: 700 as const, style: "normal" as const },
+    { name: "GaramondItalic", data: garamondItalic, weight: 500 as const, style: "italic" as const },
+    { name: "PlayfairSc", data: playfairSc, weight: 700 as const, style: "normal" as const },
+  ];
+
+  if (brandKey === "guinness") {
+    return new ImageResponse(
+      <GuinnessCard
+        photo={photoData}
+        name="Sam Rahim"
+        position="MID"
+        number="8"
+        rating="92"
+        signature="Sam Rahim"
+      />,
+      { width: W, height: H, fonts, headers: { "Cache-Control": "public, max-age=31536000, immutable" } }
+    );
+  }
+
+  const [markDark, markLight] = await Promise.all([
+    loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark.png"),
+    loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark-white.png"),
+  ]);
   const markUrl = isLight(PAPER) ? markDark : markLight;
 
   const props = {
@@ -685,19 +1093,10 @@ export async function GET(req: Request) {
     brand: brandOverlay,
   };
 
-  const W = px(500);
-  const H = px(700);
-
   return new ImageResponse(<ArchCard {...props} />, {
     width: W,
     height: H,
-    fonts: [
-      { name: "Big Shoulders", data: bs8, weight: 800, style: "normal" },
-      { name: "Big Shoulders", data: bs9, weight: 900, style: "normal" },
-      { name: "Bebas", data: bebas, weight: 400, style: "normal" },
-      { name: "Plex Mono", data: plex, weight: 600, style: "normal" },
-      { name: "Homemade Apple", data: sig, weight: 400, style: "normal" },
-    ],
+    fonts,
     headers: { "Cache-Control": "public, max-age=31536000, immutable" },
   });
 }
