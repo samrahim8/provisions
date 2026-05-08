@@ -1,10 +1,10 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/world-cup", "destination": "/world-cup-hub/index.html" },
-    { "source": "/world-cup/", "destination": "/world-cup-hub/index.html" },
-    { "source": "/world-cup/kit-index", "destination": "/world-cup-hub/kit-index.html" },
-    { "source": "/world-cup/kit-index/", "destination": "/world-cup-hub/kit-index.html" },
+    { "source": "/world-cup", "destination": "/world-cup-hub" },
+    { "source": "/world-cup/", "destination": "/world-cup-hub" },
+    { "source": "/world-cup/kit-index", "destination": "/world-cup-hub/kit-index" },
+    { "source": "/world-cup/kit-index/", "destination": "/world-cup-hub/kit-index" },
     {
       "source": "/world-cup/card-generator",
       "destination": "https://world-cup-self.vercel.app/world-cup/card-generator"
