@@ -1075,6 +1075,747 @@ function GuinnessCard({
   );
 }
 
+// ─────────────────────────────────────────────
+// MUNDIAL — editorial magazine cover
+// ─────────────────────────────────────────────
+function MundialCard({
+  photo,
+  name,
+  position,
+  number,
+  rating,
+  country,
+  countryCode,
+  issueNumber,
+}: {
+  photo: string;
+  name: string;
+  position: string;
+  number: string;
+  rating: string;
+  country: string;
+  countryCode: string;
+  issueNumber: string;
+}) {
+  const PAPER_M = "#EFE8DC";
+  const RED_M = "#C8262C";
+  const INK_M = "#0F0F0F";
+  const W = px(500);
+  const H = px(700);
+
+  return (
+    <div
+      style={{
+        width: W,
+        height: H,
+        background: PAPER_M,
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* Top red rule */}
+      <div style={{ height: px(6), background: RED_M, display: "flex", flexShrink: 0 }} />
+
+      {/* Masthead band */}
+      <div
+        style={{
+          padding: `${px(14)}px ${px(22)}px ${px(8)}px`,
+          display: "flex",
+          flexDirection: "column",
+          flexShrink: 0,
+        }}
+      >
+        {/* Issue line */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: px(2),
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(8),
+              letterSpacing: "0.28em",
+              color: INK_M,
+              opacity: 0.7,
+              display: "flex",
+            }}
+          >
+            VOL. XXVI · WORLD CUP '26
+          </div>
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(8),
+              letterSpacing: "0.28em",
+              color: INK_M,
+              opacity: 0.7,
+              display: "flex",
+            }}
+          >
+            ISSUE №{issueNumber} · USD 14
+          </div>
+        </div>
+
+        {/* Wordmark */}
+        <div
+          style={{
+            fontFamily: "Garamond",
+            fontWeight: 700,
+            fontSize: px(86),
+            letterSpacing: "-0.03em",
+            color: RED_M,
+            lineHeight: 0.92,
+            display: "flex",
+          }}
+        >
+          MUNDIAL
+        </div>
+      </div>
+
+      {/* Hairline */}
+      <div
+        style={{
+          height: px(1),
+          background: INK_M,
+          opacity: 0.85,
+          marginLeft: px(22),
+          marginRight: px(22),
+          display: "flex",
+          flexShrink: 0,
+        }}
+      />
+
+      {/* Photo + cover headline overlaid */}
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          width: "100%",
+          height: px(360),
+          overflow: "hidden",
+          flexShrink: 0,
+        }}
+      >
+        <img
+          src={photo}
+          width={W}
+          height={px(360)}
+          style={{
+            width: W,
+            height: px(360),
+            objectFit: "cover",
+            display: "flex",
+          }}
+        />
+        {/* Bottom gradient for readability */}
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: px(180),
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%)",
+            display: "flex",
+          }}
+        />
+        {/* Cover headline */}
+        <div
+          style={{
+            position: "absolute",
+            left: px(22),
+            right: px(22),
+            bottom: px(18),
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(8),
+              letterSpacing: "0.32em",
+              color: "#FFFFFF",
+              opacity: 0.85,
+              marginBottom: px(4),
+              display: "flex",
+            }}
+          >
+            COVER FEATURE · THE {country.toUpperCase()} PORTFOLIO
+          </div>
+          <div
+            style={{
+              fontFamily: "Garamond",
+              fontWeight: 700,
+              fontSize: country.length > 10 ? px(54) : px(74),
+              letterSpacing: "-0.025em",
+              color: "#FFFFFF",
+              lineHeight: 0.9,
+              display: "flex",
+            }}
+          >
+            {country.toUpperCase()}.
+          </div>
+        </div>
+        {/* Country code chip top-right */}
+        <div
+          style={{
+            position: "absolute",
+            top: px(14),
+            right: px(14),
+            background: RED_M,
+            color: "#FFFFFF",
+            padding: `${px(5)}px ${px(9)}px`,
+            fontFamily: "Plex Mono",
+            fontSize: px(9),
+            letterSpacing: "0.18em",
+            display: "flex",
+          }}
+        >
+          {countryCode}
+        </div>
+      </div>
+
+      {/* Coverlines section */}
+      <div
+        style={{
+          flex: 1,
+          padding: `${px(14)}px ${px(22)}px ${px(10)}px`,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {/* Cover star line */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            gap: px(8),
+            marginBottom: px(8),
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(8),
+              letterSpacing: "0.28em",
+              color: RED_M,
+              display: "flex",
+            }}
+          >
+            COVER STAR ★
+          </div>
+          <div
+            style={{
+              flex: 1,
+              height: px(0.5),
+              background: INK_M,
+              opacity: 0.4,
+              display: "flex",
+              alignSelf: "center",
+              marginTop: px(2),
+            }}
+          />
+        </div>
+
+        <div
+          style={{
+            fontFamily: "Garamond",
+            fontWeight: 700,
+            fontSize: px(28),
+            letterSpacing: "-0.01em",
+            color: INK_M,
+            lineHeight: 1,
+            display: "flex",
+            marginBottom: px(4),
+          }}
+        >
+          {name.toUpperCase()}
+        </div>
+
+        <div
+          style={{
+            fontFamily: "Plex Mono",
+            fontSize: px(9),
+            letterSpacing: "0.22em",
+            color: INK_M,
+            opacity: 0.8,
+            display: "flex",
+            gap: px(10),
+            marginBottom: px(12),
+          }}
+        >
+          <span>{position}</span>
+          <span style={{ color: RED_M, display: "flex" }}>·</span>
+          <span>NO. {number}</span>
+          <span style={{ color: RED_M, display: "flex" }}>·</span>
+          <span>RATING {rating}</span>
+        </div>
+
+        {/* Also in this issue */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginTop: px(2),
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(7),
+              letterSpacing: "0.28em",
+              color: INK_M,
+              opacity: 0.55,
+              display: "flex",
+              marginBottom: px(3),
+            }}
+          >
+            ALSO IN THIS ISSUE
+          </div>
+          <div
+            style={{
+              fontFamily: "GaramondItalic",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: px(13),
+              color: INK_M,
+              opacity: 0.85,
+              display: "flex",
+              gap: px(6),
+              flexWrap: "wrap",
+            }}
+          >
+            <span>The 48 sides</span>
+            <span style={{ color: RED_M, display: "flex" }}>·</span>
+            <span>The kits</span>
+            <span style={{ color: RED_M, display: "flex" }}>·</span>
+            <span>The fixtures</span>
+            <span style={{ color: RED_M, display: "flex" }}>·</span>
+            <span>The talent</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer rule + barcode + colophon */}
+      <div
+        style={{
+          height: px(1),
+          background: INK_M,
+          opacity: 0.85,
+          marginLeft: px(22),
+          marginRight: px(22),
+          display: "flex",
+          flexShrink: 0,
+        }}
+      />
+      <div
+        style={{
+          padding: `${px(8)}px ${px(22)}px ${px(10)}px`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexShrink: 0,
+        }}
+      >
+        {/* Barcode */}
+        <div style={{ display: "flex", alignItems: "flex-end", gap: px(1) }}>
+          {[3, 1, 2, 1, 3, 1, 1, 2, 1, 3, 2, 1, 1, 3, 1, 2, 1, 1, 3, 1, 2].map((w, i) => (
+            <div
+              key={i}
+              style={{
+                width: px(w * 0.6),
+                height: px(16),
+                background: i % 3 === 1 ? "transparent" : INK_M,
+                display: "flex",
+              }}
+            />
+          ))}
+        </div>
+        <div
+          style={{
+            fontFamily: "Plex Mono",
+            fontSize: px(8),
+            letterSpacing: "0.28em",
+            color: INK_M,
+            opacity: 0.7,
+            display: "flex",
+          }}
+        >
+          MUNDIAL × WORLD CUP '26 · PROVISIONS
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// FELLOW — equipment spec sheet
+// ─────────────────────────────────────────────
+function FellowCard({
+  photo,
+  name,
+  position,
+  number,
+  rating,
+  country,
+  countryCode,
+}: {
+  photo: string;
+  name: string;
+  position: string;
+  number: string;
+  rating: string;
+  country: string;
+  countryCode: string;
+}) {
+  const PAPER_F = "#F4EFE6";
+  const INK_F = "#1A1A1A";
+  const COPPER = "#C9785F";
+  const MUTED = "rgba(26,26,26,0.55)";
+  const W = px(500);
+  const H = px(700);
+
+  // Tick mark for technical drawing edges
+  const Tick = ({ vertical }: { vertical?: boolean }) => (
+    <div
+      style={{
+        width: vertical ? px(1) : px(8),
+        height: vertical ? px(8) : px(1),
+        background: INK_F,
+        opacity: 0.45,
+        display: "flex",
+      }}
+    />
+  );
+
+  return (
+    <div
+      style={{
+        width: W,
+        height: H,
+        background: PAPER_F,
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        padding: px(20),
+      }}
+    >
+      {/* Outer technical frame */}
+      <div
+        style={{
+          position: "absolute",
+          inset: px(16),
+          border: `${px(0.5)}px solid rgba(26,26,26,0.18)`,
+          display: "flex",
+        }}
+      />
+
+      {/* Header: FELLOW wordmark + serial */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          paddingBottom: px(12),
+          borderBottom: `${px(1)}px solid ${INK_F}`,
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(7),
+              letterSpacing: "0.32em",
+              color: MUTED,
+              marginBottom: px(2),
+              display: "flex",
+            }}
+          >
+            BREW · PLAY
+          </div>
+          <div
+            style={{
+              fontFamily: "Big Shoulders",
+              fontWeight: 800,
+              fontSize: px(28),
+              letterSpacing: "0.08em",
+              color: INK_F,
+              lineHeight: 1,
+              display: "flex",
+            }}
+          >
+            FELLOW
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(7),
+              letterSpacing: "0.28em",
+              color: MUTED,
+              display: "flex",
+            }}
+          >
+            MODEL · SR-{number.padStart(2, "0")}
+          </div>
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(7),
+              letterSpacing: "0.28em",
+              color: MUTED,
+              marginTop: px(2),
+              display: "flex",
+            }}
+          >
+            SERIES · {countryCode}/{rating}
+          </div>
+        </div>
+      </div>
+
+      {/* Edition eyebrow + jersey number */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          marginTop: px(14),
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(8),
+              letterSpacing: "0.32em",
+              color: COPPER,
+              marginBottom: px(4),
+              display: "flex",
+            }}
+          >
+            EDITION · {country.toUpperCase()}
+          </div>
+          <div
+            style={{
+              fontFamily: "Big Shoulders",
+              fontWeight: 800,
+              fontSize: px(20),
+              letterSpacing: "-0.01em",
+              color: INK_F,
+              lineHeight: 1,
+              display: "flex",
+            }}
+          >
+            The Player
+          </div>
+        </div>
+        <div
+          style={{
+            fontFamily: "Big Shoulders",
+            fontWeight: 900,
+            fontSize: px(72),
+            letterSpacing: "-0.04em",
+            color: INK_F,
+            lineHeight: 0.85,
+            display: "flex",
+            alignItems: "baseline",
+          }}
+        >
+          <span style={{ display: "flex" }}>{number.padStart(2, "0")}</span>
+        </div>
+      </div>
+
+      {/* Photo with technical tick marks */}
+      <div
+        style={{
+          marginTop: px(14),
+          position: "relative",
+          display: "flex",
+          width: "100%",
+          height: px(280),
+        }}
+      >
+        {/* Photo frame */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            border: `${px(0.5)}px solid rgba(26,26,26,0.35)`,
+            background: "#FFFFFF",
+            padding: px(10),
+            display: "flex",
+          }}
+        >
+          <img
+            src={photo}
+            width={px(420)}
+            height={px(260)}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "flex",
+              filter: "grayscale(0.18) contrast(1.02)",
+            }}
+          />
+        </div>
+        {/* Corner ticks */}
+        {[
+          { top: px(-4), left: px(-1) },
+          { top: px(-4), right: px(-1) },
+          { bottom: px(-4), left: px(-1) },
+          { bottom: px(-4), right: px(-1) },
+        ].map((pos, i) => (
+          <div key={`v${i}`} style={{ position: "absolute", ...pos, display: "flex" }}>
+            <Tick vertical />
+          </div>
+        ))}
+        {[
+          { top: px(-1), left: px(-4) },
+          { top: px(-1), right: px(-4) },
+          { bottom: px(-1), left: px(-4) },
+          { bottom: px(-1), right: px(-4) },
+        ].map((pos, i) => (
+          <div key={`h${i}`} style={{ position: "absolute", ...pos, display: "flex" }}>
+            <Tick />
+          </div>
+        ))}
+        {/* Dimension annotation */}
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            right: px(-22),
+            transform: "translateY(-50%) rotate(90deg)",
+            fontFamily: "Plex Mono",
+            fontSize: px(6),
+            letterSpacing: "0.28em",
+            color: MUTED,
+            display: "flex",
+          }}
+        >
+          FIG. 01
+        </div>
+      </div>
+
+      {/* Spec table */}
+      <div
+        style={{
+          marginTop: px(20),
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div
+          style={{
+            fontFamily: "Plex Mono",
+            fontSize: px(7),
+            letterSpacing: "0.32em",
+            color: MUTED,
+            paddingBottom: px(6),
+            borderBottom: `${px(0.5)}px solid rgba(26,26,26,0.25)`,
+            display: "flex",
+          }}
+        >
+          SPECIFICATION
+        </div>
+
+        {[
+          ["NAME", name.toUpperCase()],
+          ["POSITION", position],
+          ["NUMBER", number.padStart(2, "0")],
+          ["RATING", `${rating} / 100`],
+          ["NATION", country.toUpperCase()],
+        ].map((row, i) => (
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: `${px(5)}px 0`,
+              borderBottom: i === 4 ? "none" : `${px(0.5)}px solid rgba(26,26,26,0.12)`,
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "Plex Mono",
+                fontSize: px(8),
+                letterSpacing: "0.22em",
+                color: MUTED,
+                display: "flex",
+              }}
+            >
+              {row[0]}
+            </div>
+            <div
+              style={{
+                fontFamily: "Big Shoulders",
+                fontWeight: 800,
+                fontSize: px(13),
+                letterSpacing: "0.04em",
+                color: INK_F,
+                display: "flex",
+              }}
+            >
+              {row[1]}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom credit */}
+      <div
+        style={{
+          marginTop: "auto",
+          paddingTop: px(10),
+          borderTop: `${px(1)}px solid ${INK_F}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div
+          style={{
+            fontFamily: "Plex Mono",
+            fontSize: px(7),
+            letterSpacing: "0.28em",
+            color: MUTED,
+            display: "flex",
+          }}
+        >
+          FELLOW × WORLD CUP '26
+        </div>
+        <div
+          style={{
+            fontFamily: "Plex Mono",
+            fontSize: px(7),
+            letterSpacing: "0.28em",
+            color: COPPER,
+            display: "flex",
+          }}
+        >
+          MADE BY PROVISIONS ▲
+        </div>
+      </div>
+    </div>
+  );
+}
+
 type BrandKitDef = {
   name: string;
   tagline: string;
@@ -1166,6 +1907,37 @@ export async function GET(req: Request) {
         signature="Sam Rahim"
         country={baseTeam.name}
         countryStripe={[baseTeam.primary, baseTeam.secondary, baseTeam.accent]}
+      />,
+      { width: W, height: H, fonts, headers: { "Cache-Control": "public, max-age=31536000, immutable" } }
+    );
+  }
+
+  if (brandKey === "mundial") {
+    return new ImageResponse(
+      <MundialCard
+        photo={photoData}
+        name="Sam Rahim"
+        position="MIDFIELDER"
+        number="8"
+        rating="92"
+        country={baseTeam.name}
+        countryCode={baseTeam.code}
+        issueNumber="26"
+      />,
+      { width: W, height: H, fonts, headers: { "Cache-Control": "public, max-age=31536000, immutable" } }
+    );
+  }
+
+  if (brandKey === "fellow") {
+    return new ImageResponse(
+      <FellowCard
+        photo={photoData}
+        name="Sam Rahim"
+        position="MIDFIELDER"
+        number="8"
+        rating="92"
+        country={baseTeam.name}
+        countryCode={baseTeam.code}
       />,
       { width: W, height: H, fonts, headers: { "Cache-Control": "public, max-age=31536000, immutable" } }
     );
