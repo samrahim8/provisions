@@ -897,33 +897,51 @@
 
     /* ── COLOPHON / CLOSE ── */
     .colophon {
-      padding: 72px 64px 64px;
+      padding: 88px 64px 72px;
       background: var(--leather-mid);
       color: var(--on-leather);
       transition: background 0.35s ease, color 0.35s ease;
+      position: relative;
+    }
+    .colophon::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 64px; right: 64px;
+      height: 1px;
+      background: rgba(245,241,235,0.14);
     }
     .colophon-grid {
       display: grid;
-      grid-template-columns: 1.25fr 1fr;
-      gap: 56px;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 64px;
       align-items: stretch;
     }
     .colophon-eyebrow {
       font-family: 'Syne', sans-serif;
       font-size: 11px;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.22em;
       font-weight: 700;
       color: var(--terracotta);
-      margin-bottom: 18px;
+      margin-bottom: 22px;
       text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .colophon-eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--terracotta);
+      display: inline-block;
     }
     .colophon h2 {
       font-family: 'Syne', sans-serif;
       font-weight: 700;
-      font-size: 46px;
-      letter-spacing: -0.022em;
+      font-size: clamp(40px, 4.4vw, 56px);
+      letter-spacing: -0.024em;
       margin: 0;
-      line-height: 1.05;
+      line-height: 1.02;
       color: var(--on-leather);
     }
     .colophon p {
@@ -931,64 +949,174 @@
       font-weight: 300;
       font-size: 17px;
       line-height: 1.6;
-      margin: 18px 0 0;
+      margin: 20px 0 0;
       max-width: 520px;
       color: var(--on-leather);
-      opacity: 0.82;
+      opacity: 0.78;
+    }
+
+    /* Deliverables ledger */
+    .commission-ledger {
+      margin: 32px 0 32px;
+      max-width: 540px;
+    }
+    .commission-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 28px;
+      padding: 16px 0;
+      border-top: 1px solid rgba(245,241,235,0.16);
+      align-items: baseline;
+    }
+    .commission-row:last-child { border-bottom: 1px solid rgba(245,241,235,0.16); }
+    .commission-row .lbl {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      font-weight: 700;
+      color: var(--on-leather);
+      opacity: 0.55;
+      text-transform: uppercase;
+    }
+    .commission-row .val {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--on-leather);
+      opacity: 0.95;
+    }
+    .commission-row .val em {
+      font-style: normal;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .commission-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
     }
     .colophon-cta {
-      margin-top: 28px;
       display: inline-flex;
       align-items: center;
       gap: 10px;
       background: var(--terracotta);
       color: var(--on-accent);
-      padding: 14px 22px;
+      padding: 16px 26px;
       font-family: 'Syne', sans-serif;
       font-weight: 700;
       font-size: 12px;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       text-decoration: none;
       border: 1px solid var(--terracotta);
-      transition: background 0.2s, transform 0.2s;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.18);
     }
-    .colophon-cta:hover { background: var(--terracotta-light); transform: translateY(-1px); }
+    .colophon-cta:hover {
+      background: var(--terracotta-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(0,0,0,0.22);
+    }
+    .colophon-cta-arrow { transition: transform 0.2s; }
+    .colophon-cta:hover .colophon-cta-arrow { transform: translateX(4px); }
+    .colophon-secondary {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--on-leather);
+      opacity: 0.75;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(245,241,235,0.3);
+      padding-bottom: 4px;
+      transition: opacity 0.2s, border-color 0.2s;
+    }
+    .colophon-secondary:hover {
+      opacity: 1;
+      border-bottom-color: var(--terracotta);
+    }
 
-    /* Countdown card */
+    /* ── Kickoff scoreboard card ── */
     .kickoff-card {
-      border: 1px solid rgba(245,241,235,0.22);
-      padding: 30px 30px 26px;
+      border: 1px solid rgba(245,241,235,0.18);
+      padding: 32px 34px 28px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      position: relative;
       background:
+        radial-gradient(circle at 20% 0%, rgba(245,241,235,0.04), transparent 60%),
         repeating-linear-gradient(45deg, rgba(245,241,235,0.025) 0 8px, transparent 8px 16px);
+      overflow: hidden;
     }
+    .kickoff-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--terracotta);
+    }
+    .kickoff-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+    .kickoff-head-l { display: flex; flex-direction: column; gap: 6px; }
     .kickoff-tag {
       font-family: 'Syne', sans-serif;
       font-size: 10px;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.24em;
       font-weight: 700;
       color: var(--terracotta);
       text-transform: uppercase;
     }
+    .kickoff-match {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--on-leather);
+      opacity: 0.55;
+    }
+    .kickoff-date {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--on-leather);
+      opacity: 0.7;
+      text-align: right;
+    }
+    .kickoff-date span {
+      display: block;
+      font-weight: 400;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      opacity: 0.55;
+      margin-top: 4px;
+    }
     .kickoff-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin: 22px 0 18px;
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      align-items: center;
+      margin: 28px 0 22px;
     }
     .kickoff-cell {
       text-align: center;
-      padding: 14px 4px 10px;
-      border: 1px solid rgba(245,241,235,0.18);
+      padding: 6px 0;
     }
     .kickoff-num {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
-      font-size: 36px;
-      letter-spacing: -0.02em;
+      font-size: clamp(40px, 5vw, 56px);
+      letter-spacing: -0.04em;
       color: var(--on-leather);
       line-height: 1;
       font-variant-numeric: tabular-nums;
@@ -996,31 +1124,58 @@
     .kickoff-lbl {
       font-family: 'Inter', sans-serif;
       font-size: 9px;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
       color: var(--on-leather);
-      opacity: 0.55;
-      margin-top: 8px;
+      opacity: 0.45;
+      margin-top: 10px;
     }
-    .kickoff-meta {
+    .kickoff-divider {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--on-leather);
+      opacity: 0.18;
+      line-height: 1;
+      transform: translateY(-8px);
+    }
+    .kickoff-foot {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      padding-top: 16px;
-      border-top: 1px solid rgba(245,241,235,0.18);
+      padding-top: 18px;
+      border-top: 1px solid rgba(245,241,235,0.16);
       font-family: 'Inter', sans-serif;
       font-size: 11px;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--on-leather);
       opacity: 0.78;
     }
-    .kickoff-meta strong {
+    .kickoff-foot .matchup {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--on-leather);
+      opacity: 1;
+    }
+    .kickoff-foot .venue {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .kickoff-foot .venue strong {
       font-family: 'Syne', sans-serif;
       font-weight: 700;
       letter-spacing: 0.16em;
       color: var(--on-leather);
       opacity: 1;
+    }
+    .kickoff-foot .venue span {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      opacity: 0.55;
     }
 
     /* ── REPAINT MODAL ── */
@@ -1236,11 +1391,17 @@
       .colophon { padding: 36px 16px 32px; }
       .colophon h2 { font-size: clamp(26px, 7vw, 32px); }
       .colophon p { font-size: 15px; }
+      .commission-row { grid-template-columns: 90px 1fr; gap: 16px; padding: 14px 0; }
+      .commission-row .val { font-size: 14px; }
+      .commission-row .lbl { font-size: 9px; letter-spacing: 0.18em; }
+      .commission-actions { gap: 18px; }
+      .colophon-cta { padding: 14px 20px; font-size: 11px; }
+      .colophon-secondary { font-size: 10px; }
       .kickoff-card { padding: 22px 20px; }
-      .kickoff-num { font-size: 28px; }
-      .kickoff-grid { gap: 8px; margin: 18px 0 14px; }
-      .kickoff-cell { padding: 10px 2px 8px; }
-      .kickoff-meta { font-size: 10px; }
+      .kickoff-num { font-size: 32px; }
+      .kickoff-grid { margin: 22px 0 18px; }
+      .kickoff-divider { font-size: 22px; transform: translateY(-6px); }
+      .kickoff-foot { font-size: 10px; flex-wrap: wrap; gap: 12px; }
       footer.programme-footer { padding: 16px; font-size: 9px; letter-spacing: 0.12em; }
     }
     @media (max-width: 380px) {
@@ -1366,25 +1527,58 @@
       <section class="colophon">
         <div class="colophon-grid">
           <div>
-            <div class="colophon-eyebrow">Commission</div>
-            <h2>Want one for your team?</h2>
-            <p>The whole shelf white-labels. Brands, agencies + clubs can license a custom version of any product here in your colors, with your logo, by your kickoff. One operator, two-week turnaround, fixed price.</p>
-            <a class="colophon-cta" href="mailto:sam@provisions.work?subject=World%20Cup%20commission">Start a commission →</a>
+            <div class="colophon-eyebrow">No. 04 — Commission</div>
+            <h2>Want one for<br>your team?</h2>
+            <p>Brands, agencies + clubs can license any product on this shelf — repainted in your colors, badged with your mark, hosted on your domain.</p>
+            <div class="commission-ledger">
+              <div class="commission-row">
+                <div class="lbl">Scope</div>
+                <div class="val">Pick any product — card generator, kit index, repainter, the whole hub. White-labeled to your brand.</div>
+              </div>
+              <div class="commission-row">
+                <div class="lbl">Turnaround</div>
+                <div class="val"><em>Two weeks</em> from brief to live.</div>
+              </div>
+              <div class="commission-row">
+                <div class="lbl">Investment</div>
+                <div class="val"><em>$1,000 – $3,000</em>, fixed. No hourly, no retainer.</div>
+              </div>
+              <div class="commission-row">
+                <div class="lbl">You get</div>
+                <div class="val">Hosted page, custom domain, source files, one round of revisions.</div>
+              </div>
+            </div>
+            <div class="commission-actions">
+              <a class="colophon-cta" href="mailto:sam@provisions.work?subject=World%20Cup%20commission&body=Hey%20Sam%2C%20I%27d%20like%20to%20commission%20a%20custom%20version%20of%20the%20%5Bproduct%5D%20for%20%5Bbrand%5D.%20Our%20kickoff%20is%20%5Bdate%5D.">
+                Start a commission
+                <svg class="colophon-cta-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+              </a>
+              <a class="colophon-secondary" href="https://provisions.work">See the workshop →</a>
+            </div>
           </div>
           <div class="kickoff-card">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;">
-              <span class="kickoff-tag">First Whistle</span>
-              <span class="kickoff-tag" style="opacity:0.6;">11 Jun · 2026</span>
+            <div class="kickoff-head">
+              <div class="kickoff-head-l">
+                <span class="kickoff-tag">First Whistle</span>
+                <span class="kickoff-match">Match 1 · Group A</span>
+              </div>
+              <div class="kickoff-date">11 Jun 2026<span>19:00 CDT</span></div>
             </div>
-            <div class="kickoff-grid" id="kickoffGrid">
-              <div class="kickoff-cell"><div class="kickoff-num" id="kDays">–</div><div class="kickoff-lbl">Days</div></div>
-              <div class="kickoff-cell"><div class="kickoff-num" id="kHrs">–</div><div class="kickoff-lbl">Hrs</div></div>
-              <div class="kickoff-cell"><div class="kickoff-num" id="kMin">–</div><div class="kickoff-lbl">Min</div></div>
-              <div class="kickoff-cell"><div class="kickoff-num" id="kSec">–</div><div class="kickoff-lbl">Sec</div></div>
+            <div class="kickoff-grid">
+              <div class="kickoff-cell"><div class="kickoff-num" id="kDays">––</div><div class="kickoff-lbl">Days</div></div>
+              <div class="kickoff-divider">:</div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kHrs">––</div><div class="kickoff-lbl">Hours</div></div>
+              <div class="kickoff-divider">:</div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kMin">––</div><div class="kickoff-lbl">Min</div></div>
+              <div class="kickoff-divider">:</div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kSec">––</div><div class="kickoff-lbl">Sec</div></div>
             </div>
-            <div class="kickoff-meta">
-              <span>MEX vs RSA</span>
-              <strong>Estadio Azteca</strong>
+            <div class="kickoff-foot">
+              <span class="matchup">MEX <span style="opacity:0.55;font-weight:400;">vs</span> RSA</span>
+              <span class="venue">
+                <strong>Estadio Azteca</strong>
+                <span>Mexico City · 87,000 cap.</span>
+              </span>
             </div>
           </div>
         </div>
