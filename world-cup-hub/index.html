@@ -1740,6 +1740,11 @@
     // ── Boot — keep Provisions default palette; team-mode is opt-in ──
     renderTeamGrid(null);
     renderLedger();
+    // First-load scramble for the default ticket (MEX vs RSA)
+    requestAnimationFrame(() => {
+      scrambleTo(document.getElementById('whistleHome'), 'MEX', 650);
+      scrambleTo(document.getElementById('whistleAway'), 'RSA', 850);
+    });
   </script>
 </body>
 </html>

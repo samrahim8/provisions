@@ -291,7 +291,7 @@ function ArchCard({
                 transform: `translate(-50%, -50%) rotate(${angle}deg)`,
                 fontFamily: "Bebas",
                 fontSize: letterFontSize,
-                color: team.primary,
+                color: teamColor,
                 lineHeight: 1,
                 display: "flex",
               }}
@@ -317,7 +317,7 @@ function ArchCard({
           top: px(180),
           width: px(500 - 80),
           height: px(330),
-          background: team.primary,
+          background: teamColor,
           borderRadius: `${px(120)}px ${px(120)}px ${px(6)}px ${px(6)}px`,
           padding: px(8),
           display: "flex",
@@ -331,7 +331,7 @@ function ArchCard({
             overflow: "hidden",
             position: "relative",
             border: `2px solid ${INK}`,
-            background: team.primary,
+            background: teamColor,
             display: "flex",
           }}
         >
@@ -353,7 +353,7 @@ function ArchCard({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          boxShadow: `${px(4)}px ${px(4)}px 0 0 ${team.primary}`,
+          boxShadow: `${px(4)}px ${px(4)}px 0 0 ${teamColor}`,
           overflow: "hidden",
         }}
       >
@@ -392,7 +392,7 @@ function ArchCard({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: `${px(3)}px ${px(3)}px 0 0 ${team.primary}`,
+            boxShadow: `${px(3)}px ${px(3)}px 0 0 ${teamColor}`,
           }}
         >
           <div
@@ -411,7 +411,7 @@ function ArchCard({
             style={{
               fontFamily: "Bebas",
               fontSize: px(54),
-              color: team.primary,
+              color: teamColor,
               lineHeight: 0.95,
               letterSpacing: "0.04em",
               display: "flex",
@@ -423,7 +423,7 @@ function ArchCard({
         <div
           style={{
             flex: 1.2,
-            background: team.primary,
+            background: teamColor,
             border: `3px solid ${INK}`,
             color: lightPrimary ? INK : "#fff",
             display: "flex",
@@ -466,7 +466,7 @@ function ArchCard({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: `${px(3)}px ${px(3)}px 0 0 ${team.primary}`,
+            boxShadow: `${px(3)}px ${px(3)}px 0 0 ${teamColor}`,
           }}
         >
           <div
