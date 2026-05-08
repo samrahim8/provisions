@@ -104,7 +104,199 @@ export default function Page() {
       </section>
 
       <Footer />
+
+      {generating && team && <PressingOverlay team={team} />}
     </main>
+  );
+}
+
+function PressingOverlay({ team }: { team: Team }) {
+  const STAGES = [
+    "Loading the press",
+    "Setting the kit",
+    "Inking your photo",
+    "Stamping your number",
+    "Almost there",
+  ];
+  const [stageIdx, setStageIdx] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setStageIdx((i) => (i + 1) % STAGES.length);
+    }, 700);
+    return () => clearInterval(id);
+  }, [STAGES.length]);
+
+  const accent = team.secondary || team.accent || team.primary;
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center px-6"
+      style={{
+        background: "rgba(245, 241, 235, 0.94)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+      }}
+      role="status"
+      aria-live="polite"
+    >
+      <div className="flex flex-col items-center" style={{ gap: 28 }}>
+        {/* Card silhouette being pressed */}
+        <div className="press-card" style={{ ["--accent" as string]: accent, ["--primary" as string]: team.primary }}>
+          <div className="press-card-inner">
+            <div className="press-tape" />
+            <div className="press-photo">
+              <div className="press-photo-shimmer" />
+            </div>
+            <div className="press-name" />
+            <div className="press-stats">
+              <div /><div /><div />
+            </div>
+          </div>
+          <div className="press-bar" aria-hidden="true" />
+        </div>
+
+        {/* Headline */}
+        <div style={{ textAlign: "center" }}>
+          <h2
+            className="font-display"
+            style={{
+              fontWeight: 800,
+              fontSize: "clamp(28px, 4vw, 40px)",
+              letterSpacing: "-0.02em",
+              color: "#2C2118",
+              lineHeight: 1,
+              margin: 0,
+            }}
+          >
+            Pressing your card.
+          </h2>
+          <p
+            style={{
+              fontFamily: "var(--font-mono, ui-monospace, monospace)",
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              fontWeight: 600,
+              color: accent,
+              marginTop: 12,
+              minHeight: 16,
+              transition: "color 0.4s ease",
+            }}
+          >
+            {STAGES[stageIdx]}…
+          </p>
+        </div>
+
+        {/* Progress bar */}
+        <div
+          style={{
+            width: 240,
+            height: 2,
+            background: "rgba(0,0,0,0.08)",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: accent,
+              animation: "press-progress 1.4s ease-in-out infinite",
+              transformOrigin: "left",
+            }}
+          />
+        </div>
+      </div>
+
+      <style>{`
+        .press-card {
+          position: relative;
+          width: 220px;
+          height: 308px;
+          background: var(--primary, #f0e9dc);
+          border: 2.5px solid #2C2118;
+          box-shadow: 0 24px 56px rgba(0,0,0,0.18), inset 0 0 0 6px var(--primary, #f0e9dc);
+          padding: 12px;
+          overflow: hidden;
+        }
+        .press-card-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          background: #f5efe0;
+          padding: 14px 14px 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .press-tape {
+          height: 8px;
+          background: var(--accent, #2C2118);
+          opacity: 0.85;
+        }
+        .press-photo {
+          flex: 1;
+          background: rgba(0,0,0,0.08);
+          border: 1.5px solid var(--accent, #2C2118);
+          position: relative;
+          overflow: hidden;
+        }
+        .press-photo-shimmer {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255,255,255,0.5) 50%,
+            transparent 100%);
+          transform: translateX(-100%);
+          animation: press-shimmer 1.6s ease-in-out infinite;
+        }
+        .press-name {
+          height: 14px;
+          background: rgba(0,0,0,0.12);
+        }
+        .press-stats {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 4px;
+          height: 32px;
+        }
+        .press-stats > div {
+          background: rgba(0,0,0,0.08);
+        }
+        .press-stats > div:nth-child(2) {
+          background: var(--accent, #2C2118);
+          opacity: 0.8;
+        }
+        .press-bar {
+          position: absolute;
+          left: -8px;
+          right: -8px;
+          height: 14px;
+          background: #2C2118;
+          box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+          animation: press-bar 2.1s ease-in-out infinite;
+          pointer-events: none;
+        }
+        @keyframes press-bar {
+          0%, 100% { top: -20px; opacity: 0; }
+          15%, 85% { opacity: 1; }
+          50% { top: calc(100% - 4px); }
+        }
+        @keyframes press-shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        @keyframes press-progress {
+          0% { transform: scaleX(0); transform-origin: left; }
+          50% { transform: scaleX(1); transform-origin: left; }
+          50.01% { transform: scaleX(1); transform-origin: right; }
+          100% { transform: scaleX(0); transform-origin: right; }
+        }
+      `}</style>
+    </div>
   );
 }
 
