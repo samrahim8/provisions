@@ -311,20 +311,21 @@ function Nav({ step }: { step: Step }) {
   const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   return (
     <header className="sticky top-0 z-50 bg-parchment-elevated border-b border-border">
-      <div className="max-w-[1280px] mx-auto px-8 sm:px-16 min-h-[72px] flex items-center justify-between gap-4">
-        <a href="https://provisions.work/world-cup" className="flex items-center gap-3.5 group">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 min-h-[72px] flex items-center justify-between gap-3">
+        <a
+          href="https://provisions.work/world-cup"
+          className="flex items-center gap-3 group flex-shrink-0"
+          aria-label="Provisions"
+        >
           <img
             src={`${BASE}/provisions-mark.png`}
             alt="Provisions"
-            width={22}
-            height={22}
+            width={26}
+            height={26}
             className="object-contain"
           />
-          <span className="font-display font-extrabold text-leather-mid tracking-wordmark text-sm">
-            PROVISIONS
-          </span>
         </a>
-        <ol className="hidden md:flex items-center gap-4">
+        <ol className="hidden lg:flex items-center gap-4">
           {labels.map((l, i) => (
             <li key={l.id} className="flex items-center gap-2">
               <span
@@ -346,9 +347,10 @@ function Nav({ step }: { step: Step }) {
         </ol>
         <a
           href="https://provisions.work/world-cup"
-          className="md:hidden font-display font-extrabold uppercase tracking-label text-[10px] text-text-soft"
+          className="h-[40px] sm:h-[44px] inline-flex items-center bg-leather-mid text-white px-4 sm:px-5 font-display font-extrabold uppercase tracking-label text-[10px] sm:text-[12px] border border-leather-mid hover:bg-terracotta hover:border-terracotta transition-all"
+          style={{ boxShadow: "0 3px 0 rgba(0,0,0,0.12)" }}
         >
-          ← Sheet
+          ← Back to the team sheet
         </a>
       </div>
     </header>
