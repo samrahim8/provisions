@@ -646,11 +646,17 @@
       padding: 40px;
       display: grid;
       grid-template-columns: 1.05fr 1fr;
-      gap: 48px;
-      align-items: center;
+      grid-template-areas:
+        "content image"
+        "cta image";
+      column-gap: 48px;
+      row-gap: 32px;
+      align-items: start;
       transition: background 0.35s ease, border-color 0.35s ease;
     }
-    .featured-content { padding-top: 0; }
+    .featured-content { grid-area: content; padding-top: 0; }
+    .featured-image-frame { grid-area: image; align-self: center; }
+    .featured-cta-row { grid-area: cta; align-self: end; }
     .featured-h3 {
       font-family: 'Syne', sans-serif;
       font-weight: 700;
@@ -1126,7 +1132,16 @@
       }
       .hero-h1 { font-size: clamp(64px, 14vw, 110px); }
       .hero-card { max-width: 100%; justify-self: stretch; margin-bottom: 0; }
-      .featured { grid-template-columns: 1fr; gap: 28px; padding: 28px; }
+      .featured {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "content"
+          "image"
+          "cta";
+        gap: 28px;
+        padding: 28px;
+      }
+      .featured-cta-row { align-self: stretch; }
       .featured-h3 { font-size: 38px; }
       .ledger { grid-template-columns: 1fr; }
       .ledger-cell.col-left { border-right: none; border-bottom: 1px solid var(--border); }
@@ -1167,6 +1182,8 @@
       .featured-stat .lbl { font-size: 8px; }
       .featured-image-frame { min-height: 360px; padding: 22px; }
       .featured-image-frame img { max-height: 320px; max-width: 86%; }
+      .featured-cta-row { margin-top: 0; }
+      .featured-cta-row .btn-dark { width: 100%; text-align: center; justify-content: center; display: flex; }
       .team-grid { grid-template-columns: repeat(2, 1fr); }
       /* Match ticket on mobile */
       .ticket-stub { padding: 16px 18px 16px; }
@@ -1283,12 +1300,12 @@
               <div class="featured-stat"><div class="num">48</div><div class="lbl">Squads</div></div>
               <div class="featured-stat"><div class="num">1</div><div class="lbl">Click</div></div>
             </div>
-            <div class="featured-cta-row">
-              <span class="btn-dark">Open the generator →</span>
-            </div>
           </div>
           <div class="featured-image-frame">
             <img src="../images/wc-card-feature.png" alt="Player card example">
+          </div>
+          <div class="featured-cta-row">
+            <span class="btn-dark">Open the generator →</span>
           </div>
         </a>
 
