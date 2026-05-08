@@ -52,7 +52,7 @@ export default function Page() {
 
       <Nav step={step} />
 
-      <section className="relative max-w-[1100px] mx-auto px-8 py-16">
+      <section className="relative max-w-[1100px] mx-auto px-5 sm:px-8 py-8 sm:py-16">
         {step === "team" && (
           <TeamPicker
             onPick={(t) => {
@@ -368,16 +368,16 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
   );
   return (
     <div>
-      <div className="grid lg:grid-cols-[1.25fr,1fr] gap-10 lg:gap-16 items-center mb-12">
+      <div className="grid lg:grid-cols-[1.25fr,1fr] gap-8 lg:gap-16 items-center mb-10 sm:mb-12">
         <div>
-          <div className="label mb-4">Summer '26</div>
-          <h1 className="font-display font-bold text-leather text-[clamp(2.4rem,6vw,4.2rem)] leading-[1.05] tracking-[-0.02em] mb-5">
+          <div className="label mb-3 sm:mb-4">Summer '26</div>
+          <h1 className="font-display font-bold text-leather text-[clamp(2rem,8vw,4.2rem)] leading-[1.05] tracking-[-0.02em] mb-4 sm:mb-5">
             The player card<br />for the rest of us.
           </h1>
-          <p className="text-text-soft max-w-xl text-lg leading-snug mb-7">
+          <p className="text-text-soft max-w-xl text-base sm:text-lg leading-snug mb-6 sm:mb-7">
             Pick a country. Snap a photo. Share it with your squad.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <a
               href="#browse"
               onClick={(e) => {
@@ -391,7 +391,7 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
                 <path d="M12 5v14M5 12l7 7 7-7" />
               </svg>
             </a>
-            <span className="text-text-soft text-sm">Or scroll to browse all 48.</span>
+            <span className="text-text-soft text-xs sm:text-sm">Or scroll to browse all 48.</span>
           </div>
         </div>
         <div className="hidden lg:flex justify-end">

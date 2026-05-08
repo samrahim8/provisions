@@ -50,7 +50,7 @@
       --mono: 'Inter', sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
     body {
       font-family: var(--sans);
       background: var(--bg);
@@ -59,7 +59,9 @@
       -webkit-font-smoothing: antialiased;
       -webkit-text-size-adjust: 100%;
       overflow-x: hidden;
+      max-width: 100vw;
     }
+    img, svg, video { max-width: 100%; height: auto; }
     h1, h2, h3, h4 { font-family: var(--display); font-weight: 700; }
     a { color: inherit; text-decoration: none; }
     img, svg { max-width: 100%; display: block; }
@@ -299,6 +301,29 @@
     @media (max-width: 700px) {
       footer { padding: 18px 24px; }
       .attribution { padding: 14px 24px 20px; }
+    }
+    @media (max-width: 600px) {
+      .nav-inner { padding: 0 16px; min-height: 64px; }
+      .nav-mark { font-size: 12px; gap: 10px; }
+      .nav-back { font-size: 10px; padding: 0 14px; height: 38px; letter-spacing: 0.14em; }
+      .hero { padding: 28px 16px 20px; }
+      .hero h1 { font-size: clamp(36px, 11vw, 56px); margin-bottom: 14px; }
+      .hero .lede { font-size: 15px; line-height: 1.5; }
+      .hero .label { font-size: 11px; margin-bottom: 12px; letter-spacing: 0.14em; }
+      .filters { padding: 12px 16px; top: 64px; }
+      .filters-inner { gap: 10px 8px; }
+      .conf-tab { font-size: 9px; padding: 5px 10px; letter-spacing: 0.14em; }
+      .filter-count { font-size: 10px; }
+      section { padding: 28px 0 48px; }
+      .container { padding: 0 16px; }
+      .team-grid { gap: 12px; grid-template-columns: repeat(2, 1fr); }
+      .team-card { padding: 14px 14px 12px; gap: 10px; }
+      .team-name { font-size: 14px; line-height: 1.1; }
+      .team-conf { font-size: 8px; }
+      .swatch-tile .hex { font-size: 8px; }
+      .palette { gap: 5px; }
+      footer { padding: 14px 16px; font-size: 9px; }
+      .attribution { padding: 12px 16px 16px; font-size: 11px; }
     }
   </style>
 </head>
