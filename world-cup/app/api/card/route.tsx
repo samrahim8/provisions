@@ -198,24 +198,6 @@ function ArchCard({
   const fullCountry = fullName(team);
   const longCountry = fullCountry.length > 8;
 
-  // Place letters along the design's Bezier curve: M 30 120 Q 230 -10 430 120
-  // The SVG container is positioned at left:20, top:28 in card coordinates.
-  const letters = fullCountry.split("");
-  const bezier = (t: number) => {
-    const u = 1 - t;
-    return {
-      x: u * u * 30 + 2 * u * t * 230 + t * t * 430,
-      y: u * u * 120 + 2 * u * t * -10 + t * t * 120,
-    };
-  };
-  const tangentDeg = (t: number) => {
-    const dy = -260 + 520 * t;
-    return (Math.atan2(dy, 400) * 180) / Math.PI;
-  };
-  const svgOffsetX = 20;
-  const svgOffsetY = 28;
-  const letterFontSize = px(longCountry ? 56 : 80);
-
   return (
     <div
       style={{
@@ -351,48 +333,76 @@ function ArchCard({
         </div>
       )}
 
-      {/* Arched country name — letters placed along Bezier curve */}
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          width: "100%",
-          height: px(180),
-          display: "flex",
-        }}
-      >
-        {letters.map((ch, i) => {
-          const t = letters.length > 1 ? i / (letters.length - 1) : 0.5;
-          const p = bezier(t);
-          const angle = tangentDeg(t);
-          return (
+      {/* Country banner — flat ribbon with edge stripes + flanking stars */}
+      {(() => {
+        const onTeam = isLight(teamColor) ? INK : "#FFFFFF";
+        const bannerTop = px(86);
+        const bannerHeight = px(54);
+        const stripeColor = accentColor;
+        const bannerFontSize = px(longCountry ? 24 : 30);
+        return (
+          <div
+            style={{
+              position: "absolute",
+              left: px(30),
+              right: px(30),
+              top: bannerTop,
+              height: bannerHeight,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div style={{ height: px(4), background: stripeColor, display: "flex" }} />
             <div
-              key={i}
               style={{
-                position: "absolute",
-                left: px(svgOffsetX + p.x),
-                top: px(svgOffsetY + p.y),
-                transform: `translate(-50%, -50%) rotate(${angle}deg)`,
-                fontFamily: "Bebas",
-                fontSize: letterFontSize,
-                color: teamColor,
-                lineHeight: 1,
+                flex: 1,
+                background: teamColor,
                 display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: `0 ${px(14)}px`,
+                position: "relative",
               }}
             >
-              {ch === " " ? "·" : ch}
+              <div style={{ display: "flex", alignItems: "center", gap: px(6) }}>
+                <Star size={10} color={onTeam} />
+                <Star size={10} color={onTeam} />
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "Bebas",
+                    fontSize: bannerFontSize,
+                    letterSpacing: "0.18em",
+                    color: onTeam,
+                    lineHeight: 1,
+                    whiteSpace: "nowrap",
+                    display: "flex",
+                  }}
+                >
+                  {fullCountry.toUpperCase()}
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: px(6) }}>
+                <Star size={10} color={onTeam} />
+                <Star size={10} color={onTeam} />
+              </div>
             </div>
-          );
-        })}
-      </div>
-
-      <div style={{ position: "absolute", top: px(60), left: px(34), display: "flex" }}>
-        <Star size={12} color={INK} />
-      </div>
-      <div style={{ position: "absolute", top: px(60), right: px(34), display: "flex" }}>
-        <Star size={12} color={INK} />
-      </div>
+            <div style={{ height: px(4), background: stripeColor, display: "flex" }} />
+          </div>
+        );
+      })()}
 
       {/* Photo in stadium-shape frame */}
       <div
@@ -618,6 +628,8 @@ function GuinnessCard({
   number,
   rating,
   signature,
+  country,
+  countryStripe,
 }: {
   photo: string;
   name: string;
@@ -625,6 +637,8 @@ function GuinnessCard({
   number: string;
   rating: string;
   signature: string;
+  country: string;
+  countryStripe: [string, string, string];
 }) {
   const PAPER_G = "#F2EBD8";
   const INK_G = "#0D0D0D";
@@ -849,8 +863,8 @@ function GuinnessCard({
             alignItems: "center",
             justifyContent: "center",
             gap: px(14),
-            marginTop: px(20),
-            marginBottom: px(2),
+            marginTop: px(18),
+            marginBottom: px(0),
           }}
         >
           <div style={{ width: px(28), height: px(1), background: GOLD, display: "flex" }} />
@@ -868,6 +882,40 @@ function GuinnessCard({
             {name}
           </div>
           <div style={{ width: px(28), height: px(1), background: GOLD, display: "flex" }} />
+        </div>
+
+        {/* Country accent — tri-color hairline + small caps nation */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(10),
+            marginTop: px(8),
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <div style={{ width: px(8), height: px(3), background: countryStripe[0], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[1], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[2], display: "flex" }} />
+          </div>
+          <div
+            style={{
+              fontFamily: "PlayfairSc",
+              fontSize: px(9),
+              letterSpacing: "0.32em",
+              color: INK_G,
+              opacity: 0.78,
+              display: "flex",
+            }}
+          >
+            OF {country.toUpperCase()}
+          </div>
+          <div style={{ display: "flex" }}>
+            <div style={{ width: px(8), height: px(3), background: countryStripe[0], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[1], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[2], display: "flex" }} />
+          </div>
         </div>
 
         {/* Stats — pint-label style */}
@@ -972,7 +1020,7 @@ function GuinnessCard({
             gap: px(8),
           }}
         >
-          <span>PERFECTLY PRESSED</span>
+          <span>GUINNESS FC × {country.toUpperCase()}</span>
           <span style={{ color: GOLD, display: "flex" }}>·</span>
           <span>WORLD CUP MMXXVI</span>
         </div>
@@ -1070,6 +1118,8 @@ export async function GET(req: Request) {
         number="8"
         rating="92"
         signature="Sam Rahim"
+        country={baseTeam.name}
+        countryStripe={[baseTeam.primary, baseTeam.secondary, baseTeam.accent]}
       />,
       { width: W, height: H, fonts, headers: { "Cache-Control": "public, max-age=31536000, immutable" } }
     );
