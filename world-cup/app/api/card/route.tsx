@@ -519,10 +519,48 @@ function ArchCard({
   );
 }
 
+const BRAND_PRESETS: Record<string, Team> = {
+  guinness: {
+    code: "GNS",
+    name: "Guinness",
+    flag: "",
+    primary: "#1A1A1A",
+    secondary: "#C8A24B",
+    accent: "#A8170A",
+    confederation: "UEFA" as Team["confederation"],
+  },
+  mundial: {
+    code: "MND",
+    name: "Mundial",
+    flag: "",
+    primary: "#D32027",
+    secondary: "#F2EFE8",
+    accent: "#0F0F0F",
+    confederation: "UEFA" as Team["confederation"],
+  },
+  fellow: {
+    code: "FLW",
+    name: "Fellow",
+    flag: "",
+    primary: "#1F1F1F",
+    secondary: "#C9785F",
+    accent: "#E8E0D6",
+    confederation: "UEFA" as Team["confederation"],
+  },
+};
+const BRAND_TAGLINES: Record<string, string> = {
+  guinness: "EST. 1759",
+  mundial: "ISSUE XXVI",
+  fellow: "BREW · PLAY",
+};
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
+  const brandKey = (url.searchParams.get("brand") || "").toLowerCase();
   const teamCode = (url.searchParams.get("team") || "USA").toUpperCase();
-  const team = teamByCode(teamCode) || teamByCode("USA");
+  const team: Team | null = brandKey && BRAND_PRESETS[brandKey]
+    ? { ...BRAND_PRESETS[brandKey], confederation: (BRAND_TAGLINES[brandKey] || "UEFA") as Team["confederation"] }
+    : (teamByCode(teamCode) || teamByCode("USA") || null);
   if (!team) return new Response("Unknown team", { status: 400 });
 
   const [bs8, bs9, bebas, plex, sig, markDark, markLight, photoData] = await Promise.all([
