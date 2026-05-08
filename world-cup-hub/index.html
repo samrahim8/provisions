@@ -1737,8 +1737,7 @@
       const ledger = document.getElementById('ledger');
       const items = PRODUCTS;
       ledger.innerHTML = items.map((p, i) => {
-        const isLast = i === items.length - 1;
-        const cls = ['ledger-cell', isLast ? 'full-row' : ''].filter(Boolean).join(' ');
+        const cls = 'ledger-cell';
         const onClickAttr = p.onClick ? ` onclick="event.preventDefault(); ${p.onClick}();"` : '';
         return `<a href="${p.href}" class="${cls}"${onClickAttr}>
           <div class="ledger-head">
