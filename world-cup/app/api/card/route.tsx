@@ -57,6 +57,11 @@ function contrastColor(team: Team): string {
   return INK;
 }
 
+// The "team color" used for visible elements. Falls back when primary is white-ish.
+function displayPrimary(team: Team): string {
+  return isLight(team.primary) ? contrastColor(team) : team.primary;
+}
+
 function todayStamp(): string {
   const d = new Date();
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -174,7 +179,8 @@ function ArchCard({
   markUrl: string;
 }) {
   const accentColor = contrastColor(team);
-  const lightPrimary = isLight(team.primary);
+  const teamColor = displayPrimary(team);
+  const lightPrimary = isLight(teamColor);
   const fullCountry = fullName(team);
   const longCountry = fullCountry.length > 8;
 
