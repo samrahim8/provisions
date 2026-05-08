@@ -1299,7 +1299,7 @@
             </div>
           </div>
           <div class="featured-image-frame">
-            <img src="../images/wc-card-feature.png?v=3" alt="Player card example">
+            <img id="featuredCardImg" src="https://provisions.work/world-cup/card-generator/api/card?team=USA" alt="Player card example">
           </div>
           <div class="featured-cta-row">
             <span class="btn-dark">Open the generator →</span>
@@ -1607,6 +1607,8 @@
       updateTicket(code);
       renderTeamGrid(code);
       renderTeamGrid(code, 'repaintTeamGrid');
+      const fc = document.getElementById('featuredCardImg');
+      if (fc) fc.src = `https://provisions.work/world-cup/card-generator/api/card?team=${encodeURIComponent(code)}`;
       // Close the top bar
       document.getElementById('teamBar').classList.remove('open');
       document.getElementById('teamToggle').setAttribute('aria-expanded', 'false');

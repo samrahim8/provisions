@@ -513,6 +513,53 @@ function ArchCard({
   );
 }
 
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const teamCode = (url.searchParams.get("team") || "USA").toUpperCase();
+  const team = teamByCode(teamCode) || teamByCode("USA");
+  if (!team) return new Response("Unknown team", { status: 400 });
+
+  const [bs8, bs9, bebas, plex, sig, markDark, markLight, photoData] = await Promise.all([
+    loadFont(FONT_URLS.bigShoulders800),
+    loadFont(FONT_URLS.bigShoulders900),
+    loadFont(FONT_URLS.bebas),
+    loadFont(FONT_URLS.plexMono),
+    loadFont(FONT_URLS.homemade),
+    loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark.png"),
+    loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark-white.png"),
+    loadImageDataUrl(req, "/world-cup/card-generator/sam.png"),
+  ]);
+
+  const markUrl = isLight(PAPER) ? markDark : markLight;
+
+  const props = {
+    team,
+    photo: photoData,
+    name: "Sam Rahim",
+    position: "MID",
+    number: "8",
+    rating: "92",
+    signature: "Sam Rahim",
+    markUrl,
+  };
+
+  const W = px(500);
+  const H = px(700);
+
+  return new ImageResponse(<ArchCard {...props} />, {
+    width: W,
+    height: H,
+    fonts: [
+      { name: "Big Shoulders", data: bs8, weight: 800, style: "normal" },
+      { name: "Big Shoulders", data: bs9, weight: 900, style: "normal" },
+      { name: "Bebas", data: bebas, weight: 400, style: "normal" },
+      { name: "Plex Mono", data: plex, weight: 600, style: "normal" },
+      { name: "Homemade Apple", data: sig, weight: 400, style: "normal" },
+    ],
+    headers: { "Cache-Control": "public, max-age=31536000, immutable" },
+  });
+}
+
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
   if (!body) return new Response("Bad JSON", { status: 400 });
