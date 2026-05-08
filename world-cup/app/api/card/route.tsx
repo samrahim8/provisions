@@ -17,6 +17,17 @@ async function loadFont(url: string): Promise<ArrayBuffer> {
   return res.arrayBuffer();
 }
 
+async function loadImageDataUrl(req: Request, path: string): Promise<string> {
+  const url = new URL(path, req.url).toString();
+  const res = await fetch(url, { cache: "force-cache" });
+  if (!res.ok) throw new Error("Image fetch failed: " + path);
+  const buf = await res.arrayBuffer();
+  const bytes = new Uint8Array(buf);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return `data:image/png;base64,${btoa(bin)}`;
+}
+
 const SCALE = 2;
 const px = (n: number) => n * SCALE;
 
@@ -60,41 +71,15 @@ function splitName(name: string): { first: string; last: string } {
   return { first: name.slice(0, idx), last: name.slice(idx + 1) };
 }
 
-function BrandMark({ color, paperColor }: { color: string; paperColor: string }) {
+function BrandMark({ markUrl }: { markUrl: string }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: px(7), color }}>
-      <div
-        style={{
-          width: px(12),
-          height: px(12),
-          background: color,
-          position: "relative",
-          display: "flex",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: px(2),
-            left: px(2),
-            right: px(2),
-            bottom: px(2),
-            background: paperColor,
-            display: "flex",
-          }}
-        />
-      </div>
-      <div
-        style={{
-          fontFamily: "Big Shoulders",
-          fontWeight: 900,
-          fontSize: px(14),
-          letterSpacing: "0.18em",
-          display: "flex",
-        }}
-      >
-        PROVISIONS
-      </div>
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <img
+        src={markUrl}
+        width={px(20)}
+        height={px(20)}
+        style={{ display: "block", objectFit: "contain" }}
+      />
     </div>
   );
 }
@@ -177,6 +162,7 @@ function ArchCard({
   number,
   rating,
   signature,
+  markUrl,
 }: {
   team: Team;
   photo: string;
@@ -185,6 +171,7 @@ function ArchCard({
   number: string;
   rating: string;
   signature: string;
+  markUrl: string;
 }) {
   const accentColor = contrastColor(team);
   const lightPrimary = isLight(team.primary);
@@ -258,7 +245,7 @@ function ArchCard({
           justifyContent: "space-between",
         }}
       >
-        <BrandMark color={INK} paperColor={PAPER} />
+        <BrandMark markUrl={markUrl} />
         <div
           style={{
             fontFamily: "Plex Mono",
@@ -542,13 +529,18 @@ export async function POST(req: Request) {
   if (!team) return new Response("Unknown team", { status: 400 });
   if (!photo?.startsWith("data:image")) return new Response("Bad photo", { status: 400 });
 
-  const [bs8, bs9, bebas, plex, sig] = await Promise.all([
+  const [bs8, bs9, bebas, plex, sig, markDark, markLight] = await Promise.all([
     loadFont(FONT_URLS.bigShoulders800),
     loadFont(FONT_URLS.bigShoulders900),
     loadFont(FONT_URLS.bebas),
     loadFont(FONT_URLS.plexMono),
     loadFont(FONT_URLS.homemade),
+    loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark.png"),
+    loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark-white.png"),
   ]);
+
+  // Pick mark color based on PAPER luminance — light paper → dark mark, dark paper → light mark
+  const markUrl = isLight(PAPER) ? markDark : markLight;
 
   const props = {
     team,
@@ -558,6 +550,7 @@ export async function POST(req: Request) {
     number,
     rating,
     signature: name || "Your Name",
+    markUrl,
   };
 
   const W = px(500);
