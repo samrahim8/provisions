@@ -287,17 +287,20 @@ function ArchCard({
             </div>
           </div>
         ) : (
-          <div
-            style={{
-              fontFamily: "Plex Mono",
-              fontSize: px(9),
-              letterSpacing: "0.22em",
-              color: INK,
-              opacity: 0.7,
-              display: "flex",
-            }}
-          >
-            SERIES ONE · {todayStamp()}
+          <div style={{ display: "flex", alignItems: "center", gap: px(8) }}>
+            <div
+              style={{
+                fontFamily: "Plex Mono",
+                fontSize: px(9),
+                letterSpacing: "0.22em",
+                color: INK,
+                opacity: 0.7,
+                display: "flex",
+              }}
+            >
+              {team.confederation}
+            </div>
+            <FedBadge team={team} size={22} />
           </div>
         )}
       </div>
@@ -336,8 +339,8 @@ function ArchCard({
       {/* Country banner — flat ribbon with edge stripes + flanking stars */}
       {(() => {
         const onTeam = isLight(teamColor) ? INK : "#FFFFFF";
-        const bannerTop = px(86);
-        const bannerHeight = px(54);
+        const bannerTop = px(74);
+        const bannerHeight = px(50);
         const stripeColor = accentColor;
         const bannerFontSize = px(longCountry ? 24 : 30);
         return (
@@ -409,9 +412,9 @@ function ArchCard({
         style={{
           position: "absolute",
           left: px(40),
-          top: px(180),
+          top: px(144),
           width: px(500 - 80),
-          height: px(330),
+          height: px(320),
           background: teamColor,
           borderRadius: `${px(120)}px ${px(120)}px ${px(6)}px ${px(6)}px`,
           padding: px(8),
@@ -421,7 +424,7 @@ function ArchCard({
         <div
           style={{
             width: px(500 - 80 - 16),
-            height: px(330 - 16),
+            height: px(320 - 16),
             borderRadius: `${px(110)}px ${px(110)}px ${px(2)}px ${px(2)}px`,
             overflow: "hidden",
             position: "relative",
@@ -430,7 +433,7 @@ function ArchCard({
             display: "flex",
           }}
         >
-          <Photo src={photo} w={px(500 - 80 - 16 - 4)} h={px(330 - 16 - 4)} />
+          <Photo src={photo} w={px(500 - 80 - 16 - 4)} h={px(320 - 16 - 4)} />
           <Signature name={signature} color={INK} tilt={-5} size={30} />
         </div>
       </div>
@@ -441,8 +444,8 @@ function ArchCard({
           position: "absolute",
           left: px(40),
           right: px(40),
-          top: px(528),
-          height: px(46),
+          top: px(484),
+          height: px(44),
           background: "#fff",
           border: `3px solid ${INK}`,
           display: "flex",
@@ -472,10 +475,11 @@ function ArchCard({
           position: "absolute",
           left: px(40),
           right: px(40),
-          top: px(586),
-          height: px(86),
+          top: px(546),
+          height: px(96),
           display: "flex",
           gap: px(8),
+          alignItems: "stretch",
         }}
       >
         <div
@@ -517,7 +521,9 @@ function ArchCard({
         </div>
         <div
           style={{
-            flex: 1.2,
+            flex: 1.3,
+            alignSelf: "flex-end",
+            height: px(108),
             background: teamColor,
             border: `3px solid ${INK}`,
             color: lightPrimary ? INK : "#fff",
@@ -533,7 +539,8 @@ function ArchCard({
               fontFamily: "Plex Mono",
               fontSize: px(9),
               letterSpacing: "0.25em",
-              opacity: 0.85,
+              color: lightPrimary ? INK : "#FFFFFF",
+              opacity: lightPrimary ? 0.7 : 0.95,
               marginTop: px(4),
               display: "flex",
             }}
@@ -543,7 +550,7 @@ function ArchCard({
           <div
             style={{
               fontFamily: "Bebas",
-              fontSize: px(78),
+              fontSize: px(86),
               lineHeight: 0.95,
               letterSpacing: "-0.02em",
               display: "flex",
@@ -597,20 +604,20 @@ function ArchCard({
           position: "absolute",
           left: px(40),
           right: px(40),
-          bottom: px(8),
+          bottom: px(30),
           display: "flex",
           justifyContent: "space-between",
           fontFamily: "Plex Mono",
           fontSize: px(8),
           letterSpacing: "0.2em",
           color: INK,
-          opacity: 0.6,
+          opacity: 0.65,
         }}
       >
         <span>
           {brand?.mode === "footer"
             ? `BY ${brand.name.toUpperCase()} · ${brand.tagline}`
-            : team.confederation}
+            : `SERIES ONE · ${todayStamp()}`}
         </span>
         <span>WORLD CUP '26</span>
       </div>
