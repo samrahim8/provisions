@@ -1,22 +1,26 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const OG_IMAGE = "https://provisions.work/world-cup/card-generator/api/og";
+
 export const metadata: Metadata = {
-  title: "The Player Card · Provisions Series",
-  description: "The player card for the rest of us. Pick a country, snap a photo, share it with your squad. Issue 01 of the Provisions Series, summer '26.",
+  title: "A lineup of goods for '26 — Provisions",
+  description: "World Cup products for brands, agencies + fans. Pick a country, snap a photo, share it with your squad.",
   metadataBase: new URL("https://provisions.work"),
   alternates: { canonical: "/world-cup/card-generator" },
   openGraph: {
-    title: "The Player Card · Provisions Series",
-    description: "The player card for the rest of us. Pick a country, snap a photo, share it with your squad.",
+    title: "A lineup of goods for '26 — Provisions",
+    description: "World Cup products for brands, agencies + fans. Pick a country, snap a photo, share it with your squad.",
     url: "https://provisions.work/world-cup/card-generator",
     siteName: "Provisions",
     type: "website",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Player Card · Provisions Series",
-    description: "The player card for the rest of us.",
+    title: "A lineup of goods for '26 — Provisions",
+    description: "World Cup products for brands, agencies + fans.",
+    images: [OG_IMAGE],
   },
 };
 
