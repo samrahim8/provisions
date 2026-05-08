@@ -102,13 +102,13 @@
       gap: 18px;
     }
     .nav-mark {
-      display: flex; align-items: center; gap: 14px;
-      font-family: var(--display); font-weight: 800; font-size: 14px;
-      letter-spacing: 0.18em; text-transform: uppercase; color: var(--leather-mid);
+      display: flex; align-items: center;
+      flex-shrink: 0;
     }
     .nav-mark img {
-      width: 22px; height: 22px;
+      width: 26px; height: 26px;
       object-fit: contain;
+      display: block;
     }
     .nav-back {
       height: 44px;
@@ -139,6 +139,8 @@
     .container {
       max-width: 1200px; margin: 0 auto; padding: 0 2rem;
       position: relative; z-index: 1;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     /* HERO */
@@ -218,10 +220,11 @@
     /* TEAM GRID */
     .team-grid {
       display: grid; gap: 16px;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 100%;
     }
-    @media (min-width: 720px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 1080px) { .team-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 720px) { .team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (min-width: 1080px) { .team-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
     .team-card {
       background: var(--parchment-el);
@@ -315,9 +318,10 @@
       .conf-tab { font-size: 9px; padding: 5px 10px; letter-spacing: 0.14em; }
       .filter-count { font-size: 10px; }
       section { padding: 28px 0 48px; }
-      .container { padding: 0 16px; }
-      .team-grid { gap: 12px; grid-template-columns: repeat(2, 1fr); }
-      .team-card { padding: 14px 14px 12px; gap: 10px; }
+      .container { padding: 0 12px; }
+      .team-grid { gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .team-card { padding: 12px 12px 10px; gap: 10px; min-width: 0; }
+      .kit-frame { padding: 10px; }
       .team-name { font-size: 14px; line-height: 1.1; }
       .team-conf { font-size: 8px; }
       .swatch-tile .hex { font-size: 8px; }
@@ -333,9 +337,8 @@
 
   <nav>
     <div class="nav-inner">
-      <a href="https://provisions.work/world-cup" class="nav-mark">
-        <img src="../images/provisions-mark.png" alt="Provisions" width="22" height="22">
-        <span>Provisions</span>
+      <a href="https://provisions.work/world-cup" class="nav-mark" aria-label="Provisions">
+        <img src="../images/provisions-mark.png" alt="Provisions" width="26" height="26">
       </a>
       <a href="https://provisions.work/world-cup" class="nav-back">← Back to the team sheet</a>
     </div>
