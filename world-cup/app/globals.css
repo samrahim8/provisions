@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --leather: #2C2118;
+  --leather-mid: #4A3D32;
+  --bg: #F5F1EB;
+  --bg-elevated: #F8F5EF;
+  --terracotta: #A0422A;
+  --terracotta-light: #B8533A;
+  --dust: #C4B49A;
+  --text-soft: #6B6259;
+  --border: #DDD7CC;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--leather);
+  -webkit-font-smoothing: antialiased;
+  font-family: Inter, -apple-system, system-ui, sans-serif;
+  line-height: 1.65;
+}
+
+::selection {
+  background: var(--terracotta);
+  color: var(--bg);
+}
+
+.grain {
+  position: relative;
+}
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(196, 180, 154, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(196, 180, 154, 0.15) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.label {
+  font-family: Syne, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+  color: var(--terracotta);
+}
+
+.btn-primary {
+  background: var(--terracotta);
+  color: var(--bg);
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 6px;
+  padding: 0.875rem 1.5rem;
+  transition: background 220ms ease;
+}
+.btn-primary:hover { background: var(--terracotta-light); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--leather);
+  border: 1px solid var(--border);
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 0.875rem 1.5rem;
+  transition: border-color 220ms ease, color 220ms ease;
+}
+.btn-ghost:hover { border-color: var(--leather); }
+
+.input {
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 0.9rem;
+  font-family: Inter, sans-serif;
+  color: var(--leather);
+  outline: none;
+  transition: border-color 200ms ease;
+}
+.input:focus { border-color: var(--terracotta); }

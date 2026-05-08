@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Kit Index — Provisions Series, Summer '26</title>
+  <meta name="description" content="A reference plate for summer '26. Forty-eight national teams, their kits, and the three colors that make each one.">
+  <link rel="canonical" href="https://provisions.work/world-cup/kit-index">
+
+  <meta property="og:title" content="The Kit Index — Provisions Series">
+  <meta property="og:description" content="A reference plate for summer '26. Forty-eight national teams + the colors of their kits.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://provisions.work/world-cup/kit-index">
+  <meta property="og:image" content="https://provisions.work/images/og-image.png">
+  <meta property="og:site_name" content="Provisions">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@samdape">
+  <meta name="twitter:title" content="The Kit Index — Provisions Series">
+  <meta name="twitter:description" content="Forty-eight national teams + the colors of their kits.">
+  <meta name="twitter:image" content="https://provisions.work/images/og-image.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#2C2118">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #F5F1EB;
+      --bg-elevated: #F8F5EF;
+      --leather: #2C2118;
+      --leather-mid: #4A3D32;
+      --terracotta: #A0422A;
+      --terracotta-light: #B8533A;
+      --sage: #4A5E3E;
+      --dust: #C4B49A;
+      --text: #2C2118;
+      --text-soft: #6B6259;
+      --border: #DDD7CC;
+      --display: 'Syne', sans-serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 { font-family: var(--display); font-weight: 700; }
+    a { color: inherit; text-decoration: none; }
+    img, svg { max-width: 100%; display: block; }
+    ::selection { background: var(--terracotta); color: var(--bg); }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(to right, rgba(196, 180, 154, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(196, 180, 154, 0.15) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(245, 241, 235, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0.9rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-mark {
+      display: flex; align-items: center; gap: 0.55rem;
+      font-family: var(--display); font-weight: 800; font-size: 0.85rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--leather);
+    }
+    .nav-mark .p-mark {
+      width: 22px; height: 22px; border-radius: 4px;
+      background: var(--leather); color: var(--bg);
+      display: grid; place-items: center;
+      font-family: var(--display); font-weight: 800; font-size: 0.7rem;
+    }
+    .nav-back {
+      font-family: var(--display); font-weight: 700; font-size: 0.7rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-soft);
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--terracotta); }
+
+    .label {
+      font-family: var(--display); font-weight: 700; font-size: 0.7rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--terracotta);
+    }
+
+    .container {
+      max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+      position: relative; z-index: 1;
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--leather); color: var(--bg);
+      padding: 5.5rem 2rem 4.5rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 16px 16px; pointer-events: none;
+    }
+    .hero-inner { max-width: 880px; margin: 0 auto; position: relative; }
+    .hero .label { color: var(--terracotta-light); margin-bottom: 1.4rem; }
+    .hero h1 {
+      font-family: var(--display); font-weight: 800;
+      font-size: clamp(2.4rem, 6vw, 4.4rem);
+      line-height: 1.04; letter-spacing: -0.02em; margin-bottom: 1.2rem;
+    }
+    .hero .lede {
+      color: rgba(245, 241, 235, 0.78);
+      font-size: clamp(1rem, 1.4vw, 1.15rem);
+      max-width: 600px; margin: 0 auto; line-height: 1.55;
+    }
+
+    /* FILTER BAR */
+    .filters {
+      position: sticky; top: 53px; z-index: 40;
+      background: rgba(245, 241, 235, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+    }
+    .filters-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 0.5rem 0.4rem;
+      align-items: center; justify-content: space-between;
+    }
+    .conf-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .conf-tab {
+      font-family: var(--display); font-weight: 700; font-size: 0.66rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.45rem 0.8rem; border-radius: 4px;
+      border: 1.5px solid rgba(44, 33, 24, 0.18);
+      background: var(--bg-elevated); color: var(--text-soft);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .conf-tab:hover { border-color: var(--leather); color: var(--leather); }
+    .conf-tab.active { background: var(--leather); border-color: var(--leather); color: var(--bg); }
+    .filter-count {
+      font-family: var(--display); font-weight: 700; font-size: 0.66rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-soft);
+    }
+
+    /* SECTION */
+    section { padding: 4rem 0 5rem; }
+
+    /* TEAM GRID */
+    .team-grid {
+      display: grid; gap: 1.2rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 720px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1080px) { .team-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .team-card {
+      background: var(--bg-elevated);
+      border: 1.5px solid rgba(44, 33, 24, 0.12);
+      border-radius: 12px;
+      padding: 1.2rem 1.1rem 1.05rem;
+      display: flex; flex-direction: column; gap: 0.85rem;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.25s;
+      box-shadow: 0 3px 14px rgba(26, 23, 20, 0.05);
+    }
+    .team-card:hover {
+      border-color: var(--leather);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(26, 23, 20, 0.10);
+    }
+
+    .kit-frame {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      aspect-ratio: 1;
+      display: grid; place-items: center;
+      padding: 1rem;
+    }
+    .kit-frame .lego { width: 88%; height: 88%; }
+
+    .team-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .team-name {
+      font-family: var(--display); font-weight: 700; font-size: 1.05rem;
+      letter-spacing: -0.01em; color: var(--leather); line-height: 1.15;
+    }
+    .team-conf {
+      font-family: var(--display); font-weight: 700; font-size: 0.58rem;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--terracotta);
+    }
+
+    .palette {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem;
+    }
+    .swatch-tile {
+      display: flex; flex-direction: column; gap: 0.32rem;
+    }
+    .swatch-tile .chip {
+      width: 100%; aspect-ratio: 3 / 1;
+      border-radius: 4px;
+      border: 1px solid rgba(44, 33, 24, 0.12);
+    }
+    .swatch-tile .hex {
+      font-family: var(--mono); font-weight: 500; font-size: 0.62rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--text-soft); text-align: center;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--leather); color: rgba(245, 241, 235, 0.6);
+      padding: 2.4rem 2rem;
+      font-family: var(--display); font-weight: 700;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-inner a { color: var(--terracotta-light); transition: color 0.2s; }
+    .footer-inner a:hover { color: var(--bg); }
+    .attribution {
+      max-width: 1200px; margin: 0 auto;
+      padding: 1.6rem 2rem 0;
+      font-family: var(--sans); font-weight: 400;
+      font-size: 0.72rem; letter-spacing: 0.02em; text-transform: none;
+      color: rgba(245, 241, 235, 0.4); line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="/world-cup" class="nav-mark">
+        <span class="p-mark">P</span>
+        <span>Provisions / Series</span>
+      </a>
+      <a href="/world-cup" class="nav-back">← The Series</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="label">Issue 04 · The Kit Index</div>
+      <h1>Forty-eight kits.<br>Forty-eight palettes.</h1>
+      <p class="lede">A reference plate for summer '26. Every national team, the shape of its kit, and the three colors that identify it. Filter by confederation. Take what you need.</p>
+    </div>
+  </header>
+
+  <div class="filters">
+    <div class="filters-inner">
+      <div class="conf-tabs" id="conf-tabs">
+        <button class="conf-tab active" data-conf="ALL">All 48</button>
+        <button class="conf-tab" data-conf="UEFA">UEFA</button>
+        <button class="conf-tab" data-conf="CONMEBOL">CONMEBOL</button>
+        <button class="conf-tab" data-conf="CONCACAF">CONCACAF</button>
+        <button class="conf-tab" data-conf="AFC">AFC</button>
+        <button class="conf-tab" data-conf="CAF">CAF</button>
+        <button class="conf-tab" data-conf="OFC">OFC</button>
+      </div>
+      <div class="filter-count" id="filter-count">48 shown</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="team-grid" id="team-grid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Provisions · Summer '26 · UTC-5 to UTC-7</span>
+      <span><a href="https://provisions.work">provisions.work</a></span>
+    </div>
+    <div class="attribution">
+      Kit illustrations are abstract pattern primitives, not official product representations. Each is rendered from the team's identifying colors and signature pattern. For the actual shirts, see your federation's site or local football shop.
+    </div>
+  </footer>
+
+  <script>
+    // ---- Team data ----
+    const TEAMS = [
+      { code: "USA", name: "United States", confederation: "CONCACAF", primary: "#BF0A30", secondary: "#FFFFFF", accent: "#002868" },
+      { code: "CAN", name: "Canada", confederation: "CONCACAF", primary: "#D52B1E", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "MEX", name: "Mexico", confederation: "CONCACAF", primary: "#006847", secondary: "#FFFFFF", accent: "#CE1126" },
+      { code: "ARG", name: "Argentina", confederation: "CONMEBOL", primary: "#74ACDF", secondary: "#FFFFFF", accent: "#F6B40E" },
+      { code: "BRA", name: "Brazil", confederation: "CONMEBOL", primary: "#FFDF00", secondary: "#009C3B", accent: "#002776" },
+      { code: "URU", name: "Uruguay", confederation: "CONMEBOL", primary: "#5CBCE9", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "COL", name: "Colombia", confederation: "CONMEBOL", primary: "#FCD116", secondary: "#003893", accent: "#CE1126" },
+      { code: "ECU", name: "Ecuador", confederation: "CONMEBOL", primary: "#FFD100", secondary: "#003893", accent: "#EF3340" },
+      { code: "PAR", name: "Paraguay", confederation: "CONMEBOL", primary: "#D52B1E", secondary: "#FFFFFF", accent: "#0038A8" },
+      { code: "VEN", name: "Venezuela", confederation: "CONMEBOL", primary: "#7A1F2A", secondary: "#FFCC00", accent: "#00247D" },
+      { code: "FRA", name: "France", confederation: "UEFA", primary: "#0055A4", secondary: "#FFFFFF", accent: "#EF4135" },
+      { code: "ENG", name: "England", confederation: "UEFA", primary: "#FFFFFF", secondary: "#CE1124", accent: "#00247D" },
+      { code: "GER", name: "Germany", confederation: "UEFA", primary: "#000000", secondary: "#DD0000", accent: "#FFCE00" },
+      { code: "ESP", name: "Spain", confederation: "UEFA", primary: "#AA151B", secondary: "#FFD100", accent: "#1A1A1A" },
+      { code: "POR", name: "Portugal", confederation: "UEFA", primary: "#046A38", secondary: "#DA291C", accent: "#FFE900" },
+      { code: "NED", name: "Netherlands", confederation: "UEFA", primary: "#FF6C00", secondary: "#FFFFFF", accent: "#21468B" },
+      { code: "BEL", name: "Belgium", confederation: "UEFA", primary: "#000000", secondary: "#FAE042", accent: "#ED2939" },
+      { code: "ITA", name: "Italy", confederation: "UEFA", primary: "#0066B3", secondary: "#FFFFFF", accent: "#009246" },
+      { code: "CRO", name: "Croatia", confederation: "UEFA", primary: "#FF0000", secondary: "#FFFFFF", accent: "#171796" },
+      { code: "SUI", name: "Switzerland", confederation: "UEFA", primary: "#DA291C", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "DEN", name: "Denmark", confederation: "UEFA", primary: "#C8102E", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "POL", name: "Poland", confederation: "UEFA", primary: "#DC143C", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "AUT", name: "Austria", confederation: "UEFA", primary: "#ED2939", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "TUR", name: "Türkiye", confederation: "UEFA", primary: "#E30A17", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "NOR", name: "Norway", confederation: "UEFA", primary: "#BA0C2F", secondary: "#FFFFFF", accent: "#00205B" },
+      { code: "SWE", name: "Sweden", confederation: "UEFA", primary: "#006AA7", secondary: "#FECC00", accent: "#1A1A1A" },
+      { code: "SCO", name: "Scotland", confederation: "UEFA", primary: "#0065BD", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "WAL", name: "Wales", confederation: "UEFA", primary: "#D30731", secondary: "#FFFFFF", accent: "#00B140" },
+      { code: "UKR", name: "Ukraine", confederation: "UEFA", primary: "#0057B7", secondary: "#FFD500", accent: "#1A1A1A" },
+      { code: "JPN", name: "Japan", confederation: "AFC", primary: "#0A1F4D", secondary: "#FFFFFF", accent: "#BC002D" },
+      { code: "KOR", name: "South Korea", confederation: "AFC", primary: "#C60C30", secondary: "#FFFFFF", accent: "#003478" },
+      { code: "AUS", name: "Australia", confederation: "AFC", primary: "#FFCD00", secondary: "#00843D", accent: "#012169" },
+      { code: "IRN", name: "Iran", confederation: "AFC", primary: "#FFFFFF", secondary: "#239F40", accent: "#DA0000" },
+      { code: "KSA", name: "Saudi Arabia", confederation: "AFC", primary: "#006C35", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "QAT", name: "Qatar", confederation: "AFC", primary: "#8A1538", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "UZB", name: "Uzbekistan", confederation: "AFC", primary: "#0099B5", secondary: "#FFFFFF", accent: "#CE1126" },
+      { code: "JOR", name: "Jordan", confederation: "AFC", primary: "#000000", secondary: "#FFFFFF", accent: "#CE1126" },
+      { code: "MAR", name: "Morocco", confederation: "CAF", primary: "#C1272D", secondary: "#006233", accent: "#FFFFFF" },
+      { code: "SEN", name: "Senegal", confederation: "CAF", primary: "#00853F", secondary: "#FDEF42", accent: "#E31B23" },
+      { code: "EGY", name: "Egypt", confederation: "CAF", primary: "#CE1126", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "NGA", name: "Nigeria", confederation: "CAF", primary: "#008751", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "CIV", name: "Côte d'Ivoire", confederation: "CAF", primary: "#FF8200", secondary: "#FFFFFF", accent: "#009E60" },
+      { code: "CMR", name: "Cameroon", confederation: "CAF", primary: "#007A5E", secondary: "#FCD116", accent: "#CE1126" },
+      { code: "GHA", name: "Ghana", confederation: "CAF", primary: "#CE1126", secondary: "#FCD116", accent: "#006B3F" },
+      { code: "ALG", name: "Algeria", confederation: "CAF", primary: "#006233", secondary: "#FFFFFF", accent: "#D21034" },
+      { code: "TUN", name: "Tunisia", confederation: "CAF", primary: "#E70013", secondary: "#FFFFFF", accent: "#1A1A1A" },
+      { code: "RSA", name: "South Africa", confederation: "CAF", primary: "#007749", secondary: "#FFB81C", accent: "#001489" },
+      { code: "NZL", name: "New Zealand", confederation: "OFC", primary: "#000000", secondary: "#FFFFFF", accent: "#C8102E" },
+    ];
+
+    // ---- Lego-style kit definitions (same as before) ----
+    const KIT_PATTERN = {
+      ARG: { pattern: "vstripes3", colors: ["#74ACDF", "#FFFFFF", "#74ACDF"] },
+      BRA: { pattern: "collar", body: "#FFDF00", trim: "#009C3B", sleeve: "#FFDF00" },
+      URU: { pattern: "solid", sleeve: "#5CBCE9" },
+      COL: { pattern: "solid", sleeve: "#FCD116" },
+      ECU: { pattern: "solid", sleeve: "#FFD100" },
+      PAR: { pattern: "vstripes2", colors: ["#D52B1E", "#FFFFFF"] },
+      VEN: { pattern: "solid", sleeve: "#7A1F2A" },
+      USA: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#BF0A30" },
+      CAN: { pattern: "solid", sleeve: "#D52B1E" },
+      MEX: { pattern: "collar", body: "#006847", trim: "#CE1126", sleeve: "#006847" },
+      FRA: { pattern: "solid", sleeve: "#0055A4" },
+      ENG: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#CE1124" },
+      GER: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#000000" },
+      ESP: { pattern: "solid", sleeve: "#AA151B" },
+      POR: { pattern: "collar", body: "#7A0019", trim: "#046A38", sleeve: "#7A0019" },
+      NED: { pattern: "solid", sleeve: "#FF6C00" },
+      BEL: { pattern: "solid", sleeve: "#C8102E", body: "#C8102E", trim: "#000000" },
+      ITA: { pattern: "solid", sleeve: "#0066B3" },
+      CRO: { pattern: "check", colors: ["#FF0000", "#FFFFFF"] },
+      SUI: { pattern: "solid", sleeve: "#DA291C" },
+      DEN: { pattern: "solid", sleeve: "#C8102E" },
+      POL: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#DC143C" },
+      AUT: { pattern: "solid", sleeve: "#ED2939" },
+      TUR: { pattern: "solid", sleeve: "#E30A17" },
+      NOR: { pattern: "solid", sleeve: "#BA0C2F" },
+      SWE: { pattern: "collar", body: "#FECC00", trim: "#006AA7", sleeve: "#FECC00" },
+      SCO: { pattern: "solid", sleeve: "#0065BD" },
+      WAL: { pattern: "solid", sleeve: "#D30731" },
+      UKR: { pattern: "solid", body: "#FFD500", sleeve: "#FFD500", trim: "#0057B7" },
+      JPN: { pattern: "solid", sleeve: "#0A1F4D" },
+      KOR: { pattern: "solid", sleeve: "#C60C30" },
+      AUS: { pattern: "solid", body: "#FFCD00", sleeve: "#FFCD00", trim: "#00843D" },
+      IRN: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#239F40" },
+      KSA: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#006C35" },
+      QAT: { pattern: "solid", sleeve: "#8A1538" },
+      UZB: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#0099B5" },
+      JOR: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#000000" },
+      MAR: { pattern: "solid", sleeve: "#C1272D" },
+      SEN: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#00853F" },
+      EGY: { pattern: "solid", sleeve: "#CE1126" },
+      NGA: { pattern: "vstripes2", colors: ["#008751", "#FFFFFF"] },
+      CIV: { pattern: "solid", sleeve: "#FF8200" },
+      CMR: { pattern: "solid", body: "#007A5E", sleeve: "#007A5E", trim: "#FCD116" },
+      GHA: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#CE1126" },
+      ALG: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#006233" },
+      TUN: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#E70013" },
+      RSA: { pattern: "solid", sleeve: "#007749", body: "#FFB81C" },
+      NZL: { pattern: "solid", body: "#FFFFFF", sleeve: "#FFFFFF", trim: "#000000" },
+    };
+
+    function legoKit(team) {
+      const def = KIT_PATTERN[team.code] || { pattern: "solid", sleeve: team.primary };
+      const body = def.body || team.primary;
+      const sleeve = def.sleeve || body;
+      const trim = def.trim || team.accent || "#1A1A1A";
+      const stroke = "rgba(20,15,10,0.25)";
+      const id = `kit-${team.code}`;
+
+      const bodyPath = "M30 22 L30 116 Q30 120 34 120 L86 120 Q90 120 90 116 L90 22 L74 22 L70 28 Q60 34 50 28 L46 22 Z";
+      const lSleevePath = "M14 22 Q10 22 10 26 L10 56 Q10 60 14 60 L30 60 L30 22 Z";
+      const rSleevePath = "M90 22 L106 22 Q110 22 110 26 L110 56 Q110 60 106 60 L90 60 Z";
+
+      let bodyFill = "";
+      const colors = def.colors || [body];
+
+      switch (def.pattern) {
+        case "vstripes3": {
+          const w = 60 / 3;
+          bodyFill = `
+            <rect x="30" y="22" width="${w}" height="98" fill="${colors[0]}"/>
+            <rect x="${30 + w}" y="22" width="${w}" height="98" fill="${colors[1]}"/>
+            <rect x="${30 + 2 * w}" y="22" width="${w}" height="98" fill="${colors[2]}"/>
+          `;
+          break;
+        }
+        case "vstripes2": {
+          const w = 60 / 5;
+          for (let i = 0; i < 5; i++) {
+            bodyFill += `<rect x="${30 + i * w}" y="22" width="${w}" height="98" fill="${colors[i % 2]}"/>`;
+          }
+          break;
+        }
+        case "check": {
+          const cs = 10;
+          bodyFill = `<rect x="30" y="22" width="60" height="98" fill="${colors[0]}"/>`;
+          for (let r = 0; r < 10; r++) {
+            for (let c = 0; c < 6; c++) {
+              if ((r + c) % 2 === 1) {
+                bodyFill += `<rect x="${30 + c * cs}" y="${22 + r * cs}" width="${cs}" height="${cs}" fill="${colors[1]}"/>`;
+              }
+            }
+          }
+          break;
+        }
+        case "hoops": {
+          const h = 14;
+          bodyFill = `<rect x="30" y="22" width="60" height="98" fill="${colors[0]}"/>`;
+          for (let i = 0; i < 7; i++) {
+            if (i % 2 === 1) {
+              bodyFill += `<rect x="30" y="${22 + i * h}" width="60" height="${h}" fill="${colors[1] || colors[0]}"/>`;
+            }
+          }
+          break;
+        }
+        case "collar": {
+          bodyFill = `<rect x="30" y="22" width="60" height="98" fill="${body}"/>
+            <rect x="30" y="22" width="60" height="9" fill="${trim}"/>`;
+          break;
+        }
+        default: {
+          bodyFill = `<rect x="30" y="22" width="60" height="98" fill="${body}"/>`;
+        }
+      }
+
+      const showTrim = !!def.trim;
+      const trimMarkup = showTrim
+        ? `
+          <rect x="30" y="113" width="60" height="3" fill="${trim}"/>
+          <rect x="10" y="55" width="20" height="3" fill="${trim}"/>
+          <rect x="90" y="55" width="20" height="3" fill="${trim}"/>
+        `
+        : "";
+
+      const shine = `
+        <path d="M30 22 L46 22 L42 30 L30 30 Z" fill="#FFFFFF" opacity="0.18"/>
+        <path d="M14 22 L26 22 L26 36 L14 36 Z" fill="#FFFFFF" opacity="0.14"/>
+      `;
+
+      return `<svg class="lego" viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <clipPath id="${id}-body">
+            <path d="${bodyPath}"/>
+          </clipPath>
+        </defs>
+        <path d="${lSleevePath}" fill="${sleeve}" stroke="${stroke}" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="${rSleevePath}" fill="${sleeve}" stroke="${stroke}" stroke-width="1.2" stroke-linejoin="round"/>
+        <g clip-path="url(#${id}-body)">
+          ${bodyFill}
+          ${trimMarkup}
+          ${shine}
+        </g>
+        <path d="${bodyPath}" fill="none" stroke="${stroke}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M50 28 Q60 34 70 28" fill="none" stroke="${stroke}" stroke-width="1.2"/>
+      </svg>`;
+    }
+
+    function teamCard(team) {
+      const colors = [team.primary, team.secondary, team.accent];
+      const swatches = colors.map(c => `
+        <div class="swatch-tile">
+          <div class="chip" style="background:${c}"></div>
+          <div class="hex">${c.toUpperCase()}</div>
+        </div>
+      `).join("");
+      return `
+        <article class="team-card" data-conf="${team.confederation}">
+          <div class="kit-frame">${legoKit(team)}</div>
+          <div class="team-head">
+            <div class="team-name">${team.name}</div>
+            <div class="team-conf">${team.confederation}</div>
+          </div>
+          <div class="palette">${swatches}</div>
+        </article>
+      `;
+    }
+
+    // Sort alphabetically by name
+    const SORTED = [...TEAMS].sort((a, b) => a.name.localeCompare(b.name));
+
+    function render(filterConf) {
+      const grid = document.getElementById("team-grid");
+      const list = SORTED.filter(t => filterConf === "ALL" || t.confederation === filterConf);
+      grid.innerHTML = list.map(teamCard).join("");
+      document.getElementById("filter-count").textContent = `${list.length} shown`;
+    }
+
+    function setActive(conf) {
+      document.querySelectorAll(".conf-tab").forEach(b => {
+        b.classList.toggle("active", b.dataset.conf === conf);
+      });
+    }
+
+    document.querySelectorAll(".conf-tab").forEach(btn => {
+      btn.addEventListener("click", () => {
+        setActive(btn.dataset.conf);
+        render(btn.dataset.conf);
+      });
+    });
+
+    render("ALL");
+  </script>
+</body>
+</html>
