@@ -1482,19 +1482,6 @@ function FellowCard({
   const W = px(500);
   const H = px(700);
 
-  // Tick mark for technical drawing edges
-  const Tick = ({ vertical }: { vertical?: boolean }) => (
-    <div
-      style={{
-        width: vertical ? px(1) : px(8),
-        height: vertical ? px(8) : px(1),
-        background: INK_F,
-        opacity: 0.45,
-        display: "flex",
-      }}
-    />
-  );
-
   return (
     <div
       style={{
@@ -1639,77 +1626,71 @@ function FellowCard({
         </div>
       </div>
 
-      {/* Photo with technical tick marks */}
+      {/* Photo with technical frame */}
       <div
         style={{
           marginTop: px(14),
-          position: "relative",
           display: "flex",
           width: "100%",
-          height: px(280),
+          height: px(260),
+          border: `${px(0.5)}px solid rgba(26,26,26,0.35)`,
+          background: "#FFFFFF",
+          padding: px(8),
+          position: "relative",
         }}
       >
-        {/* Photo frame */}
-        <div
+        <img
+          src={photo}
+          width={px(444)}
+          height={px(244)}
           style={{
-            position: "absolute",
-            inset: 0,
-            border: `${px(0.5)}px solid rgba(26,26,26,0.35)`,
-            background: "#FFFFFF",
-            padding: px(10),
+            width: px(444),
+            height: px(244),
+            objectFit: "cover",
             display: "flex",
           }}
-        >
-          <img
-            src={photo}
-            width={px(420)}
-            height={px(260)}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "flex",
-              filter: "grayscale(0.18) contrast(1.02)",
-            }}
-          />
-        </div>
-        {/* Corner ticks */}
-        {[
-          { top: px(-4), left: px(-1) },
-          { top: px(-4), right: px(-1) },
-          { bottom: px(-4), left: px(-1) },
-          { bottom: px(-4), right: px(-1) },
-        ].map((pos, i) => (
-          <div key={`v${i}`} style={{ position: "absolute", ...pos, display: "flex" }}>
-            <Tick vertical />
-          </div>
-        ))}
-        {[
-          { top: px(-1), left: px(-4) },
-          { top: px(-1), right: px(-4) },
-          { bottom: px(-1), left: px(-4) },
-          { bottom: px(-1), right: px(-4) },
-        ].map((pos, i) => (
-          <div key={`h${i}`} style={{ position: "absolute", ...pos, display: "flex" }}>
-            <Tick />
-          </div>
-        ))}
-        {/* Dimension annotation */}
+        />
+        {/* FIG. 01 annotation pinned bottom-right */}
         <div
           style={{
             position: "absolute",
-            top: "50%",
-            right: px(-22),
-            transform: "translateY(-50%) rotate(90deg)",
+            bottom: px(2),
+            right: px(6),
             fontFamily: "Plex Mono",
-            fontSize: px(6),
+            fontSize: px(7),
             letterSpacing: "0.28em",
-            color: MUTED,
+            color: "#FFFFFF",
+            background: "rgba(26,26,26,0.7)",
+            padding: `${px(2)}px ${px(5)}px`,
             display: "flex",
           }}
         >
           FIG. 01
         </div>
+      </div>
+
+      {/* Hairline + dimension callout under photo */}
+      <div
+        style={{
+          marginTop: px(6),
+          display: "flex",
+          alignItems: "center",
+          gap: px(8),
+        }}
+      >
+        <div style={{ flex: 1, height: px(0.5), background: "rgba(26,26,26,0.25)", display: "flex" }} />
+        <div
+          style={{
+            fontFamily: "Plex Mono",
+            fontSize: px(7),
+            letterSpacing: "0.28em",
+            color: MUTED,
+            display: "flex",
+          }}
+        >
+          500 × 700 PORTRAIT FORMAT
+        </div>
+        <div style={{ flex: 1, height: px(0.5), background: "rgba(26,26,26,0.25)", display: "flex" }} />
       </div>
 
       {/* Spec table */}
