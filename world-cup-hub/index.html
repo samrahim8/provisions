@@ -761,26 +761,25 @@
       filter: drop-shadow(0 18px 36px rgba(0,0,0,0.18));
     }
 
-    /* ── LEDGER ── */
+    /* ── LEDGER (standalone cards) ── */
     .ledger {
       margin: 0 64px 80px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      border: 1px solid var(--border);
-      background: var(--parchment-el);
-      transition: background 0.35s ease, border-color 0.35s ease;
+      gap: 18px;
+      background: transparent;
     }
     .ledger-cell {
-      padding: 34px 36px 96px;
+      padding: 30px 32px 92px;
       position: relative;
-      min-height: 340px;
+      min-height: 320px;
+      background: var(--parchment-el);
+      border: 1px solid var(--border);
+      transition: background 0.35s ease, border-color 0.35s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .ledger-cell.col-left { border-right: 1px solid var(--border); }
-    .ledger-cell.row-not-last { border-bottom: 1px solid var(--border); }
     .ledger-cell.full-row {
       grid-column: 1 / -1;
-      border-top: 1px solid var(--border);
-      min-height: 220px;
+      min-height: 200px;
     }
     .ledger-head {
       display: flex;
@@ -863,8 +862,13 @@
       white-space: nowrap;
       text-transform: uppercase;
     }
-    a.ledger-cell { color: inherit; transition: background 0.2s; }
-    a.ledger-cell:hover { background: rgba(160, 66, 42, 0.04); }
+    a.ledger-cell { color: inherit; }
+    a.ledger-cell:hover {
+      background: var(--parchment);
+      border-color: var(--leather-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    }
 
     /* ── COLOPHON ── */
     .colophon {
@@ -1143,9 +1147,7 @@
       }
       .featured-cta-row { align-self: stretch; }
       .featured-h3 { font-size: 38px; }
-      .ledger { grid-template-columns: 1fr; }
-      .ledger-cell.col-left { border-right: none; border-bottom: 1px solid var(--border); }
-      .ledger-cell.row-not-last { border-bottom: 1px solid var(--border); }
+      .ledger { grid-template-columns: 1fr; gap: 14px; }
       .colophon-grid { grid-template-columns: 1fr; gap: 32px; }
       .colophon h2 { font-size: 32px; }
       footer.programme-footer { padding: 18px 24px; flex-direction: column; gap: 8px; }
@@ -1650,14 +1652,7 @@
       const items = PRODUCTS;
       ledger.innerHTML = items.map((p, i) => {
         const isLast = i === items.length - 1;
-        const isPenultimate = i === items.length - 2;
-        const isLeft = !isLast && i % 2 === 0;
-        const cls = [
-          'ledger-cell',
-          isLast ? 'full-row' : '',
-          isLeft ? 'col-left' : '',
-          (!isLast && !isPenultimate) ? 'row-not-last' : ''
-        ].filter(Boolean).join(' ');
+        const cls = ['ledger-cell', isLast ? 'full-row' : ''].filter(Boolean).join(' ');
         const onClickAttr = p.onClick ? ` onclick="event.preventDefault(); ${p.onClick}();"` : '';
         return `<a href="${p.href}" class="${cls}"${onClickAttr}>
           <div class="ledger-head">
