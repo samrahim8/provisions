@@ -1985,8 +1985,25 @@
       r.setProperty('--on-leather', _onColor(p.leatherMid));
     }
 
-    // ── Kit chip renderer ──
-    function chipHtml(primary, accents, w = 26, h = 18) {
+    // ── FIFA code → flagcdn ISO mapping ──
+    const FIFA_TO_ISO = {
+      USA:'us', MEX:'mx', CAN:'ca', ENG:'gb-eng', FRA:'fr', GER:'de',
+      ESP:'es', POR:'pt', NED:'nl', BEL:'be', CRO:'hr', SUI:'ch',
+      AUT:'at', NOR:'no', SCO:'gb-sct', SWE:'se', TUR:'tr', BIH:'ba',
+      CZE:'cz', MAR:'ma', SEN:'sn', TUN:'tn', ALG:'dz', EGY:'eg',
+      GHA:'gh', CIV:'ci', CPV:'cv', RSA:'za', COD:'cd', JPN:'jp',
+      IRN:'ir', KOR:'kr', AUS:'au', KSA:'sa', QAT:'qa', UZB:'uz',
+      JOR:'jo', IRQ:'iq', ARG:'ar', BRA:'br', URU:'uy', COL:'co',
+      ECU:'ec', PAR:'py', PAN:'pa', CUW:'cw', HAI:'ht', NZL:'nz'
+    };
+
+    // ── Kit chip renderer (flag image when known, stripe fallback otherwise) ──
+    function chipHtml(primary, accents, w = 26, h = 18, code) {
+      const iso = code ? FIFA_TO_ISO[code] : null;
+      if (iso) {
+        const cdnW = Math.max(40, Math.min(160, Math.round(w * 4)));
+        return `<span class="kit-chip" style="width:${w}px;height:${h}px"><img src="https://flagcdn.com/w${cdnW}/${iso}.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"></span>`;
+      }
       const acc = (accents || []).slice(0, 2);
       let inner = `<span style="flex:0.55;background:${primary}"></span>`;
       acc.forEach(c => { inner += `<span style="flex:0.225;background:${c}"></span>`; });
@@ -2004,7 +2021,7 @@
         const [code, name, primary, accents] = t;
         const isActive = code === activeCode;
         return `<button type="button" data-code="${code}" class="${isActive ? 'active' : ''}">
-          ${chipHtml(primary, accents, 22, 14)}
+          ${chipHtml(primary, accents, 22, 14, code)}
           <span class="code">${code}</span>
           <span class="nm">${name}</span>
         </button>`;
@@ -2017,7 +2034,7 @@
     // ── Update header active team display ──
     function updateActiveTeamDisplay(team) {
       const [code, name, primary, accents] = team;
-      document.getElementById('activeChip').outerHTML = chipHtml(primary, accents, 28, 18).replace('<span class="kit-chip"', '<span class="kit-chip" id="activeChip"');
+      document.getElementById('activeChip').outerHTML = chipHtml(primary, accents, 28, 18, code).replace('<span class="kit-chip"', '<span class="kit-chip" id="activeChip"');
       document.getElementById('activeName').textContent = name;
       document.getElementById('activeCode').textContent = code;
     }

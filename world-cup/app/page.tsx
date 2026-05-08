@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TEAMS, POSITIONS, type Team, type Position } from "@/lib/teams";
+import { flagUrl } from "@/lib/flagIso";
 
 type Step = "team" | "photo" | "details" | "result";
 
@@ -441,13 +442,33 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
               e.currentTarget.style.background = "rgba(248, 245, 239, 0.68)";
             }}
           >
-            <div
-              className="h-1.5 w-full"
-              style={{
-                background: `linear-gradient(90deg, ${t.primary} 0 33%, ${t.secondary} 33% 66%, ${t.accent} 66% 100%)`,
-              }}
-            />
-            <div className="px-5 pt-6 pb-6">
+            <div className="px-5 pt-5 pb-6">
+              {flagUrl(t.code) ? (
+                <img
+                  src={flagUrl(t.code, 160)}
+                  alt=""
+                  width={48}
+                  height={36}
+                  loading="lazy"
+                  className="block mb-4"
+                  style={{
+                    width: 48,
+                    height: 36,
+                    objectFit: "cover",
+                    border: "1px solid rgba(0,0,0,0.18)",
+                  }}
+                />
+              ) : (
+                <div
+                  className="mb-4"
+                  style={{
+                    width: 48,
+                    height: 36,
+                    background: `linear-gradient(90deg, ${t.primary} 0 33%, ${t.secondary} 33% 66%, ${t.accent} 66% 100%)`,
+                    border: "1px solid rgba(0,0,0,0.18)",
+                  }}
+                />
+              )}
               <div className="font-display font-extrabold text-leather text-3xl tracking-[-0.02em] leading-none">
                 {t.code}
               </div>
