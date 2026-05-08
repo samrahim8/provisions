@@ -420,63 +420,98 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
         />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-        {filtered.map((t) => (
-          <button
-            key={t.code}
-            onClick={() => onPick(t)}
-            className="group relative rounded-card border-2 border-leather/25 text-left overflow-hidden transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-leather focus:outline-none focus-visible:border-terracotta focus-visible:ring-2 focus-visible:ring-terracotta/30"
-            style={{
-              background: "rgba(248, 245, 239, 0.68)",
-              backdropFilter: "blur(4px)",
-              WebkitBackdropFilter: "blur(4px)",
-              boxShadow: "0 10px 28px rgba(26, 23, 20, 0.10), 0 2px 6px rgba(26, 23, 20, 0.06)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow =
-                "0 22px 46px rgba(26, 23, 20, 0.18), 0 4px 10px rgba(26, 23, 20, 0.08)";
-              e.currentTarget.style.background = "rgba(248, 245, 239, 0.82)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow =
-                "0 10px 28px rgba(26, 23, 20, 0.10), 0 2px 6px rgba(26, 23, 20, 0.06)";
-              e.currentTarget.style.background = "rgba(248, 245, 239, 0.68)";
-            }}
-          >
-            <div className="px-5 pt-5 pb-6">
-              {flagUrl(t.code) ? (
+        {filtered.map((t) => {
+          const tilePrimary = isLightHex(t.primary) ? t.primary : t.primary;
+          const onTile = isLightHex(t.primary) ? "#1a1a1a" : "#FFFFFF";
+          const isLight = isLightHex(t.primary);
+          const accent = pickContrast(t);
+          const markSrc = isLight
+            ? `${BASE_PATH}/provisions-mark.png`
+            : `${BASE_PATH}/favicon-white.png`;
+          return (
+            <button
+              key={t.code}
+              onClick={() => onPick(t)}
+              className="group relative rounded-card text-left overflow-hidden transition-all duration-300 ease-out hover:-translate-y-1.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-terracotta/40"
+              style={{
+                background: tilePrimary,
+                color: onTile,
+                border: `2px solid ${isLight ? "rgba(26,23,20,0.25)" : "rgba(255,255,255,0.18)"}`,
+                boxShadow: "0 10px 28px rgba(26, 23, 20, 0.16), 0 2px 6px rgba(26, 23, 20, 0.08)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow =
+                  "0 28px 56px rgba(26, 23, 20, 0.30), 0 6px 14px rgba(26, 23, 20, 0.14)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow =
+                  "0 10px 28px rgba(26, 23, 20, 0.16), 0 2px 6px rgba(26, 23, 20, 0.08)";
+              }}
+            >
+              {/* Top accent stripe */}
+              <div className="h-1 w-full" style={{ background: accent }} />
+              <div className="px-5 pt-5 pb-6 relative">
+                {/* Provisions mark, contrast-aware */}
                 <img
-                  src={flagUrl(t.code, 160)}
+                  src={markSrc}
                   alt=""
-                  width={48}
-                  height={36}
-                  loading="lazy"
-                  className="block mb-4"
-                  style={{
-                    width: 48,
-                    height: 36,
-                    objectFit: "cover",
-                    border: "1px solid rgba(0,0,0,0.18)",
-                  }}
+                  width={18}
+                  height={18}
+                  className="absolute top-4 right-4 opacity-70"
+                  style={{ width: 18, height: 18 }}
                 />
-              ) : (
+                {flagUrl(t.code) ? (
+                  <div
+                    className="mb-4 inline-block"
+                    style={{
+                      padding: 2,
+                      background: "#FFFFFF",
+                      border: "1px solid rgba(0,0,0,0.22)",
+                    }}
+                  >
+                    <img
+                      src={flagUrl(t.code, 160)}
+                      alt=""
+                      width={48}
+                      height={36}
+                      loading="lazy"
+                      className="block"
+                      style={{ width: 48, height: 36, objectFit: "cover" }}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="mb-4"
+                    style={{
+                      width: 52,
+                      height: 40,
+                      background: `linear-gradient(90deg, ${t.primary} 0 33%, ${t.secondary} 33% 66%, ${t.accent} 66% 100%)`,
+                      border: "1px solid rgba(0,0,0,0.18)",
+                    }}
+                  />
+                )}
                 <div
-                  className="mb-4"
-                  style={{
-                    width: 48,
-                    height: 36,
-                    background: `linear-gradient(90deg, ${t.primary} 0 33%, ${t.secondary} 33% 66%, ${t.accent} 66% 100%)`,
-                    border: "1px solid rgba(0,0,0,0.18)",
-                  }}
-                />
-              )}
-              <div className="font-display font-extrabold text-leather text-3xl tracking-[-0.02em] leading-none">
-                {t.code}
+                  className="font-display font-extrabold text-3xl tracking-[-0.02em] leading-none"
+                  style={{ color: onTile }}
+                >
+                  {t.code}
+                </div>
+                <div
+                  className="text-[0.95rem] leading-snug mt-3"
+                  style={{ color: onTile, opacity: 0.92 }}
+                >
+                  {t.name}
+                </div>
+                <div
+                  className="font-display font-bold uppercase tracking-[0.18em] text-[0.6rem] mt-5"
+                  style={{ color: onTile, opacity: 0.65 }}
+                >
+                  {t.confederation}
+                </div>
               </div>
-              <div className="text-leather text-[0.95rem] leading-snug mt-3">{t.name}</div>
-              <div className="label text-[0.6rem] mt-5">{t.confederation}</div>
-            </div>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
