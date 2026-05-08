@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { teamByCode, type Team } from "@/lib/teams";
+import { flagUrl } from "@/lib/flagIso";
 
 export const runtime = "edge";
 
@@ -367,10 +368,33 @@ function ArchCard({
                 position: "relative",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: px(6) }}>
-                <Star size={10} color={onTeam} />
-                <Star size={10} color={onTeam} />
-              </div>
+              {(() => {
+                const fUrl = flagUrl(team.code, 80);
+                return fUrl ? (
+                  <div
+                    style={{
+                      width: px(32),
+                      height: px(24),
+                      border: `1px solid ${onTeam}`,
+                      overflow: "hidden",
+                      display: "flex",
+                      background: "#fff",
+                    }}
+                  >
+                    <img
+                      src={fUrl}
+                      width={px(32)}
+                      height={px(24)}
+                      style={{ width: px(32), height: px(24), objectFit: "cover" }}
+                    />
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", alignItems: "center", gap: px(6) }}>
+                    <Star size={10} color={onTeam} />
+                    <Star size={10} color={onTeam} />
+                  </div>
+                );
+              })()}
               <div
                 style={{
                   position: "absolute",
