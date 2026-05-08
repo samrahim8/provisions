@@ -308,29 +308,35 @@ function Nav({ step }: { step: Step }) {
     { id: "result", label: "Card" },
   ];
   const idx = labels.findIndex((l) => l.id === step);
+  const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   return (
-    <header className="relative border-b border-border">
-      <div className="max-w-[1100px] mx-auto px-8 py-5 flex items-center justify-between">
-        <a href="https://provisions.work/world-cup" className="flex items-center gap-3 group">
-          <PMark />
-          <span className="font-display font-extrabold text-leather tracking-wordmark text-sm">
+    <header className="sticky top-0 z-50 bg-parchment-elevated border-b border-border">
+      <div className="max-w-[1280px] mx-auto px-8 sm:px-16 min-h-[72px] flex items-center justify-between gap-4">
+        <a href="https://provisions.work/world-cup" className="flex items-center gap-3.5 group">
+          <img
+            src={`${BASE}/provisions-mark.png`}
+            alt="Provisions"
+            width={22}
+            height={22}
+            className="object-contain"
+          />
+          <span className="font-display font-extrabold text-leather-mid tracking-wordmark text-sm">
             PROVISIONS
           </span>
-          <span className="text-text-soft text-xs hidden sm:inline">/ World Cup '26</span>
         </a>
-        <ol className="hidden sm:flex items-center gap-5">
+        <ol className="hidden md:flex items-center gap-4">
           {labels.map((l, i) => (
             <li key={l.id} className="flex items-center gap-2">
               <span
-                className={`w-5 h-5 grid place-items-center text-[10px] font-display font-bold rounded-sm ${
-                  i <= idx ? "bg-terracotta text-parchment" : "bg-border text-text-soft"
+                className={`w-5 h-5 grid place-items-center text-[10px] font-display font-bold rounded-sm transition-colors ${
+                  i <= idx ? "bg-terracotta text-white" : "bg-border text-text-soft"
                 }`}
               >
                 {i + 1}
               </span>
               <span
-                className={`font-display font-bold uppercase tracking-label text-[11px] ${
-                  i <= idx ? "text-leather" : "text-text-soft"
+                className={`font-display font-bold uppercase tracking-label text-[11px] transition-colors ${
+                  i <= idx ? "text-leather-mid" : "text-text-soft"
                 }`}
               >
                 {l.label}
@@ -338,20 +344,14 @@ function Nav({ step }: { step: Step }) {
             </li>
           ))}
         </ol>
+        <a
+          href="https://provisions.work/world-cup"
+          className="md:hidden font-display font-extrabold uppercase tracking-label text-[10px] text-text-soft"
+        >
+          ← Sheet
+        </a>
       </div>
     </header>
-  );
-}
-
-function PMark() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="4" fill="#2C2118" />
-      <path
-        d="M10 8h7.5c3.6 0 6 2.2 6 5.6 0 3.4-2.4 5.6-6 5.6H13.5V24H10V8Zm3.5 8.4h3.6c1.8 0 2.9-1 2.9-2.8 0-1.7-1.1-2.7-2.9-2.7H13.5v5.5Z"
-        fill="#F5F1EB"
-      />
-    </svg>
   );
 }
 
@@ -887,11 +887,15 @@ function ResultStep({
 
 function Footer() {
   return (
-    <footer className="relative border-t border-border mt-24">
-      <div className="max-w-[1100px] mx-auto px-8 py-8 flex items-center justify-between text-text-soft text-sm">
-        <span>Made by Provisions · Series One</span>
-        <a href="https://provisions.work/world-cup" className="hover:text-terracotta transition-colors label text-[0.7rem]">
-          provisions.work
+    <footer className="relative bg-leather-mid text-white mt-24">
+      <div className="max-w-[1280px] mx-auto px-8 sm:px-16 py-5 flex items-center justify-between gap-4 flex-wrap font-display font-semibold uppercase tracking-label text-[10px] opacity-75">
+        <span>Provisions · World Cup ’26</span>
+        <span>Set in Syne + Inter</span>
+        <a
+          href="https://provisions.work"
+          className="text-terracotta-light hover:text-white transition-colors"
+        >
+          provisions.work →
         </a>
       </div>
     </footer>

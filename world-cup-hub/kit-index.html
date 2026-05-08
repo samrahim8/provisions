@@ -26,16 +26,20 @@
   <meta name="theme-color" content="#2C2118">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
+      --parchment: #F5F1EB;
+      --parchment-el: #F8F5EF;
       --bg: #F5F1EB;
       --bg-elevated: #F8F5EF;
       --leather: #2C2118;
       --leather-mid: #4A3D32;
       --terracotta: #A0422A;
       --terracotta-light: #B8533A;
+      --on-accent: #FFFFFF;
+      --on-leather: #FFFFFF;
       --sage: #4A5E3E;
       --dust: #C4B49A;
       --text: #2C2118;
@@ -43,7 +47,7 @@
       --border: #DDD7CC;
       --display: 'Syne', sans-serif;
       --sans: 'Inter', -apple-system, sans-serif;
-      --mono: 'JetBrains Mono', ui-monospace, monospace;
+      --mono: 'Inter', sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -66,42 +70,64 @@
       inset: 0;
       pointer-events: none;
       z-index: 0;
+      opacity: 0.35;
+      mix-blend-mode: multiply;
       background-image:
-        linear-gradient(to right, rgba(196, 180, 154, 0.15) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(196, 180, 154, 0.15) 1px, transparent 1px);
+        linear-gradient(to right, rgba(120,108,92,0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120,108,92,0.18) 1px, transparent 1px);
       background-size: 16px 16px;
+    }
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 200;
+      opacity: 0.05;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
     }
 
     /* NAV */
     nav {
       position: sticky; top: 0; z-index: 50;
-      background: rgba(245, 241, 235, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: var(--parchment-el);
       border-bottom: 1px solid var(--border);
     }
     .nav-inner {
-      max-width: 1200px; margin: 0 auto;
-      padding: 0.9rem 2rem;
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 64px; min-height: 72px;
       display: flex; align-items: center; justify-content: space-between;
+      gap: 18px;
     }
     .nav-mark {
-      display: flex; align-items: center; gap: 0.55rem;
-      font-family: var(--display); font-weight: 800; font-size: 0.85rem;
-      letter-spacing: 0.15em; text-transform: uppercase; color: var(--leather);
+      display: flex; align-items: center; gap: 14px;
+      font-family: var(--display); font-weight: 800; font-size: 14px;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--leather-mid);
     }
-    .nav-mark .p-mark {
-      width: 22px; height: 22px; border-radius: 4px;
-      background: var(--leather); color: var(--bg);
-      display: grid; place-items: center;
-      font-family: var(--display); font-weight: 800; font-size: 0.7rem;
+    .nav-mark img {
+      width: 22px; height: 22px;
+      object-fit: contain;
     }
     .nav-back {
-      font-family: var(--display); font-weight: 700; font-size: 0.7rem;
-      letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-soft);
-      transition: color 0.2s;
+      height: 44px;
+      background: var(--leather-mid);
+      color: var(--on-leather);
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 22px;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border: 1.5px solid var(--leather-mid);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.12);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
     }
-    .nav-back:hover { color: var(--terracotta); }
+    .nav-back:hover { background: var(--terracotta); border-color: var(--terracotta); color: var(--on-accent); transform: translateY(-2px); box-shadow: 0 5px 0 rgba(0,0,0,0.14); }
+    @media (max-width: 700px) {
+      .nav-inner { padding: 0 24px; }
+      .nav-back { font-size: 11px; padding: 0 14px; height: 38px; }
+    }
 
     .label {
       font-family: var(--display); font-weight: 700; font-size: 0.7rem;
@@ -115,165 +141,184 @@
 
     /* HERO */
     .hero {
-      background: var(--leather); color: var(--bg);
-      padding: 5.5rem 2rem 4.5rem; text-align: center;
-      position: relative; overflow: hidden;
+      background: transparent;
+      padding: 56px 64px 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative;
     }
-    .hero::before {
-      content: ''; position: absolute; inset: 0;
-      background-image:
-        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-      background-size: 16px 16px; pointer-events: none;
+    .hero-inner { max-width: 100%; }
+    .hero .label {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      color: var(--terracotta);
+      text-transform: uppercase;
+      margin-bottom: 18px;
     }
-    .hero-inner { max-width: 880px; margin: 0 auto; position: relative; }
-    .hero .label { color: var(--terracotta-light); margin-bottom: 1.4rem; }
     .hero h1 {
       font-family: var(--display); font-weight: 800;
-      font-size: clamp(2.4rem, 6vw, 4.4rem);
-      line-height: 1.04; letter-spacing: -0.02em; margin-bottom: 1.2rem;
+      font-size: clamp(48px, 6.6vw, 104px);
+      line-height: 0.94; letter-spacing: -0.03em; margin-bottom: 22px;
+      color: var(--leather-mid);
     }
     .hero .lede {
-      color: rgba(245, 241, 235, 0.78);
-      font-size: clamp(1rem, 1.4vw, 1.15rem);
-      max-width: 600px; margin: 0 auto; line-height: 1.55;
+      font-family: var(--sans);
+      color: var(--leather-mid);
+      font-size: 18px;
+      max-width: 620px;
+      line-height: 1.5;
+    }
+    @media (max-width: 700px) {
+      .hero { padding: 32px 24px 28px; }
     }
 
     /* FILTER BAR */
     .filters {
-      position: sticky; top: 53px; z-index: 40;
-      background: rgba(245, 241, 235, 0.92);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      position: sticky; top: 72px; z-index: 40;
+      background: var(--parchment);
+      border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      padding: 0.85rem 2rem;
+      padding: 16px 64px;
     }
     .filters-inner {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; flex-wrap: wrap; gap: 0.5rem 0.4rem;
+      max-width: 1280px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 12px 14px;
       align-items: center; justify-content: space-between;
     }
-    .conf-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .conf-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
     .conf-tab {
-      font-family: var(--display); font-weight: 700; font-size: 0.66rem;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      padding: 0.45rem 0.8rem; border-radius: 4px;
-      border: 1.5px solid rgba(44, 33, 24, 0.18);
-      background: var(--bg-elevated); color: var(--text-soft);
+      font-family: var(--display); font-weight: 800; font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      padding: 6px 12px; border-radius: 99px;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--text-soft);
       cursor: pointer; transition: all 0.2s;
     }
-    .conf-tab:hover { border-color: var(--leather); color: var(--leather); }
-    .conf-tab.active { background: var(--leather); border-color: var(--leather); color: var(--bg); }
+    .conf-tab:hover { border-color: var(--leather-mid); color: var(--leather-mid); }
+    .conf-tab.active {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      color: var(--on-accent);
+    }
     .filter-count {
-      font-family: var(--display); font-weight: 700; font-size: 0.66rem;
-      letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-soft);
+      font-family: var(--sans); font-weight: 600; font-size: 11px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-soft);
+    }
+    @media (max-width: 700px) {
+      .filters { padding: 12px 24px; }
     }
 
     /* SECTION */
-    section { padding: 4rem 0 5rem; }
+    section { padding: 48px 0 80px; }
 
     /* TEAM GRID */
     .team-grid {
-      display: grid; gap: 1.2rem;
+      display: grid; gap: 16px;
       grid-template-columns: repeat(2, 1fr);
     }
     @media (min-width: 720px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (min-width: 1080px) { .team-grid { grid-template-columns: repeat(4, 1fr); } }
 
     .team-card {
-      background: var(--bg-elevated);
-      border: 1.5px solid rgba(44, 33, 24, 0.12);
-      border-radius: 12px;
-      padding: 1.2rem 1.1rem 1.05rem;
-      display: flex; flex-direction: column; gap: 0.85rem;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.25s;
-      box-shadow: 0 3px 14px rgba(26, 23, 20, 0.05);
+      background: var(--parchment-el);
+      border: 1px solid var(--border);
+      padding: 22px 22px 18px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
     }
     .team-card:hover {
-      border-color: var(--leather);
+      border-color: var(--leather-mid);
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(26, 23, 20, 0.10);
+      background: var(--parchment);
     }
 
     .kit-frame {
-      background: var(--bg);
+      background: var(--parchment);
       border: 1px solid var(--border);
-      border-radius: 8px;
       aspect-ratio: 1;
       display: grid; place-items: center;
-      padding: 1rem;
+      padding: 16px;
     }
     .kit-frame .lego { width: 88%; height: 88%; }
 
     .team-head {
       display: flex; align-items: baseline; justify-content: space-between;
-      gap: 0.5rem;
+      gap: 8px;
     }
     .team-name {
-      font-family: var(--display); font-weight: 700; font-size: 1.05rem;
-      letter-spacing: -0.01em; color: var(--leather); line-height: 1.15;
+      font-family: var(--display); font-weight: 700; font-size: 17px;
+      letter-spacing: -0.01em; color: var(--leather-mid); line-height: 1.15;
     }
     .team-conf {
-      font-family: var(--display); font-weight: 700; font-size: 0.58rem;
-      letter-spacing: 0.22em; text-transform: uppercase; color: var(--terracotta);
+      font-family: var(--display); font-weight: 800; font-size: 9px;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--terracotta);
     }
 
     .palette {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
     }
     .swatch-tile {
-      display: flex; flex-direction: column; gap: 0.32rem;
+      display: flex; flex-direction: column; gap: 6px;
     }
     .swatch-tile .chip {
       width: 100%; aspect-ratio: 3 / 1;
-      border-radius: 4px;
-      border: 1px solid rgba(44, 33, 24, 0.12);
+      border: 1px solid rgba(44, 33, 24, 0.14);
     }
     .swatch-tile .hex {
-      font-family: var(--mono); font-weight: 500; font-size: 0.62rem;
-      letter-spacing: 0.04em; text-transform: uppercase;
+      font-family: var(--sans); font-weight: 600; font-size: 10px;
+      letter-spacing: 0.06em; text-transform: uppercase;
       color: var(--text-soft); text-align: center;
     }
 
     /* FOOTER */
     footer {
-      background: var(--leather); color: rgba(245, 241, 235, 0.6);
-      padding: 2.4rem 2rem;
-      font-family: var(--display); font-weight: 700;
-      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      background: var(--leather-mid); color: var(--on-leather);
+      padding: 22px 64px;
+      border-top: 1px solid rgba(245,241,235,0.18);
+      font-family: var(--sans); font-weight: 600;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      opacity: 0.95;
     }
     .footer-inner {
-      max-width: 1200px; margin: 0 auto;
+      max-width: 1280px; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 1rem;
+      flex-wrap: wrap; gap: 16px;
+      opacity: 0.7;
     }
     .footer-inner a { color: var(--terracotta-light); transition: color 0.2s; }
-    .footer-inner a:hover { color: var(--bg); }
+    .footer-inner a:hover { color: var(--on-leather); }
     .attribution {
-      max-width: 1200px; margin: 0 auto;
-      padding: 1.6rem 2rem 0;
+      max-width: 1280px; margin: 0 auto;
+      padding: 16px 64px 24px;
       font-family: var(--sans); font-weight: 400;
-      font-size: 0.72rem; letter-spacing: 0.02em; text-transform: none;
-      color: rgba(245, 241, 235, 0.4); line-height: 1.6;
+      font-size: 12px; letter-spacing: 0.02em; text-transform: none;
+      color: var(--on-leather); opacity: 0.5; line-height: 1.6;
+    }
+    @media (max-width: 700px) {
+      footer { padding: 18px 24px; }
+      .attribution { padding: 14px 24px 20px; }
     }
   </style>
 </head>
 <body>
   <div class="grid-bg"></div>
+  <div class="grain"></div>
 
   <nav>
     <div class="nav-inner">
-      <a href="/world-cup" class="nav-mark">
-        <span class="p-mark">P</span>
-        <span>Provisions / Series</span>
+      <a href="https://provisions.work/world-cup" class="nav-mark">
+        <img src="../images/provisions-mark.png" alt="Provisions" width="22" height="22">
+        <span>Provisions</span>
       </a>
-      <a href="/world-cup" class="nav-back">← The Series</a>
+      <a href="https://provisions.work/world-cup" class="nav-back">← Back to the team sheet</a>
     </div>
   </nav>
 
   <header class="hero">
     <div class="hero-inner">
-      <div class="label">Issue 04 · The Kit Index</div>
+      <div class="label">No. 04 · The Kit Index</div>
       <h1>Forty-eight kits.<br>Forty-eight palettes.</h1>
       <p class="lede">A reference plate for summer '26. Every national team, the shape of its kit, and the three colors that identify it. Filter by confederation. Take what you need.</p>
     </div>
