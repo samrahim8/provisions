@@ -754,7 +754,37 @@
       height: auto;
       object-fit: contain;
       filter: drop-shadow(0 18px 36px rgba(0,0,0,0.18));
+      transition: opacity 220ms ease;
     }
+    .featured-image-frame.is-loading img { opacity: 0.25; }
+    .featured-loading {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      pointer-events: none;
+    }
+    .featured-image-frame.is-loading .featured-loading { display: flex; }
+    .featured-loading-spinner {
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--border);
+      border-top-color: var(--terracotta);
+      border-radius: 50%;
+      animation: featuredSpin 720ms linear infinite;
+    }
+    .featured-loading-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+    }
+    @keyframes featuredSpin { to { transform: rotate(360deg); } }
 
     /* ── LEDGER (standalone cards) ── */
     .ledger {
@@ -1298,8 +1328,12 @@
               <div class="featured-stat"><div class="num">1</div><div class="lbl">Click</div></div>
             </div>
           </div>
-          <div class="featured-image-frame">
+          <div class="featured-image-frame" id="featuredCardFrame">
             <img id="featuredCardImg" src="https://provisions.work/world-cup/card-generator/api/card?team=USA" alt="Player card example">
+            <div class="featured-loading" aria-hidden="true">
+              <div class="featured-loading-spinner"></div>
+              <div class="featured-loading-label">Pressing the card</div>
+            </div>
           </div>
           <div class="featured-cta-row">
             <span class="btn-dark">Open the generator →</span>
@@ -1584,14 +1618,41 @@
       document.getElementById('activeCode').textContent = code;
     }
 
+    // ── Scramble effect (matches main provisions site) ──
+    const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    function scrambleTo(el, target, duration = 600) {
+      if (!el) return;
+      if (el._scrambleRaf) cancelAnimationFrame(el._scrambleRaf);
+      const start = performance.now();
+      const len = target.length;
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        let out = '';
+        for (let i = 0; i < len; i++) {
+          const charProgress = (t * len) - i;
+          if (charProgress >= 1) {
+            out += target[i];
+          } else if (charProgress > 0) {
+            out += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+          } else {
+            out += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+          }
+        }
+        el.textContent = out;
+        if (t < 1) el._scrambleRaf = requestAnimationFrame(tick);
+        else { el.textContent = target; el._scrambleRaf = null; }
+      };
+      el._scrambleRaf = requestAnimationFrame(tick);
+    }
+
     // ── Update the match ticket for a chosen team ──
     function updateTicket(code) {
       const fx = M1[code];
       if (!fx) return;
       document.getElementById('whistleHomeLbl').textContent = 'Your Side';
       document.getElementById('whistleAwayLbl').textContent = 'Opponent';
-      document.getElementById('whistleHome').textContent = code;
-      document.getElementById('whistleAway').textContent = fx.opp;
+      scrambleTo(document.getElementById('whistleHome'), code, 550);
+      scrambleTo(document.getElementById('whistleAway'), fx.opp, 700);
       document.getElementById('whistleVenue').textContent = fx.venue;
       document.getElementById('whistleCity').textContent = fx.city + ' · Matchday 1';
       document.getElementById('whistleKickoff').textContent = fx.date + ' · 2026';
@@ -1608,7 +1669,14 @@
       renderTeamGrid(code);
       renderTeamGrid(code, 'repaintTeamGrid');
       const fc = document.getElementById('featuredCardImg');
-      if (fc) fc.src = `https://provisions.work/world-cup/card-generator/api/card?team=${encodeURIComponent(code)}`;
+      const ff = document.getElementById('featuredCardFrame');
+      if (fc && ff) {
+        ff.classList.add('is-loading');
+        const done = () => ff.classList.remove('is-loading');
+        fc.onload = done;
+        fc.onerror = done;
+        fc.src = `https://provisions.work/world-cup/card-generator/api/card?team=${encodeURIComponent(code)}`;
+      }
       // Close the top bar
       document.getElementById('teamBar').classList.remove('open');
       document.getElementById('teamToggle').setAttribute('aria-expanded', 'false');
