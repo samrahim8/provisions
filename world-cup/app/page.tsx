@@ -128,6 +128,7 @@ function PressingOverlay({ team }: { team: Team }) {
   }, [STAGES.length]);
 
   const accent = team.secondary || team.accent || team.primary;
+  const subtextColor = pickContrast(team);
 
   return (
     <div
@@ -178,7 +179,7 @@ function PressingOverlay({ team }: { team: Team }) {
               letterSpacing: "0.18em",
               textTransform: "uppercase",
               fontWeight: 600,
-              color: accent,
+              color: subtextColor,
               marginTop: 12,
               minHeight: 16,
               transition: "color 0.4s ease",
