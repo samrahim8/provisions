@@ -1076,7 +1076,7 @@ function GuinnessCard({
 }
 
 // ─────────────────────────────────────────────
-// MUNDIAL — editorial magazine cover
+// MUNDIAL — player-card chassis, editorial skin
 // ─────────────────────────────────────────────
 function MundialCard({
   photo,
@@ -1087,6 +1087,7 @@ function MundialCard({
   country,
   countryCode,
   issueNumber,
+  countryStripe,
 }: {
   photo: string;
   name: string;
@@ -1096,43 +1097,80 @@ function MundialCard({
   country: string;
   countryCode: string;
   issueNumber: string;
+  countryStripe: [string, string, string];
 }) {
   const PAPER_M = "#EFE8DC";
   const RED_M = "#C8262C";
   const INK_M = "#0F0F0F";
-  const W = px(500);
-  const H = px(700);
+  const RED_LIGHT = "#E55A5F";
+
+  const Square = ({ size, color }: { size: number; color: string }) => (
+    <div style={{ width: px(size), height: px(size), background: color, display: "flex" }} />
+  );
 
   return (
     <div
       style={{
-        width: W,
-        height: H,
+        width: px(500),
+        height: px(700),
         background: PAPER_M,
         position: "relative",
         display: "flex",
         flexDirection: "column",
+        padding: px(16),
       }}
     >
-      {/* Top red rule */}
-      <div style={{ height: px(6), background: RED_M, display: "flex", flexShrink: 0 }} />
-
-      {/* Masthead band */}
+      {/* Outer double rule frame */}
       <div
         style={{
-          padding: `${px(14)}px ${px(22)}px ${px(8)}px`,
+          position: "absolute",
+          inset: px(14),
+          border: `${px(2)}px solid ${INK_M}`,
+          display: "flex",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: px(20),
+          border: `${px(0.5)}px solid ${INK_M}`,
+          display: "flex",
+        }}
+      />
+
+      {/* Corner ornaments — editorial squares */}
+      {[
+        { top: px(26), left: px(26) },
+        { top: px(26), right: px(26) },
+        { bottom: px(26), left: px(26) },
+        { bottom: px(26), right: px(26) },
+      ].map((pos, i) => (
+        <div key={i} style={{ position: "absolute", ...pos, display: "flex" }}>
+          <Square size={5} color={RED_M} />
+        </div>
+      ))}
+
+      {/* Inner content */}
+      <div
+        style={{
+          position: "absolute",
+          left: px(36),
+          right: px(36),
+          top: px(34),
+          bottom: px(36),
           display: "flex",
           flexDirection: "column",
-          flexShrink: 0,
+          alignItems: "center",
         }}
       >
-        {/* Issue line */}
+        {/* Top issue line */}
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: px(2),
+            justifyContent: "space-between",
+            width: "100%",
+            marginBottom: px(6),
           }}
         >
           <div
@@ -1145,7 +1183,7 @@ function MundialCard({
               display: "flex",
             }}
           >
-            VOL. XXVI · WORLD CUP '26
+            VOL. XXVI
           </div>
           <div
             style={{
@@ -1157,298 +1195,298 @@ function MundialCard({
               display: "flex",
             }}
           >
-            ISSUE №{issueNumber} · USD 14
+            ISSUE №{issueNumber}
           </div>
         </div>
 
-        {/* Wordmark */}
+        {/* MUNDIAL wordmark */}
         <div
           style={{
             fontFamily: "Garamond",
             fontWeight: 700,
-            fontSize: px(86),
-            letterSpacing: "-0.03em",
+            fontSize: px(78),
+            letterSpacing: "-0.02em",
             color: RED_M,
-            lineHeight: 0.92,
+            lineHeight: 1,
             display: "flex",
           }}
         >
           MUNDIAL
         </div>
-      </div>
 
-      {/* Hairline */}
-      <div
-        style={{
-          height: px(1),
-          background: INK_M,
-          opacity: 0.85,
-          marginLeft: px(22),
-          marginRight: px(22),
-          display: "flex",
-          flexShrink: 0,
-        }}
-      />
-
-      {/* Photo + cover headline overlaid */}
-      <div
-        style={{
-          position: "relative",
-          display: "flex",
-          width: "100%",
-          height: px(360),
-          overflow: "hidden",
-          flexShrink: 0,
-        }}
-      >
-        <img
-          src={photo}
-          width={W}
-          height={px(360)}
-          style={{
-            width: W,
-            height: px(360),
-            objectFit: "cover",
-            display: "flex",
-          }}
-        />
-        {/* Bottom gradient for readability */}
+        {/* Tagline */}
         <div
           style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: px(180),
-            background:
-              "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%)",
+            fontFamily: "PlayfairSc",
+            fontSize: px(10),
+            letterSpacing: "0.32em",
+            color: INK_M,
+            opacity: 0.78,
+            marginTop: px(6),
             display: "flex",
-          }}
-        />
-        {/* Cover headline */}
-        <div
-          style={{
-            position: "absolute",
-            left: px(22),
-            right: px(22),
-            bottom: px(18),
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "Plex Mono",
-              fontSize: px(8),
-              letterSpacing: "0.32em",
-              color: "#FFFFFF",
-              opacity: 0.85,
-              marginBottom: px(4),
-              display: "flex",
-            }}
-          >
-            COVER FEATURE · THE {country.toUpperCase()} PORTFOLIO
-          </div>
-          <div
-            style={{
-              fontFamily: "Garamond",
-              fontWeight: 700,
-              fontSize: country.length > 10 ? px(54) : px(74),
-              letterSpacing: "-0.025em",
-              color: "#FFFFFF",
-              lineHeight: 0.9,
-              display: "flex",
-            }}
-          >
-            {country.toUpperCase()}.
-          </div>
-        </div>
-        {/* Country code chip top-right */}
-        <div
-          style={{
-            position: "absolute",
-            top: px(14),
-            right: px(14),
-            background: RED_M,
-            color: "#FFFFFF",
-            padding: `${px(5)}px ${px(9)}px`,
-            fontFamily: "Plex Mono",
-            fontSize: px(9),
-            letterSpacing: "0.18em",
-            display: "flex",
-          }}
-        >
-          {countryCode}
-        </div>
-      </div>
-
-      {/* Coverlines section */}
-      <div
-        style={{
-          flex: 1,
-          padding: `${px(14)}px ${px(22)}px ${px(10)}px`,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {/* Cover star line */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "baseline",
+            alignItems: "center",
             gap: px(8),
-            marginBottom: px(8),
           }}
         >
+          <span>THE FOOTBALL QUARTERLY</span>
+          <span style={{ color: RED_M, display: "flex" }}>·</span>
+          <span>MMXXVI</span>
+        </div>
+
+        {/* Double rule with center square */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(8),
+            width: "100%",
+            marginTop: px(14),
+            marginBottom: px(16),
+          }}
+        >
+          <div style={{ flex: 1, height: px(1), background: INK_M, opacity: 0.9, display: "flex" }} />
+          <Square size={5} color={RED_M} />
+          <div style={{ flex: 1, height: px(1), background: INK_M, opacity: 0.9, display: "flex" }} />
+        </div>
+
+        {/* Arched photo cameo — editorial */}
+        <div
+          style={{
+            width: px(280),
+            height: px(300),
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {/* Outer red mat */}
           <div
             style={{
-              fontFamily: "Plex Mono",
-              fontSize: px(8),
-              letterSpacing: "0.28em",
-              color: RED_M,
+              position: "absolute",
+              inset: 0,
+              borderTopLeftRadius: px(140),
+              borderTopRightRadius: px(140),
+              background: RED_M,
               display: "flex",
-            }}
-          >
-            COVER STAR ★
-          </div>
-          <div
-            style={{
-              flex: 1,
-              height: px(0.5),
-              background: INK_M,
-              opacity: 0.4,
-              display: "flex",
-              alignSelf: "center",
-              marginTop: px(2),
             }}
           />
-        </div>
-
-        <div
-          style={{
-            fontFamily: "Garamond",
-            fontWeight: 700,
-            fontSize: px(28),
-            letterSpacing: "-0.01em",
-            color: INK_M,
-            lineHeight: 1,
-            display: "flex",
-            marginBottom: px(4),
-          }}
-        >
-          {name.toUpperCase()}
-        </div>
-
-        <div
-          style={{
-            fontFamily: "Plex Mono",
-            fontSize: px(9),
-            letterSpacing: "0.22em",
-            color: INK_M,
-            opacity: 0.8,
-            display: "flex",
-            gap: px(10),
-            marginBottom: px(12),
-          }}
-        >
-          <span>{position}</span>
-          <span style={{ color: RED_M, display: "flex" }}>·</span>
-          <span>NO. {number}</span>
-          <span style={{ color: RED_M, display: "flex" }}>·</span>
-          <span>RATING {rating}</span>
-        </div>
-
-        {/* Also in this issue */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            marginTop: px(2),
-          }}
-        >
+          {/* Inner ink frame */}
           <div
             style={{
-              fontFamily: "Plex Mono",
-              fontSize: px(7),
-              letterSpacing: "0.28em",
-              color: INK_M,
-              opacity: 0.55,
+              position: "absolute",
+              inset: px(6),
+              borderTopLeftRadius: px(134),
+              borderTopRightRadius: px(134),
+              background: INK_M,
               display: "flex",
-              marginBottom: px(3),
+            }}
+          />
+          {/* Photo */}
+          <div
+            style={{
+              position: "absolute",
+              inset: px(10),
+              borderTopLeftRadius: px(130),
+              borderTopRightRadius: px(130),
+              overflow: "hidden",
+              display: "flex",
             }}
           >
-            ALSO IN THIS ISSUE
+            <img
+              src={photo}
+              width={px(260)}
+              height={px(280)}
+              style={{ width: px(260), height: px(280), objectFit: "cover" }}
+            />
           </div>
+          {/* Issue chip — top-right */}
+          <div
+            style={{
+              position: "absolute",
+              top: px(14),
+              right: px(-10),
+              background: PAPER_M,
+              border: `${px(1)}px solid ${INK_M}`,
+              padding: `${px(3)}px ${px(6)}px`,
+              fontFamily: "Plex Mono",
+              fontSize: px(8),
+              letterSpacing: "0.22em",
+              color: INK_M,
+              display: "flex",
+            }}
+          >
+            {countryCode}
+          </div>
+        </div>
+
+        {/* Player name with red flanker rules */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(14),
+            marginTop: px(16),
+          }}
+        >
+          <div style={{ width: px(28), height: px(1), background: RED_M, display: "flex" }} />
           <div
             style={{
               fontFamily: "GaramondItalic",
               fontStyle: "italic",
               fontWeight: 500,
-              fontSize: px(13),
+              fontSize: px(28),
+              letterSpacing: "0.01em",
               color: INK_M,
-              opacity: 0.85,
               display: "flex",
-              gap: px(6),
-              flexWrap: "wrap",
             }}
           >
-            <span>The 48 sides</span>
-            <span style={{ color: RED_M, display: "flex" }}>·</span>
-            <span>The kits</span>
-            <span style={{ color: RED_M, display: "flex" }}>·</span>
-            <span>The fixtures</span>
-            <span style={{ color: RED_M, display: "flex" }}>·</span>
-            <span>The talent</span>
+            {name}
+          </div>
+          <div style={{ width: px(28), height: px(1), background: RED_M, display: "flex" }} />
+        </div>
+
+        {/* Country stripe + nation small caps */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(10),
+            marginTop: px(8),
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <div style={{ width: px(8), height: px(3), background: countryStripe[0], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[1], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[2], display: "flex" }} />
+          </div>
+          <div
+            style={{
+              fontFamily: "PlayfairSc",
+              fontSize: px(9),
+              letterSpacing: "0.32em",
+              color: INK_M,
+              opacity: 0.78,
+              display: "flex",
+            }}
+          >
+            COVER STAR · {country.toUpperCase()}
+          </div>
+          <div style={{ display: "flex" }}>
+            <div style={{ width: px(8), height: px(3), background: countryStripe[0], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[1], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[2], display: "flex" }} />
           </div>
         </div>
-      </div>
 
-      {/* Footer rule + barcode + colophon */}
-      <div
-        style={{
-          height: px(1),
-          background: INK_M,
-          opacity: 0.85,
-          marginLeft: px(22),
-          marginRight: px(22),
-          display: "flex",
-          flexShrink: 0,
-        }}
-      />
-      <div
-        style={{
-          padding: `${px(8)}px ${px(22)}px ${px(10)}px`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexShrink: 0,
-        }}
-      >
-        {/* Barcode */}
-        <div style={{ display: "flex", alignItems: "flex-end", gap: px(1) }}>
-          {[3, 1, 2, 1, 3, 1, 1, 2, 1, 3, 2, 1, 1, 3, 1, 2, 1, 1, 3, 1, 2].map((w, i) => (
+        {/* Stats — editorial dossier blocks */}
+        <div
+          style={{
+            display: "flex",
+            gap: px(12),
+            marginTop: px(16),
+          }}
+        >
+          {[
+            { lbl: "POSITION", val: position },
+            { lbl: "NO.", val: number },
+            { lbl: "RATING", val: rating },
+          ].map((stat, i) => (
             <div
               key={i}
               style={{
-                width: px(w * 0.6),
-                height: px(16),
-                background: i % 3 === 1 ? "transparent" : INK_M,
+                width: px(108),
+                padding: `${px(8)}px ${px(6)}px ${px(10)}px`,
+                background: INK_M,
+                border: `${px(1)}px solid ${RED_M}`,
                 display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
-            />
+            >
+              <div
+                style={{
+                  fontFamily: "PlayfairSc",
+                  fontSize: px(8),
+                  letterSpacing: "0.28em",
+                  color: RED_LIGHT,
+                  display: "flex",
+                }}
+              >
+                {stat.lbl}
+              </div>
+              <div
+                style={{
+                  width: px(70),
+                  height: px(0.5),
+                  background: RED_M,
+                  opacity: 0.6,
+                  marginTop: px(3),
+                  marginBottom: px(3),
+                  display: "flex",
+                }}
+              />
+              <div
+                style={{
+                  fontFamily: "Garamond",
+                  fontWeight: 700,
+                  fontSize: px(28),
+                  color: PAPER_M,
+                  lineHeight: 1,
+                  display: "flex",
+                }}
+              >
+                {stat.val}
+              </div>
+            </div>
           ))}
+        </div>
+      </div>
+
+      {/* Footer — barcode + colophon */}
+      <div
+        style={{
+          position: "absolute",
+          left: px(36),
+          right: px(36),
+          bottom: px(40),
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(8),
+            width: "100%",
+          }}
+        >
+          <div style={{ flex: 1, height: px(1), background: INK_M, opacity: 0.6, display: "flex" }} />
+          <Square size={4} color={RED_M} />
+          <div style={{ flex: 1, height: px(1), background: INK_M, opacity: 0.6, display: "flex" }} />
         </div>
         <div
           style={{
-            fontFamily: "Plex Mono",
-            fontSize: px(8),
-            letterSpacing: "0.28em",
+            fontFamily: "PlayfairSc",
+            fontSize: px(9),
+            letterSpacing: "0.32em",
             color: INK_M,
             opacity: 0.7,
+            marginTop: px(8),
             display: "flex",
+            alignItems: "center",
+            gap: px(8),
           }}
         >
-          MUNDIAL × WORLD CUP '26 · PROVISIONS
+          <span>MUNDIAL × {country.toUpperCase()}</span>
+          <span style={{ color: RED_M, display: "flex" }}>·</span>
+          <span>WORLD CUP MMXXVI</span>
         </div>
       </div>
     </div>
@@ -1456,7 +1494,7 @@ function MundialCard({
 }
 
 // ─────────────────────────────────────────────
-// FELLOW — equipment spec sheet
+// FELLOW — player-card chassis, technical skin
 // ─────────────────────────────────────────────
 function FellowCard({
   photo,
@@ -1466,6 +1504,7 @@ function FellowCard({
   rating,
   country,
   countryCode,
+  countryStripe,
 }: {
   photo: string;
   name: string;
@@ -1474,86 +1513,97 @@ function FellowCard({
   rating: string;
   country: string;
   countryCode: string;
+  countryStripe: [string, string, string];
 }) {
   const PAPER_F = "#F4EFE6";
   const INK_F = "#1A1A1A";
   const COPPER = "#C9785F";
-  const MUTED = "rgba(26,26,26,0.55)";
-  const W = px(500);
-  const H = px(700);
+  const COPPER_LIGHT = "#E29F86";
+
+  const Tick = ({ size, color }: { size: number; color: string }) => (
+    <div
+      style={{
+        width: px(size),
+        height: px(size),
+        background: color,
+        display: "flex",
+        transform: "rotate(45deg)",
+      }}
+    />
+  );
 
   return (
     <div
       style={{
-        width: W,
-        height: H,
+        width: px(500),
+        height: px(700),
         background: PAPER_F,
         position: "relative",
         display: "flex",
         flexDirection: "column",
-        padding: px(20),
+        padding: px(16),
       }}
     >
-      {/* Outer technical frame */}
+      {/* Outer double rule frame */}
       <div
         style={{
           position: "absolute",
-          inset: px(16),
-          border: `${px(0.5)}px solid rgba(26,26,26,0.18)`,
+          inset: px(14),
+          border: `${px(2)}px solid ${INK_F}`,
+          display: "flex",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: px(20),
+          border: `${px(0.5)}px solid ${INK_F}`,
           display: "flex",
         }}
       />
 
-      {/* Header: FELLOW wordmark + serial */}
+      {/* Corner ticks — technical */}
+      {[
+        { top: px(26), left: px(26) },
+        { top: px(26), right: px(26) },
+        { bottom: px(26), left: px(26) },
+        { bottom: px(26), right: px(26) },
+      ].map((pos, i) => (
+        <div key={i} style={{ position: "absolute", ...pos, display: "flex" }}>
+          <Tick size={5} color={COPPER} />
+        </div>
+      ))}
+
+      {/* Inner content */}
       <div
         style={{
+          position: "absolute",
+          left: px(36),
+          right: px(36),
+          top: px(34),
+          bottom: px(36),
           display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          paddingBottom: px(12),
-          borderBottom: `${px(1)}px solid ${INK_F}`,
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div
-            style={{
-              fontFamily: "Plex Mono",
-              fontSize: px(7),
-              letterSpacing: "0.32em",
-              color: MUTED,
-              marginBottom: px(2),
-              display: "flex",
-            }}
-          >
-            BREW · PLAY
-          </div>
-          <div
-            style={{
-              fontFamily: "Big Shoulders",
-              fontWeight: 800,
-              fontSize: px(28),
-              letterSpacing: "0.08em",
-              color: INK_F,
-              lineHeight: 1,
-              display: "flex",
-            }}
-          >
-            FELLOW
-          </div>
-        </div>
+        {/* Top model/series line */}
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            marginBottom: px(6),
           }}
         >
           <div
             style={{
               fontFamily: "Plex Mono",
-              fontSize: px(7),
+              fontSize: px(8),
               letterSpacing: "0.28em",
-              color: MUTED,
+              color: INK_F,
+              opacity: 0.7,
               display: "flex",
             }}
           >
@@ -1562,240 +1612,309 @@ function FellowCard({
           <div
             style={{
               fontFamily: "Plex Mono",
-              fontSize: px(7),
+              fontSize: px(8),
               letterSpacing: "0.28em",
-              color: MUTED,
-              marginTop: px(2),
+              color: INK_F,
+              opacity: 0.7,
               display: "flex",
             }}
           >
-            SERIES · {countryCode}/{rating}
+            {countryCode}/{rating}
           </div>
         </div>
-      </div>
 
-      {/* Edition eyebrow + jersey number */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          marginTop: px(14),
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        {/* FELLOW wordmark */}
+        <div
+          style={{
+            fontFamily: "Big Shoulders",
+            fontWeight: 900,
+            fontSize: px(78),
+            letterSpacing: "-0.01em",
+            color: INK_F,
+            lineHeight: 1,
+            display: "flex",
+          }}
+        >
+          FELLOW
+        </div>
+
+        {/* Tagline */}
+        <div
+          style={{
+            fontFamily: "Plex Mono",
+            fontSize: px(9),
+            letterSpacing: "0.32em",
+            color: INK_F,
+            opacity: 0.78,
+            marginTop: px(6),
+            display: "flex",
+            alignItems: "center",
+            gap: px(8),
+          }}
+        >
+          <span>BREW</span>
+          <span style={{ color: COPPER, display: "flex" }}>·</span>
+          <span>PLAY</span>
+          <span style={{ color: COPPER, display: "flex" }}>·</span>
+          <span>MMXXVI</span>
+        </div>
+
+        {/* Double rule with center tick */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(8),
+            width: "100%",
+            marginTop: px(14),
+            marginBottom: px(16),
+          }}
+        >
+          <div style={{ flex: 1, height: px(1), background: INK_F, opacity: 0.9, display: "flex" }} />
+          <Tick size={5} color={COPPER} />
+          <div style={{ flex: 1, height: px(1), background: INK_F, opacity: 0.9, display: "flex" }} />
+        </div>
+
+        {/* Square photo cameo — technical frame */}
+        <div
+          style={{
+            width: px(280),
+            height: px(280),
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {/* Outer copper mat */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: COPPER,
+              display: "flex",
+            }}
+          />
+          {/* Inner ink frame */}
+          <div
+            style={{
+              position: "absolute",
+              inset: px(6),
+              background: INK_F,
+              display: "flex",
+            }}
+          />
+          {/* Photo container */}
+          <div
+            style={{
+              position: "absolute",
+              inset: px(10),
+              overflow: "hidden",
+              display: "flex",
+            }}
+          >
+            <img
+              src={photo}
+              width={px(260)}
+              height={px(260)}
+              style={{
+                width: px(260),
+                height: px(260),
+                objectFit: "cover",
+              }}
+            />
+          </div>
+          {/* FIG annotation */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: px(12),
+              right: px(12),
+              fontFamily: "Plex Mono",
+              fontSize: px(7),
+              letterSpacing: "0.28em",
+              color: "#FFFFFF",
+              background: "rgba(26,26,26,0.75)",
+              padding: `${px(2)}px ${px(5)}px`,
+              display: "flex",
+            }}
+          >
+            FIG. 01
+          </div>
+        </div>
+
+        {/* Player name with copper flanker rules */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(14),
+            marginTop: px(18),
+          }}
+        >
+          <div style={{ width: px(28), height: px(1), background: COPPER, display: "flex" }} />
+          <div
+            style={{
+              fontFamily: "Big Shoulders",
+              fontWeight: 800,
+              fontSize: px(26),
+              letterSpacing: "0.04em",
+              color: INK_F,
+              display: "flex",
+            }}
+          >
+            {name.toUpperCase()}
+          </div>
+          <div style={{ width: px(28), height: px(1), background: COPPER, display: "flex" }} />
+        </div>
+
+        {/* Country stripe + nation small caps */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(10),
+            marginTop: px(8),
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <div style={{ width: px(8), height: px(3), background: countryStripe[0], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[1], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[2], display: "flex" }} />
+          </div>
           <div
             style={{
               fontFamily: "Plex Mono",
               fontSize: px(8),
               letterSpacing: "0.32em",
-              color: COPPER,
-              marginBottom: px(4),
+              color: INK_F,
+              opacity: 0.78,
               display: "flex",
             }}
           >
             EDITION · {country.toUpperCase()}
           </div>
-          <div
-            style={{
-              fontFamily: "Big Shoulders",
-              fontWeight: 800,
-              fontSize: px(20),
-              letterSpacing: "-0.01em",
-              color: INK_F,
-              lineHeight: 1,
-              display: "flex",
-            }}
-          >
-            The Player
+          <div style={{ display: "flex" }}>
+            <div style={{ width: px(8), height: px(3), background: countryStripe[0], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[1], display: "flex" }} />
+            <div style={{ width: px(8), height: px(3), background: countryStripe[2], display: "flex" }} />
           </div>
         </div>
+
+        {/* Stats — paper blocks with copper trim */}
         <div
           style={{
-            fontFamily: "Big Shoulders",
-            fontWeight: 900,
-            fontSize: px(72),
-            letterSpacing: "-0.04em",
-            color: INK_F,
-            lineHeight: 0.85,
             display: "flex",
-            alignItems: "baseline",
+            gap: px(12),
+            marginTop: px(16),
           }}
         >
-          <span style={{ display: "flex" }}>{number.padStart(2, "0")}</span>
+          {[
+            { lbl: "POSITION", val: position },
+            { lbl: "NO.", val: number.padStart(2, "0") },
+            { lbl: "RATING", val: rating },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              style={{
+                width: px(108),
+                padding: `${px(8)}px ${px(6)}px ${px(10)}px`,
+                background: INK_F,
+                border: `${px(1)}px solid ${COPPER}`,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "Plex Mono",
+                  fontSize: px(8),
+                  letterSpacing: "0.28em",
+                  color: COPPER_LIGHT,
+                  display: "flex",
+                }}
+              >
+                {stat.lbl}
+              </div>
+              <div
+                style={{
+                  width: px(70),
+                  height: px(0.5),
+                  background: COPPER,
+                  opacity: 0.6,
+                  marginTop: px(3),
+                  marginBottom: px(3),
+                  display: "flex",
+                }}
+              />
+              <div
+                style={{
+                  fontFamily: "Big Shoulders",
+                  fontWeight: 900,
+                  fontSize: px(30),
+                  color: PAPER_F,
+                  lineHeight: 1,
+                  display: "flex",
+                }}
+              >
+                {stat.val}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Photo with technical frame */}
+      {/* Footer — colophon */}
       <div
         style={{
-          marginTop: px(14),
-          display: "flex",
-          width: "100%",
-          height: px(260),
-          border: `${px(0.5)}px solid rgba(26,26,26,0.35)`,
-          background: "#FFFFFF",
-          padding: px(8),
-          position: "relative",
-        }}
-      >
-        <img
-          src={photo}
-          width={px(444)}
-          height={px(244)}
-          style={{
-            width: px(444),
-            height: px(244),
-            objectFit: "cover",
-            display: "flex",
-          }}
-        />
-        {/* FIG. 01 annotation pinned bottom-right */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: px(2),
-            right: px(6),
-            fontFamily: "Plex Mono",
-            fontSize: px(7),
-            letterSpacing: "0.28em",
-            color: "#FFFFFF",
-            background: "rgba(26,26,26,0.7)",
-            padding: `${px(2)}px ${px(5)}px`,
-            display: "flex",
-          }}
-        >
-          FIG. 01
-        </div>
-      </div>
-
-      {/* Hairline + dimension callout under photo */}
-      <div
-        style={{
-          marginTop: px(6),
-          display: "flex",
-          alignItems: "center",
-          gap: px(8),
-        }}
-      >
-        <div style={{ flex: 1, height: px(0.5), background: "rgba(26,26,26,0.25)", display: "flex" }} />
-        <div
-          style={{
-            fontFamily: "Plex Mono",
-            fontSize: px(7),
-            letterSpacing: "0.28em",
-            color: MUTED,
-            display: "flex",
-          }}
-        >
-          500 × 700 PORTRAIT FORMAT
-        </div>
-        <div style={{ flex: 1, height: px(0.5), background: "rgba(26,26,26,0.25)", display: "flex" }} />
-      </div>
-
-      {/* Spec table */}
-      <div
-        style={{
-          marginTop: px(20),
+          position: "absolute",
+          left: px(36),
+          right: px(36),
+          bottom: px(40),
           display: "flex",
           flexDirection: "column",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "Plex Mono",
-            fontSize: px(7),
-            letterSpacing: "0.32em",
-            color: MUTED,
-            paddingBottom: px(6),
-            borderBottom: `${px(0.5)}px solid rgba(26,26,26,0.25)`,
-            display: "flex",
-          }}
-        >
-          SPECIFICATION
-        </div>
-
-        {[
-          ["NAME", name.toUpperCase()],
-          ["POSITION", position],
-          ["NUMBER", number.padStart(2, "0")],
-          ["RATING", `${rating} / 100`],
-          ["NATION", country.toUpperCase()],
-        ].map((row, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: `${px(5)}px 0`,
-              borderBottom: i === 4 ? "none" : `${px(0.5)}px solid rgba(26,26,26,0.12)`,
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "Plex Mono",
-                fontSize: px(8),
-                letterSpacing: "0.22em",
-                color: MUTED,
-                display: "flex",
-              }}
-            >
-              {row[0]}
-            </div>
-            <div
-              style={{
-                fontFamily: "Big Shoulders",
-                fontWeight: 800,
-                fontSize: px(13),
-                letterSpacing: "0.04em",
-                color: INK_F,
-                display: "flex",
-              }}
-            >
-              {row[1]}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Bottom credit */}
-      <div
-        style={{
-          marginTop: "auto",
-          paddingTop: px(10),
-          borderTop: `${px(1)}px solid ${INK_F}`,
-          display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
         }}
       >
         <div
           style={{
-            fontFamily: "Plex Mono",
-            fontSize: px(7),
-            letterSpacing: "0.28em",
-            color: MUTED,
             display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: px(8),
+            width: "100%",
           }}
         >
-          FELLOW × WORLD CUP '26
+          <div style={{ flex: 1, height: px(1), background: INK_F, opacity: 0.6, display: "flex" }} />
+          <Tick size={4} color={COPPER} />
+          <div style={{ flex: 1, height: px(1), background: INK_F, opacity: 0.6, display: "flex" }} />
         </div>
         <div
           style={{
             fontFamily: "Plex Mono",
-            fontSize: px(7),
-            letterSpacing: "0.28em",
-            color: COPPER,
+            fontSize: px(8),
+            letterSpacing: "0.32em",
+            color: INK_F,
+            opacity: 0.7,
+            marginTop: px(8),
             display: "flex",
+            alignItems: "center",
+            gap: px(8),
           }}
         >
-          MADE BY PROVISIONS ▲
+          <span>FELLOW × {country.toUpperCase()}</span>
+          <span style={{ color: COPPER, display: "flex" }}>·</span>
+          <span>WORLD CUP MMXXVI</span>
         </div>
       </div>
     </div>
   );
 }
+
 
 type BrandKitDef = {
   name: string;
@@ -1904,6 +2023,7 @@ export async function GET(req: Request) {
         country={baseTeam.name}
         countryCode={baseTeam.code}
         issueNumber="26"
+        countryStripe={[baseTeam.primary, baseTeam.secondary, baseTeam.accent]}
       />,
       { width: W, height: H, fonts, headers: { "Cache-Control": "public, max-age=31536000, immutable" } }
     );
@@ -1919,6 +2039,7 @@ export async function GET(req: Request) {
         rating="92"
         country={baseTeam.name}
         countryCode={baseTeam.code}
+        countryStripe={[baseTeam.primary, baseTeam.secondary, baseTeam.accent]}
       />,
       { width: W, height: H, fonts, headers: { "Cache-Control": "public, max-age=31536000, immutable" } }
     );
