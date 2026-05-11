@@ -349,7 +349,7 @@ function Nav({ step }: { step: Step }) {
         </ol>
         <a
           href="https://provisions.work/world-cup"
-          className="h-[40px] sm:h-[44px] inline-flex items-center bg-leather-mid text-white px-4 sm:px-5 font-display font-extrabold uppercase tracking-label text-[10px] sm:text-[12px] border border-leather-mid hover:bg-terracotta hover:border-terracotta transition-all"
+          className="h-[44px] inline-flex items-center bg-leather-mid text-white px-4 sm:px-5 font-display font-extrabold uppercase tracking-label text-[10px] sm:text-[12px] border border-leather-mid hover:bg-terracotta hover:border-terracotta transition-all"
           style={{ boxShadow: "0 3px 0 rgba(0,0,0,0.12)" }}
         >
           ← Back to the team sheet
@@ -398,13 +398,12 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
             <span className="text-text-soft text-xs sm:text-sm">Or scroll to browse all 48.</span>
           </div>
         </div>
-        <div className="hidden lg:flex justify-end">
+        <div className="flex justify-center lg:justify-end">
           <div className="relative" style={{ transform: "rotate(3deg)" }}>
             <img
               src={asset("/api/card?team=USA")}
               alt="Example player card"
-              width={360}
-              className="rounded-md"
+              className="rounded-md w-[220px] sm:w-[260px] lg:w-[360px] h-auto"
               style={{ boxShadow: "0 30px 60px -20px rgba(26,23,20,0.35), 0 8px 20px -8px rgba(26,23,20,0.18)" }}
             />
           </div>
@@ -419,7 +418,7 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
           className="input max-w-sm mb-8"
         />
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-5">
         {filtered.map((t) => {
           const tilePrimary = isLightHex(t.primary) ? t.primary : t.primary;
           const onTile = isLightHex(t.primary) ? "#1a1a1a" : "#FFFFFF";
