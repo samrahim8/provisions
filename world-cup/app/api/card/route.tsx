@@ -638,28 +638,78 @@ function ArchCard({
       </div>
 
       {/* Footer */}
-      <div
-        style={{
-          position: "absolute",
-          left: px(40),
-          right: px(40),
-          bottom: px(30),
-          display: "flex",
-          justifyContent: "space-between",
-          fontFamily: "Plex Mono",
-          fontSize: px(8),
-          letterSpacing: "0.2em",
-          color: INK,
-          opacity: 0.65,
-        }}
-      >
-        <span>
-          {brand?.mode === "footer"
-            ? `BY ${brand.name.toUpperCase()} · ${brand.tagline}`
-            : `SERIES ONE · ${todayStamp()}`}
-        </span>
-        <span>WORLD CUP '26</span>
-      </div>
+      {brand?.mode === "footer" ? (
+        <div
+          style={{
+            position: "absolute",
+            left: px(40),
+            right: px(40),
+            bottom: px(28),
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "baseline", gap: px(8) }}>
+            <div
+              style={{
+                fontFamily: "Garamond",
+                fontWeight: 700,
+                fontSize: px(20),
+                letterSpacing: "0.02em",
+                color: brand.primary,
+                lineHeight: 1,
+                display: "flex",
+              }}
+            >
+              {brand.name.toUpperCase()}
+            </div>
+            <div
+              style={{
+                fontFamily: "Plex Mono",
+                fontSize: px(8),
+                letterSpacing: "0.22em",
+                color: INK,
+                opacity: 0.6,
+                display: "flex",
+              }}
+            >
+              · {brand.tagline}
+            </div>
+          </div>
+          <div
+            style={{
+              fontFamily: "Plex Mono",
+              fontSize: px(8),
+              letterSpacing: "0.2em",
+              color: INK,
+              opacity: 0.65,
+              display: "flex",
+            }}
+          >
+            WORLD CUP '26
+          </div>
+        </div>
+      ) : (
+        <div
+          style={{
+            position: "absolute",
+            left: px(40),
+            right: px(40),
+            bottom: px(30),
+            display: "flex",
+            justifyContent: "space-between",
+            fontFamily: "Plex Mono",
+            fontSize: px(8),
+            letterSpacing: "0.2em",
+            color: INK,
+            opacity: 0.65,
+          }}
+        >
+          <span>SERIES ONE · {todayStamp()}</span>
+          <span>WORLD CUP '26</span>
+        </div>
+      )}
     </div>
   );
 }
