@@ -439,9 +439,9 @@
     // ---- Lego-style kit definitions (same as before) ----
     const KIT_PATTERN = {
       ARG: { pattern: "vstripes3", colors: ["#74ACDF", "#FFFFFF", "#74ACDF"] },
-      BRA: { pattern: "collar", body: "#FFDF00", trim: "#009C3B", sleeve: "#FFDF00" },
+      BRA: { pattern: "chevron3", colors: ["#FFDF00", "#009C3B"], sleeve: "#FFDF00", trim: "#009C3B" },
       URU: { pattern: "solid", sleeve: "#5CBCE9" },
-      COL: { pattern: "solid", sleeve: "#FCD116" },
+      COL: { pattern: "solid", body: "#FCD116", sleeve: "#CE1126", trim: "#003893" },
       ECU: { pattern: "solid", sleeve: "#FFD100" },
       PAR: { pattern: "vstripes2", colors: ["#D52B1E", "#FFFFFF"] },
       VEN: { pattern: "solid", sleeve: "#7A1F2A" },
@@ -458,7 +458,7 @@
       ITA: { pattern: "solid", sleeve: "#0066B3" },
       CRO: { pattern: "check", colors: ["#FF0000", "#FFFFFF"] },
       SUI: { pattern: "solid", sleeve: "#DA291C" },
-      DEN: { pattern: "solid", sleeve: "#C8102E" },
+      DEN: { pattern: "halves", colors: ["#C8102E", "#FFFFFF"], sleeve: "#C8102E", trim: "#FFFFFF" },
       POL: { pattern: "solid", body: "#DC143C", sleeve: "#DC143C", trim: "#FFFFFF" },
       AUT: { pattern: "solid", sleeve: "#ED2939" },
       TUR: { pattern: "solid", sleeve: "#E30A17" },
@@ -469,7 +469,7 @@
       UKR: { pattern: "solid", body: "#FFD500", sleeve: "#FFD500", trim: "#0057B7" },
       JPN: { pattern: "solid", sleeve: "#0A1F4D" },
       KOR: { pattern: "solid", sleeve: "#C60C30" },
-      AUS: { pattern: "solid", body: "#FFCD00", sleeve: "#FFCD00", trim: "#00843D" },
+      AUS: { pattern: "chevron3", colors: ["#FFCD00", "#00843D"], sleeve: "#FFCD00", trim: "#00843D" },
       IRN: { pattern: "solid", body: "#239F40", sleeve: "#239F40", trim: "#DA0000" },
       KSA: { pattern: "solid", body: "#006C35", sleeve: "#006C35", trim: "#FFFFFF" },
       QAT: { pattern: "solid", sleeve: "#8A1538" },
@@ -478,7 +478,7 @@
       MAR: { pattern: "solid", sleeve: "#C1272D" },
       SEN: { pattern: "solid", body: "#00853F", sleeve: "#00853F", trim: "#E31B23" },
       EGY: { pattern: "solid", sleeve: "#CE1126" },
-      NGA: { pattern: "vstripes2", colors: ["#008751", "#FFFFFF"] },
+      NGA: { pattern: "zigzag", colors: ["#FFFFFF", "#008751"], sleeve: "#FFFFFF", trim: "#008751" },
       CIV: { pattern: "solid", sleeve: "#FF8200" },
       CMR: { pattern: "solid", body: "#007A5E", sleeve: "#007A5E", trim: "#FCD116" },
       GHA: { pattern: "vstripes3", colors: ["#CE1126", "#FCD116", "#006B3F"] },
@@ -540,6 +540,29 @@
               bodyFill += `<rect x="30" y="${22 + i * h}" width="60" height="${h}" fill="${colors[1] || colors[0]}"/>`;
             }
           }
+          break;
+        }
+        case "zigzag": {
+          // Nigeria-style chest panel with sawtooth bottom edge
+          bodyFill = `<rect x="30" y="22" width="60" height="98" fill="${colors[0] || "#FFFFFF"}"/>`;
+          const teeth = 6;
+          const w = 60 / teeth;
+          const top = 22;
+          const yHigh = 42;
+          const yLow = 60;
+          let path = `M30 ${top} L90 ${top} L90 ${yHigh}`;
+          for (let i = teeth; i >= 0; i--) {
+            const x = 30 + i * w;
+            path += i % 2 === 0 ? ` L${x} ${yHigh}` : ` L${x} ${yLow}`;
+          }
+          path += ` Z`;
+          bodyFill += `<path d="${path}" fill="${colors[1]}"/>`;
+          break;
+        }
+        case "halves": {
+          // Hummel-style split body: left half / right half
+          bodyFill = `<rect x="30" y="22" width="30" height="98" fill="${colors[0]}"/>`;
+          bodyFill += `<rect x="60" y="22" width="30" height="98" fill="${colors[1]}"/>`;
           break;
         }
         case "chevron3": {
