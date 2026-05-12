@@ -244,7 +244,7 @@
       min-width: 0;
       position: relative;
     }
-    .match-side--home { justify-content: flex-end; text-align: right; flex-direction: row-reverse; }
+    .match-side--home { justify-content: flex-end; }
     .match-side--away { justify-content: flex-start; }
     .match-side .stripe {
       position: absolute; top: 0; bottom: 0; width: 6px;
@@ -341,7 +341,6 @@
       .match-side {
         padding: 14px 16px;
         justify-content: flex-start !important;
-        flex-direction: row !important;
         text-align: left !important;
       }
       .match-side .stripe { right: auto; left: 0; }
@@ -627,11 +626,11 @@
         <article class="match" data-iso="${iso}">
           <div class="match-side match-side--home">
             <div class="stripe" style="background:${h.primary}"></div>
+            ${hf ? `<img class="match-flag" src="${hf}" alt="" loading="lazy">` : ""}
             <div class="match-team-block">
               <div class="match-code">${home}</div>
               <div class="match-name">${h.name}</div>
             </div>
-            ${hf ? `<img class="match-flag" src="${hf}" alt="" loading="lazy">` : ""}
           </div>
           <div class="match-center">
             <div class="match-group">${label}</div>
@@ -641,11 +640,11 @@
           </div>
           <div class="match-side match-side--away">
             <div class="stripe" style="background:${a.primary}"></div>
-            ${af ? `<img class="match-flag" src="${af}" alt="" loading="lazy">` : ""}
             <div class="match-team-block">
               <div class="match-code">${away}</div>
               <div class="match-name">${a.name}</div>
             </div>
+            ${af ? `<img class="match-flag" src="${af}" alt="" loading="lazy">` : ""}
           </div>
           <div class="match-venue">
             <span class="v">${venue} · ${city}</span>
