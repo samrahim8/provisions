@@ -28,7 +28,7 @@
   <meta name="theme-color" content="#2C2118">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Homemade+Apple&display=swap" rel="stylesheet">
 
   <style>
     /* ── PALETTE (CSS variables — overwritten on team change) ── */
@@ -1242,6 +1242,56 @@
       letter-spacing: -0.01em;
     }
 
+    .signature-block {
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+      margin-top: 28px;
+      margin-bottom: 4px;
+    }
+    .signature-mark {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      color: var(--terracotta);
+      animation: kickIdle 4.2s ease-in-out infinite;
+      transform-origin: 50% 60%;
+    }
+    .signature-mark.is-kicking { animation: kickPow 0.6s ease-out 1; }
+    .signature-script {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .signature-script .by {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--on-leather);
+      opacity: 0.55;
+    }
+    .signature-script .name {
+      font-family: 'Homemade Apple', cursive;
+      font-size: 30px;
+      letter-spacing: 0.01em;
+      color: var(--on-leather);
+      line-height: 1;
+      transform: rotate(-3deg);
+      padding-bottom: 2px;
+    }
+    @keyframes kickIdle {
+      0%, 100% { transform: rotate(-6deg) translateY(0); }
+      50% { transform: rotate(2deg) translateY(-3px); }
+    }
+    @keyframes kickPow {
+      0% { transform: rotate(0deg) scale(1); }
+      35% { transform: rotate(-30deg) scale(1.15); }
+      70% { transform: rotate(15deg) scale(1.08); }
+      100% { transform: rotate(-3deg) scale(1); }
+    }
+
     .commission-actions {
       display: flex;
       align-items: center;
@@ -1834,6 +1884,16 @@
             <div class="colophon-eyebrow">Colophon</div>
             <h2>About this.</h2>
             <p>A love letter to the tournament. If you're a brand or club who wants a custom take, hit me up.</p>
+            <div class="signature-block" aria-label="Signed by Sam Rahim">
+              <svg class="signature-mark" id="signatureMark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="9" cy="6" r="2"/>
+                <path d="M9 8 v3 l-3 4 v6 M9 11 l3 4 v6 M5 14 h8 M11 13 l-2 -3"/>
+              </svg>
+              <div class="signature-script">
+                <span class="by">Signed</span>
+                <span class="name">Sam Rahim</span>
+              </div>
+            </div>
             <div class="commission-actions">
               <a class="colophon-cta" href="mailto:sam@provisions.work?subject=World%20Cup">
                 sam@provisions.work
@@ -2234,6 +2294,15 @@
       const ff = document.getElementById('featuredCardFrame');
       // Press overlay color hints: prefer the picked palette's terracotta accent
       showPressOverlay(team[2], palette.terracotta || (team[3] && team[3][0]));
+      // Mascot reacts to the pick
+      const mark = document.getElementById('signatureMark');
+      if (mark) {
+        mark.classList.remove('is-kicking');
+        // force reflow so the animation can replay
+        void mark.offsetWidth;
+        mark.classList.add('is-kicking');
+        setTimeout(() => mark.classList.remove('is-kicking'), 700);
+      }
       const start = Date.now();
       const MIN_DISPLAY = 1400;
       const finish = () => {
