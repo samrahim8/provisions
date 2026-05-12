@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Daily — Provisions Series, Summer '26</title>
+  <meta name="description" content="Every match of the World Cup, day by day. Kickoff times, venues, kit colors, countdowns. Reference plate, free for fans.">
+  <link rel="canonical" href="https://provisions.work/world-cup/the-daily">
+
+  <meta property="og:title" content="The Daily — Provisions Series">
+  <meta property="og:description" content="Every match of the World Cup, day by day.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://provisions.work/world-cup/the-daily">
+  <meta property="og:image" content="https://provisions.work/images/og-image.png">
+  <meta property="og:site_name" content="Provisions">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@samdape">
+  <meta name="twitter:title" content="The Daily — Provisions Series">
+  <meta name="twitter:description" content="Every match of the World Cup, day by day.">
+  <meta name="twitter:image" content="https://provisions.work/images/og-image.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#2C2118">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --parchment: #F5F1EB;
+      --parchment-el: #F8F5EF;
+      --bg: #F5F1EB;
+      --bg-elevated: #F8F5EF;
+      --leather: #2C2118;
+      --leather-mid: #4A3D32;
+      --terracotta: #A0422A;
+      --terracotta-light: #B8533A;
+      --on-accent: #FFFFFF;
+      --on-leather: #FFFFFF;
+      --sage: #4A5E3E;
+      --dust: #C4B49A;
+      --text: #2C2118;
+      --text-soft: #6B6259;
+      --border: #DDD7CC;
+      --display: 'Syne', sans-serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+      --bigs: 'Big Shoulders Display', sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    h1, h2, h3, h4 { font-family: var(--display); font-weight: 700; }
+    a { color: inherit; text-decoration: none; }
+    img, svg { max-width: 100%; display: block; }
+    ::selection { background: var(--terracotta); color: var(--bg); }
+
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      opacity: 0.35; mix-blend-mode: multiply;
+      background-image:
+        linear-gradient(to right, rgba(120,108,92,0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120,108,92,0.18) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+    .grain {
+      position: fixed; inset: 0; pointer-events: none; z-index: 200;
+      opacity: 0.05; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--parchment-el);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 64px; min-height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px;
+    }
+    .nav-mark img { width: 26px; height: 26px; object-fit: contain; }
+    .nav-back {
+      height: 44px;
+      background: var(--leather-mid);
+      color: var(--on-leather);
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 22px;
+      font-family: var(--display);
+      font-weight: 800; font-size: 13px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      border: 1.5px solid var(--leather-mid);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.12);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-back:hover { background: var(--terracotta); border-color: var(--terracotta); transform: translateY(-2px); }
+    @media (max-width: 700px) {
+      .nav-inner { padding: 0 24px; }
+      .nav-back { font-size: 11px; padding: 0 14px; height: 44px; }
+    }
+
+    .label {
+      font-family: var(--display); font-weight: 700; font-size: 0.7rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--terracotta);
+    }
+    .container {
+      max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+      position: relative; z-index: 1; width: 100%;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 56px 64px 32px;
+      max-width: 1280px; margin: 0 auto; position: relative;
+    }
+    .hero .label { font-size: 13px; margin-bottom: 18px; }
+    .hero h1 {
+      font-family: var(--display); font-weight: 800;
+      font-size: clamp(48px, 6.6vw, 104px);
+      line-height: 0.94; letter-spacing: -0.03em; margin-bottom: 22px;
+      color: var(--leather);
+    }
+    .hero .lede {
+      font-family: var(--sans); color: var(--leather-mid);
+      font-size: 18px; max-width: 620px; line-height: 1.5;
+    }
+    @media (max-width: 700px) {
+      .hero { padding: 32px 24px 24px; }
+      .hero h1 { font-size: clamp(40px, 12vw, 64px); margin-bottom: 14px; }
+      .hero .lede { font-size: 15px; }
+      .hero .label { font-size: 11px; margin-bottom: 12px; }
+    }
+
+    /* NEXT-UP STRIP */
+    .nextup {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 64px 12px;
+    }
+    .nextup-card {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+      padding: 18px 24px;
+      background: var(--leather);
+      color: var(--on-leather);
+      border: 1.5px solid var(--leather);
+      box-shadow: 0 4px 0 rgba(0,0,0,0.16);
+    }
+    .nextup-lhs { display: flex; align-items: center; gap: 18px; }
+    .nextup-tag {
+      font-family: var(--display); font-weight: 800;
+      font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--terracotta-light);
+      padding: 4px 10px;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+    .nextup-meta {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .nextup-count {
+      display: flex; align-items: baseline; gap: 6px;
+      font-family: var(--bigs); font-weight: 900;
+      font-size: 32px; line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .nextup-count span.unit {
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      opacity: 0.7; margin-right: 8px;
+    }
+    @media (max-width: 700px) {
+      .nextup { padding: 0 16px 8px; }
+      .nextup-card { padding: 14px 16px; gap: 12px; }
+      .nextup-count { font-size: 24px; }
+    }
+
+    /* DAY HEADING */
+    .day {
+      max-width: 1280px; margin: 32px auto 0;
+      padding: 0 64px;
+    }
+    .day-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--leather);
+      margin-bottom: 14px;
+    }
+    .day-num {
+      font-family: var(--bigs); font-weight: 900;
+      font-size: clamp(40px, 5vw, 64px);
+      letter-spacing: -0.03em; line-height: 1;
+      color: var(--leather);
+    }
+    .day-meta {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--leather-mid);
+    }
+    @media (max-width: 700px) {
+      .day { padding: 0 16px; margin-top: 24px; }
+      .day-num { font-size: clamp(32px, 12vw, 52px); }
+      .day-meta { font-size: 10px; }
+    }
+
+    /* MATCH CARD */
+    .matches {
+      display: grid; gap: 14px;
+    }
+    .match {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: stretch;
+      background: var(--parchment-el);
+      border: 1.5px solid var(--leather);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.14);
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .match:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+    }
+    .match-side {
+      padding: 22px 24px;
+      display: flex; align-items: center;
+      gap: 14px;
+      min-width: 0;
+      position: relative;
+    }
+    .match-side--home { justify-content: flex-end; text-align: right; flex-direction: row-reverse; }
+    .match-side--away { justify-content: flex-start; }
+    .match-side .stripe {
+      position: absolute; top: 0; bottom: 0; width: 6px;
+    }
+    .match-side--home .stripe { right: 0; }
+    .match-side--away .stripe { left: 0; }
+    .match-flag {
+      width: 36px; height: 26px;
+      border: 1px solid rgba(20,15,10,0.18);
+      object-fit: cover; background: #fff;
+      flex-shrink: 0;
+    }
+    .match-team-block { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .match-side--home .match-team-block { align-items: flex-end; }
+    .match-code {
+      font-family: var(--bigs); font-weight: 900;
+      font-size: 38px; letter-spacing: -0.01em; line-height: 0.95;
+      color: var(--leather);
+      text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 240px;
+    }
+    .match-name {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    .match-center {
+      padding: 18px 22px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px;
+      border-left: 1px dashed rgba(44,33,24,0.18);
+      border-right: 1px dashed rgba(44,33,24,0.18);
+      background: var(--parchment);
+      min-width: 180px;
+    }
+    .match-group {
+      font-family: var(--display); font-weight: 800;
+      font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--terracotta);
+      padding: 2px 8px;
+      border: 1px solid var(--terracotta);
+    }
+    .match-time {
+      font-family: var(--bigs); font-weight: 900;
+      font-size: 24px; letter-spacing: -0.01em; line-height: 1;
+      color: var(--leather);
+      margin-top: 4px;
+    }
+    .match-tz {
+      font-family: var(--mono); font-size: 9px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    .match-countdown {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--leather-mid);
+      margin-top: 4px;
+    }
+    .match-venue {
+      grid-column: 1 / -1;
+      padding: 8px 22px 12px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+      background: var(--parchment-el);
+      border-top: 1px dashed rgba(44,33,24,0.18);
+    }
+    .match-venue .v {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    .match-status {
+      font-family: var(--display); font-weight: 800;
+      font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--terracotta);
+      padding: 2px 8px;
+      border: 1px solid var(--terracotta);
+    }
+
+    @media (max-width: 700px) {
+      .match { grid-template-columns: 1fr; }
+      .match-side {
+        padding: 14px 16px;
+        justify-content: flex-start !important;
+        flex-direction: row !important;
+        text-align: left !important;
+      }
+      .match-side .stripe { right: auto; left: 0; }
+      .match-side--home { border-bottom: 1px dashed rgba(44,33,24,0.18); }
+      .match-side--home .match-team-block { align-items: flex-start; }
+      .match-center {
+        order: 99;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        border: none;
+        border-top: 1px dashed rgba(44,33,24,0.18);
+        padding: 12px 16px;
+        min-width: 0;
+      }
+      .match-code { font-size: 30px; max-width: 100%; }
+      .match-time { font-size: 20px; margin-top: 0; }
+      .match-venue { padding: 8px 16px 12px; }
+    }
+
+    /* COMING SOON */
+    .coming-soon {
+      max-width: 1280px; margin: 48px auto 0;
+      padding: 24px 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 14px; flex-wrap: wrap;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .coming-soon-h {
+      font-family: var(--display); font-weight: 800; font-size: 14px;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--leather);
+    }
+    .coming-soon-b {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-soft);
+    }
+    @media (max-width: 700px) {
+      .coming-soon { padding: 18px 16px; }
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--leather-mid); color: var(--on-leather);
+      padding: 22px 64px;
+      border-top: 1px solid rgba(245,241,235,0.18);
+      font-family: var(--sans); font-weight: 600;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      opacity: 0.95;
+      margin-top: 48px;
+    }
+    .footer-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+      opacity: 0.7;
+    }
+    .footer-inner a { color: var(--terracotta-light); }
+    .footer-inner a:hover { color: var(--on-leather); }
+    .attribution {
+      max-width: 1280px; margin: 0 auto;
+      padding: 16px 64px 24px;
+      font-family: var(--sans); font-weight: 400;
+      font-size: 12px; letter-spacing: 0.02em; text-transform: none;
+      color: var(--on-leather); opacity: 0.5; line-height: 1.6;
+    }
+    @media (max-width: 700px) {
+      footer { padding: 18px 16px; }
+      .attribution { padding: 14px 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="grain"></div>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="https://provisions.work/world-cup" class="nav-mark" aria-label="Provisions">
+        <img src="../images/provisions-mark.png" alt="Provisions" width="26" height="26">
+      </a>
+      <a href="https://provisions.work/world-cup" class="nav-back">← Back to the team sheet</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="label">No. 02 · The Daily</div>
+      <h1>The daily.</h1>
+      <p class="lede">Every match of the World Cup, day by day. Kickoff times, venues, kit colors, and a countdown to the next whistle. Free to use, free to share.</p>
+    </div>
+  </header>
+
+  <section class="nextup">
+    <div class="nextup-card" id="nextupCard">
+      <div class="nextup-lhs">
+        <span class="nextup-tag">First Whistle</span>
+        <span class="nextup-meta" id="nextupMatch">MEX vs RSA · Estadio Azteca</span>
+      </div>
+      <div class="nextup-count" id="nextupCount">
+        <span class="unit">Kicks off in</span>
+        <span id="kuDays">––</span><span class="unit" style="margin: 0 4px;">d</span>
+        <span id="kuHrs">––</span><span class="unit" style="margin: 0 4px;">h</span>
+        <span id="kuMin">––</span><span class="unit" style="margin: 0 4px;">m</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="schedule"></main>
+
+  <section class="coming-soon">
+    <span class="coming-soon-h">Matchday 2 + 3 · Group stage</span>
+    <span class="coming-soon-b">Loading after Matchday 1 wraps</span>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Provisions · Summer '26 · UTC-5 to UTC-7</span>
+      <span><a href="https://provisions.work">provisions.work</a></span>
+    </div>
+    <div class="attribution">
+      Kickoff times are scheduled in local stadium time. Times and venues are based on the December 2025 final draw and may shift. For official broadcast schedules, check your federation or local rights-holder.
+    </div>
+  </footer>
+
+  <script>
+    // ── Team kit colors (subset used by Matchday 1) ──
+    const TEAMS = {
+      MEX:{name:"Mexico",primary:"#006847",accent:"#CE1126"},
+      RSA:{name:"South Africa",primary:"#007749",accent:"#FFB81C"},
+      KOR:{name:"South Korea",primary:"#C60C30",accent:"#003478"},
+      CZE:{name:"Czechia",primary:"#11457E",accent:"#D7141A"},
+      CAN:{name:"Canada",primary:"#D52B1E",accent:"#1A1A1A"},
+      BIH:{name:"Bosnia & Herz.",primary:"#002F6C",accent:"#FECB00"},
+      QAT:{name:"Qatar",primary:"#8A1538",accent:"#FFFFFF"},
+      SUI:{name:"Switzerland",primary:"#DA291C",accent:"#FFFFFF"},
+      USA:{name:"United States",primary:"#BF0A30",accent:"#002868"},
+      PAR:{name:"Paraguay",primary:"#D52B1E",accent:"#0038A8"},
+      AUS:{name:"Australia",primary:"#FFCD00",accent:"#00843D"},
+      TUR:{name:"Türkiye",primary:"#E30A17",accent:"#FFFFFF"},
+      BRA:{name:"Brazil",primary:"#FFDF00",accent:"#009C3B"},
+      MAR:{name:"Morocco",primary:"#C1272D",accent:"#006233"},
+      HAI:{name:"Haiti",primary:"#00209F",accent:"#D21034"},
+      SCO:{name:"Scotland",primary:"#0065BD",accent:"#FFFFFF"},
+      GER:{name:"Germany",primary:"#000000",accent:"#FFCE00"},
+      CUW:{name:"Curaçao",primary:"#002F6C",accent:"#FFCD00"},
+      CIV:{name:"Côte d'Ivoire",primary:"#FF8200",accent:"#009A44"},
+      ECU:{name:"Ecuador",primary:"#FFD100",accent:"#003893"},
+      NED:{name:"Netherlands",primary:"#FF6C00",accent:"#21468B"},
+      JPN:{name:"Japan",primary:"#0A1F4D",accent:"#BC002D"},
+      SWE:{name:"Sweden",primary:"#FECC00",accent:"#006AA7"},
+      TUN:{name:"Tunisia",primary:"#E70013",accent:"#FFFFFF"},
+      BEL:{name:"Belgium",primary:"#C8102E",accent:"#000000"},
+      EGY:{name:"Egypt",primary:"#CE1126",accent:"#000000"},
+      IRN:{name:"Iran",primary:"#239F40",accent:"#DA0000"},
+      NZL:{name:"New Zealand",primary:"#000000",accent:"#FFFFFF"},
+      ESP:{name:"Spain",primary:"#AA151B",accent:"#F1BF00"},
+      CPV:{name:"Cape Verde",primary:"#003893",accent:"#CF2027"},
+      KSA:{name:"Saudi Arabia",primary:"#006C35",accent:"#FFFFFF"},
+      URU:{name:"Uruguay",primary:"#5CBCE9",accent:"#1A1A1A"},
+      FRA:{name:"France",primary:"#0055A4",accent:"#EF4135"},
+      SEN:{name:"Senegal",primary:"#00853F",accent:"#E31B23"},
+      IRQ:{name:"Iraq",primary:"#007A3D",accent:"#CE1126"},
+      NOR:{name:"Norway",primary:"#BA0C2F",accent:"#00205B"},
+      ARG:{name:"Argentina",primary:"#74ACDF",accent:"#F6B40E"},
+      ALG:{name:"Algeria",primary:"#006233",accent:"#FFFFFF"},
+      AUT:{name:"Austria",primary:"#ED2939",accent:"#FFFFFF"},
+      JOR:{name:"Jordan",primary:"#CE1126",accent:"#000000"},
+      POR:{name:"Portugal",primary:"#7A0019",accent:"#046A38"},
+      COD:{name:"DR Congo",primary:"#007FFF",accent:"#F7D618"},
+      UZB:{name:"Uzbekistan",primary:"#0099B5",accent:"#CE1126"},
+      COL:{name:"Colombia",primary:"#FCD116",accent:"#CE1126"},
+      ENG:{name:"England",primary:"#CE1124",accent:"#00247D"},
+      CRO:{name:"Croatia",primary:"#FF0000",accent:"#171796"},
+      GHA:{name:"Ghana",primary:"#CE1126",accent:"#006B3F"},
+      PAN:{name:"Panama",primary:"#005AA7",accent:"#D21034"}
+    };
+
+    const FIFA_TO_ISO = {
+      MEX:"mx",RSA:"za",KOR:"kr",CZE:"cz",CAN:"ca",BIH:"ba",QAT:"qa",SUI:"ch",
+      USA:"us",PAR:"py",AUS:"au",TUR:"tr",BRA:"br",MAR:"ma",HAI:"ht",SCO:"gb-sct",
+      GER:"de",CUW:"cw",CIV:"ci",ECU:"ec",NED:"nl",JPN:"jp",SWE:"se",TUN:"tn",
+      BEL:"be",EGY:"eg",IRN:"ir",NZL:"nz",ESP:"es",CPV:"cv",KSA:"sa",URU:"uy",
+      FRA:"fr",SEN:"sn",IRQ:"iq",NOR:"no",ARG:"ar",ALG:"dz",AUT:"at",JOR:"jo",
+      POR:"pt",COD:"cd",UZB:"uz",COL:"co",ENG:"gb-eng",CRO:"hr",GHA:"gh",PAN:"pa"
+    };
+
+    function flagUrl(code, w = 80) {
+      const iso = FIFA_TO_ISO[code];
+      if (!iso) return null;
+      return `https://flagcdn.com/w${w}/${iso}.png`;
+    }
+
+    // ── Matchday 1 fixtures (final draw, Dec 2025) ──
+    // [homeCode, awayCode, venue, city, ISO kickoff (UTC), group]
+    const MATCHDAY_1 = [
+      ["MEX","RSA","Estadio Azteca","Mexico City","2026-06-12T01:00:00Z","A"],
+      ["KOR","CZE","Estadio Akron","Guadalajara","2026-06-11T22:00:00Z","B"],
+      ["CAN","BIH","BMO Field","Toronto","2026-06-12T18:00:00Z","C"],
+      ["QAT","SUI","Levi's Stadium","Santa Clara","2026-06-12T21:00:00Z","D"],
+      ["USA","PAR","SoFi Stadium","Inglewood","2026-06-12T23:00:00Z","E"],
+      ["AUS","TUR","BC Place","Vancouver","2026-06-13T02:00:00Z","F"],
+      ["BRA","MAR","Gillette Stadium","Foxborough","2026-06-13T19:00:00Z","G"],
+      ["HAI","SCO","MetLife Stadium","East Rutherford","2026-06-13T22:00:00Z","H"],
+      ["GER","CUW","Lincoln Financial Field","Philadelphia","2026-06-14T19:00:00Z","I"],
+      ["CIV","ECU","NRG Stadium","Houston","2026-06-14T21:00:00Z","J"],
+      ["NED","JPN","AT&T Stadium","Arlington","2026-06-14T23:00:00Z","K"],
+      ["SWE","TUN","Estadio BBVA","Monterrey","2026-06-15T02:00:00Z","L"],
+      ["BEL","EGY","SoFi Stadium","Inglewood","2026-06-15T19:00:00Z","A"],
+      ["IRN","NZL","Lumen Field","Seattle","2026-06-15T21:00:00Z","B"],
+      ["ESP","CPV","Hard Rock Stadium","Miami Gardens","2026-06-15T23:00:00Z","C"],
+      ["KSA","URU","Mercedes-Benz Stadium","Atlanta","2026-06-16T01:00:00Z","D"],
+      ["FRA","SEN","MetLife Stadium","East Rutherford","2026-06-16T19:00:00Z","E"],
+      ["IRQ","NOR","Gillette Stadium","Foxborough","2026-06-16T21:00:00Z","F"],
+      ["ARG","ALG","Arrowhead Stadium","Kansas City","2026-06-16T23:00:00Z","G"],
+      ["AUT","JOR","Levi's Stadium","Santa Clara","2026-06-17T01:00:00Z","H"],
+      ["POR","COD","NRG Stadium","Houston","2026-06-17T19:00:00Z","I"],
+      ["UZB","COL","Estadio Azteca","Mexico City","2026-06-17T21:00:00Z","J"],
+      ["ENG","CRO","BMO Field","Toronto","2026-06-17T23:00:00Z","K"],
+      ["GHA","PAN","AT&T Stadium","Arlington","2026-06-18T01:00:00Z","L"]
+    ];
+
+    // ── Group by date in local Eastern time (most matches are stateside) ──
+    function dayKey(iso) {
+      const d = new Date(iso);
+      // Convert to ET-ish for grouping (UTC-5)
+      const local = new Date(d.getTime() - 5 * 60 * 60 * 1000);
+      return local.toISOString().slice(0, 10);
+    }
+
+    const groupedByDay = MATCHDAY_1.reduce((acc, m) => {
+      const k = dayKey(m[4]);
+      (acc[k] = acc[k] || []).push(m);
+      return acc;
+    }, {});
+
+    function formatDate(key) {
+      const d = new Date(key + "T12:00:00Z");
+      return d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" });
+    }
+
+    function formatKickoff(iso) {
+      const d = new Date(iso);
+      return d.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        timeZone: "America/New_York",
+        hour12: true
+      });
+    }
+
+    function timeUntil(iso) {
+      const diff = new Date(iso) - new Date();
+      if (diff <= 0) return null;
+      const days = Math.floor(diff / 86400000);
+      const hrs = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      return { days, hrs, mins };
+    }
+
+    function countdownText(iso) {
+      const t = timeUntil(iso);
+      if (!t) return "Kicked off";
+      if (t.days > 0) return `Kicks off in ${t.days}d ${t.hrs}h`;
+      if (t.hrs > 0) return `Kicks off in ${t.hrs}h ${t.mins}m`;
+      return `Kicks off in ${t.mins}m`;
+    }
+
+    function matchCard(m, matchNum) {
+      const [home, away, venue, city, iso, group] = m;
+      const h = TEAMS[home] || { name: home, primary: "#1A1A1A", accent: "#FFFFFF" };
+      const a = TEAMS[away] || { name: away, primary: "#1A1A1A", accent: "#FFFFFF" };
+      const hf = flagUrl(home);
+      const af = flagUrl(away);
+      const time = formatKickoff(iso);
+
+      return `
+        <article class="match" data-iso="${iso}">
+          <div class="match-side match-side--home">
+            <div class="stripe" style="background:${h.primary}"></div>
+            <div class="match-team-block">
+              <div class="match-code">${home}</div>
+              <div class="match-name">${h.name}</div>
+            </div>
+            ${hf ? `<img class="match-flag" src="${hf}" alt="" loading="lazy">` : ""}
+          </div>
+          <div class="match-center">
+            <div class="match-group">Group ${group}</div>
+            <div class="match-time">${time}</div>
+            <div class="match-tz">ET</div>
+            <div class="match-countdown" data-countdown="${iso}">${countdownText(iso)}</div>
+          </div>
+          <div class="match-side match-side--away">
+            <div class="stripe" style="background:${a.primary}"></div>
+            ${af ? `<img class="match-flag" src="${af}" alt="" loading="lazy">` : ""}
+            <div class="match-team-block">
+              <div class="match-code">${away}</div>
+              <div class="match-name">${a.name}</div>
+            </div>
+          </div>
+          <div class="match-venue">
+            <span class="v">${venue} · ${city}</span>
+            <span class="match-status">Upcoming</span>
+          </div>
+        </article>
+      `;
+    }
+
+    function render() {
+      const sched = document.getElementById("schedule");
+      let html = "";
+      let dayCount = 0;
+      const sortedKeys = Object.keys(groupedByDay).sort();
+      for (const key of sortedKeys) {
+        dayCount++;
+        const matches = groupedByDay[key].sort((a, b) => new Date(a[4]) - new Date(b[4]));
+        html += `
+          <section class="day">
+            <div class="day-head">
+              <div class="day-num">Day ${String(dayCount).padStart(2, "0")}</div>
+              <div class="day-meta">${formatDate(key)} · ${matches.length} match${matches.length === 1 ? "" : "es"}</div>
+            </div>
+            <div class="matches">
+              ${matches.map((m, i) => matchCard(m, i + 1)).join("")}
+            </div>
+          </section>
+        `;
+      }
+      sched.innerHTML = html;
+    }
+
+    function updateAllCountdowns() {
+      document.querySelectorAll("[data-countdown]").forEach((el) => {
+        const iso = el.getAttribute("data-countdown");
+        el.textContent = countdownText(iso);
+      });
+      // First-whistle big countdown
+      const first = MATCHDAY_1[0][4];
+      const t = timeUntil(first);
+      if (t) {
+        document.getElementById("kuDays").textContent = String(t.days);
+        document.getElementById("kuHrs").textContent = String(t.hrs).padStart(2, "0");
+        document.getElementById("kuMin").textContent = String(t.mins).padStart(2, "0");
+      } else {
+        document.getElementById("kuDays").textContent = "00";
+        document.getElementById("kuHrs").textContent = "00";
+        document.getElementById("kuMin").textContent = "00";
+      }
+    }
+
+    render();
+    updateAllCountdowns();
+    setInterval(updateAllCountdowns, 60 * 1000);
+  </script>
+</body>
+</html>
