@@ -454,12 +454,53 @@
       transition: border-color 0.2s, color 0.2s, background-color 0.2s;
     }
     .tf-select:hover { background-color: var(--parchment-el); }
+    .tf-tz {
+      display: flex; align-items: center; gap: 0;
+      border: 1.5px solid var(--leather);
+      overflow: hidden;
+    }
+    .tf-tz button {
+      appearance: none;
+      background: var(--bg);
+      color: var(--leather);
+      font-family: var(--display);
+      font-weight: 800; font-size: 11px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 9px 12px;
+      cursor: pointer;
+      border: none;
+      border-right: 1px solid var(--leather);
+      transition: background 0.15s, color 0.15s;
+    }
+    .tf-tz button:last-child { border-right: none; }
+    .tf-tz button:hover { background: var(--parchment-el); }
+    .tf-tz button.is-active {
+      background: var(--leather);
+      color: var(--on-leather);
+    }
     .tf-count {
       font-family: var(--mono); font-size: 11px;
       letter-spacing: 0.16em; text-transform: uppercase;
       color: var(--text-soft);
       margin-left: auto;
     }
+    .match-watch {
+      grid-column: 1 / -1;
+      padding: 8px 22px 12px;
+      display: flex; align-items: center; gap: 12px;
+      flex-wrap: wrap;
+      background: var(--parchment-el);
+      border-top: 1px dashed rgba(44,33,24,0.18);
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    .match-watch .lbl {
+      font-family: var(--display); font-weight: 800;
+      color: var(--terracotta);
+      letter-spacing: 0.22em;
+    }
+    .match-watch .dot { opacity: 0.4; }
     @media (max-width: 700px) {
       .team-filter-inner { padding: 12px 16px; gap: 10px; }
       .tf-prompt { font-size: 10px; }
@@ -545,6 +586,12 @@
       <select class="tf-select" id="teamFilter">
         <option value="ALL">All 48 teams</option>
       </select>
+      <div class="tf-tz" id="tzTabs" role="tablist" aria-label="Timezone">
+        <button type="button" data-tz="ET" class="is-active">ET</button>
+        <button type="button" data-tz="CT">CT</button>
+        <button type="button" data-tz="MT">MT</button>
+        <button type="button" data-tz="PT">PT</button>
+      </div>
       <span class="tf-count" id="tfCount">104 matches</span>
     </div>
   </div>
@@ -776,25 +823,47 @@
       return { name: "To be decided", primary: "#8B7F70", accent: "#4A3D32" };
     }
 
+    // ── Timezone state ──
+    const TZ_MAP = {
+      ET: "America/New_York",
+      CT: "America/Chicago",
+      MT: "America/Denver",
+      PT: "America/Los_Angeles"
+    };
+    function detectTz() {
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (tz === "America/New_York" || tz === "America/Toronto" || tz === "America/Detroit") return "ET";
+        if (tz === "America/Chicago" || tz === "America/Mexico_City") return "CT";
+        if (tz === "America/Denver" || tz === "America/Phoenix" || tz === "America/Edmonton") return "MT";
+        if (tz === "America/Los_Angeles" || tz === "America/Vancouver" || tz === "America/Tijuana") return "PT";
+      } catch (e) {}
+      return "ET";
+    }
+    let activeTz = (function() {
+      try { return localStorage.getItem("daily-tz") || detectTz(); }
+      catch (e) { return detectTz(); }
+    })();
+
     function formatKickoff(iso) {
       return new Date(iso).toLocaleTimeString("en-US", {
         hour: "numeric", minute: "2-digit",
-        timeZone: "America/New_York", hour12: true
+        timeZone: TZ_MAP[activeTz] || "America/New_York",
+        hour12: true
       });
     }
 
     function formatDate(iso) {
-      // Local ET grouping
       const d = new Date(iso);
       return d.toLocaleDateString("en-US", {
         weekday: "long", month: "long", day: "numeric",
-        timeZone: "America/New_York"
+        timeZone: TZ_MAP[activeTz] || "America/New_York"
       });
     }
 
     function dayKey(iso) {
       const d = new Date(iso);
-      const local = new Date(d.toLocaleString("en-US", { timeZone: "America/New_York" }));
+      const local = new Date(d.toLocaleString("en-US", { timeZone: TZ_MAP[activeTz] || "America/New_York" }));
       return local.toISOString().slice(0, 10);
     }
 
@@ -837,8 +906,8 @@
           </div>
           <div class="match-center">
             <div class="match-group">${label}</div>
-            <div class="match-time">${time}</div>
-            <div class="match-tz">ET</div>
+            <div class="match-time" data-time="${iso}">${time}</div>
+            <div class="match-tz" data-tz-label>${activeTz}</div>
             <div class="match-countdown" data-countdown="${iso}">${countdownText(iso)}</div>
           </div>
           <div class="match-side match-side--away">
@@ -852,6 +921,14 @@
           <div class="match-venue">
             <span class="v">${venue} · ${city}</span>
             <span class="match-status">Upcoming</span>
+          </div>
+          <div class="match-watch">
+            <span class="lbl">Watch</span>
+            <span>FOX / FS1</span>
+            <span class="dot">·</span>
+            <span>Telemundo</span>
+            <span class="dot">·</span>
+            <span>Peacock</span>
           </div>
         </article>
       `;
@@ -974,6 +1051,15 @@
       const b = Math.max(0, Math.min(255, parseInt(hex.slice(5,7),16) + delta));
       return "#" + [r,g,b].map(v => v.toString(16).padStart(2,"0")).join("");
     }
+    function _mix(c1, c2, t) {
+      const a = parseInt(c1.slice(1,3),16), b = parseInt(c1.slice(3,5),16), cc = parseInt(c1.slice(5,7),16);
+      const d = parseInt(c2.slice(1,3),16), e = parseInt(c2.slice(3,5),16), f = parseInt(c2.slice(5,7),16);
+      const m = (x, y) => Math.round(x * (1 - t) + y * t);
+      return "#" + [m(a,d), m(b,e), m(cc,f)].map(v => v.toString(16).padStart(2,"0")).join("");
+    }
+    function _onColor(hex) {
+      return _lum(hex) > 0.55 ? "#1A1A1A" : "#FFFFFF";
+    }
 
     const DEFAULT_PALETTE = {
       parchment: "#F5F1EB",
@@ -982,7 +1068,10 @@
       leatherMid: "#4A3D32",
       terracotta: "#A0422A",
       terracottaLight: "#B8533A",
-      border: "#DDD7CC"
+      textSoft: "#6B6259",
+      border: "#DDD7CC",
+      onAccent: "#FFFFFF",
+      onLeather: "#FFFFFF"
     };
 
     function applyPalette(p) {
@@ -995,44 +1084,92 @@
       r.setProperty("--leather-mid", p.leatherMid);
       r.setProperty("--terracotta", p.terracotta);
       r.setProperty("--terracotta-light", p.terracottaLight);
+      r.setProperty("--text", p.leather);
+      r.setProperty("--text-soft", p.textSoft);
       r.setProperty("--border", p.border);
+      r.setProperty("--on-accent", p.onAccent || _onColor(p.terracotta));
+      r.setProperty("--on-leather", p.onLeather || _onColor(p.leatherMid));
+    }
+
+    function paletteFromKit(primary, accent) {
+      const pLum = _lum(primary);
+      const isWhite = pLum > 0.93;
+      const isLight = pLum > 0.55;
+      const popAccent = (_lum(accent) > 0.18 && _lum(accent) < 0.85) ? accent : _shade(primary, -40);
+      const darkAccent = _lum(accent) < 0.35 ? accent : _shade(popAccent, -45);
+
+      if (isWhite) {
+        return {
+          parchment: "#FAF8F2",
+          parchmentEl: "#EFEAE0",
+          leather: darkAccent,
+          leatherMid: "#1A1A1A",
+          terracotta: popAccent,
+          terracottaLight: _shade(popAccent, 22),
+          textSoft: "#7A6E5E",
+          border: "#DAD3C5"
+        };
+      }
+      if (isLight) {
+        return {
+          parchment: primary,
+          parchmentEl: _mix(primary, "#000000", 0.06),
+          leather: darkAccent,
+          leatherMid: "#1A1A1A",
+          terracotta: popAccent,
+          terracottaLight: _shade(popAccent, 22),
+          textSoft: "rgba(26,26,26,0.6)",
+          border: _mix(primary, "#000000", 0.18)
+        };
+      }
+      return {
+        parchment: primary,
+        parchmentEl: _mix(primary, "#FFFFFF", 0.06),
+        leather: _mix(primary, "#000000", 0.32),
+        leatherMid: "#F0E9DC",
+        terracotta: popAccent,
+        terracottaLight: _shade(popAccent, 22),
+        textSoft: "rgba(240,233,220,0.55)",
+        border: "rgba(240,233,220,0.18)"
+      };
     }
 
     function applyTeamPalette(code) {
       const t = TEAMS[code];
       if (!t) return;
-      const primary = t.primary;
-      const accent = t.accent;
-      const primaryLum = _lum(primary);
-      const accentLum = _lum(accent);
-      // Pick the darker of the two as leather, lighter as accent
-      const dark = primaryLum < accentLum ? primary : accent;
-      const pop = primaryLum < accentLum ? accent : primary;
-      const popLum = _lum(pop);
-
-      // If the team is white-on-X (e.g. ENG = red), use a soft parchment;
-      // otherwise tint parchment slightly toward the pop color.
-      const parchment = popLum > 0.85 ? "#FAF6EC" : "#F5F1EB";
-      const parchmentEl = popLum > 0.85 ? "#FFFBF1" : "#F8F5EF";
-
-      applyPalette({
-        parchment,
-        parchmentEl,
-        leather: dark,
-        leatherMid: _shade(dark, 30),
-        terracotta: pop,
-        terracottaLight: _shade(pop, 22),
-        border: _shade(parchment, -25)
-      });
+      applyPalette(paletteFromKit(t.primary, t.accent));
     }
 
     function resetPalette() {
       applyPalette(DEFAULT_PALETTE);
     }
 
+    function setTimezone(tz) {
+      if (!TZ_MAP[tz]) return;
+      activeTz = tz;
+      try { localStorage.setItem("daily-tz", tz); } catch (e) {}
+      // Update active state on tabs
+      document.querySelectorAll("#tzTabs button").forEach(b => {
+        b.classList.toggle("is-active", b.getAttribute("data-tz") === tz);
+      });
+      // Re-render whole schedule (re-groups by day in new TZ)
+      render();
+      // Re-apply filter if one was active
+      const sel = document.getElementById("teamFilter");
+      if (sel && sel.value !== "ALL") applyFilter(sel.value);
+    }
+
+    function bindTzTabs() {
+      document.querySelectorAll("#tzTabs button").forEach(b => {
+        b.addEventListener("click", () => setTimezone(b.getAttribute("data-tz")));
+        b.classList.toggle("is-active", b.getAttribute("data-tz") === activeTz);
+      });
+    }
+
     // ── Init ──
     render();
     buildFilter();
+    bindTzTabs();
     updateAllCountdowns();
     setInterval(updateAllCountdowns, 60 * 1000);
   </script>
