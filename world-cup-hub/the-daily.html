@@ -155,10 +155,10 @@
       display: flex; align-items: center; justify-content: space-between;
       flex-wrap: wrap; gap: 20px;
       padding: 18px 24px;
-      background: var(--leather);
-      color: var(--on-leather);
-      border: 1.5px solid var(--leather);
-      box-shadow: 0 4px 0 rgba(0,0,0,0.16);
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--text);
+      box-shadow: none;
     }
     .nextup-lhs { display: flex; align-items: center; gap: 18px; }
     .nextup-tag {
@@ -422,9 +422,9 @@
       position: sticky;
       top: 72px;
       z-index: 40;
-      background: var(--parchment-el);
+      background: transparent;
       border-bottom: 1px solid var(--border);
-      transition: background 0.35s ease, border-color 0.35s ease;
+      transition: border-color 0.35s ease;
     }
     .team-filter-inner {
       max-width: 1280px; margin: 0 auto;
@@ -900,6 +900,13 @@
       return `Kicks off in ${t.mins}m`;
     }
 
+    function teamStripeColor(t) {
+      if (!t.accents || !t.accents.length) return t.primary;
+      return t.accents.find(a => _lum(a) > 0.18 && _lum(a) < 0.85)
+          || t.accents.find(a => a !== "#FFFFFF")
+          || t.accents[0];
+    }
+
     function matchCard(m) {
       const [home, away, venue, city, iso, round, group] = m;
       const h = teamInfo(home);
@@ -908,11 +915,13 @@
       const af = flagUrl(away);
       const time = formatKickoff(iso);
       const label = group ? `Group ${group}` : round.replace("Matchday ", "MD ");
+      const hStripe = teamStripeColor(h);
+      const aStripe = teamStripeColor(a);
 
       return `
         <article class="match" data-iso="${iso}" data-home="${home}" data-away="${away}">
           <div class="match-side match-side--home">
-            <div class="stripe" style="background:${h.primary}"></div>
+            <div class="stripe" style="background:${hStripe}"></div>
             ${hf ? `<img class="match-flag" src="${hf}" alt="" loading="lazy">` : ""}
             <div class="match-team-block">
               <div class="match-code">${home}</div>
@@ -926,7 +935,7 @@
             <div class="match-countdown" data-countdown="${iso}">${countdownText(iso)}</div>
           </div>
           <div class="match-side match-side--away">
-            <div class="stripe" style="background:${a.primary}"></div>
+            <div class="stripe" style="background:${aStripe}"></div>
             <div class="match-team-block">
               <div class="match-code">${away}</div>
               <div class="match-name">${a.name}</div>
