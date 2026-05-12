@@ -1000,14 +1000,33 @@
       sched.innerHTML = html;
     }
 
+    // ── Nextup bar: dynamic based on filter ──
+    let nextupMatch = SCHEDULE[0];
+
+    function getNextupMatchForTeam(code) {
+      if (!code || code === "ALL") return SCHEDULE[0];
+      const now = Date.now();
+      const teamMatches = SCHEDULE.filter(m => m[0] === code || m[1] === code);
+      if (!teamMatches.length) return SCHEDULE[0];
+      return teamMatches.find(m => new Date(m[4]).getTime() > now) || teamMatches[teamMatches.length - 1];
+    }
+
+    function renderNextup(match, isFiltered) {
+      nextupMatch = match;
+      const [home, away, venue] = match;
+      const matchEl = document.getElementById("nextupMatch");
+      if (matchEl) matchEl.textContent = `${home} vs ${away} · ${venue}`;
+      const tagEl = document.querySelector(".nextup-tag");
+      if (tagEl) tagEl.textContent = isFiltered ? "Up Next" : "First Whistle";
+    }
+
     function updateAllCountdowns() {
       document.querySelectorAll("[data-countdown]").forEach((el) => {
         const iso = el.getAttribute("data-countdown");
         el.textContent = countdownText(iso);
       });
-      // First-whistle big countdown
-      const first = SCHEDULE[0][4];
-      const t = timeUntil(first);
+      // Nextup big countdown — anchored to whichever match is currently surfaced
+      const t = timeUntil(nextupMatch[4]);
       if (t) {
         document.getElementById("kuDays").textContent = String(t.days);
         document.getElementById("kuHrs").textContent = String(t.hrs).padStart(2, "0");
@@ -1054,6 +1073,9 @@
       // Update count
       document.getElementById("tfCount").textContent =
         showAll ? "104 matches" : `${visibleCount} match${visibleCount === 1 ? "" : "es"}`;
+      // Update the nextup bar to follow the selected team
+      renderNextup(getNextupMatchForTeam(code), !showAll);
+      updateAllCountdowns();
       // Repaint the page
       if (showAll) {
         resetPalette();
