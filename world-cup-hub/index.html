@@ -1249,18 +1249,6 @@
       margin-top: 28px;
       margin-bottom: 4px;
     }
-    .kick-mark {
-      flex-shrink: 0;
-      color: var(--terracotta);
-      animation: kickIdle 4.2s ease-in-out infinite;
-      transform-origin: 50% 60%;
-      display: inline-block;
-      vertical-align: middle;
-    }
-    .kick-mark.is-kicking { animation: kickPow 0.6s ease-out 1; }
-    .kick-mark--bar { width: 22px; height: 22px; }
-    .kick-mark--hero { width: 32px; height: 32px; }
-    .kick-mark--sig { width: 56px; height: 56px; }
     .signature-script {
       display: flex;
       flex-direction: column;
@@ -1284,17 +1272,6 @@
       transform: rotate(-3deg);
       padding-bottom: 2px;
     }
-    @keyframes kickIdle {
-      0%, 100% { transform: rotate(-6deg) translateY(0); }
-      50% { transform: rotate(2deg) translateY(-3px); }
-    }
-    @keyframes kickPow {
-      0% { transform: rotate(0deg) scale(1); }
-      35% { transform: rotate(-30deg) scale(1.15); }
-      70% { transform: rotate(15deg) scale(1.08); }
-      100% { transform: rotate(-3deg) scale(1); }
-    }
-
     .commission-actions {
       display: flex;
       align-items: center;
@@ -1763,10 +1740,6 @@
 
   <header class="team-bar" id="teamBar">
     <div class="team-bar-row">
-      <svg class="kick-mark kick-mark--bar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="9" cy="6" r="2"/>
-        <path d="M9 8 v3 l-3 4 v6 M9 11 l3 4 v6 M5 14 h8 M11 13 l-2 -3"/>
-      </svg>
       <span class="team-bar-prompt">Pick your country and we’ll repaint the whole page in your kit</span>
       <span class="team-bar-arrow" aria-hidden="true">→</span>
       <button type="button" class="team-toggle" id="teamToggle" aria-expanded="false">
@@ -1796,13 +1769,7 @@
       <!-- HERO LOCKUP -->
       <section class="hero-lockup">
         <div class="hero-text">
-          <div class="hero-eyebrow" style="display:inline-flex;align-items:center;gap:10px;">
-            <svg class="kick-mark kick-mark--hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="9" cy="6" r="2"/>
-              <path d="M9 8 v3 l-3 4 v6 M9 11 l3 4 v6 M5 14 h8 M11 13 l-2 -3"/>
-            </svg>
-            <span>World Cup ’26 · A brand toolkit</span>
-          </div>
+          <div class="hero-eyebrow">World Cup ’26 · A brand toolkit</div>
           <h1 class="hero-h1">A lineup<br>of goods<br>for <span class="hero-accent">’26.</span></h1>
           <p class="hero-body">I've been waiting my whole life for the World Cup to come back to the US. It's already getting eaten by big brands and boring ads. So I made some goods. Free for fans.</p>
           <div class="hero-cta-row">
@@ -1898,10 +1865,6 @@
             <h2>About this.</h2>
             <p>A love letter to the tournament. If you're a brand or club who wants a custom take, hit me up.</p>
             <div class="signature-block" aria-label="Signed by Sam Rahim">
-              <svg class="kick-mark kick-mark--sig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="9" cy="6" r="2"/>
-                <path d="M9 8 v3 l-3 4 v6 M9 11 l3 4 v6 M5 14 h8 M11 13 l-2 -3"/>
-              </svg>
               <div class="signature-script">
                 <span class="by">Signed</span>
                 <span class="name">Sam Rahim</span>
@@ -2307,13 +2270,6 @@
       const ff = document.getElementById('featuredCardFrame');
       // Press overlay color hints: prefer the picked palette's terracotta accent
       showPressOverlay(team[2], palette.terracotta || (team[3] && team[3][0]));
-      // Mascots react to the pick
-      document.querySelectorAll('.kick-mark').forEach((mark) => {
-        mark.classList.remove('is-kicking');
-        void mark.offsetWidth;
-        mark.classList.add('is-kicking');
-        setTimeout(() => mark.classList.remove('is-kicking'), 700);
-      });
       const start = Date.now();
       const MIN_DISPLAY = 1400;
       const finish = () => {
