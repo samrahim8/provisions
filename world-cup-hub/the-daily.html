@@ -45,6 +45,7 @@
       --text: #2C2118;
       --text-soft: #6B6259;
       --border: #DDD7CC;
+      --rule: rgba(44,33,24,0.18);
       --display: 'Syne', sans-serif;
       --sans: 'Inter', -apple-system, sans-serif;
       --bigs: 'Big Shoulders Display', sans-serif;
@@ -165,7 +166,7 @@
       font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
       color: var(--terracotta-light);
       padding: 4px 10px;
-      border: 1px solid rgba(255,255,255,0.18);
+      border: 1px solid var(--rule);
     }
     .nextup-meta {
       font-family: var(--mono); font-size: 11px;
@@ -286,8 +287,8 @@
       padding: 18px 22px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 4px;
-      border-left: 1px dashed rgba(44,33,24,0.18);
-      border-right: 1px dashed rgba(44,33,24,0.18);
+      border-left: 1px dashed var(--rule);
+      border-right: 1px dashed var(--rule);
       background: var(--parchment);
       min-width: 180px;
     }
@@ -321,7 +322,7 @@
       display: flex; align-items: center; justify-content: space-between;
       gap: 12px; flex-wrap: wrap;
       background: var(--parchment-el);
-      border-top: 1px dashed rgba(44,33,24,0.18);
+      border-top: 1px dashed var(--rule);
     }
     .match-venue .v {
       font-family: var(--mono); font-size: 10px;
@@ -344,7 +345,7 @@
         text-align: left !important;
       }
       .match-side .stripe { right: auto; left: 0; }
-      .match-side--home { border-bottom: 1px dashed rgba(44,33,24,0.18); }
+      .match-side--home { border-bottom: 1px dashed var(--rule); }
       .match-team-block { width: auto; flex: 1; }
       .match-side--home .match-code,
       .match-side--away .match-code,
@@ -356,7 +357,7 @@
         flex-wrap: wrap;
         justify-content: space-between;
         border: none;
-        border-top: 1px dashed rgba(44,33,24,0.18);
+        border-top: 1px dashed var(--rule);
         padding: 12px 16px;
         min-width: 0;
       }
@@ -428,9 +429,13 @@
     .team-filter-inner {
       max-width: 1280px; margin: 0 auto;
       padding: 14px 64px;
-      display: flex; align-items: center; gap: 18px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px 24px;
     }
+    .tf-row-1 { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; min-width: 0; }
+    .tf-row-2 { display: flex; align-items: center; gap: 18px; justify-self: end; }
     .tf-prompt {
       font-family: var(--display);
       font-weight: 700; font-size: 12px;
@@ -482,7 +487,6 @@
       font-family: var(--mono); font-size: 11px;
       letter-spacing: 0.16em; text-transform: uppercase;
       color: var(--text-soft);
-      margin-left: auto;
     }
     .match-watch {
       grid-column: 1 / -1;
@@ -490,7 +494,7 @@
       display: flex; align-items: center; gap: 12px;
       flex-wrap: wrap;
       background: var(--parchment-el);
-      border-top: 1px dashed rgba(44,33,24,0.18);
+      border-top: 1px dashed var(--rule);
       font-family: var(--mono); font-size: 10px;
       letter-spacing: 0.16em; text-transform: uppercase;
       color: var(--text-soft);
@@ -501,11 +505,15 @@
       letter-spacing: 0.22em;
     }
     .match-watch .dot { opacity: 0.4; }
+    @media (max-width: 900px) {
+      .team-filter-inner { grid-template-columns: 1fr; gap: 12px; }
+      .tf-row-2 { justify-self: start; }
+    }
     @media (max-width: 700px) {
-      .team-filter-inner { padding: 12px 16px; gap: 10px; }
+      .team-filter-inner { padding: 12px 16px; gap: 12px; }
       .tf-prompt { font-size: 10px; }
       .tf-select { font-size: 11px; padding: 9px 32px 9px 12px; }
-      .tf-count { font-size: 10px; width: 100%; margin-left: 0; }
+      .tf-count { font-size: 10px; }
     }
 
     /* ROUND HEADERS */
@@ -582,17 +590,21 @@
 
   <div class="team-filter">
     <div class="team-filter-inner">
-      <span class="tf-prompt">Pick your team and we'll show their schedule in their colors</span>
-      <select class="tf-select" id="teamFilter">
-        <option value="ALL">All 48 teams</option>
-      </select>
-      <div class="tf-tz" id="tzTabs" role="tablist" aria-label="Timezone">
-        <button type="button" data-tz="ET" class="is-active">ET</button>
-        <button type="button" data-tz="CT">CT</button>
-        <button type="button" data-tz="MT">MT</button>
-        <button type="button" data-tz="PT">PT</button>
+      <div class="tf-row-1">
+        <span class="tf-prompt">Pick your team and we'll show their schedule in their colors</span>
+        <select class="tf-select" id="teamFilter">
+          <option value="ALL">All 48 teams</option>
+        </select>
       </div>
-      <span class="tf-count" id="tfCount">104 matches</span>
+      <div class="tf-row-2">
+        <div class="tf-tz" id="tzTabs" role="tablist" aria-label="Timezone">
+          <button type="button" data-tz="ET" class="is-active">ET</button>
+          <button type="button" data-tz="CT">CT</button>
+          <button type="button" data-tz="MT">MT</button>
+          <button type="button" data-tz="PT">PT</button>
+        </div>
+        <span class="tf-count" id="tfCount">104 matches</span>
+      </div>
     </div>
   </div>
 
@@ -863,9 +875,12 @@
     }
 
     function dayKey(iso) {
-      const d = new Date(iso);
-      const local = new Date(d.toLocaleString("en-US", { timeZone: TZ_MAP[activeTz] || "America/New_York" }));
-      return local.toISOString().slice(0, 10);
+      // Use en-CA locale to reliably get YYYY-MM-DD in the target timezone
+      const fmt = new Intl.DateTimeFormat("en-CA", {
+        timeZone: TZ_MAP[activeTz] || "America/New_York",
+        year: "numeric", month: "2-digit", day: "2-digit"
+      });
+      return fmt.format(new Date(iso));
     }
 
     function timeUntil(iso) {
@@ -1088,6 +1103,7 @@
       r.setProperty("--text", p.leather);
       r.setProperty("--text-soft", p.textSoft);
       r.setProperty("--border", p.border);
+      r.setProperty("--rule", p.rule || (_lum(p.parchment) < 0.5 ? "rgba(240,233,220,0.22)" : "rgba(44,33,24,0.18)"));
       r.setProperty("--on-accent", p.onAccent || _onColor(p.terracotta));
       r.setProperty("--on-leather", p.onLeather || _onColor(p.leatherMid));
     }
@@ -1127,16 +1143,22 @@
           border: _mix(primary, "#000000", 0.18)
         };
       }
-      // Dark primary: text must read on the dark bg, so leather goes cream
+      // Dark primary: text must read on the dark bg, so leather goes cream.
+      // Also brighten the popAccent so it has enough contrast against the dark bg.
+      const popLum = _lum(popAccent);
+      const brightPop = popLum < 0.55
+        ? _mix(popAccent, "#FFFFFF", popLum < 0.25 ? 0.5 : 0.32)
+        : popAccent;
       return {
         parchment: primary,
         parchmentEl: _mix(primary, "#FFFFFF", 0.06),
         leather: "#F0E9DC",
         leatherMid: "#F0E9DC",
-        terracotta: popAccent,
-        terracottaLight: _shade(popAccent, 22),
-        textSoft: "rgba(240,233,220,0.6)",
-        border: "rgba(240,233,220,0.22)"
+        terracotta: brightPop,
+        terracottaLight: _shade(brightPop, 18),
+        textSoft: "rgba(240,233,220,0.65)",
+        border: "rgba(240,233,220,0.28)",
+        rule: "rgba(240,233,220,0.22)"
       };
     }
 
