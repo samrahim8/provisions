@@ -621,57 +621,56 @@
   </footer>
 
   <script>
-    // ── Team kit colors (all 48 World Cup '26 teams) ──
-    // accents: array, paletteFromKit picks the first one with mid-range luminance
+    // ── Team kit data (synced exactly with hub's WC_TEAMS) ──
     const TEAMS = {
-      MEX:{name:"Mexico",primary:"#006847",accents:["#CE1126","#FFFFFF"]},
-      RSA:{name:"South Africa",primary:"#007749",accents:["#FFB81C","#FFFFFF"]},
-      KOR:{name:"South Korea",primary:"#C60C30",accents:["#003478","#FFFFFF"]},
-      CZE:{name:"Czechia",primary:"#11457E",accents:["#D7141A","#FFFFFF"]},
-      CAN:{name:"Canada",primary:"#D52B1E",accents:["#1A1A1A","#FFFFFF"]},
-      BIH:{name:"Bosnia & Herz.",primary:"#002F6C",accents:["#FECB00","#FFFFFF"]},
-      QAT:{name:"Qatar",primary:"#8A1538",accents:["#FECB00","#FFFFFF"]},
-      SUI:{name:"Switzerland",primary:"#DA291C",accents:["#1A1A1A","#FFFFFF"]},
-      USA:{name:"United States",primary:"#BF0A30",accents:["#002868","#FFFFFF"]},
-      PAR:{name:"Paraguay",primary:"#D52B1E",accents:["#0038A8","#FFFFFF"]},
-      AUS:{name:"Australia",primary:"#FFCD00",accents:["#00843D","#012169"]},
-      TUR:{name:"Türkiye",primary:"#E30A17",accents:["#1A1A1A","#FFFFFF"]},
-      BRA:{name:"Brazil",primary:"#FFDF00",accents:["#009C3B","#002776"]},
-      MAR:{name:"Morocco",primary:"#C1272D",accents:["#006233","#FFFFFF"]},
-      HAI:{name:"Haiti",primary:"#00209F",accents:["#D21034","#FFFFFF"]},
-      SCO:{name:"Scotland",primary:"#0065BD",accents:["#1A1A1A","#FFFFFF"]},
+      USA:{name:"United States",primary:"#0A2D5C",accents:["#C8334B","#FFFFFF"]},
+      MEX:{name:"Mexico",primary:"#006847",accents:["#FFFFFF","#CE1126"]},
+      CAN:{name:"Canada",primary:"#D52B1E",accents:["#FFFFFF"]},
+      ENG:{name:"England",primary:"#C8102E",accents:["#FFFFFF","#012169"]},
+      FRA:{name:"France",primary:"#0055A4",accents:["#FFFFFF","#EF4135"]},
       GER:{name:"Germany",primary:"#000000",accents:["#FFCE00","#DD0000"]},
-      CUW:{name:"Curaçao",primary:"#002F6C",accents:["#FFCD00","#FFFFFF"]},
-      CIV:{name:"Côte d'Ivoire",primary:"#FF8200",accents:["#009A44","#FFFFFF"]},
-      ECU:{name:"Ecuador",primary:"#FFD100",accents:["#003893","#EF3340"]},
-      NED:{name:"Netherlands",primary:"#FF6C00",accents:["#21468B","#FFFFFF"]},
-      JPN:{name:"Japan",primary:"#0A1F4D",accents:["#BC002D","#FFFFFF"]},
-      SWE:{name:"Sweden",primary:"#FECC00",accents:["#006AA7","#003893"]},
-      TUN:{name:"Tunisia",primary:"#E70013",accents:["#1A1A1A","#FFFFFF"]},
-      BEL:{name:"Belgium",primary:"#C8102E",accents:["#FAE042","#000000"]},
-      EGY:{name:"Egypt",primary:"#CE1126",accents:["#FCD116","#000000"]},
+      ESP:{name:"Spain",primary:"#AA151B",accents:["#F6BE13","#1A2D5C"]},
+      POR:{name:"Portugal",primary:"#C8102E",accents:["#1E5631","#FCD116"]},
+      NED:{name:"Netherlands",primary:"#E55A1C",accents:["#000000","#FFFFFF"]},
+      BEL:{name:"Belgium",primary:"#C8102E",accents:["#000000","#FAE042"]},
+      CRO:{name:"Croatia",primary:"#D90F1B",accents:["#FFFFFF","#171796"]},
+      SUI:{name:"Switzerland",primary:"#D52B1E",accents:["#FFFFFF"]},
+      AUT:{name:"Austria",primary:"#ED2939",accents:["#FFFFFF"]},
+      NOR:{name:"Norway",primary:"#BA0C2F",accents:["#FFFFFF","#00205B"]},
+      SCO:{name:"Scotland",primary:"#0A2D5C",accents:["#FFFFFF"]},
+      SWE:{name:"Sweden",primary:"#FECC00",accents:["#006AA7"]},
+      TUR:{name:"Türkiye",primary:"#E30A17",accents:["#FFFFFF"]},
+      BIH:{name:"Bosnia & Herzegovina",primary:"#002395",accents:["#FECB00","#FFFFFF"]},
+      CZE:{name:"Czechia",primary:"#D7141A",accents:["#FFFFFF","#11457E"]},
+      MAR:{name:"Morocco",primary:"#C1272D",accents:["#006233"]},
+      SEN:{name:"Senegal",primary:"#00853F",accents:["#FDEF42","#E31B23"]},
+      TUN:{name:"Tunisia",primary:"#E70013",accents:["#FFFFFF"]},
+      ALG:{name:"Algeria",primary:"#006233",accents:["#FFFFFF","#D21034"]},
+      EGY:{name:"Egypt",primary:"#CE1126",accents:["#FFFFFF","#000000"]},
+      GHA:{name:"Ghana",primary:"#CE1126",accents:["#FCD116","#006B3F","#000000"]},
+      CIV:{name:"Côte d'Ivoire",primary:"#F77F00",accents:["#FFFFFF","#009E60"]},
+      CPV:{name:"Cape Verde",primary:"#6CACDE",accents:["#FFFFFF","#C8102E"]},
+      RSA:{name:"South Africa",primary:"#FFB81C",accents:["#007749","#FFFFFF"]},
+      COD:{name:"DR Congo",primary:"#4FA8DC",accents:["#CE1021","#F7D618"]},
+      JPN:{name:"Japan",primary:"#0A2D5C",accents:["#FFFFFF","#BC002D"]},
       IRN:{name:"Iran",primary:"#239F40",accents:["#DA0000","#FFFFFF"]},
-      NZL:{name:"New Zealand",primary:"#000000",accents:["#012169","#FFFFFF"]},
-      ESP:{name:"Spain",primary:"#AA151B",accents:["#F1BF00","#1A2D5C"]},
-      CPV:{name:"Cape Verde",primary:"#003893",accents:["#CF2027","#FFCD00"]},
-      KSA:{name:"Saudi Arabia",primary:"#006C35",accents:["#FECB00","#FFFFFF"]},
-      URU:{name:"Uruguay",primary:"#5CBCE9",accents:["#1A1A1A","#FFFFFF"]},
-      FRA:{name:"France",primary:"#0055A4",accents:["#EF4135","#FFFFFF"]},
-      SEN:{name:"Senegal",primary:"#00853F",accents:["#E31B23","#FDEF42"]},
-      IRQ:{name:"Iraq",primary:"#007A3D",accents:["#CE1126","#FECB00"]},
-      NOR:{name:"Norway",primary:"#BA0C2F",accents:["#00205B","#FFFFFF"]},
-      ARG:{name:"Argentina",primary:"#74ACDF",accents:["#F6B40E","#1A1A1A"]},
-      ALG:{name:"Algeria",primary:"#006233",accents:["#D21034","#FFFFFF"]},
-      AUT:{name:"Austria",primary:"#ED2939",accents:["#1A1A1A","#FFFFFF"]},
-      JOR:{name:"Jordan",primary:"#CE1126",accents:["#007A3D","#000000"]},
-      POR:{name:"Portugal",primary:"#7A0019",accents:["#046A38","#FCD116"]},
-      COD:{name:"DR Congo",primary:"#007FFF",accents:["#F7D618","#CE1021"]},
-      UZB:{name:"Uzbekistan",primary:"#0099B5",accents:["#1EB53A","#CE1126"]},
+      KOR:{name:"South Korea",primary:"#CD2E3A",accents:["#0047A0","#FFFFFF"]},
+      AUS:{name:"Australia",primary:"#FFCD00",accents:["#00843D"]},
+      KSA:{name:"Saudi Arabia",primary:"#006C35",accents:["#FFFFFF"]},
+      QAT:{name:"Qatar",primary:"#8A1538",accents:["#FFFFFF"]},
+      UZB:{name:"Uzbekistan",primary:"#0099B5",accents:["#1EB53A","#FFFFFF"]},
+      JOR:{name:"Jordan",primary:"#CE1126",accents:["#000000","#007A3D","#FFFFFF"]},
+      IRQ:{name:"Iraq",primary:"#007A3D",accents:["#CE1126","#000000","#FFFFFF"]},
+      ARG:{name:"Argentina",primary:"#74ACDF",accents:["#FFFFFF","#000000"]},
+      BRA:{name:"Brazil",primary:"#FFCB05",accents:["#0F4A2E","#1F4FB0"]},
+      URU:{name:"Uruguay",primary:"#5DA9DD",accents:["#FFFFFF","#000000"]},
       COL:{name:"Colombia",primary:"#FCD116",accents:["#003893","#CE1126"]},
-      ENG:{name:"England",primary:"#CE1124",accents:["#00247D","#FFFFFF"]},
-      CRO:{name:"Croatia",primary:"#FF0000",accents:["#171796","#FFFFFF"]},
-      GHA:{name:"Ghana",primary:"#CE1126",accents:["#FCD116","#006B3F"]},
-      PAN:{name:"Panama",primary:"#005AA7",accents:["#D21034","#FFFFFF"]}
+      ECU:{name:"Ecuador",primary:"#FFD100",accents:["#003893","#CE1126"]},
+      PAR:{name:"Paraguay",primary:"#D52B1E",accents:["#FFFFFF","#0038A8"]},
+      PAN:{name:"Panama",primary:"#D32B1E",accents:["#FFFFFF","#0066B3"]},
+      CUW:{name:"Curaçao",primary:"#002B7F",accents:["#F9E300"]},
+      HAI:{name:"Haiti",primary:"#00209F",accents:["#D21034","#FFFFFF"]},
+      NZL:{name:"New Zealand",primary:"#000000",accents:["#FFFFFF","#012169"]}
     };
 
     const FIFA_TO_ISO = {
@@ -1090,34 +1089,16 @@
       onLeather: "#FFFFFF"
     };
 
-    function applyPalette(p) {
-      const r = document.documentElement.style;
-      r.setProperty("--parchment", p.parchment);
-      r.setProperty("--parchment-el", p.parchmentEl);
-      r.setProperty("--bg", p.parchment);
-      r.setProperty("--bg-elevated", p.parchmentEl);
-      r.setProperty("--leather", p.leather);
-      r.setProperty("--leather-mid", p.leatherMid);
-      r.setProperty("--terracotta", p.terracotta);
-      r.setProperty("--terracotta-light", p.terracottaLight);
-      r.setProperty("--text", p.leather);
-      r.setProperty("--text-soft", p.textSoft);
-      r.setProperty("--border", p.border);
-      r.setProperty("--rule", p.rule || (_lum(p.parchment) < 0.5 ? "rgba(240,233,220,0.22)" : "rgba(44,33,24,0.18)"));
-      r.setProperty("--on-accent", p.onAccent || _onColor(p.terracotta));
-      r.setProperty("--on-leather", p.onLeather || _onColor(p.leatherMid));
-    }
-
+    // ── paletteFromKit and applyPalette: copied verbatim from the hub for behavior parity ──
     function paletteFromKit(primary, accents) {
       const pLum = _lum(primary);
       const isWhite = pLum > 0.93;
       const isLight = pLum > 0.55;
-      const accArr = Array.isArray(accents) ? accents : [accents];
-      const popAccent = accArr.find(a => _lum(a) > 0.18 && _lum(a) < 0.85)
-                     || accArr.find(a => a !== "#FFFFFF" && a !== "#FFF")
-                     || accArr[0]
+      const popAccent = accents.find(a => _lum(a) > 0.18 && _lum(a) < 0.85)
+                     || accents.find(a => a !== "#FFFFFF")
+                     || accents[0]
                      || _shade(primary, -40);
-      const darkAccent = accArr.find(a => _lum(a) < 0.35) || _shade(popAccent, -45);
+      const darkAccent = accents.find(a => _lum(a) < 0.35) || _shade(popAccent, -45);
 
       if (isWhite) {
         return {
@@ -1143,23 +1124,37 @@
           border: _mix(primary, "#000000", 0.18)
         };
       }
-      // Dark primary: text must read on the dark bg, so leather goes cream.
-      // Also brighten the popAccent so it has enough contrast against the dark bg.
-      const popLum = _lum(popAccent);
-      const brightPop = popLum < 0.55
-        ? _mix(popAccent, "#FFFFFF", popLum < 0.25 ? 0.5 : 0.32)
-        : popAccent;
       return {
         parchment: primary,
         parchmentEl: _mix(primary, "#FFFFFF", 0.06),
-        leather: "#F0E9DC",
+        leather: _mix(primary, "#000000", 0.32),
         leatherMid: "#F0E9DC",
-        terracotta: brightPop,
-        terracottaLight: _shade(brightPop, 18),
-        textSoft: "rgba(240,233,220,0.65)",
-        border: "rgba(240,233,220,0.28)",
-        rule: "rgba(240,233,220,0.22)"
+        terracotta: popAccent,
+        terracottaLight: _shade(popAccent, 22),
+        textSoft: "rgba(240,233,220,0.55)",
+        border: "rgba(240,233,220,0.14)"
       };
+    }
+
+    function applyPalette(p) {
+      const r = document.documentElement.style;
+      r.setProperty("--parchment", p.parchment);
+      r.setProperty("--parchment-el", p.parchmentEl);
+      r.setProperty("--bg", p.parchment);
+      r.setProperty("--bg-elevated", p.parchmentEl);
+      // The Daily uses --leather as adaptive text color. On dark parchment, headings
+      // need to be cream to stay legible — fall through to leatherMid in that case.
+      const isDarkBg = _lum(p.parchment) < 0.55;
+      r.setProperty("--leather", isDarkBg ? p.leatherMid : p.leather);
+      r.setProperty("--leather-mid", p.leatherMid);
+      r.setProperty("--terracotta", p.terracotta);
+      r.setProperty("--terracotta-light", p.terracottaLight);
+      r.setProperty("--text", isDarkBg ? p.leatherMid : p.leather);
+      r.setProperty("--text-soft", p.textSoft);
+      r.setProperty("--border", p.border);
+      r.setProperty("--rule", isDarkBg ? "rgba(240,233,220,0.22)" : "rgba(44,33,24,0.18)");
+      r.setProperty("--on-accent", _onColor(p.terracotta));
+      r.setProperty("--on-leather", _onColor(p.leatherMid));
     }
 
     function applyTeamPalette(code) {
