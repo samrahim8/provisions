@@ -524,32 +524,33 @@
     }
 
     // ── Matchday 1 fixtures (final draw, Dec 2025) ──
-    // [homeCode, awayCode, venue, city, ISO kickoff (UTC), group]
+    // [homeCode, awayCode, venue, city, ISO kickoff (UTC), label]
+    // Source: ESPN FIFA World Cup schedule, times in ET, converted to UTC (EDT = UTC-4)
     const MATCHDAY_1 = [
-      ["MEX","RSA","Estadio Azteca","Mexico City","2026-06-12T01:00:00Z","A"],
-      ["KOR","CZE","Estadio Akron","Guadalajara","2026-06-11T22:00:00Z","B"],
-      ["CAN","BIH","BMO Field","Toronto","2026-06-12T18:00:00Z","C"],
-      ["QAT","SUI","Levi's Stadium","Santa Clara","2026-06-12T21:00:00Z","D"],
-      ["USA","PAR","SoFi Stadium","Inglewood","2026-06-12T23:00:00Z","E"],
-      ["AUS","TUR","BC Place","Vancouver","2026-06-13T02:00:00Z","F"],
-      ["BRA","MAR","Gillette Stadium","Foxborough","2026-06-13T19:00:00Z","G"],
-      ["HAI","SCO","MetLife Stadium","East Rutherford","2026-06-13T22:00:00Z","H"],
-      ["GER","CUW","Lincoln Financial Field","Philadelphia","2026-06-14T19:00:00Z","I"],
-      ["CIV","ECU","NRG Stadium","Houston","2026-06-14T21:00:00Z","J"],
-      ["NED","JPN","AT&T Stadium","Arlington","2026-06-14T23:00:00Z","K"],
-      ["SWE","TUN","Estadio BBVA","Monterrey","2026-06-15T02:00:00Z","L"],
-      ["BEL","EGY","SoFi Stadium","Inglewood","2026-06-15T19:00:00Z","A"],
-      ["IRN","NZL","Lumen Field","Seattle","2026-06-15T21:00:00Z","B"],
-      ["ESP","CPV","Hard Rock Stadium","Miami Gardens","2026-06-15T23:00:00Z","C"],
-      ["KSA","URU","Mercedes-Benz Stadium","Atlanta","2026-06-16T01:00:00Z","D"],
-      ["FRA","SEN","MetLife Stadium","East Rutherford","2026-06-16T19:00:00Z","E"],
-      ["IRQ","NOR","Gillette Stadium","Foxborough","2026-06-16T21:00:00Z","F"],
-      ["ARG","ALG","Arrowhead Stadium","Kansas City","2026-06-16T23:00:00Z","G"],
-      ["AUT","JOR","Levi's Stadium","Santa Clara","2026-06-17T01:00:00Z","H"],
-      ["POR","COD","NRG Stadium","Houston","2026-06-17T19:00:00Z","I"],
-      ["UZB","COL","Estadio Azteca","Mexico City","2026-06-17T21:00:00Z","J"],
-      ["ENG","CRO","BMO Field","Toronto","2026-06-17T23:00:00Z","K"],
-      ["GHA","PAN","AT&T Stadium","Arlington","2026-06-18T01:00:00Z","L"]
+      ["MEX","RSA","Estadio Banorte","Mexico City","2026-06-11T19:00:00Z","MD 1"],
+      ["KOR","CZE","Estadio Akron","Guadalajara","2026-06-12T02:00:00Z","MD 1"],
+      ["CAN","BIH","BMO Field","Toronto","2026-06-12T19:00:00Z","MD 1"],
+      ["USA","PAR","SoFi Stadium","Inglewood","2026-06-13T01:00:00Z","MD 1"],
+      ["QAT","SUI","Levi's Stadium","Santa Clara","2026-06-13T19:00:00Z","MD 1"],
+      ["BRA","MAR","MetLife Stadium","East Rutherford","2026-06-13T22:00:00Z","MD 1"],
+      ["HAI","SCO","Gillette Stadium","Foxborough","2026-06-14T01:00:00Z","MD 1"],
+      ["AUS","TUR","BC Place","Vancouver","2026-06-14T04:00:00Z","MD 1"],
+      ["GER","CUW","NRG Stadium","Houston","2026-06-14T17:00:00Z","MD 1"],
+      ["NED","JPN","AT&T Stadium","Arlington","2026-06-14T20:00:00Z","MD 1"],
+      ["CIV","ECU","Lincoln Financial Field","Philadelphia","2026-06-14T23:00:00Z","MD 1"],
+      ["SWE","TUN","Estadio BBVA","Guadalupe","2026-06-15T02:00:00Z","MD 1"],
+      ["ESP","CPV","Mercedes-Benz Stadium","Atlanta","2026-06-15T16:00:00Z","MD 1"],
+      ["BEL","EGY","Lumen Field","Seattle","2026-06-15T19:00:00Z","MD 1"],
+      ["KSA","URU","Hard Rock Stadium","Miami Gardens","2026-06-15T22:00:00Z","MD 1"],
+      ["IRN","NZL","SoFi Stadium","Inglewood","2026-06-16T01:00:00Z","MD 1"],
+      ["FRA","SEN","MetLife Stadium","East Rutherford","2026-06-16T19:00:00Z","MD 1"],
+      ["IRQ","NOR","Gillette Stadium","Foxborough","2026-06-16T22:00:00Z","MD 1"],
+      ["ARG","ALG","GEHA Field at Arrowhead Stadium","Kansas City","2026-06-17T01:00:00Z","MD 1"],
+      ["AUT","JOR","Levi's Stadium","Santa Clara","2026-06-17T04:00:00Z","MD 1"],
+      ["POR","COD","NRG Stadium","Houston","2026-06-17T17:00:00Z","MD 1"],
+      ["ENG","CRO","AT&T Stadium","Arlington","2026-06-17T20:00:00Z","MD 1"],
+      ["GHA","PAN","BMO Field","Toronto","2026-06-17T23:00:00Z","MD 1"],
+      ["UZB","COL","Estadio Banorte","Mexico City","2026-06-18T02:00:00Z","MD 1"]
     ];
 
     // ── Group by date in local Eastern time (most matches are stateside) ──
@@ -599,7 +600,7 @@
     }
 
     function matchCard(m, matchNum) {
-      const [home, away, venue, city, iso, group] = m;
+      const [home, away, venue, city, iso, label] = m;
       const h = TEAMS[home] || { name: home, primary: "#1A1A1A", accent: "#FFFFFF" };
       const a = TEAMS[away] || { name: away, primary: "#1A1A1A", accent: "#FFFFFF" };
       const hf = flagUrl(home);
@@ -617,7 +618,7 @@
             ${hf ? `<img class="match-flag" src="${hf}" alt="" loading="lazy">` : ""}
           </div>
           <div class="match-center">
-            <div class="match-group">Group ${group}</div>
+            <div class="match-group">${label}</div>
             <div class="match-time">${time}</div>
             <div class="match-tz">ET</div>
             <div class="match-countdown" data-countdown="${iso}">${countdownText(iso)}</div>
