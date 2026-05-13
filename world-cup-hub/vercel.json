@@ -1,0 +1,17 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/daily", "destination": "/the-daily" },
+    { "source": "/daily/", "destination": "/the-daily" },
+    { "source": "/kits", "destination": "/kit-index" },
+    { "source": "/kits/", "destination": "/kit-index" },
+    {
+      "source": "/card",
+      "destination": "https://world-cup-self.vercel.app/world-cup/card-generator"
+    },
+    {
+      "source": "/card/:path*",
+      "destination": "https://world-cup-self.vercel.app/world-cup/card-generator/:path*"
+    }
+  ]
+}
