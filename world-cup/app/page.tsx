@@ -905,6 +905,8 @@ function ResultStep({
   team: Team;
   onRestart: () => void;
 }) {
+  const [storyBusy, setStoryBusy] = useState(false);
+
   async function share() {
     try {
       const res = await fetch(cardUrl);
@@ -923,6 +925,138 @@ function ResultStep({
     a.download = `${name.replace(/\s+/g, "-")}-${team.code}.png`;
     a.click();
   }
+
+  function _lum(hex: string): number {
+    const r = parseInt(hex.slice(1, 3), 16) / 255;
+    const g = parseInt(hex.slice(3, 5), 16) / 255;
+    const b = parseInt(hex.slice(5, 7), 16) / 255;
+    return 0.299 * r + 0.587 * g + 0.114 * b;
+  }
+  function dayContext(): string {
+    const opener = new Date("2026-06-11T19:00:00Z").getTime();
+    const final = new Date("2026-07-19T23:00:00Z").getTime();
+    const now = Date.now();
+    const dayMs = 86400000;
+    if (now < opener) {
+      const days = Math.max(1, Math.ceil((opener - now) / dayMs));
+      return `DAY ${days} OF THE WAIT`;
+    }
+    if (now <= final) {
+      const days = Math.floor((now - opener) / dayMs) + 1;
+      return `DAY ${days} OF THE TOURNAMENT`;
+    }
+    return "MMXXVI · IN THE BOOKS";
+  }
+
+  async function shareStory() {
+    if (storyBusy) return;
+    setStoryBusy(true);
+    try {
+      // Make sure the typeface is loaded so canvas text renders correctly
+      try { await (document as Document & { fonts?: FontFaceSet }).fonts?.load("700 24px Syne"); } catch {}
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const i = new Image();
+        i.onload = () => resolve(i);
+        i.onerror = reject;
+        i.crossOrigin = "anonymous";
+        i.src = cardUrl;
+      });
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1080;
+      canvas.height = 1920;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("No 2D context");
+
+      const primary = team.primary;
+      const textColor = _lum(primary) > 0.55 ? "#1A1A1A" : "#F0E9DC";
+      const ruleColor = _lum(primary) > 0.55 ? "rgba(26,33,24,0.35)" : "rgba(240,233,220,0.45)";
+
+      // Background
+      ctx.fillStyle = primary;
+      ctx.fillRect(0, 0, 1080, 1920);
+
+      // Subtle vignette
+      const grad = ctx.createRadialGradient(540, 960, 200, 540, 960, 1000);
+      grad.addColorStop(0, "rgba(0,0,0,0)");
+      grad.addColorStop(1, "rgba(0,0,0,0.22)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1080, 1920);
+
+      // Top hairline
+      ctx.strokeStyle = ruleColor;
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(56, 100); ctx.lineTo(1024, 100); ctx.stroke();
+
+      // Top text
+      ctx.fillStyle = textColor;
+      ctx.font = "700 24px Syne, sans-serif";
+      try { (ctx as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = "6px"; } catch {}
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(dayContext(), 56, 50);
+      ctx.textAlign = "right";
+      ctx.globalAlpha = 0.75;
+      ctx.fillText(team.name.toUpperCase(), 1024, 50);
+      ctx.globalAlpha = 1;
+
+      // Card: tilted, shadowed, centered
+      const cardW = 720;
+      const cardH = 1008;
+      ctx.save();
+      ctx.translate(540, 960);
+      ctx.rotate((-3 * Math.PI) / 180);
+      ctx.shadowColor = "rgba(0,0,0,0.35)";
+      ctx.shadowBlur = 60;
+      ctx.shadowOffsetY = 30;
+      ctx.drawImage(img, -cardW / 2, -cardH / 2, cardW, cardH);
+      ctx.restore();
+      ctx.shadowColor = "transparent";
+
+      // Bottom hairline
+      ctx.strokeStyle = ruleColor;
+      ctx.beginPath(); ctx.moveTo(56, 1820); ctx.lineTo(1024, 1820); ctx.stroke();
+
+      // Bottom text
+      ctx.fillStyle = textColor;
+      ctx.font = "700 24px Syne, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("MADE BY PROVISIONS", 56, 1870);
+      ctx.textAlign = "right";
+      ctx.globalAlpha = 0.75;
+      ctx.fillText("PROVISIONS.WORK/WORLD-CUP", 1024, 1870);
+      ctx.globalAlpha = 1;
+
+      // Export
+      const blob: Blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png");
+      });
+      const file = new File([blob], `${name.replace(/\s+/g, "-")}-${team.code}-story.png`, { type: "image/png" });
+      const isTouch = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+      if (isTouch && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+        await navigator.share({
+          files: [file],
+          title: `${name} · ${team.name}`,
+          text: `My World Cup '26 card`,
+        });
+      } else {
+        // Desktop: download
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${name.replace(/\s+/g, "-")}-${team.code}-story.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 60 * 1000);
+      }
+    } catch (e) {
+      console.error("Story share failed:", e);
+    } finally {
+      setStoryBusy(false);
+    }
+  }
+
   return (
     <div className="grid md:grid-cols-[1fr,1fr] gap-12 items-center">
       <div>
@@ -934,7 +1068,10 @@ function ResultStep({
           Save it, post it, dare a friend to make theirs.
         </p>
         <div className="flex flex-wrap gap-3">
-          <button onClick={share} className="btn-primary">Share</button>
+          <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
+            {storyBusy ? "Pressing…" : "Share to Story"}
+          </button>
+          <button onClick={share} className="btn-ghost">Share card</button>
           <button onClick={download} className="btn-ghost">Download</button>
           <button onClick={onRestart} className="text-text-soft hover:text-leather px-2 py-3">
             Make another
