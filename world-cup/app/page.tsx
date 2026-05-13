@@ -401,8 +401,11 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
         <div className="flex justify-center lg:justify-end">
           <div className="relative" style={{ transform: "rotate(3deg)" }}>
             <img
-              src={asset("/api/card?team=USA")}
+              src={asset("/hero-card.png")}
               alt="Example player card"
+              width={360}
+              height={504}
+              fetchPriority="high"
               className="rounded-md w-[220px] sm:w-[260px] lg:w-[360px] h-auto"
               style={{ boxShadow: "0 30px 60px -20px rgba(26,23,20,0.35), 0 8px 20px -8px rgba(26,23,20,0.18)" }}
             />
