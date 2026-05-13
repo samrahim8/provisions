@@ -168,8 +168,6 @@ export async function GET(req: Request) {
   const city = url.searchParams.get("city") || "Mexico City";
   const group = url.searchParams.get("group") || "";
   const round = url.searchParams.get("round") || "Matchday 1";
-  const handleRaw = (url.searchParams.get("handle") || "").trim().slice(0, 24);
-  const handle = handleRaw ? (handleRaw.startsWith("@") ? handleRaw : "@" + handleRaw) : "";
 
   const home = TEAMS[h] || { name: h, primary: "#1A1A1A" };
   const away = TEAMS[a] || { name: a, primary: "#1A1A1A" };
@@ -450,17 +448,9 @@ export async function GET(req: Request) {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 display: "flex",
-                alignItems: "center",
-                gap: 14,
               }}
             >
-              <span style={{ display: "flex" }}>{dayCtx}</span>
-              {handle ? (
-                <>
-                  <span style={{ opacity: 0.4, display: "flex" }}>·</span>
-                  <span style={{ display: "flex", color: TERRACOTTA, opacity: 1 }}>{handle}'s pick</span>
-                </>
-              ) : null}
+              {dayCtx}
             </div>
             <div
               style={{
