@@ -102,6 +102,26 @@
       font-family: var(--display); font-weight: 800;
       letter-spacing: 0.22em; color: var(--terracotta);
     }
+    .today-share {
+      appearance: none;
+      background: var(--terracotta);
+      color: var(--on-accent);
+      border: 1.5px solid var(--terracotta);
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .today-share:hover { background: var(--terracotta-light); transform: translateY(-1px); }
+    .today-share svg { width: 13px; height: 13px; }
+    .today-share[disabled] { opacity: 0.5; cursor: wait; }
     @media (max-width: 700px) {
       .today { padding: 0 16px; margin-top: 16px; }
       .today-title { font-size: clamp(32px, 12vw, 48px); }
@@ -1499,11 +1519,67 @@
       if (e.key === "Escape") closeShareModal();
     });
 
+    // Share-today flow: hits /api/today, same modal preview pattern as shareMatch
+    async function shareToday(btn) {
+      const date = btn.getAttribute("data-share-today");
+      const team = btn.getAttribute("data-team") || "";
+      const params = new URLSearchParams({ date });
+      if (team && team !== "ALL") params.set("team", team);
+      const url = `https://provisions.work/world-cup/card-generator/api/today?${params.toString()}`;
+      const filename = `today-${date}${team && team !== "ALL" ? "-" + team : ""}-world-cup-26.png`;
+      const originalLabel = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg> Pressing…`;
+
+      const title = team && TEAMS[team]
+        ? `Today · ${TEAMS[team].name}`
+        : `Today's matches`;
+      // Open the modal then override the title (openShareModal expects home/away)
+      openShareModal("Today", "");
+      const titleEl = document.getElementById("shareModalTitle");
+      if (titleEl) titleEl.textContent = title;
+
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Render failed");
+        const blob = await res.blob();
+        _currentShareBlob = blob;
+        _currentShareFilename = filename;
+        _currentShareFile = new File([blob], filename, { type: "image/png" });
+        _currentShareLabel = title;
+        const blobUrl = URL.createObjectURL(blob);
+        const preview = document.getElementById("sharePreview");
+        if (preview) preview.innerHTML = `<img src="${blobUrl}" alt="${title} story stack">`;
+        const shareBtn = document.getElementById("shareNative");
+        const dlBtn = document.getElementById("shareDownload");
+        if (shareBtn) {
+          if (shouldUseNativeShare(_currentShareFile)) {
+            shareBtn.hidden = false;
+            dlBtn?.classList.add("secondary");
+          } else {
+            shareBtn.hidden = true;
+            dlBtn?.classList.remove("secondary");
+          }
+        }
+        btn.disabled = false;
+        btn.innerHTML = originalLabel;
+      } catch (e) {
+        btn.innerHTML = originalLabel;
+        btn.disabled = false;
+        if (e && e.name !== "AbortError") console.error("Render failed:", e);
+      }
+    }
+
     // Delegate clicks on per-match share buttons → always open the preview modal
     document.addEventListener("click", (e) => {
       const btn = e.target.closest(".match-share");
       if (!btn) return;
       e.preventDefault();
+      // Today-share buttons carry a data-share-today attribute
+      if (btn.hasAttribute("data-share-today")) {
+        shareToday(btn);
+        return;
+      }
       shareMatch(btn);
     });
 
@@ -1823,8 +1899,18 @@
         mount.innerHTML = `
           <section class="today">
             <div class="today-head">
-              <div class="today-title">Today</div>
-              <div class="today-meta">${formatDate(todays[0][4])} · ${todays.length} match${todays.length === 1 ? "" : "es"}</div>
+              <div>
+                <div class="today-title">Today</div>
+                <div class="today-meta">${formatDate(todays[0][4])} · ${todays.length} match${todays.length === 1 ? "" : "es"}</div>
+              </div>
+              <button class="today-share match-share" type="button" data-share-today="${tk}" data-team="${filterCode || ''}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                  <polyline points="16 6 12 2 8 6"/>
+                  <line x1="12" y1="2" x2="12" y2="15"/>
+                </svg>
+                Share today
+              </button>
             </div>
             <div class="matches">${todays.map(matchCard).join("")}</div>
           </section>
@@ -1834,10 +1920,19 @@
       const nxt = nextMatchAfter(new Date(), filterCode);
       if (nxt) {
         const dLabel = formatDate(nxt[4]);
+        const nxtKey = dayKey(nxt[4]);
         mount.innerHTML = `
           <div class="today-empty">
             <span>No matches today</span>
             <span><strong>Next up:</strong> ${dLabel} · ${nxt[0]} vs ${nxt[1]}</span>
+            <button class="today-share match-share" type="button" data-share-today="${nxtKey}" data-team="${filterCode || ''}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                <polyline points="16 6 12 2 8 6"/>
+                <line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              Share next matchday
+            </button>
           </div>
         `;
       } else {
