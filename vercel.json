@@ -51,7 +51,7 @@
     {
       "source": "/",
       "has": [{ "type": "host", "value": "provisions.soccer" }],
-      "destination": "/world-cup-hub"
+      "destination": "/world-cup-hub/index.html"
     },
     { "source": "/daily", "destination": "/world-cup-hub/the-daily" },
     { "source": "/daily/", "destination": "/world-cup-hub/the-daily" },
