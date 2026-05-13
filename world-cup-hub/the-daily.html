@@ -1315,8 +1315,15 @@
     }
     window.closeShareModal = closeShareModal;
 
-    function isMobileShareCapable(file) {
-      return !!(navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share);
+    function isTouchPrimary() {
+      return !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+    }
+    function shouldUseNativeShare(file) {
+      if (!navigator.canShare || !navigator.share) return false;
+      if (!navigator.canShare({ files: [file] })) return false;
+      // Only on touch-primary devices (phones, tablets). Desktop with Safari/Chrome
+      // also supports navigator.share but we want the in-page modal there.
+      return isTouchPrimary();
     }
 
     async function shareMatch(btn) {
@@ -1335,8 +1342,8 @@
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg> Pressing…`;
 
       // Open the modal immediately on desktop so the user sees feedback
-      const hasNativeShare = !!(navigator.canShare && navigator.share);
-      if (!hasNativeShare) {
+      const willUseNative = isTouchPrimary();
+      if (!willUseNative) {
         openShareModal(home, away);
       }
 
@@ -1348,8 +1355,8 @@
         _currentShareFilename = filename;
         const file = new File([blob], filename, { type: "image/png" });
 
-        // Mobile: native share sheet, no modal
-        if (isMobileShareCapable(file)) {
+        // Touch-primary mobile: native share sheet
+        if (shouldUseNativeShare(file)) {
           await navigator.share({
             files: [file],
             title: `${home} vs ${away}`,
@@ -1358,7 +1365,10 @@
           btn.classList.add("is-success");
           btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Shared`;
         } else {
-          // Desktop: render into the already-open modal preview
+          // Desktop: render into the modal preview
+          if (!document.getElementById("shareModal").classList.contains("open")) {
+            openShareModal(home, away);
+          }
           const blobUrl = URL.createObjectURL(blob);
           const preview = document.getElementById("sharePreview");
           if (preview) {
