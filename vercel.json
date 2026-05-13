@@ -1,6 +1,11 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    { "source": "/ufo", "destination": "/ufo/", "permanent": false }
+  ],
   "rewrites": [
+    { "source": "/ufo/", "destination": "https://ufo-archive-three.vercel.app" },
+    { "source": "/ufo/:path*", "destination": "https://ufo-archive-three.vercel.app/:path*" },
     { "source": "/world-cup", "destination": "/world-cup-hub" },
     { "source": "/world-cup/", "destination": "/world-cup-hub" },
     { "source": "/world-cup/kit-index", "destination": "/world-cup-hub/kit-index" },
