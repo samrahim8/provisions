@@ -406,31 +406,48 @@
 
     @media (max-width: 700px) {
       .match { grid-template-columns: 1fr; }
+      /* Reorder for mobile: time/group up top, teams below, venue, watch */
+      .match-center { order: 1; }
+      .match-side--home { order: 2; }
+      .match-side--away { order: 3; }
+      .match-venue { order: 4; }
+      .match-watch { order: 5; }
+      /* Sides: both render [flag][code-block] consistently */
       .match-side {
-        padding: 14px 16px;
+        padding: 14px 16px 14px 22px;
         justify-content: flex-start !important;
         text-align: left !important;
+        gap: 14px;
       }
-      .match-side .stripe { right: auto; left: 0; }
+      .match-side--home { flex-direction: row !important; }
+      .match-side--away { flex-direction: row-reverse !important; }
+      .match-side .stripe { right: auto; left: 0; width: 5px; }
       .match-side--home { border-bottom: 1px dashed var(--rule); }
-      .match-team-block { width: auto; flex: 1; }
+      .match-team-block { width: auto; flex: 1; gap: 3px; }
       .match-side--home .match-code,
       .match-side--away .match-code,
       .match-side--home .match-name,
       .match-side--away .match-name { text-align: left !important; }
+      .match-code { font-size: 28px; max-width: 100%; }
+      /* Center bar: group + time inline on top row, countdown on second row */
       .match-center {
-        order: 99;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: space-between;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px 12px;
         border: none;
-        border-top: 1px dashed var(--rule);
+        border-bottom: 1px dashed var(--rule);
         padding: 12px 16px;
         min-width: 0;
+        background: transparent;
       }
-      .match-code { font-size: 30px; max-width: 100%; }
-      .match-time { font-size: 20px; margin-top: 0; }
-      .match-venue { padding: 8px 16px 12px; }
+      .match-group { order: 1; }
+      .match-time { order: 2; font-size: 22px; margin-top: 0; }
+      .match-tz { order: 3; align-self: baseline; }
+      .match-countdown { order: 4; flex: 1 0 100%; text-align: left; margin-top: 0; }
+      .match-venue { padding: 10px 16px; gap: 8px; }
+      .match-watch { padding: 10px 16px 14px; gap: 8px; }
     }
 
     /* COMING SOON */
