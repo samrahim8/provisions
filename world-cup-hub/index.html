@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A lineup of goods for '26 — Provisions</title>
   <meta name="description" content="World Cup products for brands, agencies + fans. Pick a country, snap a photo, share it with your squad. From the Provisions workshop.">
-  <link rel="canonical" href="https://provisions.work/world-cup">
+  <link rel="canonical" href="https://provisions.soccer">
 
   <meta property="og:title" content="A lineup of goods for '26 — Provisions">
   <meta property="og:description" content="World Cup products for brands, agencies + fans. Pick a country, snap a photo, share it with your squad.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://provisions.work/world-cup">
-  <meta property="og:image" content="https://provisions.work/world-cup/card-generator/api/og">
+  <meta property="og:url" content="https://provisions.soccer">
+  <meta property="og:image" content="https://provisions.soccer/card/api/og">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="Provisions">
@@ -20,7 +20,7 @@
   <meta name="twitter:site" content="@samdape">
   <meta name="twitter:title" content="A lineup of goods for '26 — Provisions">
   <meta name="twitter:description" content="World Cup products for brands, agencies + fans.">
-  <meta name="twitter:image" content="https://provisions.work/world-cup/card-generator/api/og">
+  <meta name="twitter:image" content="https://provisions.soccer/card/api/og">
 
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -1834,7 +1834,7 @@
         </header>
 
         <!-- STARTER -->
-        <a href="https://provisions.work/world-cup/card-generator" class="featured" style="text-decoration:none;color:inherit;">
+        <a href="https://provisions.soccer/card" class="featured" style="text-decoration:none;color:inherit;">
           <div class="featured-content">
             <div class="featured-meta-row">
               <span class="kit-no">No. 01</span>
@@ -1849,7 +1849,7 @@
             </div>
           </div>
           <div class="featured-image-frame" id="featuredCardFrame">
-            <img id="featuredCardImg" src="https://provisions.work/world-cup/card-generator/api/card?team=USA&v=5" alt="Player card example">
+            <img id="featuredCardImg" src="https://provisions.soccer/card/api/card?team=USA&v=5" alt="Player card example">
             <div class="press-overlay" id="pressOverlay" role="status" aria-live="polite" aria-hidden="true">
               <div class="press-card" id="pressCard">
                 <div class="press-card-inner">
@@ -1935,8 +1935,8 @@
           <span>World Cup '26</span>
         </a>
         <nav class="pf-links">
-          <a href="https://provisions.work/world-cup/card-generator">Player Card</a>
-          <a href="https://provisions.work/world-cup/kit-index">Kit Index</a>
+          <a href="https://provisions.soccer/card">Player Card</a>
+          <a href="https://provisions.soccer/kits">Kit Index</a>
           <a href="#repaint" onclick="event.preventDefault(); openRepaintModal();">Repaint</a>
           <a href="mailto:sam@provisions.work?subject=World%20Cup%20commission">Commission</a>
         </nav>
@@ -2053,8 +2053,8 @@
 
     // Bench (Nos. 02–06; No. 01 is the starter)
     const PRODUCTS = [
-      { id: '02', label: 'The Daily', title: 'The Daily', blurb: 'Every match of the World Cup, day by day. Kit-colored cards for all 104 fixtures, kickoff countdowns, venues, group context. The clubhouse wall of what’s on.', cta: 'See the schedule', status: 'starter', statusLabel: 'Live', href: 'https://provisions.work/world-cup/the-daily' },
-      { id: '03', label: 'Kit Index', title: 'The Kit Index', blurb: 'A block-style catalog of all 48 home kits. Browse the design language of every nation’s tournament kit. Reference product, no AI.', cta: 'Browse all 48', status: 'starter', statusLabel: 'Live', href: 'https://provisions.work/world-cup/kit-index' },
+      { id: '02', label: 'The Daily', title: 'The Daily', blurb: 'Every match of the World Cup, day by day. Kit-colored cards for all 104 fixtures, kickoff countdowns, venues, group context. The clubhouse wall of what’s on.', cta: 'See the schedule', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/daily' },
+      { id: '03', label: 'Kit Index', title: 'The Kit Index', blurb: 'A block-style catalog of all 48 home kits. Browse the design language of every nation’s tournament kit. Reference product, no AI.', cta: 'Browse all 48', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/kits' },
       { id: '04', label: 'Repaint', title: 'The Repaint', blurb: 'Pick a country and the whole page repaints in their kit. A small widget for the fan who wants their team everywhere they look.', cta: 'Open the repainter', status: 'starter', statusLabel: 'Live', href: '#repaint', onClick: 'openRepaintModal' },
       { id: '05', label: 'Anthem', title: 'The Anthem', blurb: 'Pick a country, pick a vibe. Get a hype track that mashes their anthem with your soundtrack.', cta: 'Coming soon', status: 'drafted', statusLabel: 'Coming soon', href: '#' },
       { id: '06', label: 'Heritage', title: 'The Heritage', blurb: 'Find out which nations you can root for. Three ways in: a family tree, a DNA upload, or a vibes quiz. You walk out with a team and a crest.', cta: 'Coming soon', status: 'drafted', statusLabel: 'Coming soon', href: '#' },
@@ -2321,7 +2321,7 @@
         const done = () => { ff.classList.remove('is-loading'); finish(); };
         fc.onload = done;
         fc.onerror = done;
-        fc.src = `https://provisions.work/world-cup/card-generator/api/card?team=${encodeURIComponent(code)}&v=5`;
+        fc.src = `https://provisions.soccer/card/api/card?team=${encodeURIComponent(code)}&v=5`;
       } else {
         finish();
       }

@@ -1,17 +1,76 @@
 {
   "cleanUrls": true,
   "redirects": [
-    { "source": "/ufo", "destination": "/ufo/", "permanent": false }
+    { "source": "/ufo", "destination": "/ufo/", "permanent": false },
+    {
+      "source": "/world-cup",
+      "has": [{ "type": "host", "value": "provisions.work" }],
+      "destination": "https://provisions.soccer/",
+      "permanent": true
+    },
+    {
+      "source": "/world-cup/",
+      "has": [{ "type": "host", "value": "provisions.work" }],
+      "destination": "https://provisions.soccer/",
+      "permanent": true
+    },
+    {
+      "source": "/world-cup/the-daily",
+      "has": [{ "type": "host", "value": "provisions.work" }],
+      "destination": "https://provisions.soccer/daily",
+      "permanent": true
+    },
+    {
+      "source": "/world-cup/the-daily/",
+      "has": [{ "type": "host", "value": "provisions.work" }],
+      "destination": "https://provisions.soccer/daily",
+      "permanent": true
+    },
+    {
+      "source": "/world-cup/kit-index",
+      "has": [{ "type": "host", "value": "provisions.work" }],
+      "destination": "https://provisions.soccer/kits",
+      "permanent": true
+    },
+    {
+      "source": "/world-cup/kit-index/",
+      "has": [{ "type": "host", "value": "provisions.work" }],
+      "destination": "https://provisions.soccer/kits",
+      "permanent": true
+    },
+    {
+      "source": "/world-cup/card-generator",
+      "has": [{ "type": "host", "value": "provisions.work" }],
+      "destination": "https://provisions.soccer/card",
+      "permanent": true
+    }
   ],
   "rewrites": [
     { "source": "/ufo/", "destination": "https://ufo-archive-three.vercel.app" },
     { "source": "/ufo/:path*", "destination": "https://ufo-archive-three.vercel.app/:path*" },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "provisions.soccer" }],
+      "destination": "/world-cup-hub"
+    },
+    { "source": "/daily", "destination": "/world-cup-hub/the-daily" },
+    { "source": "/daily/", "destination": "/world-cup-hub/the-daily" },
+    { "source": "/kits", "destination": "/world-cup-hub/kit-index" },
+    { "source": "/kits/", "destination": "/world-cup-hub/kit-index" },
+    {
+      "source": "/card",
+      "destination": "https://world-cup-self.vercel.app/world-cup/card-generator"
+    },
+    {
+      "source": "/card/:path*",
+      "destination": "https://world-cup-self.vercel.app/world-cup/card-generator/:path*"
+    },
     { "source": "/world-cup", "destination": "/world-cup-hub" },
     { "source": "/world-cup/", "destination": "/world-cup-hub" },
-    { "source": "/world-cup/kit-index", "destination": "/world-cup-hub/kit-index" },
-    { "source": "/world-cup/kit-index/", "destination": "/world-cup-hub/kit-index" },
     { "source": "/world-cup/the-daily", "destination": "/world-cup-hub/the-daily" },
     { "source": "/world-cup/the-daily/", "destination": "/world-cup-hub/the-daily" },
+    { "source": "/world-cup/kit-index", "destination": "/world-cup-hub/kit-index" },
+    { "source": "/world-cup/kit-index/", "destination": "/world-cup-hub/kit-index" },
     {
       "source": "/world-cup/card-generator",
       "destination": "https://world-cup-self.vercel.app/world-cup/card-generator"

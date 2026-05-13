@@ -315,7 +315,7 @@ function Nav({ step }: { step: Step }) {
     <header className="sticky top-0 z-50 bg-parchment-elevated border-b border-border">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 min-h-[72px] flex items-center justify-between gap-3">
         <a
-          href="https://provisions.work/world-cup"
+          href="https://provisions.soccer"
           className="flex items-center gap-3 group flex-shrink-0"
           aria-label="Provisions"
         >
@@ -348,7 +348,7 @@ function Nav({ step }: { step: Step }) {
           ))}
         </ol>
         <a
-          href="https://provisions.work/world-cup"
+          href="https://provisions.soccer"
           className="h-[44px] inline-flex items-center bg-leather-mid text-white px-4 sm:px-5 font-display font-extrabold uppercase tracking-label text-[10px] sm:text-[12px] border border-leather-mid hover:bg-terracotta hover:border-terracotta transition-all"
           style={{ boxShadow: "0 3px 0 rgba(0,0,0,0.12)" }}
         >
@@ -1008,7 +1008,7 @@ function ResultStep({
       ctx.fillStyle = textColor;
       ctx.font = "700 24px Syne, sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText("PROVISIONS.WORK/WORLD-CUP", 540, 1870);
+      ctx.fillText("PROVISIONS.SOCCER", 540, 1870);
 
       // Export
       const blob: Blob = await new Promise((resolve, reject) => {

@@ -577,7 +577,7 @@ export async function GET(req: Request) {
               display: "flex",
             }}
           >
-            PROVISIONS.WORK/WORLD-CUP
+            PROVISIONS.SOCCER
           </div>
         </div>
       </div>

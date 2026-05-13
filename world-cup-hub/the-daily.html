@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Daily — Provisions Series, Summer '26</title>
   <meta name="description" content="Every match of the World Cup, day by day. Kickoff times, venues, kit colors, countdowns. Reference plate, free for fans.">
-  <link rel="canonical" href="https://provisions.work/world-cup/the-daily">
+  <link rel="canonical" href="https://provisions.soccer/daily">
 
   <meta property="og:title" content="The Daily — Provisions Series">
   <meta property="og:description" content="Every match of the World Cup, day by day.">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://provisions.work/world-cup/the-daily">
+  <meta property="og:url" content="https://provisions.soccer/daily">
   <meta property="og:image" content="https://provisions.work/images/og-image.png">
   <meta property="og:site_name" content="Provisions">
 
@@ -878,10 +878,10 @@
 
   <nav>
     <div class="nav-inner">
-      <a href="https://provisions.work/world-cup" class="nav-mark" aria-label="Provisions">
+      <a href="https://provisions.soccer" class="nav-mark" aria-label="Provisions">
         <img src="../images/provisions-mark.png" alt="Provisions" width="26" height="26">
       </a>
-      <a href="https://provisions.work/world-cup" class="nav-back">← Back to the team sheet</a>
+      <a href="https://provisions.soccer" class="nav-back">← Back to the team sheet</a>
     </div>
   </nav>
 
@@ -1388,7 +1388,7 @@
       const group = btn.getAttribute("data-group") || "";
       const round = btn.getAttribute("data-round") || "";
       const params = new URLSearchParams({ h: home, a: away, iso, venue, city, group, round });
-      const url = `https://provisions.work/world-cup/card-generator/api/story?${params.toString()}`;
+      const url = `https://provisions.soccer/card/api/story?${params.toString()}`;
       const filename = `${home}-vs-${away}-world-cup-26.png`;
       const originalLabel = btn.innerHTML;
       btn.disabled = true;
@@ -1525,7 +1525,7 @@
       const team = btn.getAttribute("data-team") || "";
       const params = new URLSearchParams({ date });
       if (team && team !== "ALL") params.set("team", team);
-      const url = `https://provisions.work/world-cup/card-generator/api/today?${params.toString()}`;
+      const url = `https://provisions.soccer/card/api/today?${params.toString()}`;
       const filename = `today-${date}${team && team !== "ALL" ? "-" + team : ""}-world-cup-26.png`;
       const originalLabel = btn.innerHTML;
       btn.disabled = true;

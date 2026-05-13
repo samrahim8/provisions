@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const OG_IMAGE = "https://provisions.work/world-cup/card-generator/api/og";
+const OG_IMAGE = "https://provisions.soccer/card/api/og";
 
 export const metadata: Metadata = {
   title: "A lineup of goods for '26 — Provisions",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "A lineup of goods for '26 — Provisions",
     description: "World Cup products for brands, agencies + fans. Pick a country, snap a photo, share it with your squad.",
-    url: "https://provisions.work/world-cup/card-generator",
+    url: "https://provisions.soccer/card",
     siteName: "Provisions",
     type: "website",
     images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
