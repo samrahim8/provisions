@@ -907,23 +907,30 @@ function ResultStep({
 }) {
   const [storyBusy, setStoryBusy] = useState(false);
 
-  async function share() {
+  async function save() {
+    const filename = `${name.replace(/\s+/g, "-")}-${team.code}.png`;
+    const isTouch = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
     try {
       const res = await fetch(cardUrl);
       const blob = await res.blob();
-      const file = new File([blob], `${name.replace(/\s+/g, "-")}-${team.code}.png`, { type: "image/png" });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: `${name} · ${team.name}`, text: `My World Cup '26 card.` });
-      } else {
-        download();
+      const file = new File([blob], filename, { type: "image/png" });
+      // Mobile: native share sheet → user picks "Save Image" → goes to Photos
+      if (isTouch && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+        await navigator.share({ files: [file], title: `${name} · ${team.name}`, text: `My World Cup '26 card` });
+        return;
       }
-    } catch {}
-  }
-  function download() {
-    const a = document.createElement("a");
-    a.href = cardUrl;
-    a.download = `${name.replace(/\s+/g, "-")}-${team.code}.png`;
-    a.click();
+      // Desktop: download to Downloads folder
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 60 * 1000);
+    } catch (e) {
+      if (e && (e as Error).name !== "AbortError") console.error("Save failed:", e);
+    }
   }
 
   function _lum(hex: string): number {
@@ -931,21 +938,6 @@ function ResultStep({
     const g = parseInt(hex.slice(3, 5), 16) / 255;
     const b = parseInt(hex.slice(5, 7), 16) / 255;
     return 0.299 * r + 0.587 * g + 0.114 * b;
-  }
-  function dayContext(): string {
-    const opener = new Date("2026-06-11T19:00:00Z").getTime();
-    const final = new Date("2026-07-19T23:00:00Z").getTime();
-    const now = Date.now();
-    const dayMs = 86400000;
-    if (now < opener) {
-      const days = Math.max(1, Math.ceil((opener - now) / dayMs));
-      return `DAY ${days} OF THE WAIT`;
-    }
-    if (now <= final) {
-      const days = Math.floor((now - opener) / dayMs) + 1;
-      return `DAY ${days} OF THE TOURNAMENT`;
-    }
-    return "MMXXVI · IN THE BOOKS";
   }
 
   async function shareStory() {
@@ -988,17 +980,13 @@ function ResultStep({
       ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(56, 100); ctx.lineTo(1024, 100); ctx.stroke();
 
-      // Top text
+      // Top text — just the team name, centered
       ctx.fillStyle = textColor;
-      ctx.font = "700 24px Syne, sans-serif";
+      ctx.font = "700 26px Syne, sans-serif";
       try { (ctx as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = "6px"; } catch {}
-      ctx.textAlign = "left";
+      ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(dayContext(), 56, 50);
-      ctx.textAlign = "right";
-      ctx.globalAlpha = 0.75;
-      ctx.fillText(team.name.toUpperCase(), 1024, 50);
-      ctx.globalAlpha = 1;
+      ctx.fillText(team.name.toUpperCase(), 540, 50);
 
       // Card: flat, shadowed, centered
       const cardW = 820;
@@ -1016,15 +1004,11 @@ function ResultStep({
       ctx.strokeStyle = ruleColor;
       ctx.beginPath(); ctx.moveTo(56, 1820); ctx.lineTo(1024, 1820); ctx.stroke();
 
-      // Bottom text
+      // Bottom text — single centered line
       ctx.fillStyle = textColor;
       ctx.font = "700 24px Syne, sans-serif";
-      ctx.textAlign = "left";
-      ctx.fillText("MADE BY PROVISIONS", 56, 1870);
-      ctx.textAlign = "right";
-      ctx.globalAlpha = 0.75;
-      ctx.fillText("PROVISIONS.WORK/WORLD-CUP", 1024, 1870);
-      ctx.globalAlpha = 1;
+      ctx.textAlign = "center";
+      ctx.fillText("PROVISIONS.WORK/WORLD-CUP", 540, 1870);
 
       // Export
       const blob: Blob = await new Promise((resolve, reject) => {
@@ -1070,8 +1054,7 @@ function ResultStep({
           <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
             {storyBusy ? "Pressing…" : "Share to Story"}
           </button>
-          <button onClick={share} className="btn-ghost">Share card</button>
-          <button onClick={download} className="btn-ghost">Download</button>
+          <button onClick={save} className="btn-ghost">Save</button>
           <button onClick={onRestart} className="text-text-soft hover:text-leather px-2 py-3">
             Make another
           </button>

@@ -305,7 +305,7 @@ export async function GET(req: Request) {
           fontFamily: "BigShoulders",
         }}
       >
-        {/* Top day-context strip */}
+        {/* Top context strip — centered tournament + optional team */}
         <div
           style={{
             height: TOP,
@@ -313,17 +313,16 @@ export async function GET(req: Request) {
             color: CREAM,
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
             padding: "0 56px",
             flexShrink: 0,
             fontFamily: "PlexMono",
-            fontSize: 22,
-            letterSpacing: "0.28em",
+            fontSize: 24,
+            letterSpacing: "0.32em",
             fontWeight: 600,
           }}
         >
-          <span style={{ color: TERRACOTTA, display: "flex" }}>{dayContext()}</span>
-          <span style={{ opacity: 0.7, display: "flex" }}>{teamLine}WORLD CUP '26</span>
+          <span style={{ opacity: 0.95, display: "flex" }}>{teamLine}WORLD CUP '26</span>
         </div>
 
         {/* Big header */}
@@ -549,7 +548,7 @@ export async function GET(req: Request) {
           })}
         </div>
 
-        {/* Footer */}
+        {/* Footer — single centered mark + URL */}
         <div
           style={{
             height: FOOTER,
@@ -557,42 +556,28 @@ export async function GET(req: Request) {
             color: CREAM,
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
+            gap: 16,
             padding: "0 56px",
             flexShrink: 0,
           }}
         >
+          {mark ? (
+            <img src={mark} width={32} height={32} style={{ width: 32, height: 32 }} />
+          ) : null}
           <div
             style={{
               fontFamily: "PlexMono",
-              fontSize: 22,
-              letterSpacing: "0.24em",
-              color: TERRACOTTA,
+              fontSize: 24,
+              letterSpacing: "0.28em",
+              color: CREAM,
+              opacity: 0.95,
               fontWeight: 600,
               textTransform: "uppercase",
               display: "flex",
             }}
           >
             PROVISIONS.WORK/WORLD-CUP
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            {mark ? (
-              <img src={mark} width={32} height={32} style={{ width: 32, height: 32 }} />
-            ) : null}
-            <div
-              style={{
-                fontFamily: "PlexMono",
-                fontSize: 18,
-                letterSpacing: "0.22em",
-                color: CREAM,
-                opacity: 0.65,
-                fontWeight: 600,
-                textTransform: "uppercase",
-                display: "flex",
-              }}
-            >
-              MADE BY PROVISIONS
-            </div>
           </div>
         </div>
       </div>

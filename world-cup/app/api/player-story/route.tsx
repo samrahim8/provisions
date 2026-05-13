@@ -130,24 +130,23 @@ export async function GET(req: Request) {
           position: "relative",
         }}
       >
-        {/* Top strip */}
+        {/* Top strip — team name, centered */}
         <div
           style={{
             height: TOP,
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
             padding: "0 56px",
             flexShrink: 0,
             fontFamily: "PlexMono",
-            fontSize: 22,
-            letterSpacing: "0.28em",
+            fontSize: 24,
+            letterSpacing: "0.32em",
             fontWeight: 600,
             borderBottom: `2px solid ${accentText}`,
           }}
         >
-          <span style={{ color: text, opacity: 0.95, display: "flex" }}>{dayContext()}</span>
-          <span style={{ color: text, opacity: 0.7, display: "flex" }}>{tInfo.name.toUpperCase()}</span>
+          <span style={{ color: text, opacity: 0.95, display: "flex" }}>{tInfo.name.toUpperCase()}</span>
         </div>
 
         {/* Card area */}
@@ -183,44 +182,29 @@ export async function GET(req: Request) {
           ) : null}
         </div>
 
-        {/* Bottom strip */}
+        {/* Bottom strip — single centered mark + URL */}
         <div
           style={{
             height: FOOTER,
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
+            gap: 16,
             padding: "0 56px",
             flexShrink: 0,
             borderTop: `2px solid ${accentText}`,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            {mark ? (
-              <img src={mark} width={36} height={36} style={{ width: 36, height: 36 }} />
-            ) : null}
-            <div
-              style={{
-                fontFamily: "PlexMono",
-                fontSize: 22,
-                letterSpacing: "0.24em",
-                color: text,
-                opacity: 0.95,
-                fontWeight: 600,
-                textTransform: "uppercase",
-                display: "flex",
-              }}
-            >
-              MADE BY PROVISIONS
-            </div>
-          </div>
+          {mark ? (
+            <img src={mark} width={36} height={36} style={{ width: 36, height: 36 }} />
+          ) : null}
           <div
             style={{
               fontFamily: "PlexMono",
-              fontSize: 20,
-              letterSpacing: "0.24em",
+              fontSize: 24,
+              letterSpacing: "0.28em",
               color: text,
-              opacity: 0.7,
+              opacity: 0.95,
               fontWeight: 600,
               textTransform: "uppercase",
               display: "flex",

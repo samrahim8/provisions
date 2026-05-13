@@ -440,35 +440,23 @@ export async function GET(req: Request) {
           >
             <div
               style={{
-                fontFamily: "PlexMono",
-                fontSize: 18,
-                letterSpacing: "0.22em",
-                color: CREAM,
-                opacity: 0.55,
-                fontWeight: 600,
-                textTransform: "uppercase",
-                display: "flex",
-              }}
-            >
-              {dayCtx}
-            </div>
-            <div
-              style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 10,
+                justifyContent: "center",
+                gap: 12,
+                width: "100%",
               }}
             >
               {mark ? (
-                <img src={mark} width={22} height={22} style={{ width: 22, height: 22 }} />
+                <img src={mark} width={24} height={24} style={{ width: 24, height: 24 }} />
               ) : null}
               <div
                 style={{
                   fontFamily: "PlexMono",
-                  fontSize: 16,
-                  letterSpacing: "0.22em",
+                  fontSize: 18,
+                  letterSpacing: "0.24em",
                   color: CREAM,
-                  opacity: 0.7,
+                  opacity: 0.78,
                   fontWeight: 600,
                   display: "flex",
                 }}
