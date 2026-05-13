@@ -391,6 +391,22 @@
       color: var(--leather-mid);
       margin-top: 4px;
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .match-flame {
+      display: none;
+      width: 11px;
+      height: 11px;
+      color: var(--terracotta);
+      animation: flame-flicker 1.4s ease-in-out infinite;
+    }
+    .match.is-imminent .match-flame { display: inline-block; }
+    .match.is-imminent .match-countdown { color: var(--terracotta); opacity: 1; }
+    @keyframes flame-flicker {
+      0%, 100% { transform: scale(1) rotate(-1deg); opacity: 0.95; }
+      50% { transform: scale(1.08) rotate(2deg); opacity: 1; }
     }
     .match-venue {
       grid-column: 1 / -1;
@@ -779,6 +795,32 @@
     .share-action svg { width: 14px; height: 14px; flex-shrink: 0; }
     .share-action[disabled] { opacity: 0.5; cursor: wait; }
     .share-action.is-success { background: var(--terracotta); color: var(--on-accent); }
+    .share-handle-label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.7;
+    }
+    .share-handle-input {
+      appearance: none;
+      background: var(--bg);
+      border: 1.5px solid var(--text);
+      color: var(--text);
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .share-handle-input:focus { border-color: var(--terracotta); }
     .share-hint {
       font-family: var(--mono);
       font-size: 11px;
@@ -932,6 +974,10 @@
         </div>
         <div class="share-actions">
           <h4>1080 × 1920 · Instagram Story</h4>
+          <label class="share-handle-label">
+            <span>Sign it (optional)</span>
+            <input type="text" class="share-handle-input" id="shareHandle" placeholder="@yourname" maxlength="24" autocomplete="off">
+          </label>
           <button class="share-action" type="button" id="shareNative" hidden>
             <span>Share to Story</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
@@ -1276,7 +1322,12 @@
             <div class="match-group">${label}</div>
             <div class="match-time" data-time="${iso}">${time}</div>
             <div class="match-tz" data-tz-label>${activeTz}</div>
-            <div class="match-countdown" data-countdown="${iso}">${countdownText(iso)}</div>
+            <div class="match-countdown" data-countdown="${iso}">
+              <svg class="match-flame" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M13.5 1c.83 4.5-2.5 6-2.5 9 0 1.5.83 2.5 2 2.5s2-1 2-2.5c0-2 2-3 2-3s2 2 2 5c0 4-3 7-7 7s-7-3-7-7c0-5 5-6.5 5-11z"/>
+              </svg>
+              <span>${countdownText(iso)}</span>
+            </div>
           </div>
           <div class="match-side match-side--away">
             <div class="stripe" style="background:${aStripe}"></div>
@@ -1359,6 +1410,7 @@
       return isTouchPrimary();
     }
 
+    let _lastShareParams = null;
     async function shareMatch(btn) {
       const home = btn.getAttribute("data-home");
       const away = btn.getAttribute("data-away");
@@ -1367,7 +1419,11 @@
       const city = btn.getAttribute("data-city") || "";
       const group = btn.getAttribute("data-group") || "";
       const round = btn.getAttribute("data-round") || "";
+      const handleEl = document.getElementById("shareHandle");
+      const handle = handleEl ? (handleEl.value || "").trim() : "";
+      _lastShareParams = { home, away, iso, venue, city, group, round };
       const params = new URLSearchParams({ h: home, a: away, iso, venue, city, group, round });
+      if (handle) params.set("handle", handle);
       const url = `https://provisions.work/world-cup/card-generator/api/story?${params.toString()}`;
       const filename = `${home}-vs-${away}-world-cup-26.png`;
       const originalLabel = btn.innerHTML;
@@ -1482,6 +1538,38 @@
     document.getElementById("shareDownload")?.addEventListener("click", downloadCurrentShare);
     document.getElementById("shareCopy")?.addEventListener("click", copyCurrentShare);
     document.getElementById("shareOpen")?.addEventListener("click", openCurrentShare);
+    // Debounced re-render when @handle changes — persists in localStorage
+    const handleEl = document.getElementById("shareHandle");
+    if (handleEl) {
+      try { handleEl.value = localStorage.getItem("daily-handle") || ""; } catch (e) {}
+      let _t = null;
+      handleEl.addEventListener("input", () => {
+        try { localStorage.setItem("daily-handle", handleEl.value); } catch (e) {}
+        if (!_lastShareParams) return;
+        clearTimeout(_t);
+        _t = setTimeout(async () => {
+          const { home, away, iso, venue, city, group, round } = _lastShareParams;
+          const h = (handleEl.value || "").trim();
+          const params = new URLSearchParams({ h: home, a: away, iso, venue, city, group, round });
+          if (h) params.set("handle", h);
+          const url = `https://provisions.work/world-cup/card-generator/api/story?${params.toString()}`;
+          const filename = `${home}-vs-${away}-world-cup-26.png`;
+          const preview = document.getElementById("sharePreview");
+          if (preview) preview.innerHTML = `<div class="skeleton"></div>`;
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Render failed");
+            const blob = await res.blob();
+            _currentShareBlob = blob;
+            _currentShareFile = new File([blob], filename, { type: "image/png" });
+            _currentShareFilename = filename;
+            const blobUrl = URL.createObjectURL(blob);
+            if (preview) preview.innerHTML = `<img src="${blobUrl}" alt="${home} vs ${away} story card">`;
+          } catch (e) { /* silent */ }
+        }, 450);
+      });
+    }
+
     document.getElementById("shareNative")?.addEventListener("click", (e) => {
       const b = e.currentTarget;
       // After a successful share, the button morphs to an IG launcher
@@ -1570,9 +1658,20 @@
     }
 
     function updateAllCountdowns() {
+      const dayMs = 86400000;
+      const now = Date.now();
       document.querySelectorAll("[data-countdown]").forEach((el) => {
         const iso = el.getAttribute("data-countdown");
-        el.textContent = countdownText(iso);
+        const span = el.querySelector("span") || el;
+        span.textContent = countdownText(iso);
+        // Flag matches within the next 24 hours (and not yet kicked off) as imminent
+        const article = el.closest(".match");
+        if (article) {
+          const kickoff = new Date(iso).getTime();
+          const diff = kickoff - now;
+          const imminent = diff > 0 && diff <= dayMs;
+          article.classList.toggle("is-imminent", imminent);
+        }
       });
       // Nextup big countdown — anchored to whichever match is currently surfaced
       const t = timeUntil(nextupMatch[4]);
