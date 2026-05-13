@@ -1058,9 +1058,9 @@ function ResultStep({
   }
 
   return (
-    <div className="grid md:grid-cols-[1fr,1fr] gap-12 items-center">
-      <div>
-        <div className="label mb-4">Your Card</div>
+    <div className="grid md:grid-cols-[1fr,1fr] gap-8 md:gap-12 items-center">
+      <div className="order-2 md:order-1">
+        <div className="label mb-4 hidden md:block">Your Card</div>
         <h1 className="font-display font-bold text-leather text-[clamp(2.2rem,5.5vw,3.8rem)] leading-[1.05] tracking-[-0.02em] mb-3">
           You made the squad.
         </h1>
@@ -1078,7 +1078,7 @@ function ResultStep({
           </button>
         </div>
       </div>
-      <div className="flex justify-center">
+      <div className="order-1 md:order-2 flex justify-center">
         <img src={cardUrl} alt="Your card" className="w-full max-w-sm rounded-card shadow-card border border-border" />
       </div>
     </div>
