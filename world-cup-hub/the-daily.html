@@ -106,7 +106,14 @@
       .today { padding: 0 16px; margin-top: 16px; }
       .today-title { font-size: clamp(32px, 12vw, 48px); }
       .today-meta { font-size: 10px; }
-      .today-empty { padding: 12px 16px; font-size: 10px; }
+      .today-empty {
+        padding: 10px 16px;
+        font-size: 9px;
+        letter-spacing: 0.14em;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
@@ -198,10 +205,10 @@
       font-weight: 500;
     }
     @media (max-width: 700px) {
-      .hero { padding: 32px 24px 24px; }
-      .hero h1 { font-size: clamp(40px, 12vw, 64px); margin-bottom: 14px; }
-      .hero .lede { font-size: 15px; }
-      .hero .label { font-size: 11px; margin-bottom: 12px; }
+      .hero { padding: 24px 16px 16px; }
+      .hero h1 { font-size: clamp(44px, 14vw, 64px); margin-bottom: 10px; line-height: 0.92; }
+      .hero .lede { font-size: 14px; line-height: 1.45; max-width: 100%; }
+      .hero .label { font-size: 10px; margin-bottom: 10px; }
     }
 
     /* NEXT-UP STRIP */
@@ -245,8 +252,12 @@
     }
     @media (max-width: 700px) {
       .nextup { padding: 0 16px 8px; }
-      .nextup-card { padding: 14px 16px; gap: 12px; }
-      .nextup-count { font-size: 24px; }
+      .nextup-card { padding: 12px 14px; gap: 10px; }
+      .nextup-lhs { gap: 10px; flex-wrap: wrap; }
+      .nextup-tag { font-size: 9px; letter-spacing: 0.2em; padding: 3px 7px; }
+      .nextup-meta { font-size: 10px; letter-spacing: 0.14em; }
+      .nextup-count { font-size: 22px; }
+      .nextup-count span.unit { font-size: 9px; letter-spacing: 0.14em; }
     }
 
     /* DAY HEADING */
@@ -790,11 +801,18 @@
       .tf-row-2 { justify-self: start; }
     }
     @media (max-width: 700px) {
-      .team-filter-inner { padding: 12px 16px; gap: 12px; }
-      .tf-prompt { font-size: 10px; }
-      .tf-select { font-size: 11px; padding: 9px 32px 9px 12px; }
-      .tf-count { font-size: 10px; }
+      .team-filter-inner { padding: 10px 16px; gap: 10px; }
+      /* Mobile prompt becomes a single-line label, shorter */
+      .tf-prompt { font-size: 9px; letter-spacing: 0.18em; line-height: 1.3; }
+      .tf-prompt .full { display: none; }
+      .tf-prompt .short { display: inline; }
+      .tf-row-1 { gap: 10px; }
+      .tf-row-2 { gap: 10px; align-items: center; }
+      .tf-select { font-size: 11px; padding: 8px 30px 8px 12px; flex: 1; min-width: 0; }
+      .tf-tz button { padding: 7px 9px; font-size: 10px; letter-spacing: 0.14em; }
+      .tf-count { font-size: 9px; letter-spacing: 0.14em; }
     }
+    .tf-prompt .short { display: none; }
 
     /* ROUND HEADERS */
     .round-head {
@@ -873,7 +891,10 @@
   <div class="team-filter">
     <div class="team-filter-inner">
       <div class="tf-row-1">
-        <span class="tf-prompt">Pick your team and we'll show their schedule in their colors</span>
+        <span class="tf-prompt">
+  <span class="full">Pick your team and we'll show their schedule in their colors</span>
+  <span class="short">Pick your team</span>
+</span>
         <select class="tf-select" id="teamFilter">
           <option value="ALL">All 48 teams</option>
         </select>
@@ -912,7 +933,7 @@
         <div class="share-actions">
           <h4>1080 × 1920 · Instagram Story</h4>
           <button class="share-action" type="button" id="shareNative" hidden>
-            <span>Share to IG</span>
+            <span>Share to Story</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
           </button>
           <button class="share-action" type="button" id="shareDownload">
@@ -1311,7 +1332,7 @@
       const shareBtn = document.getElementById("shareNative");
       if (shareBtn) {
         shareBtn.dataset.mode = "";
-        shareBtn.innerHTML = `<span>Share to IG</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>`;
+        shareBtn.innerHTML = `<span>Share to Story</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>`;
       }
       modal.setAttribute("aria-hidden", "false");
       modal.classList.add("open");
@@ -1371,7 +1392,7 @@
         if (preview) {
           preview.innerHTML = `<img src="${blobUrl}" alt="${home} vs ${away} story card">`;
         }
-        // Show the right action set: on touch devices, the "Share to IG" button is primary
+        // Show the right action set: on touch devices, the "Share to Story" button is primary
         const shareBtn = document.getElementById("shareNative");
         const dlBtn = document.getElementById("shareDownload");
         if (shareBtn) {
