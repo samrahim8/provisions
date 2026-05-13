@@ -1362,8 +1362,19 @@
             title: `${home} vs ${away}`,
             text: `${home} vs ${away} · World Cup '26`,
           });
+          // Morph the button into an Instagram launcher for 6s
           btn.classList.add("is-success");
-          btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Shared`;
+          btn.disabled = false;
+          btn.innerHTML = `Open Instagram <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
+          btn.dataset.mode = "ig";
+          setTimeout(() => {
+            if (btn.dataset.mode === "ig") {
+              btn.classList.remove("is-success");
+              btn.innerHTML = originalLabel;
+              btn.dataset.mode = "";
+            }
+          }, 6000);
+          return;
         } else {
           // Desktop: render into the modal preview
           if (!document.getElementById("shareModal").classList.contains("open")) {
@@ -1448,10 +1459,16 @@
     // Delegate clicks on per-match share buttons
     document.addEventListener("click", (e) => {
       const btn = e.target.closest(".match-share");
-      if (btn) {
-        e.preventDefault();
-        shareMatch(btn);
+      if (!btn) return;
+      e.preventDefault();
+      // If the button is in post-share IG mode, that click launches Instagram
+      if (btn.dataset.mode === "ig") {
+        // Try the Stories camera deep link first, fall back to plain IG
+        window.location.href = "instagram://story-camera";
+        setTimeout(() => { window.location.href = "instagram://"; }, 400);
+        return;
       }
+      shareMatch(btn);
     });
 
     function render() {
