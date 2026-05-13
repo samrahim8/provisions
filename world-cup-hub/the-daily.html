@@ -911,6 +911,10 @@
         </div>
         <div class="share-actions">
           <h4>1080 × 1920 · Instagram Story</h4>
+          <button class="share-action" type="button" id="shareNative" hidden>
+            <span>Share to apps</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          </button>
           <button class="share-action" type="button" id="shareDownload">
             <span>Download PNG</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -923,7 +927,7 @@
             <span>Open in new tab</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </button>
-          <div class="share-hint">On phones, the Share button opens your native share sheet directly — straight to Instagram, iMessage, anywhere.</div>
+          <div class="share-hint" id="shareHint">Save the image to your camera roll, then open Instagram and add it to your Story.</div>
         </div>
       </div>
     </div>
@@ -1292,6 +1296,8 @@
 
     // ── Story share — keeps the rendered blob in scope for modal actions ──
     let _currentShareBlob = null;
+    let _currentShareFile = null;
+    let _currentShareLabel = "";
     let _currentShareFilename = "world-cup-26.png";
 
     function openShareModal(home, away) {
@@ -1301,6 +1307,12 @@
       if (!modal) return;
       title.textContent = `${home} vs ${away}`;
       preview.innerHTML = `<div class="skeleton"></div>`;
+      // Reset the native share button to its fresh state
+      const shareBtn = document.getElementById("shareNative");
+      if (shareBtn) {
+        shareBtn.dataset.mode = "";
+        shareBtn.innerHTML = `<span>Share to apps</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>`;
+      }
       modal.setAttribute("aria-hidden", "false");
       modal.classList.add("open");
       document.body.style.overflow = "hidden";
@@ -1341,11 +1353,8 @@
       btn.disabled = true;
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg> Pressing…`;
 
-      // Open the modal immediately on desktop so the user sees feedback
-      const willUseNative = isTouchPrimary();
-      if (!willUseNative) {
-        openShareModal(home, away);
-      }
+      // Always open the modal first — same flow on mobile + desktop
+      openShareModal(home, away);
 
       try {
         const res = await fetch(url);
@@ -1353,52 +1362,55 @@
         const blob = await res.blob();
         _currentShareBlob = blob;
         _currentShareFilename = filename;
-        const file = new File([blob], filename, { type: "image/png" });
-
-        // Touch-primary mobile: native share sheet
-        if (shouldUseNativeShare(file)) {
-          await navigator.share({
-            files: [file],
-            title: `${home} vs ${away}`,
-            text: `${home} vs ${away} · World Cup '26`,
-          });
-          // Morph the button into an Instagram launcher for 6s
-          btn.classList.add("is-success");
-          btn.disabled = false;
-          btn.innerHTML = `Open Instagram <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
-          btn.dataset.mode = "ig";
-          setTimeout(() => {
-            if (btn.dataset.mode === "ig") {
-              btn.classList.remove("is-success");
-              btn.innerHTML = originalLabel;
-              btn.dataset.mode = "";
-            }
-          }, 6000);
-          return;
-        } else {
-          // Desktop: render into the modal preview
-          if (!document.getElementById("shareModal").classList.contains("open")) {
-            openShareModal(home, away);
-          }
-          const blobUrl = URL.createObjectURL(blob);
-          const preview = document.getElementById("sharePreview");
-          if (preview) {
-            preview.innerHTML = `<img src="${blobUrl}" alt="${home} vs ${away} story card">`;
-          }
-          btn.classList.add("is-success");
-          btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Opened`;
+        // For Web Share — pre-build the File and stash with the blob
+        _currentShareFile = new File([blob], filename, { type: "image/png" });
+        _currentShareLabel = `${home} vs ${away}`;
+        // Render the preview into the modal
+        const blobUrl = URL.createObjectURL(blob);
+        const preview = document.getElementById("sharePreview");
+        if (preview) {
+          preview.innerHTML = `<img src="${blobUrl}" alt="${home} vs ${away} story card">`;
         }
-        setTimeout(() => {
-          btn.classList.remove("is-success");
-          btn.innerHTML = originalLabel;
-          btn.disabled = false;
-        }, 1800);
+        // Show the right action set: on touch devices, the "Share to apps" button is primary
+        const shareBtn = document.getElementById("shareNative");
+        const dlBtn = document.getElementById("shareDownload");
+        if (shareBtn) {
+          if (shouldUseNativeShare(_currentShareFile)) {
+            shareBtn.hidden = false;
+            // Demote download to secondary on touch devices
+            dlBtn?.classList.add("secondary");
+          } else {
+            shareBtn.hidden = true;
+            dlBtn?.classList.remove("secondary");
+          }
+        }
+        btn.disabled = false;
+        btn.innerHTML = originalLabel;
       } catch (e) {
         btn.innerHTML = originalLabel;
         btn.disabled = false;
         if (e && e.name !== "AbortError") {
-          console.error("Share failed:", e);
+          console.error("Render failed:", e);
         }
+      }
+    }
+
+    async function nativeShareCurrent() {
+      if (!_currentShareFile) return;
+      const shareBtn = document.getElementById("shareNative");
+      try {
+        await navigator.share({
+          files: [_currentShareFile],
+          title: _currentShareLabel || "Match card",
+          text: `${_currentShareLabel || "Match card"} · World Cup '26`,
+        });
+        // Morph button to Instagram launcher
+        if (shareBtn) {
+          shareBtn.innerHTML = `<span>Open Instagram</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
+          shareBtn.dataset.mode = "ig";
+        }
+      } catch (e) {
+        if (e && e.name !== "AbortError") console.error("Share failed:", e);
       }
     }
 
@@ -1449,6 +1461,16 @@
     document.getElementById("shareDownload")?.addEventListener("click", downloadCurrentShare);
     document.getElementById("shareCopy")?.addEventListener("click", copyCurrentShare);
     document.getElementById("shareOpen")?.addEventListener("click", openCurrentShare);
+    document.getElementById("shareNative")?.addEventListener("click", (e) => {
+      const b = e.currentTarget;
+      // After a successful share, the button morphs to an IG launcher
+      if (b.dataset.mode === "ig") {
+        window.location.href = "instagram://story-camera";
+        setTimeout(() => { window.location.href = "instagram://"; }, 400);
+        return;
+      }
+      nativeShareCurrent();
+    });
     document.getElementById("shareModal")?.addEventListener("click", (e) => {
       if (e.target === e.currentTarget) closeShareModal();
     });
@@ -1456,18 +1478,11 @@
       if (e.key === "Escape") closeShareModal();
     });
 
-    // Delegate clicks on per-match share buttons
+    // Delegate clicks on per-match share buttons → always open the preview modal
     document.addEventListener("click", (e) => {
       const btn = e.target.closest(".match-share");
       if (!btn) return;
       e.preventDefault();
-      // If the button is in post-share IG mode, that click launches Instagram
-      if (btn.dataset.mode === "ig") {
-        // Try the Stories camera deep link first, fall back to plain IG
-        window.location.href = "instagram://story-camera";
-        setTimeout(() => { window.location.href = "instagram://"; }, 400);
-        return;
-      }
       shareMatch(btn);
     });
 
