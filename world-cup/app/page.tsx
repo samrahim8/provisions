@@ -1000,12 +1000,11 @@ function ResultStep({
       ctx.fillText(team.name.toUpperCase(), 1024, 50);
       ctx.globalAlpha = 1;
 
-      // Card: tilted, shadowed, centered
-      const cardW = 720;
-      const cardH = 1008;
+      // Card: flat, shadowed, centered
+      const cardW = 820;
+      const cardH = 1148;
       ctx.save();
       ctx.translate(540, 960);
-      ctx.rotate((-3 * Math.PI) / 180);
       ctx.shadowColor = "rgba(0,0,0,0.35)";
       ctx.shadowBlur = 60;
       ctx.shadowOffsetY = 30;

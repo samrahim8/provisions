@@ -172,12 +172,11 @@ export async function GET(req: Request) {
           {cardImg ? (
             <img
               src={cardImg}
-              width={720}
-              height={1008}
+              width={820}
+              height={1148}
               style={{
-                width: 720,
-                height: 1008,
-                transform: "rotate(-3deg)",
+                width: 820,
+                height: 1148,
                 boxShadow: "0 40px 80px rgba(0,0,0,0.35), 0 16px 32px rgba(0,0,0,0.22)",
               }}
             />
