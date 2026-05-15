@@ -2009,7 +2009,7 @@ function ResultStep({
         {isRare && <span className="card-shine" aria-hidden="true" />}
       </div>
 
-      <div className="inline-flex flex-wrap justify-center items-center gap-3 mt-1">
+      <div className="reveal-actions inline-flex flex-wrap justify-center items-center gap-3 mt-1">
         <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
           {storyBusy ? "Pressing…" : "Share to Story"}
         </button>
@@ -2044,6 +2044,11 @@ function ResultStep({
         .reveal-stage.is-overlay :global(.pack-stage) {
           width: min(72vw, 320px);
           height: min(72vw * 1.4, 448px);
+        }
+        /* While the overlay is up, hide the action buttons — they belong to
+           the final static layout, not the hero animation. */
+        .reveal-stage.is-overlay .reveal-actions {
+          display: none;
         }
         .reveal-headline {
           display: flex; flex-direction: column; align-items: center; gap: 6px;
