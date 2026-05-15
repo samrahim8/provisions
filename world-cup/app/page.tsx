@@ -1837,7 +1837,6 @@ function ResultStep({
   rarity: Rarity;
   onRestart: () => void;
 }) {
-  const [storyBusy, setStoryBusy] = useState(false);
   const [shareStatus, setShareStatus] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
@@ -1989,10 +1988,9 @@ function ResultStep({
     window.matchMedia &&
     window.matchMedia("(pointer: coarse)").matches;
 
-  // Save to Photos — same simple flow as Share. Mobile: iOS share sheet
-  // (user picks "Save Image" → Photos). Desktop: download.
+  // Save to Photos — no busy state either. Mobile: share sheet ("Save
+  // Image" → Photos). Desktop: download.
   function saveToPhotos() {
-    if (storyBusy) return;
     const blob = blobRef.current;
     if (!blob) {
       alert("Still preparing — try again in a second.");
@@ -2003,21 +2001,17 @@ function ResultStep({
     const flash = (label: string) => {
       setSaveStatus(label);
       setTimeout(() => setSaveStatus(null), 2400);
-      setStoryBusy(false);
     };
     const isTouch =
       typeof window !== "undefined" &&
       window.matchMedia &&
       window.matchMedia("(pointer: coarse)").matches;
 
-    // On touch devices, prefer the share sheet so "Save Image" is one tap.
     if (isTouch && typeof navigator !== "undefined" && typeof navigator.share === "function") {
-      setStoryBusy(true);
       navigator
         .share({ files: [file] })
         .then(() => flash("Saved ✓"))
         .catch((e: Error) => {
-          setStoryBusy(false);
           if (e?.name === "AbortError") { flash("Saved ✓"); return; }
           console.warn("save share rejected:", e);
           alert("Save didn't open: " + (e?.message || "unknown"));
@@ -2025,7 +2019,7 @@ function ResultStep({
       return;
     }
 
-    // Desktop (or mobile with no Web Share) — download.
+    // Desktop or no Web Share — download.
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -2038,13 +2032,11 @@ function ResultStep({
     flash("Saved ✓");
   }
 
-  // Share to Story — always try iOS share sheet first. Skip canShare gate
-  // (it's been seen to return false on devices where share() actually works).
-  // Strip title/text from the share payload so nothing trips iOS's content
-  // filters. If share() rejects with a real error, fall back to opening
-  // the image inline so the user has SOMETHING.
+  // Share to Story — stripped to minimum. No busy state (so the button
+  // can NEVER get stuck disabled). Just call navigator.share if it exists,
+  // open in a new tab otherwise. Both paths run synchronously inside the
+  // click gesture so iOS / popup blockers don't block them.
   function shareStory() {
-    if (storyBusy) return;
     const blob = blobRef.current;
     if (!blob) {
       alert("Still preparing — try again in a second.");
@@ -2052,30 +2044,27 @@ function ResultStep({
     }
     const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
     const file = new File([blob], filename, { type: "image/png" });
-    const finish = () => {
-      setStoryBusy(false);
-      setShareStatus("Shared ✓");
-      setTimeout(() => setShareStatus(null), 2400);
-    };
 
     if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
-      setStoryBusy(true);
-      // Just files — no title/text. Some iOS versions are picky about
-      // share payloads with extra fields and silently reject them.
       navigator
         .share({ files: [file] })
-        .then(finish)
+        .then(() => {
+          setShareStatus("Shared ✓");
+          setTimeout(() => setShareStatus(null), 2400);
+        })
         .catch((e: Error) => {
-          setStoryBusy(false);
-          if (e?.name === "AbortError") { finish(); return; }
+          if (e?.name === "AbortError") {
+            setShareStatus("Shared ✓");
+            setTimeout(() => setShareStatus(null), 2400);
+            return;
+          }
           console.error("navigator.share rejected:", e);
-          // Gesture is lost here — best we can do is alert with guidance.
           alert("Share didn't open: " + (e?.message || "unknown") + ". Tap Save instead.");
         });
       return;
     }
 
-    // navigator.share unavailable — open in new tab synchronously inside gesture
+    // No Web Share — open inline so user can long-press to save / share
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank", "noopener");
     setShareStatus("Long-press → Save");
@@ -2116,11 +2105,11 @@ function ResultStep({
 
       <div className="reveal-actions inline-flex flex-wrap justify-center items-center gap-3 mt-1">
         {supportsShare && (
-          <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
-            {shareStatus ?? (storyBusy ? "Loading…" : "Share to Story")}
+          <button onClick={shareStory} className="btn-primary">
+            {shareStatus ?? "Share to Story"}
           </button>
         )}
-        <button onClick={saveToPhotos} disabled={storyBusy} className={supportsShare ? "btn-secondary" : "btn-primary"}>
+        <button onClick={saveToPhotos} className={supportsShare ? "btn-secondary" : "btn-primary"}>
           {saveStatus ?? "Save"}
         </button>
         <button onClick={onRestart} className="btn-secondary">Make another</button>
