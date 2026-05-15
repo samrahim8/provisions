@@ -130,7 +130,7 @@ function FedBadge({ team, size }: { team: Team; size: number }) {
   );
 }
 
-function Photo({ src, w, h }: { src: string; w: number; h: number }) {
+function Photo({ src, w, h, fit = "cover" }: { src: string; w: number; h: number; fit?: "cover" | "contain" }) {
   return (
     <img
       src={src}
@@ -143,7 +143,7 @@ function Photo({ src, w, h }: { src: string; w: number; h: number }) {
         left: 0,
         width: w,
         height: h,
-        objectFit: "cover",
+        objectFit: fit,
       }}
     />
   );
@@ -243,6 +243,7 @@ function paperBg(rarity: Rarity): string {
 function ArchCard({
   team,
   photo,
+  photoFit = "cover",
   name,
   position,
   number,
@@ -255,6 +256,7 @@ function ArchCard({
 }: {
   team: Team;
   photo: string;
+  photoFit?: "cover" | "contain";
   name: string;
   position: string;
   number: string;
@@ -529,7 +531,7 @@ function ArchCard({
             display: "flex",
           }}
         >
-          <Photo src={photo} w={px(500 - 80 - 16 - 4)} h={px(320 - 16 - 4)} />
+          <Photo src={photo} w={px(500 - 80 - 16 - 4)} h={px(320 - 16 - 4)} fit={photoFit} />
           <Signature name={signature} color={INK} tilt={-5} size={30} />
         </div>
       </div>
@@ -907,7 +909,7 @@ export async function POST(req: Request) {
     loadFont(FONT_URLS.homemade),
     loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark.png"),
     loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark-white.png"),
-    hasUserPhoto ? Promise.resolve("") : loadImageDataUrl(req, "/world-cup/card-generator/no-photo.png"),
+    hasUserPhoto ? Promise.resolve("") : loadImageDataUrl(req, "/world-cup/card-generator/no-photo-v2.png"),
   ]);
   const photoToUse = hasUserPhoto ? photo : defaultPhoto;
 
@@ -918,6 +920,7 @@ export async function POST(req: Request) {
   const props = {
     team,
     photo: photoToUse,
+    photoFit: (hasUserPhoto ? "cover" : "contain") as "cover" | "contain",
     name: name || "Your Name",
     position,
     number,
