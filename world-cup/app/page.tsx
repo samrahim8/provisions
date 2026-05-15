@@ -1978,6 +1978,7 @@ function ResultStep({
       </div>
 
       <div className="card-reveal-wrap">
+        <PackReveal cardUrl={cardUrl} team={team} />
         <span
           className="callup-stamp"
           style={{
@@ -1988,11 +1989,6 @@ function ResultStep({
         >
           Called Up
         </span>
-        <img
-          src={cardUrl}
-          alt="Your card"
-          className="card-reveal-img"
-        />
         {isRare && <span className="card-shine" aria-hidden="true" />}
       </div>
 
@@ -2011,7 +2007,7 @@ function ResultStep({
         .reveal-headline {
           display: flex; flex-direction: column; align-items: center; gap: 6px;
           opacity: 0;
-          animation: revealHeadlineIn 600ms cubic-bezier(0.2, 0.7, 0.2, 1) 1100ms both;
+          animation: revealHeadlineIn 600ms cubic-bezier(0.2, 0.7, 0.2, 1) 3000ms both;
         }
         .reveal-eyebrow {
           font-family: 'Syne', sans-serif; font-weight: 700;
@@ -2037,23 +2033,6 @@ function ResultStep({
           display: inline-flex;
           isolation: isolate;
         }
-        .card-reveal-img {
-          width: auto;
-          max-width: 220px;
-          max-height: 50vh;
-          border-radius: 8px;
-          border: 1px solid var(--border, #DDD7CC);
-          box-shadow: 0 30px 60px -20px rgba(26,23,20,0.4), 0 8px 20px -8px rgba(26,23,20,0.18);
-          opacity: 0;
-          transform-origin: 50% 60%;
-          animation: cardReveal 1100ms cubic-bezier(0.18, 0.9, 0.25, 1.05) 220ms both;
-        }
-        @media (min-width: 640px) {
-          .card-reveal-img { max-width: 260px; max-height: 54vh; }
-        }
-        @media (min-height: 900px) {
-          .card-reveal-img { max-height: 58vh; }
-        }
         .callup-stamp {
           position: absolute;
           top: 16%;
@@ -2072,8 +2051,8 @@ function ResultStep({
           opacity: 0;
           transform-origin: center;
           transform: translate(-50%, -50%) scale(2.6) rotate(-12deg);
-          animation: stampSlam 700ms cubic-bezier(0.6, 0.05, 0.35, 1.5) 540ms both,
-                     stampSettle 1400ms ease 1240ms both;
+          animation: stampSlam 700ms cubic-bezier(0.6, 0.05, 0.35, 1.5) 2400ms both,
+                     stampSettle 1400ms ease 3100ms both;
         }
         .card-shine {
           position: absolute; inset: 0;
@@ -2087,14 +2066,8 @@ function ResultStep({
           background-size: 240% 100%;
           background-position: -120% 0;
           mix-blend-mode: overlay;
-          animation: cardShine 1400ms cubic-bezier(0.2, 0.6, 0.2, 1) 900ms both;
+          animation: cardShine 1400ms cubic-bezier(0.2, 0.6, 0.2, 1) 2800ms both;
           border-radius: 8px;
-        }
-        @keyframes cardReveal {
-          0%   { opacity: 0; transform: scale(0.55) translateY(120px) rotate(-6deg); filter: blur(10px); }
-          55%  { opacity: 1; filter: blur(0); transform: scale(1.06) translateY(-12px) rotate(-1.5deg); }
-          75%  { transform: scale(0.985) translateY(2px) rotate(0.5deg); }
-          100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
         }
         @keyframes stampSlam {
           0%   { opacity: 0; transform: translate(-50%, -50%) scale(2.6) rotate(-12deg); }
@@ -2120,6 +2093,424 @@ function ResultStep({
   );
 }
 
+/* ──────────────────── PROVISIONS PACK REVEAL ────────────────────
+ * Pack drops in → hovers → squashes → tears open → user's card emerges
+ * from inside and flips Y-axis to reveal the face. Brand-agnostic
+ * Provisions Pack (parchment + leather, our mark) on every reveal.
+ * Total runtime ~2.6s; the existing celebration (CALLED UP stamp,
+ * confetti, headline) kicks in as the card lands.
+ */
+function PackReveal({ cardUrl, team }: { cardUrl: string; team: Team }) {
+  const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const accent = safeAccent(team);
+  return (
+    <div className="pack-stage" style={{ ["--pack-accent" as string]: accent }}>
+      {/* Atmospheric layers */}
+      <span className="pack-glow" aria-hidden="true" />
+      <span className="pack-burst" aria-hidden="true" />
+      <span className="pack-beam" aria-hidden="true" />
+
+      {/* The pack itself — drops, hovers, charges, tears, falls away */}
+      <div className="pack-anim" aria-hidden="true">
+        <div className="pack">
+          <div className="pack-flap">
+            <div className="pack-bar">
+              <img src={`${BASE}/favicon-white.png`} alt="" className="pack-bar-mark" />
+              <span className="pack-bar-name">Provisions</span>
+              <span className="pack-bar-year">'26</span>
+            </div>
+            <div className="pack-eyebrow">Official Player Card Pack</div>
+            <div className="pack-summer">Summer '26</div>
+            <div className="pack-perf"></div>
+            <div className="pack-tear-hint">▲ tear ▲</div>
+          </div>
+          <div className="pack-body">
+            <div className="pack-seal">
+              <span className="pack-seal-eyebrow">Provisions</span>
+              <img src={`${BASE}/provisions-mark.png`} alt="" className="pack-seal-mark" />
+              <span className="pack-seal-name">The Pack</span>
+              <span className="pack-seal-foot">48 nations · 1 card</span>
+            </div>
+            <div className="pack-foot">
+              <span>Series One</span>
+              <span>05.15.26</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* The user's card — emerges from inside the pack, scales up, flips */}
+      <div className="card-anim" aria-hidden="true">
+        <div className="card-3d">
+          <div className="card-face card-back">
+            <div className="back-eyebrow">Provisions · Summer '26</div>
+            <img src={`${BASE}/provisions-mark.png`} alt="" className="back-mark" />
+            <div className="back-name">The Pack</div>
+            <div className="back-foot">Official Player Card</div>
+          </div>
+          <div className="card-face card-front">
+            <img src={cardUrl} alt="Your card" className="card-front-img" />
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        .pack-stage {
+          position: relative;
+          width: 220px;
+          height: 308px;
+          margin: 0 auto;
+          isolation: isolate;
+        }
+        @media (min-width: 640px) {
+          .pack-stage { width: 260px; height: 364px; }
+        }
+
+        /* ── Atmospheric layers ── */
+        .pack-glow,
+        .pack-burst,
+        .pack-beam {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          opacity: 0;
+        }
+        .pack-glow {
+          width: 360px; height: 360px;
+          border-radius: 50%;
+          background: radial-gradient(circle,
+            rgba(255, 220, 160, 0.5) 0%,
+            rgba(255, 200, 130, 0.2) 35%,
+            transparent 65%);
+          mix-blend-mode: multiply;
+          filter: blur(2px);
+          animation: packGlow 1300ms ease 900ms both;
+        }
+        @keyframes packGlow {
+          0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+          40%  { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
+          100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.4); }
+        }
+
+        .pack-burst {
+          width: 60px; height: 60px;
+          border-radius: 50%;
+          background: radial-gradient(circle,
+            rgba(255, 246, 220, 1) 0%,
+            rgba(255, 230, 170, 0.6) 28%,
+            transparent 65%);
+          mix-blend-mode: screen;
+          filter: blur(6px);
+          animation: packBurst 700ms cubic-bezier(0.2, 0.7, 0.3, 1) 1300ms both;
+        }
+        @keyframes packBurst {
+          0%   { width: 60px;  height: 60px;  opacity: 0; }
+          30%  { width: 280px; height: 280px; opacity: 1; }
+          100% { width: 1100px; height: 1100px; opacity: 0; }
+        }
+
+        .pack-beam {
+          width: 300px; height: 420px;
+          background: radial-gradient(ellipse at center bottom,
+            rgba(255, 246, 210, 0.9) 0%,
+            rgba(255, 230, 170, 0.25) 35%,
+            transparent 70%);
+          mix-blend-mode: screen;
+          filter: blur(3px);
+          animation: packBeam 1700ms ease 1400ms both;
+        }
+        @keyframes packBeam {
+          0%   { opacity: 0; }
+          25%  { opacity: 0.9; }
+          80%  { opacity: 0.35; }
+          100% { opacity: 0; }
+        }
+
+        /* ── PACK ── */
+        .pack-anim {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          will-change: transform, opacity;
+          animation:
+            packDropIn 620ms cubic-bezier(0.18, 0.9, 0.25, 1.1) both,
+            packHover  900ms ease 620ms,
+            packCharge 380ms cubic-bezier(0.5, 0.05, 0.5, 1.4) 1000ms,
+            packFall   1100ms cubic-bezier(0.4, 0, 0.65, 1) 1900ms forwards;
+        }
+        @keyframes packDropIn {
+          0%   { opacity: 0; transform: translateY(-180%) scale(0.86) rotate(-3deg); }
+          70%  { opacity: 1; transform: translateY(8px)   scale(1.03) rotate(0.6deg); }
+          100% { opacity: 1; transform: translateY(0)     scale(1)    rotate(0deg); }
+        }
+        @keyframes packHover {
+          0%, 100% { transform: translateY(0); }
+          50%      { transform: translateY(-3px); }
+        }
+        @keyframes packCharge {
+          0%   { transform: translateX(0)  scale(1); }
+          22%  { transform: translateX(-3px) scale(1.03, 0.98); }
+          44%  { transform: translateX(3px)  scale(0.98, 1.04); }
+          66%  { transform: translateX(-2px) scale(1.04, 0.97); }
+          100% { transform: translateX(0)  scale(1); }
+        }
+        @keyframes packFall {
+          0%   { opacity: 1; transform: translateY(0)    scale(1)    rotate(0deg); }
+          100% { opacity: 0; transform: translateY(140px) scale(0.78) rotate(-6deg); }
+        }
+
+        .pack {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          filter: drop-shadow(0 28px 44px -16px rgba(26,23,20,0.55));
+        }
+
+        .pack-flap {
+          position: absolute;
+          left: 0; right: 0; top: 0;
+          height: 36%;
+          background: #F8F5EF;
+          border: 2px solid #2C2118;
+          border-radius: 8px 8px 2px 2px;
+          padding: 10px 12px 14px;
+          transform-origin: top center;
+          transform: perspective(1100px) rotateX(0deg);
+          animation: packTear 620ms cubic-bezier(0.4, 0, 0.2, 1.05) 1320ms forwards;
+          z-index: 3;
+        }
+        @keyframes packTear {
+          0%   { transform: perspective(1100px) rotateX(0deg); }
+          100% { transform: perspective(1100px) rotateX(-148deg); }
+        }
+        .pack-bar {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 5px 9px;
+          background: #2C2118;
+          color: #fff;
+          font-family: 'Syne', sans-serif;
+          font-weight: 700;
+          font-size: 9px;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          border-radius: 2px;
+        }
+        .pack-bar-mark { width: 10px; height: 10px; opacity: 0.95; flex-shrink: 0; }
+        .pack-bar-name { flex: 1; }
+        .pack-bar-year {
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 8px;
+          letter-spacing: 0.28em;
+          font-weight: 600;
+          opacity: 0.7;
+        }
+        .pack-eyebrow {
+          margin-top: 8px;
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 7px;
+          letter-spacing: 0.3em;
+          font-weight: 600;
+          text-transform: uppercase;
+          color: rgba(44, 33, 24, 0.65);
+        }
+        .pack-summer {
+          margin-top: 2px;
+          font-family: 'Big Shoulders Display', 'Syne', sans-serif;
+          font-weight: 900;
+          font-size: 22px;
+          line-height: 1;
+          letter-spacing: 0.02em;
+          color: #2C2118;
+          text-transform: uppercase;
+        }
+        .pack-perf {
+          position: absolute;
+          left: 6px; right: 6px; bottom: 4px;
+          height: 1px;
+          background: repeating-linear-gradient(90deg, rgba(44,33,24,0.5) 0 4px, transparent 4px 8px);
+        }
+        .pack-tear-hint {
+          position: absolute;
+          right: 8px; bottom: 8px;
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 6px;
+          letter-spacing: 0.28em;
+          font-weight: 700;
+          color: rgba(44, 33, 24, 0.55);
+          text-transform: uppercase;
+        }
+
+        .pack-body {
+          position: absolute;
+          left: 0; right: 0; top: 36%; bottom: 0;
+          background: #F8F5EF;
+          border: 2px solid #2C2118;
+          border-top: none;
+          border-radius: 2px 2px 8px 8px;
+          padding: 14px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          overflow: hidden;
+        }
+        .pack-seal {
+          width: 78%;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          border: 2px solid #2C2118;
+          background: #F5F1EB;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 14px 8px;
+        }
+        .pack-seal-eyebrow {
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 6px;
+          letter-spacing: 0.3em;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: rgba(44, 33, 24, 0.65);
+        }
+        .pack-seal-mark { width: 32px; height: 32px; opacity: 0.95; margin: 4px 0 2px; }
+        .pack-seal-name {
+          font-family: 'Syne', sans-serif;
+          font-weight: 800;
+          font-size: 12px;
+          letter-spacing: 0.06em;
+          color: #2C2118;
+          text-transform: uppercase;
+        }
+        .pack-seal-foot {
+          margin-top: 4px;
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 6px;
+          letter-spacing: 0.18em;
+          color: rgba(44, 33, 24, 0.55);
+          text-transform: uppercase;
+        }
+        .pack-foot {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 6px;
+          letter-spacing: 0.24em;
+          font-weight: 600;
+          color: rgba(44, 33, 24, 0.55);
+          text-transform: uppercase;
+          padding-top: 8px;
+        }
+
+        /* ── CARD ── */
+        .card-anim {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          perspective: 1500px;
+          z-index: 2;
+          opacity: 0;
+          will-change: transform, opacity;
+          animation: cardEmerge 900ms cubic-bezier(0.2, 0.8, 0.25, 1.05) 1600ms forwards;
+        }
+        @keyframes cardEmerge {
+          0%   { opacity: 0; transform: scale(0.35) translateY(60px); }
+          25%  { opacity: 1; }
+          100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .card-3d {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transform-style: preserve-3d;
+          transform: rotateY(0deg);
+          will-change: transform;
+          animation: cardFlip 900ms cubic-bezier(0.4, 0, 0.2, 1) 1850ms forwards;
+        }
+        @keyframes cardFlip {
+          0%   { transform: rotateY(0deg); }
+          60%  { transform: rotateY(-180deg) scale(1.05); }
+          100% { transform: rotateY(-180deg) scale(1); }
+        }
+
+        .card-face {
+          position: absolute;
+          inset: 0;
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 30px 60px -20px rgba(26,23,20,0.4),
+                      0 8px 20px -8px rgba(26,23,20,0.18);
+        }
+        .card-back {
+          background: #F8F5EF;
+          border: 2px solid #2C2118;
+          padding: 18px 14px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          gap: 8px;
+        }
+        .back-eyebrow {
+          position: absolute;
+          top: 14px; left: 0; right: 0;
+          font-family: 'Syne', sans-serif;
+          font-weight: 700;
+          font-size: 9px;
+          letter-spacing: 0.28em;
+          text-transform: uppercase;
+          color: var(--pack-accent, #A0422A);
+        }
+        .back-mark { width: 56px; height: 56px; opacity: 0.95; }
+        .back-name {
+          font-family: 'Big Shoulders Display', sans-serif;
+          font-weight: 900;
+          font-size: 24px;
+          letter-spacing: 0.02em;
+          color: #2C2118;
+          text-transform: uppercase;
+        }
+        .back-foot {
+          position: absolute;
+          bottom: 14px; left: 0; right: 0;
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 8px;
+          letter-spacing: 0.26em;
+          font-weight: 600;
+          color: rgba(44, 33, 24, 0.65);
+          text-transform: uppercase;
+        }
+        .card-front {
+          transform: rotateY(180deg);
+          background: #F8F5EF;
+          border: none;
+          padding: 0;
+        }
+        .card-front-img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          display: block;
+        }
+      `}</style>
+    </div>
+  );
+}
+
 function Confetti({ colors }: { colors: string[] }) {
   // Build a fixed set of confetti pieces on mount. Recreate via React `key`
   // on the parent to re-fire a fresh burst.
@@ -2131,7 +2522,8 @@ function Confetti({ colors }: { colors: string[] }) {
         id: i,
         color: c,
         left: Math.random() * 100,
-        delay: Math.random() * 380,
+        // Confetti bursts as the card lands from the pack reveal (~2.6s mark).
+        delay: 2600 + Math.random() * 400,
         duration: 1500 + Math.random() * 1700,
         rotate: Math.round((Math.random() - 0.5) * 720),
         w: 6 + Math.random() * 8,
