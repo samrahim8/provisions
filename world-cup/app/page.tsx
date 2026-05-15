@@ -1953,10 +1953,14 @@ function ResultStep({
   // no Image() — just fetch the cardUrl blob and either hand it to the
   // native share sheet or trigger a download. Every layer that could
   // silently fail has been removed.
+  // Minimum-viable share flow. No canvas composition, no font loading,
+  // no Image() — just fetch the cardUrl blob and either hand it to the
+  // native share sheet or trigger a download. Every layer that could
+  // silently fail has been removed.
   async function shareStory() {
     if (storyBusy) return;
     setStoryBusy(true);
-    let succeeded = false;
+    let outcome: "shared" | "saved" | null = null;
     try {
       const res = await fetch(cardUrl);
       if (!res.ok) throw new Error(`Card fetch ${res.status}`);
@@ -1973,11 +1977,11 @@ function ResultStep({
       if (canNative) {
         try {
           await navigator.share({ files: [file], title: `${name} · ${team.name}`, text: "My Summer '26 card" });
-          succeeded = true;
+          outcome = "shared";
           return;
         } catch (e) {
           const err = e as Error;
-          if (err?.name === "AbortError") { succeeded = true; return; } // user cancelled, treat as ok
+          if (err?.name === "AbortError") { outcome = "shared"; return; } // user cancelled, treat as ok
           // any other navigator.share error → fall through to download
           console.warn("navigator.share failed, falling back to download:", err);
         }
@@ -1993,15 +1997,15 @@ function ResultStep({
       a.click();
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 60_000);
-      succeeded = true;
+      outcome = "saved";
     } catch (e) {
       const err = e as Error;
       console.error("Share failed:", err);
       alert("Share failed: " + (err?.message || "unknown error"));
     } finally {
       setStoryBusy(false);
-      if (succeeded) {
-        setShareStatus("Saved ✓");
+      if (outcome) {
+        setShareStatus(outcome === "shared" ? "Shared ✓" : "Saved ✓");
         setTimeout(() => setShareStatus(null), 2200);
       }
     }
