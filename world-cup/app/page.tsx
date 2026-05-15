@@ -1963,10 +1963,9 @@ function ResultStep({
     window.matchMedia &&
     window.matchMedia("(pointer: coarse)").matches;
 
-  // PRIMARY save path — works on every browser, every device:
-  //   Mobile: opens the composed image in a new tab. User long-presses →
-  //           Save Image → goes to Photos. From Photos, they open IG.
-  //   Desktop: triggers a real download (download attribute is honored).
+  // Save to Photos — same simple flow as Share. On mobile uses native
+  // share sheet (user picks "Save Image" → goes to Photos, 2 taps total).
+  // On desktop triggers a real download.
   function saveToPhotos() {
     if (storyBusy) return;
     const blob = blobRef.current;
@@ -1976,7 +1975,7 @@ function ResultStep({
     }
     setStoryBusy(true);
     const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
-    const url = URL.createObjectURL(blob);
+    const file = new File([blob], filename, { type: "image/png" });
 
     const flash = (label: string) => {
       setSaveStatus(label);
@@ -1984,28 +1983,33 @@ function ResultStep({
       setStoryBusy(false);
     };
 
-    if (isTouchDevice()) {
-      // Open the image in a new tab so user can long-press → Save Image.
-      // Reliable on every mobile browser including iOS Safari + every
-      // in-app webview. The Save Image action lands the file in Photos.
-      const w = window.open(url, "_blank");
-      if (!w) {
-        // Popup blocked — fall back to anchor click (most browsers allow
-        // this in a user gesture even when window.open is blocked)
-        const a = document.createElement("a");
-        a.href = url;
-        a.target = "_blank";
-        a.rel = "noopener";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-      flash("Long-press → Save");
-      setTimeout(() => URL.revokeObjectURL(url), 120_000);
+    const canNative =
+      typeof navigator !== "undefined" &&
+      typeof navigator.canShare === "function" &&
+      typeof navigator.share === "function" &&
+      navigator.canShare({ files: [file] });
+
+    if (canNative) {
+      // iOS share sheet includes "Save Image" → Photos. Synchronous call
+      // inside the user gesture; no awaits before .share().
+      navigator
+        .share({ files: [file], title: `${name} · ${team.name}` })
+        .then(() => flash("Saved ✓"))
+        .catch((e: Error) => {
+          if (e?.name === "AbortError") { flash("Saved ✓"); return; }
+          // Share rejected — fall back to opening in new tab so user
+          // can long-press → Save Image.
+          console.warn("save share rejected, opening in new tab:", e);
+          const url = URL.createObjectURL(blob);
+          window.open(url, "_blank");
+          setTimeout(() => URL.revokeObjectURL(url), 120_000);
+          flash("Long-press → Save");
+        });
       return;
     }
 
-    // Desktop: trigger real download
+    // Desktop or no Web Share — straight download.
+    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = filename;
@@ -2092,21 +2096,16 @@ function ResultStep({
         {isRare && <span className="card-shine" aria-hidden="true" />}
       </div>
 
-      <div className="reveal-actions flex flex-col items-center gap-3 mt-1">
-        <div className="inline-flex flex-wrap justify-center items-center gap-3">
-          <button onClick={saveToPhotos} disabled={storyBusy} className="btn-primary">
-            {saveStatus ?? (storyBusy ? "Loading…" : "Save to Photos")}
+      <div className="reveal-actions inline-flex flex-wrap justify-center items-center gap-3 mt-1">
+        {supportsShare && (
+          <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
+            {shareStatus ?? (storyBusy ? "Loading…" : "Share to Story")}
           </button>
-          {supportsShare && (
-            <button onClick={shareStory} disabled={storyBusy} className="btn-secondary">
-              {shareStatus ?? "Share"}
-            </button>
-          )}
-          <button onClick={onRestart} className="btn-secondary">Make another</button>
-        </div>
-        <p className="reveal-hint">
-          On mobile: tap Save → long-press image → <strong>Save to Photos</strong>. Then add it to your Instagram story.
-        </p>
+        )}
+        <button onClick={saveToPhotos} disabled={storyBusy} className={supportsShare ? "btn-secondary" : "btn-primary"}>
+          {saveStatus ?? "Save"}
+        </button>
+        <button onClick={onRestart} className="btn-secondary">Make another</button>
       </div>
 
       <style jsx>{`
@@ -2168,20 +2167,6 @@ function ResultStep({
              don't blow horizontally off mobile viewports */
           max-width: 90vw;
           word-wrap: break-word;
-        }
-        .reveal-hint {
-          margin-top: 4px;
-          max-width: 38ch;
-          font-family: 'Inter', sans-serif;
-          font-size: 12px;
-          line-height: 1.45;
-          color: var(--text-soft, #6B6259);
-          opacity: 0.78;
-          text-align: center;
-        }
-        .reveal-hint strong {
-          color: var(--leather, #2C2118);
-          font-weight: 600;
         }
         .reveal-sub {
           font-family: 'Inter', sans-serif;
