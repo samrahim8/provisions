@@ -2065,7 +2065,7 @@ function ResultStep({
           transform-origin: center;
           transform: translate(-50%, -50%) scale(2.6) rotate(-12deg);
           animation: stampSlam 700ms cubic-bezier(0.6, 0.05, 0.35, 1.5) 540ms both,
-                     stampSettle 4200ms ease 1240ms both;
+                     stampSettle 1400ms ease 1240ms both;
         }
         .card-shine {
           position: absolute; inset: 0;
@@ -2083,10 +2083,10 @@ function ResultStep({
           border-radius: 8px;
         }
         @keyframes cardReveal {
-          0%   { opacity: 0; transform: scale(0.55) translateY(120px) rotate(-8deg); filter: blur(10px); }
-          55%  { opacity: 1; filter: blur(0); transform: scale(1.06) translateY(-12px) rotate(-1.2deg); }
-          75%  { transform: scale(0.985) translateY(2px) rotate(-1.8deg); }
-          100% { opacity: 1; transform: scale(1) translateY(0) rotate(-1.5deg); }
+          0%   { opacity: 0; transform: scale(0.55) translateY(120px) rotate(-6deg); filter: blur(10px); }
+          55%  { opacity: 1; filter: blur(0); transform: scale(1.06) translateY(-12px) rotate(-1.5deg); }
+          75%  { transform: scale(0.985) translateY(2px) rotate(0.5deg); }
+          100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
         }
         @keyframes stampSlam {
           0%   { opacity: 0; transform: translate(-50%, -50%) scale(2.6) rotate(-12deg); }
@@ -2095,8 +2095,8 @@ function ResultStep({
           100% { opacity: 0.96; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
         }
         @keyframes stampSettle {
-          0%, 35% { opacity: 0.96; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
-          100%    { opacity: 0; transform: translate(-50%, -50%) scale(1.04) rotate(-10deg); }
+          0%, 25% { opacity: 0.96; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
+          100%    { opacity: 0; transform: translate(-50%, -50%) scale(1.06) rotate(-10deg); }
         }
         @keyframes cardShine {
           0%   { background-position: -120% 0; opacity: 0; }
