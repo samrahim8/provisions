@@ -1815,24 +1815,21 @@ function ResultStep({
   const rarityMeta = RARITY_META[rarity];
   const isRare = rarity !== "standard";
 
-  // On mobile, take over the screen during the pack reveal animation
-  // (~5.5s), then drop back to the inline result layout.
-  const [isMobileOverlay, setIsMobileOverlay] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(max-width: 720px)").matches;
-  });
+  // Pack-reveal hero overlay — takes over the entire viewport on every
+  // screen size for ~5.5s while the animation plays. After that the
+  // overlay class drops and the stage collapses back to the inline
+  // result layout (card, headline, action buttons all visible).
+  const [isOverlay, setIsOverlay] = useState<boolean>(true);
   useEffect(() => {
-    if (!isMobileOverlay) return;
     document.body.style.overflow = "hidden";
     const t = setTimeout(() => {
-      setIsMobileOverlay(false);
+      setIsOverlay(false);
       document.body.style.overflow = "";
     }, 5500);
     return () => {
       clearTimeout(t);
       document.body.style.overflow = "";
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const headlineMap: Record<Rarity, string> = {
     standard: "On the team sheet.",
@@ -1850,27 +1847,36 @@ function ResultStep({
   };
 
   async function save() {
-    const filename = `${name.replace(/\s+/g, "-")}-${team.code}-story.png`;
-    const isTouch = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    const filename = `${(name || "card").replace(/\s+/g, "-")}-${team.code}.png`;
     try {
-      const blob = await buildStoryBlob();
-      const file = new File([blob], filename, { type: "image/png" });
-      // Mobile: native share sheet → user picks "Save Image" → goes to Photos
-      if (isTouch && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-        await navigator.share({ files: [file], title: `${name} · ${team.name}`, text: `My Summer '26 card` });
-        return;
+      // Story composition is a nice-to-have for the saved file but the raw
+      // card is the must-have. Fall back if the canvas compose fails.
+      let blob: Blob;
+      try {
+        blob = await buildStoryBlob();
+      } catch (e) {
+        console.warn("Story compose failed, saving raw card:", e);
+        const res = await fetch(cardUrl);
+        if (!res.ok) throw new Error("Card fetch failed: " + res.status);
+        blob = await res.blob();
       }
-      // Desktop: download to Downloads folder
+
+      // Always trigger a download (works on every device including iOS Safari).
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = filename;
+      a.rel = "noopener";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 60 * 1000);
     } catch (e) {
-      if (e && (e as Error).name !== "AbortError") console.error("Save failed:", e);
+      const err = e as Error;
+      if (err?.name !== "AbortError") {
+        console.error("Save failed:", err);
+        alert("Save failed: " + (err?.message || "unknown error"));
+      }
     }
   }
 
@@ -1950,21 +1956,42 @@ function ResultStep({
     if (storyBusy) return;
     setStoryBusy(true);
     try {
-      const blob = await buildStoryBlob();
-      const file = new File([blob], `${name.replace(/\s+/g, "-")}-${team.code}-story.png`, { type: "image/png" });
-      const isTouch = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
-      if (isTouch && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+      // Try the 1080x1920 story composition first. If anything blows up
+      // (font load, canvas taint, blob image fetch), fall back to the
+      // raw card blob so the share never silently fails.
+      let blob: Blob;
+      try {
+        blob = await buildStoryBlob();
+      } catch (e) {
+        console.warn("Story compose failed, falling back to raw card:", e);
+        const res = await fetch(cardUrl);
+        if (!res.ok) throw new Error("Card fetch failed: " + res.status);
+        blob = await res.blob();
+      }
+
+      const filename = `${(name || "card").replace(/\s+/g, "-")}-${team.code}.png`;
+      const file = new File([blob], filename, { type: "image/png" });
+
+      const canNativeShare =
+        typeof navigator !== "undefined" &&
+        typeof navigator.share === "function" &&
+        typeof navigator.canShare === "function" &&
+        navigator.canShare({ files: [file] });
+
+      if (canNativeShare) {
         await navigator.share({
           files: [file],
           title: `${name} · ${team.name}`,
           text: `My Summer '26 card`,
         });
       } else {
-        // Desktop: download
+        // No Web Share with files — download to disk instead. Trigger
+        // an explicit click on an anchor so browser shows a save dialog.
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `${name.replace(/\s+/g, "-")}-${team.code}-story.png`;
+        a.download = filename;
+        a.rel = "noopener";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1976,7 +2003,7 @@ function ResultStep({
         // User cancelled the native share sheet — silent
       } else {
         console.error("Story share failed:", err);
-        alert("Share failed. Try Save and post manually.");
+        alert("Share failed: " + (err?.message || "unknown error") + ". Try Save instead.");
       }
     } finally {
       setStoryBusy(false);
@@ -1995,7 +2022,7 @@ function ResultStep({
   const burstKey = cardUrl;
 
   return (
-    <div className={`flex flex-col items-center justify-center text-center gap-3 pt-2 md:pt-0 reveal-stage mx-auto w-full max-w-[600px] ${isMobileOverlay ? "is-overlay" : ""}`}>
+    <div className={`flex flex-col items-center justify-center text-center gap-3 pt-2 md:pt-0 reveal-stage mx-auto w-full max-w-[600px] ${isOverlay ? "is-overlay" : ""}`}>
       <Confetti key={burstKey} colors={confettiColors} />
 
       <div className="reveal-headline" style={{ color: isRare ? rarityMeta.tint : "var(--leather-mid, #2C2118)" }}>
@@ -2042,8 +2069,14 @@ function ResultStep({
         }
         /* Pack stage scales up inside the overlay so the reveal lands as a hero moment */
         .reveal-stage.is-overlay :global(.pack-stage) {
-          width: min(72vw, 320px);
-          height: min(72vw * 1.4, 448px);
+          width: min(80vw, 360px);
+          height: min(80vw * 1.4, 504px);
+        }
+        @media (min-width: 768px) {
+          .reveal-stage.is-overlay :global(.pack-stage) {
+            width: 360px;
+            height: 504px;
+          }
         }
         /* While the overlay is up, hide the action buttons — they belong to
            the final static layout, not the hero animation. */
