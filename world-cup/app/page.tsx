@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { TEAMS, POSITIONS, type Team, type Position } from "@/lib/teams";
 import { flagUrl } from "@/lib/flagIso";
 
-type Step = "team" | "name" | "position" | "number" | "rating" | "photo" | "result";
+type Step = "intro" | "team" | "name" | "position" | "number" | "rating" | "photo" | "result";
 type Rarity = "standard" | "silver" | "gold" | "platinum" | "holo";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -29,7 +29,7 @@ const RARITY_META: Record<Rarity, { label: string; odds: string; tint: string }>
 };
 
 export default function Page() {
-  const [step, setStep] = useState<Step>("team");
+  const [step, setStep] = useState<Step>("intro");
   const [team, setTeam] = useState<Team | null>(null);
   const [photo, setPhoto] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -81,8 +81,12 @@ export default function Page() {
       <Nav step={step} />
 
       <section className={`relative max-w-[1100px] mx-auto px-5 sm:px-8 ${step === "result" ? "min-h-[calc(100vh-72px)] flex flex-col justify-center py-4" : "py-0"}`}>
+        {step === "intro" && (
+          <IntroStep onStart={() => setStep("team")} />
+        )}
         {step === "team" && (
           <TeamPicker
+            onBack={() => setStep("intro")}
             onPick={(t) => {
               setTeam(t);
               setStep("name");
@@ -493,43 +497,86 @@ function Nav({ step }: { step: Step }) {
   );
 }
 
-function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
-  const [q, setQ] = useState("");
-  const filtered = useMemo(
-    () =>
-      TEAMS.filter(
-        (t) =>
-          t.name.toLowerCase().includes(q.toLowerCase()) ||
-          t.code.toLowerCase().includes(q.toLowerCase())
-      ),
-    [q]
-  );
+function IntroStep({ onStart }: { onStart: () => void }) {
   return (
-    <div>
-      <div className="grid lg:grid-cols-[1.25fr,1fr] gap-8 lg:gap-16 items-center mb-10 sm:mb-12">
+    <div
+      style={{
+        minHeight: "calc(100vh - 72px)",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "32px 4px 80px",
+        animation: "stepFadeIn 360ms cubic-bezier(0.2, 0.7, 0.2, 1)",
+      }}
+    >
+      <div className="grid lg:grid-cols-[1.25fr,1fr] gap-8 lg:gap-16 items-center">
         <div>
-          <div className="label mb-3 sm:mb-4">Summer '26</div>
-          <h1 className="font-display font-bold text-leather text-[clamp(2rem,8vw,4.2rem)] leading-[1.05] tracking-[-0.02em] mb-4 sm:mb-5">
+          <div
+            style={{
+              fontFamily: "Syne, sans-serif",
+              fontWeight: 700,
+              fontSize: 11,
+              letterSpacing: "0.28em",
+              textTransform: "uppercase",
+              color: "var(--terracotta, #A0422A)",
+              marginBottom: 14,
+            }}
+          >
+            Provisions · Summer '26
+          </div>
+          <h1
+            className="font-display"
+            style={{
+              fontWeight: 800,
+              fontSize: "clamp(38px, 7.4vw, 88px)",
+              lineHeight: 0.96,
+              letterSpacing: "-0.035em",
+              color: "var(--leather-mid, #2C2118)",
+              marginBottom: 20,
+              maxWidth: "16ch",
+            }}
+          >
             The player card<br />for the rest of us.
           </h1>
-          <p className="text-text-soft max-w-xl text-base sm:text-lg leading-snug mb-6 sm:mb-7">
-            Pick a country. Snap a photo. Share it with your squad.
+          <p
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: 17,
+              lineHeight: 1.5,
+              color: "var(--text-soft, #6B6259)",
+              maxWidth: "44ch",
+              marginBottom: 28,
+            }}
+          >
+            Seven quick steps. Pick a country, drop your name, grab your kit number. Walk away with a real-deal card you can share.
           </p>
-          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-            <a
-              href="#browse"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("browse")?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }}
-              className="btn-primary inline-flex items-center gap-2"
-            >
-              Pick your country
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5v14M5 12l7 7 7-7" />
-              </svg>
-            </a>
-            <span className="text-text-soft text-xs sm:text-sm">Or scroll to browse all 48.</span>
+          <button
+            onClick={onStart}
+            className="btn-primary inline-flex items-center gap-2"
+            style={{ fontSize: 13 }}
+          >
+            Make my card
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M13 5l7 7-7 7" />
+            </svg>
+          </button>
+          <div
+            style={{
+              marginTop: 18,
+              display: "flex",
+              gap: 16,
+              fontFamily: "Syne, sans-serif",
+              fontWeight: 700,
+              fontSize: 10,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "var(--text-soft, #6B6259)",
+              opacity: 0.7,
+            }}
+          >
+            <span>~ 60 seconds</span>
+            <span>·</span>
+            <span>Free for fans</span>
           </div>
         </div>
         <div className="flex justify-center lg:justify-end">
@@ -546,15 +593,75 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
           </div>
         </div>
       </div>
-      <div id="browse" className="scroll-mt-8">
-        <div className="label mb-3">Step One · Pick a Nation</div>
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Search countries"
-          className="input max-w-sm mb-8"
-        />
+    </div>
+  );
+}
+
+function TeamPicker({ onPick, onBack }: { onPick: (t: Team) => void; onBack: () => void }) {
+  const [q, setQ] = useState("");
+  const filtered = useMemo(
+    () =>
+      TEAMS.filter(
+        (t) =>
+          t.name.toLowerCase().includes(q.toLowerCase()) ||
+          t.code.toLowerCase().includes(q.toLowerCase())
+      ),
+    [q]
+  );
+  return (
+    <div
+      style={{
+        padding: "32px 4px 80px",
+        animation: "stepFadeIn 360ms cubic-bezier(0.2, 0.7, 0.2, 1)",
+      }}
+    >
+      <div
+        className="flex items-center gap-3 mb-3"
+        style={{
+          fontFamily: "Syne, sans-serif",
+          fontWeight: 700,
+          fontSize: 11,
+          letterSpacing: "0.28em",
+          textTransform: "uppercase",
+          color: "var(--leather-mid, #2C2118)",
+        }}
+      >
+        <span style={{ color: "var(--terracotta, #A0422A)" }}>01 / 07</span>
+        <span style={{ opacity: 0.4 }}>·</span>
+        <span style={{ opacity: 0.8 }}>Your country</span>
       </div>
+      <h1
+        className="font-display"
+        style={{
+          fontWeight: 800,
+          fontSize: "clamp(36px, 6.5vw, 72px)",
+          lineHeight: 0.98,
+          letterSpacing: "-0.03em",
+          color: "var(--leather-mid, #2C2118)",
+          marginBottom: 12,
+          maxWidth: "18ch",
+        }}
+      >
+        Pick your country.
+      </h1>
+      <p
+        style={{
+          fontFamily: "Inter, sans-serif",
+          fontSize: 15,
+          lineHeight: 1.5,
+          color: "var(--text-soft, #6B6259)",
+          marginBottom: 22,
+          maxWidth: "44ch",
+        }}
+      >
+        Any of the 48 in Summer '26. Search or scroll.
+      </p>
+      <input
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Search countries"
+        className="input max-w-sm mb-6"
+      />
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-5">
         {filtered.map((t) => {
           const tilePrimary = isLightHex(t.primary) ? t.primary : t.primary;
@@ -648,6 +755,11 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
             </button>
           );
         })}
+      </div>
+      <div className="mt-8">
+        <button onClick={onBack} className="text-text-soft hover:text-leather text-sm">
+          ← Back
+        </button>
       </div>
     </div>
   );
@@ -1039,7 +1151,8 @@ function StepShell({
   nextDisabled?: boolean;
   hint?: string;
 }) {
-  const accent = team.secondary || team.accent || team.primary;
+  const accent = safeAccent(team);
+  const onAccent = onAccentText(accent);
   return (
     <div
       className="step-shell"
@@ -1051,6 +1164,7 @@ function StepShell({
         padding: "32px 4px 80px",
         position: "relative",
         ["--step-accent" as string]: accent,
+        ["--on-step-accent" as string]: onAccent,
         animation: "stepFadeIn 360ms cubic-bezier(0.2, 0.7, 0.2, 1)",
       }}
     >
@@ -1062,14 +1176,14 @@ function StepShell({
           fontSize: 11,
           letterSpacing: "0.28em",
           textTransform: "uppercase",
-          color: "var(--text-soft, #6B6259)",
+          color: "var(--leather-mid, #2C2118)",
         }}
       >
         <span style={{ color: accent }}>
           {String(stepNum).padStart(2, "0")} / {String(stepTotal).padStart(2, "0")}
         </span>
         <span style={{ opacity: 0.4 }}>·</span>
-        <span>{eyebrow}</span>
+        <span style={{ opacity: 0.8 }}>{eyebrow}</span>
       </div>
       <h1
         className="font-display"
@@ -1277,7 +1391,7 @@ function PositionStep({
                 appearance: "none",
                 cursor: "pointer",
                 background: active ? "var(--step-accent, #2C2118)" : "transparent",
-                color: active ? (team.primary === "#FFFFFF" ? "#1A1A1A" : "#fff") : "var(--leather-mid, #2C2118)",
+                color: active ? "var(--on-step-accent, #fff)" : "var(--leather-mid, #2C2118)",
                 border: `2px solid ${active ? "var(--step-accent, #2C2118)" : "rgba(44,33,24,0.18)"}`,
                 borderRadius: 8,
                 padding: "22px 18px",
@@ -1474,7 +1588,7 @@ function RatingStep({
           style={{
             width: "100%",
             maxWidth: 640,
-            accentColor: team.secondary || team.accent || team.primary,
+            accentColor: safeAccent(team),
             cursor: "pointer",
           }}
           aria-label="Rating"
@@ -1517,6 +1631,21 @@ function pickContrast(team: Team): string {
   if (!isLightHex(team.secondary)) return team.secondary;
   if (!isLightHex(team.accent)) return team.accent;
   return "#1a1a1a";
+}
+
+// Returns the team's strongest non-white color. Used as the live accent
+// in step UI (underline, slider, active tile bg, step counter). Avoids picking
+// pure white from teams like CAN/KSA/SUI where secondary is "#FFFFFF" and
+// would otherwise paint controls invisible on parchment.
+function safeAccent(team: Team): string {
+  const cands = [team.secondary, team.accent, team.primary].filter(Boolean) as string[];
+  const nonWhite = cands.find((c) => c.replace("#", "").toUpperCase() !== "FFFFFF");
+  return nonWhite || "#2C2118";
+}
+
+// Choose readable text on top of the given accent background.
+function onAccentText(hex: string): string {
+  return isLightHex(hex) ? "#1A1A1A" : "#FFFFFF";
 }
 
 
