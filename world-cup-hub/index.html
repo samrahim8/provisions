@@ -1706,6 +1706,92 @@
       grid-template-columns: repeat(3, 1fr) !important;
       gap: 6px;
     }
+
+    /* ── HERITAGE TEASER MODAL ── */
+    .teaser-modal {
+      position: fixed; inset: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      padding: 32px 16px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 220ms ease;
+    }
+    .teaser-modal[hidden] { display: none; }
+    .teaser-modal.open { opacity: 1; pointer-events: auto; }
+    .teaser-scrim {
+      position: absolute; inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+    }
+    .teaser-card {
+      position: relative;
+      max-width: 520px;
+      width: 100%;
+      background: var(--parchment-el);
+      border: 2px solid var(--leather-mid);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 28px 60px -22px rgba(0, 0, 0, 0.55);
+      transform: translateY(10px) scale(0.98);
+      opacity: 0;
+      transition: opacity 280ms ease, transform 280ms ease;
+    }
+    .teaser-modal.open .teaser-card {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    .teaser-close {
+      position: absolute; top: 12px; right: 12px;
+      width: 32px; height: 32px;
+      appearance: none; cursor: pointer;
+      background: var(--parchment);
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      color: var(--leather-mid);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+      transition: all 0.15s;
+    }
+    .teaser-close:hover {
+      background: var(--leather-mid);
+      color: var(--on-leather);
+      border-color: var(--leather-mid);
+    }
+    .teaser-head {
+      padding: 24px 24px 18px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .teaser-tag {
+      display: block;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 8px;
+    }
+    .teaser-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 4vw, 40px); line-height: 1;
+      letter-spacing: -0.025em;
+      color: var(--leather);
+      margin: 0 0 6px;
+    }
+    .teaser-sub {
+      font-family: 'Inter', sans-serif; font-weight: 400;
+      font-size: 14px; line-height: 1.45;
+      color: var(--text-soft);
+      margin: 0;
+    }
+    .teaser-media {
+      background: #000;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 220px;
+    }
+    .teaser-media img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 60vh;
+      object-fit: contain;
+    }
     .repaint-grid button {
       background: var(--parchment) !important;
       color: var(--leather-mid) !important;
@@ -2242,6 +2328,24 @@
     </div>
   </div>
 
+  <!-- HERITAGE TEASER MODAL -->
+  <div class="teaser-modal" id="heritageTeaser" hidden>
+    <div class="teaser-scrim" onclick="closeHeritageTeaser()"></div>
+    <div class="teaser-card" role="dialog" aria-modal="true" aria-labelledby="teaserTitle">
+      <button class="teaser-close" type="button" aria-label="Close" onclick="closeHeritageTeaser()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2 L12 12 M12 2 L2 12"/></svg>
+      </button>
+      <div class="teaser-head">
+        <span class="teaser-tag">No. 06 · Football Heritage</span>
+        <h3 class="teaser-title" id="teaserTitle">Not yet.</h3>
+        <p class="teaser-sub">Building it. Patience.</p>
+      </div>
+      <div class="teaser-media">
+        <img src="https://media.tenor.com/CF6azr9PEzoAAAAM/jose.gif" alt="Not yet" loading="lazy" />
+      </div>
+    </div>
+  </div>
+
   <script>
     // ── Team data ──
     const WC_TEAMS = [
@@ -2409,7 +2513,7 @@
       { id: '03', label: 'You Know Ball', title: 'You Know Ball', blurb: '10 questions of varying difficulty on the tournament’s history. Layups any fan should know, deep cuts only the heads will get. Score reveals your tier, from Full Kit Wanker to You Know Ball.', cta: 'Take the quiz', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/you-know-ball' },
       { id: '04', label: 'Kit Index', title: 'The Kit Index', blurb: 'A block-style catalog of all 48 home kits. Browse the design language of every nation’s tournament kit.', cta: 'Browse all 48', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/kits' },
       { id: '05', label: 'Repaint', title: 'The Repaint', blurb: 'Pick a country and the whole page repaints in their kit. A small widget for the fan who wants their team everywhere they look.', cta: 'Open the repainter', status: 'starter', statusLabel: 'Live', href: '#repaint', onClick: 'openRepaintModal' },
-      { id: '06', label: 'Heritage', title: 'The Heritage', blurb: 'Find the nation you can root for. By the same rule the players use to qualify for a country. Walk out with a team and a crest.', cta: 'Find your team', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/heritage' },
+      { id: '06', label: 'Football Heritage', title: 'Football Heritage', blurb: 'Find the nation you can root for. By the same rule the players use to qualify for a country. Walk out with a team and a crest.', cta: 'Coming soon', status: 'drafted', statusLabel: 'Coming soon', href: '#', onClick: 'showHeritageTeaser' },
     ];
 
     // ── Day-of-the-wait strip ──
@@ -2714,8 +2818,27 @@
       setTimeout(() => modal.setAttribute('hidden', ''), 240);
     }
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeRepaintModal();
+      if (e.key === 'Escape') {
+        closeRepaintModal();
+        closeHeritageTeaser();
+      }
     });
+
+    // ── Heritage teaser modal ──
+    function showHeritageTeaser() {
+      const modal = document.getElementById('heritageTeaser');
+      if (!modal) return;
+      modal.removeAttribute('hidden');
+      requestAnimationFrame(() => modal.classList.add('open'));
+      document.body.style.overflow = 'hidden';
+    }
+    function closeHeritageTeaser() {
+      const modal = document.getElementById('heritageTeaser');
+      if (!modal || modal.hasAttribute('hidden')) return;
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => modal.setAttribute('hidden', ''), 240);
+    }
 
     // ── Toggle ──
     document.getElementById('teamToggle').addEventListener('click', () => {

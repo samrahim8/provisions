@@ -1979,16 +1979,6 @@ function ResultStep({
 
       <div className="card-reveal-wrap">
         <PackReveal cardUrl={cardUrl} team={team} />
-        <span
-          className="callup-stamp"
-          style={{
-            color: pickContrast(team),
-            background: `${team.primary}`,
-          }}
-          aria-hidden="true"
-        >
-          Called Up
-        </span>
         {isRare && <span className="card-shine" aria-hidden="true" />}
       </div>
 
