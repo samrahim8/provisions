@@ -107,11 +107,15 @@
     const pLum = _lum(primary);
     const isWhite = pLum > 0.93;
     const isLight = pLum > 0.55;
-    const popAccent = accents.find(a => _lum(a) > 0.18 && _lum(a) < 0.85)
-                   || accents.find(a => a !== '#FFFFFF')
-                   || accents[0]
-                   || _shade(primary, -40);
-    const darkAccent = accents.find(a => _lum(a) < 0.35) || _shade(popAccent, -45);
+    // Pop accent must land in a readable luminance window so it works as
+    // small text and button background. If no accent qualifies (e.g., kit is
+    // just black/white), derive a readable pop by lightening or darkening
+    // the primary.
+    let popAccent = accents.find(a => _lum(a) > 0.22 && _lum(a) < 0.82 && a !== '#FFFFFF');
+    if (!popAccent) {
+      popAccent = pLum > 0.6 ? _mix(primary, '#000000', 0.45) : _mix(primary, '#FFFFFF', 0.5);
+    }
+    const darkAccent = accents.find(a => _lum(a) < 0.35 && a !== '#000000') || _shade(popAccent, -45);
 
     if (isWhite) {
       return {
