@@ -2047,9 +2047,10 @@ function ResultStep({
     flash("Saved ✓");
   }
 
-  // BONUS share path — if the device supports Web Share API, hand off to
-  // the native sheet so user can pick Instagram / Messages / etc directly.
-  // Synchronous on the happy path (cached blob, no await before share).
+  // Share to Story — bulletproof flow. Try Web Share first if available.
+  // If anything goes wrong (no API, rejected, hangs), fall back IMMEDIATELY
+  // (synchronously, before the gesture is lost) to opening the image in a
+  // new tab so the user can long-press → Save / Share themselves.
   function shareStory() {
     if (storyBusy) return;
     const blob = blobRef.current;
@@ -2057,14 +2058,8 @@ function ResultStep({
       alert("Still preparing — try again in a second.");
       return;
     }
-    setStoryBusy(true);
     const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
     const file = new File([blob], filename, { type: "image/png" });
-    const finish = (label: string) => {
-      setStoryBusy(false);
-      setShareStatus(label);
-      setTimeout(() => setShareStatus(null), 2400);
-    };
 
     const canNative =
       typeof navigator !== "undefined" &&
@@ -2073,22 +2068,49 @@ function ResultStep({
       navigator.canShare({ files: [file] });
 
     if (canNative) {
+      setStoryBusy(true);
+      // Synchronous call inside the click gesture. iOS requires this.
       navigator
         .share({ files: [file], title: `${name} · ${team.name}`, text: "My Summer '26 card" })
-        .then(() => finish("Shared ✓"))
-        .catch((e: Error) => {
-          if (e?.name === "AbortError") { finish("Shared ✓"); return; }
-          // Share sheet failed — fall back to the universal save path
-          console.warn("navigator.share rejected, falling back to save:", e);
+        .then(() => {
           setStoryBusy(false);
-          saveToPhotos();
+          setShareStatus("Shared ✓");
+          setTimeout(() => setShareStatus(null), 2400);
+        })
+        .catch((e: Error) => {
+          setStoryBusy(false);
+          if (e?.name === "AbortError") {
+            // User cancelled — silent
+            return;
+          }
+          // Web Share rejected with real error. The gesture is gone now,
+          // so window.open would be blocked. Surface a clear message
+          // pointing the user to Save which has its own fallback.
+          console.error("navigator.share rejected:", e);
+          alert("Share didn't open. Tap Save instead — it works the same way.");
         });
       return;
     }
 
-    // No Web Share — just save
-    setStoryBusy(false);
-    saveToPhotos();
+    // No Web Share API — open the image in a new tab SYNCHRONOUSLY (still
+    // inside the user gesture so window.open is allowed). User long-presses
+    // → Save / Share / Copy from there.
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, "_blank", "noopener");
+    if (!w) {
+      // Popup blocked — fall back to anchor click which most browsers
+      // allow in-gesture even when window.open is blocked.
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+    setShareStatus("Long-press → Save");
+    setTimeout(() => setShareStatus(null), 3000);
+    setTimeout(() => URL.revokeObjectURL(url), 120_000);
   }
 
   const supportsShare =
