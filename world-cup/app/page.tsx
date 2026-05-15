@@ -1989,9 +1989,8 @@ function ResultStep({
     window.matchMedia &&
     window.matchMedia("(pointer: coarse)").matches;
 
-  // Save to Photos — same simple flow as Share. On mobile uses native
-  // share sheet (user picks "Save Image" → goes to Photos, 2 taps total).
-  // On desktop triggers a real download.
+  // Save to Photos — same simple flow as Share. Mobile: iOS share sheet
+  // (user picks "Save Image" → Photos). Desktop: download.
   function saveToPhotos() {
     if (storyBusy) return;
     const blob = blobRef.current;
@@ -1999,42 +1998,34 @@ function ResultStep({
       alert("Still preparing — try again in a second.");
       return;
     }
-    setStoryBusy(true);
     const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
     const file = new File([blob], filename, { type: "image/png" });
-
     const flash = (label: string) => {
       setSaveStatus(label);
       setTimeout(() => setSaveStatus(null), 2400);
       setStoryBusy(false);
     };
+    const isTouch =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(pointer: coarse)").matches;
 
-    const canNative =
-      typeof navigator !== "undefined" &&
-      typeof navigator.canShare === "function" &&
-      typeof navigator.share === "function" &&
-      navigator.canShare({ files: [file] });
-
-    if (canNative) {
-      // iOS share sheet includes "Save Image" → Photos. Synchronous call
-      // inside the user gesture; no awaits before .share().
+    // On touch devices, prefer the share sheet so "Save Image" is one tap.
+    if (isTouch && typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      setStoryBusy(true);
       navigator
-        .share({ files: [file], title: `${name} · ${team.name}` })
+        .share({ files: [file] })
         .then(() => flash("Saved ✓"))
         .catch((e: Error) => {
+          setStoryBusy(false);
           if (e?.name === "AbortError") { flash("Saved ✓"); return; }
-          // Share rejected — fall back to opening in new tab so user
-          // can long-press → Save Image.
-          console.warn("save share rejected, opening in new tab:", e);
-          const url = URL.createObjectURL(blob);
-          window.open(url, "_blank");
-          setTimeout(() => URL.revokeObjectURL(url), 120_000);
-          flash("Long-press → Save");
+          console.warn("save share rejected:", e);
+          alert("Save didn't open: " + (e?.message || "unknown"));
         });
       return;
     }
 
-    // Desktop or no Web Share — straight download.
+    // Desktop (or mobile with no Web Share) — download.
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -2047,10 +2038,11 @@ function ResultStep({
     flash("Saved ✓");
   }
 
-  // Share to Story — bulletproof flow. Try Web Share first if available.
-  // If anything goes wrong (no API, rejected, hangs), fall back IMMEDIATELY
-  // (synchronously, before the gesture is lost) to opening the image in a
-  // new tab so the user can long-press → Save / Share themselves.
+  // Share to Story — always try iOS share sheet first. Skip canShare gate
+  // (it's been seen to return false on devices where share() actually works).
+  // Strip title/text from the share payload so nothing trips iOS's content
+  // filters. If share() rejects with a real error, fall back to opening
+  // the image inline so the user has SOMETHING.
   function shareStory() {
     if (storyBusy) return;
     const blob = blobRef.current;
@@ -2060,54 +2052,32 @@ function ResultStep({
     }
     const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
     const file = new File([blob], filename, { type: "image/png" });
+    const finish = () => {
+      setStoryBusy(false);
+      setShareStatus("Shared ✓");
+      setTimeout(() => setShareStatus(null), 2400);
+    };
 
-    const canNative =
-      typeof navigator !== "undefined" &&
-      typeof navigator.canShare === "function" &&
-      typeof navigator.share === "function" &&
-      navigator.canShare({ files: [file] });
-
-    if (canNative) {
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
       setStoryBusy(true);
-      // Synchronous call inside the click gesture. iOS requires this.
+      // Just files — no title/text. Some iOS versions are picky about
+      // share payloads with extra fields and silently reject them.
       navigator
-        .share({ files: [file], title: `${name} · ${team.name}`, text: "My Summer '26 card" })
-        .then(() => {
-          setStoryBusy(false);
-          setShareStatus("Shared ✓");
-          setTimeout(() => setShareStatus(null), 2400);
-        })
+        .share({ files: [file] })
+        .then(finish)
         .catch((e: Error) => {
           setStoryBusy(false);
-          if (e?.name === "AbortError") {
-            // User cancelled — silent
-            return;
-          }
-          // Web Share rejected with real error. The gesture is gone now,
-          // so window.open would be blocked. Surface a clear message
-          // pointing the user to Save which has its own fallback.
+          if (e?.name === "AbortError") { finish(); return; }
           console.error("navigator.share rejected:", e);
-          alert("Share didn't open. Tap Save instead — it works the same way.");
+          // Gesture is lost here — best we can do is alert with guidance.
+          alert("Share didn't open: " + (e?.message || "unknown") + ". Tap Save instead.");
         });
       return;
     }
 
-    // No Web Share API — open the image in a new tab SYNCHRONOUSLY (still
-    // inside the user gesture so window.open is allowed). User long-presses
-    // → Save / Share / Copy from there.
+    // navigator.share unavailable — open in new tab synchronously inside gesture
     const url = URL.createObjectURL(blob);
-    const w = window.open(url, "_blank", "noopener");
-    if (!w) {
-      // Popup blocked — fall back to anchor click which most browsers
-      // allow in-gesture even when window.open is blocked.
-      const a = document.createElement("a");
-      a.href = url;
-      a.target = "_blank";
-      a.rel = "noopener";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
+    window.open(url, "_blank", "noopener");
     setShareStatus("Long-press → Save");
     setTimeout(() => setShareStatus(null), 3000);
     setTimeout(() => URL.revokeObjectURL(url), 120_000);
