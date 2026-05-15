@@ -1988,9 +1988,47 @@ function ResultStep({
     window.matchMedia &&
     window.matchMedia("(pointer: coarse)").matches;
 
-  // Save to Photos — no busy state either. Mobile: share sheet ("Save
+  // ALPHA — unified share/save handler. Identical code path; only the
+  // status label differs. If Save works on a device, Share works too.
+  function shareOrSave(setStatus: (s: string | null) => void, successLabel: string) {
+    const blob = blobRef.current;
+    if (!blob) { alert("Still preparing — try again in a second."); return; }
+    const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
+    const file = new File([blob], filename, { type: "image/png" });
+    const flash = (label: string) => {
+      setStatus(label);
+      setTimeout(() => setStatus(null), 2400);
+    };
+    const isTouch =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(pointer: coarse)").matches;
+
+    if (isTouch && typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      navigator
+        .share({ files: [file] })
+        .then(() => flash(successLabel))
+        .catch((e: Error) => {
+          if (e?.name === "AbortError") { flash(successLabel); return; }
+          console.warn("share rejected:", e);
+          alert("Didn't open: " + (e?.message || "unknown"));
+        });
+      return;
+    }
+    // Desktop or no Web Share — download.
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; a.rel = "noopener";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    flash(successLabel);
+  }
+  const shareStory = () => shareOrSave(setShareStatus, "Shared ✓");
+  const saveToPhotos = () => shareOrSave(setSaveStatus, "Saved ✓");
+
+  // [DELETED OLD] Save to Photos — no busy state either. Mobile: share sheet ("Save
   // Image" → Photos). Desktop: download.
-  function saveToPhotos() {
+  function _saveToPhotosOld() {
     const blob = blobRef.current;
     if (!blob) {
       alert("Still preparing — try again in a second.");
@@ -2032,11 +2070,8 @@ function ResultStep({
     flash("Saved ✓");
   }
 
-  // Share to Story — stripped to minimum. No busy state (so the button
-  // can NEVER get stuck disabled). Just call navigator.share if it exists,
-  // open in a new tab otherwise. Both paths run synchronously inside the
-  // click gesture so iOS / popup blockers don't block them.
-  function shareStory() {
+  // [DELETED OLD] Share to Story
+  function _shareStoryOld() {
     const blob = blobRef.current;
     if (!blob) {
       alert("Still preparing — try again in a second.");
