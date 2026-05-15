@@ -602,30 +602,6 @@ function IntroStep({ onStart }: { onStart: () => void }) {
               ~ 60 seconds · Free
             </span>
           </div>
-          <div
-            className="intro-steps"
-            style={{
-              marginTop: 32,
-              display: "flex",
-              gap: 6,
-              flexWrap: "wrap",
-              fontFamily: "Syne, sans-serif",
-              fontWeight: 700,
-              fontSize: 10,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "var(--text-soft, #6B6259)",
-              opacity: 0.55,
-            }}
-          >
-            {["Country","Name","Position","Number","Rating","Photo","Card"].map((s, i) => (
-              <span key={s} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                <span style={{ opacity: 0.55 }}>{String(i+1).padStart(2,"0")}</span>
-                <span>{s}</span>
-                {i < 6 && <span style={{ opacity: 0.35 }}>·</span>}
-              </span>
-            ))}
-          </div>
         </div>
 
         <div className="intro-card-wrap" style={{ display: "flex", justifyContent: "center" }}>
@@ -1382,7 +1358,7 @@ function NameStep({
       stepNum={2}
       stepTotal={7}
       eyebrow="Your name"
-      question="What name's on the back?"
+      question="What's your name?"
       sub="We use it on the card. We use it for your signature too."
       onBack={onBack}
       onNext={ok ? onNext : undefined}
@@ -1441,7 +1417,7 @@ function PositionStep({
     const onKey = (e: KeyboardEvent) => {
       const key = e.key.toUpperCase();
       const map: Record<string, Position> = { A: "GK", B: "DEF", C: "MID", D: "FWD" };
-      if (map[key]) { setPosition(map[key]); setTimeout(onNext, 220); }
+      if (map[key]) setPosition(map[key]);
       if (e.key === "Enter") onNext();
     };
     document.addEventListener("keydown", onKey);
@@ -1473,7 +1449,7 @@ function PositionStep({
             <button
               key={p}
               type="button"
-              onClick={() => { setPosition(p); setTimeout(onNext, 180); }}
+              onClick={() => setPosition(p)}
               style={{
                 appearance: "none",
                 cursor: "pointer",
@@ -1976,31 +1952,228 @@ function ResultStep({
     }
   }
 
+  const confettiColors = [
+    team.primary,
+    team.secondary,
+    team.accent,
+    "#F5EFE0",
+    isRare ? rarityMeta.tint : "#A0422A",
+  ].filter(Boolean) as string[];
+
+  // Re-mount the confetti each time so a fresh burst plays on every reveal.
+  const burstKey = cardUrl;
+
   return (
-    <div className="flex flex-col items-center text-center gap-4 pt-4 md:pt-2">
-      <div className="relative">
+    <div className="flex flex-col items-center text-center gap-5 pt-4 md:pt-2 reveal-stage">
+      <Confetti key={burstKey} colors={confettiColors} />
+
+      <div className="reveal-headline" style={{ color: isRare ? rarityMeta.tint : "var(--leather-mid, #2C2118)" }}>
+        <span className="reveal-eyebrow" style={{ color: pickContrast(team) }}>You're in</span>
+        <h1 className="reveal-h1 font-display">{headlineMap[rarity]}</h1>
+        <p className="reveal-sub">{subMap[rarity]}</p>
+      </div>
+
+      <div className="card-reveal-wrap">
+        <span
+          className="callup-stamp"
+          style={{
+            color: pickContrast(team),
+            background: `${team.primary}`,
+          }}
+          aria-hidden="true"
+        >
+          Called Up
+        </span>
         <img
           src={cardUrl}
           alt="Your card"
-          className="w-auto max-w-[240px] sm:max-w-[280px] max-h-[58vh] rounded-card shadow-card border border-border"
+          className="card-reveal-img"
         />
+        {isRare && <span className="card-shine" aria-hidden="true" />}
       </div>
-      <div className="flex flex-wrap justify-center gap-3">
+
+      <div className="flex flex-wrap justify-center gap-3 mt-1">
         <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
           {storyBusy ? "Pressing…" : "Share to Story"}
         </button>
         <button onClick={save} className="btn-ghost">Save</button>
         <button onClick={onRestart} className="btn-ghost">Make another</button>
       </div>
-      <div className="max-w-md">
-        <h1
-          className="font-display font-bold text-[clamp(1.6rem,3.5vw,2.2rem)] leading-[1.05] tracking-[-0.02em] mb-1"
-          style={{ color: isRare ? rarityMeta.tint : "#2C2118" }}
-        >
-          {headlineMap[rarity]}
-        </h1>
-        <p className="text-text-soft text-sm">{subMap[rarity]}</p>
-      </div>
+
+      <style jsx>{`
+        .reveal-stage {
+          position: relative;
+        }
+        .reveal-headline {
+          display: flex; flex-direction: column; align-items: center; gap: 6px;
+          opacity: 0;
+          animation: revealHeadlineIn 600ms cubic-bezier(0.2, 0.7, 0.2, 1) 1100ms both;
+        }
+        .reveal-eyebrow {
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+          opacity: 0.85;
+        }
+        .reveal-h1 {
+          font-weight: 800;
+          font-size: clamp(28px, 4vw, 44px);
+          line-height: 1.0;
+          letter-spacing: -0.025em;
+          margin: 0;
+        }
+        .reveal-sub {
+          font-family: 'Inter', sans-serif;
+          font-size: 14px; line-height: 1.5;
+          color: var(--text-soft, #6B6259);
+          max-width: 36ch;
+        }
+        .card-reveal-wrap {
+          position: relative;
+          display: inline-flex;
+          isolation: isolate;
+        }
+        .card-reveal-img {
+          width: auto;
+          max-width: 260px;
+          max-height: 60vh;
+          border-radius: 8px;
+          border: 1px solid var(--border, #DDD7CC);
+          box-shadow: 0 30px 60px -20px rgba(26,23,20,0.4), 0 8px 20px -8px rgba(26,23,20,0.18);
+          opacity: 0;
+          transform-origin: 50% 60%;
+          animation: cardReveal 1100ms cubic-bezier(0.18, 0.9, 0.25, 1.05) 220ms both;
+        }
+        @media (min-width: 640px) {
+          .card-reveal-img { max-width: 300px; }
+        }
+        .callup-stamp {
+          position: absolute;
+          top: 16%;
+          left: 50%;
+          z-index: 2;
+          pointer-events: none;
+          font-family: 'Big Shoulders Display', 'Syne', sans-serif;
+          font-weight: 900;
+          font-size: clamp(28px, 5vw, 44px);
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          padding: 6px 16px;
+          border: 4px solid currentColor;
+          border-radius: 4px;
+          white-space: nowrap;
+          opacity: 0;
+          transform-origin: center;
+          transform: translate(-50%, -50%) scale(2.6) rotate(-12deg);
+          animation: stampSlam 700ms cubic-bezier(0.6, 0.05, 0.35, 1.5) 540ms both,
+                     stampSettle 4200ms ease 1240ms both;
+        }
+        .card-shine {
+          position: absolute; inset: 0;
+          z-index: 3; pointer-events: none;
+          background: linear-gradient(
+            115deg,
+            rgba(255,255,255,0) 30%,
+            rgba(255,255,255,0.55) 48%,
+            rgba(255,255,255,0) 66%
+          );
+          background-size: 240% 100%;
+          background-position: -120% 0;
+          mix-blend-mode: overlay;
+          animation: cardShine 1400ms cubic-bezier(0.2, 0.6, 0.2, 1) 900ms both;
+          border-radius: 8px;
+        }
+        @keyframes cardReveal {
+          0%   { opacity: 0; transform: scale(0.55) translateY(120px) rotate(-8deg); filter: blur(10px); }
+          55%  { opacity: 1; filter: blur(0); transform: scale(1.06) translateY(-12px) rotate(-1.2deg); }
+          75%  { transform: scale(0.985) translateY(2px) rotate(-1.8deg); }
+          100% { opacity: 1; transform: scale(1) translateY(0) rotate(-1.5deg); }
+        }
+        @keyframes stampSlam {
+          0%   { opacity: 0; transform: translate(-50%, -50%) scale(2.6) rotate(-12deg); }
+          55%  { opacity: 1; transform: translate(-50%, -50%) scale(0.92) rotate(-10deg); }
+          80%  { transform: translate(-50%, -50%) scale(1.06) rotate(-10deg); }
+          100% { opacity: 0.96; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
+        }
+        @keyframes stampSettle {
+          0%, 35% { opacity: 0.96; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
+          100%    { opacity: 0; transform: translate(-50%, -50%) scale(1.04) rotate(-10deg); }
+        }
+        @keyframes cardShine {
+          0%   { background-position: -120% 0; opacity: 0; }
+          20%  { opacity: 1; }
+          100% { background-position: 220% 0; opacity: 0; }
+        }
+        @keyframes revealHeadlineIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function Confetti({ colors }: { colors: string[] }) {
+  // Build a fixed set of confetti pieces on mount. Recreate via React `key`
+  // on the parent to re-fire a fresh burst.
+  const pieces = useMemo(() => {
+    const N = 70;
+    return Array.from({ length: N }).map((_, i) => {
+      const c = colors[Math.floor(Math.random() * colors.length)] || "#A0422A";
+      return {
+        id: i,
+        color: c,
+        left: Math.random() * 100,
+        delay: Math.random() * 380,
+        duration: 1500 + Math.random() * 1700,
+        rotate: Math.round((Math.random() - 0.5) * 720),
+        w: 6 + Math.random() * 8,
+        h: 10 + Math.random() * 14,
+        drift: Math.round((Math.random() - 0.5) * 220),
+      };
+    });
+  }, [colors]);
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        pointerEvents: "none",
+        overflow: "visible",
+        zIndex: 1,
+      }}
+    >
+      {pieces.map((p) => (
+        <span
+          key={p.id}
+          style={{
+            position: "absolute",
+            left: `${p.left}%`,
+            top: "10%",
+            width: p.w,
+            height: p.h,
+            background: p.color,
+            opacity: 0.92,
+            borderRadius: 2,
+            ["--r" as string]: `${p.rotate}deg`,
+            ["--dx" as string]: `${p.drift}px`,
+            animation: `confettiFall ${p.duration}ms cubic-bezier(0.2, 0.55, 0.4, 1) ${p.delay}ms both`,
+            transform: "translate3d(0, -120px, 0)",
+            willChange: "transform, opacity",
+          }}
+        />
+      ))}
+      <style jsx>{`
+        @keyframes confettiFall {
+          0%   { transform: translate3d(0, -120px, 0) rotate(0deg); opacity: 0; }
+          15%  { opacity: 1; }
+          90%  { opacity: 1; }
+          100% { transform: translate3d(var(--dx, 0), 90vh, 0) rotate(var(--r, 720deg)); opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }
