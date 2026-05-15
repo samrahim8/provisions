@@ -86,7 +86,7 @@ export default function Page() {
 
       <Nav step={step} />
 
-      <section className={`relative max-w-[1100px] mx-auto px-5 sm:px-8 ${step === "result" ? "min-h-[calc(100vh-72px)] flex flex-col justify-center py-4" : "py-0"}`}>
+      <section className={`relative max-w-[1100px] mx-auto px-5 sm:px-8 ${step === "result" ? "min-h-[calc(100vh-72px)] flex flex-col items-center justify-center py-4" : "py-0"}`}>
         {step === "intro" && (
           <IntroStep onStart={() => setStep("team")} />
         )}
@@ -1964,7 +1964,7 @@ function ResultStep({
   const burstKey = cardUrl;
 
   return (
-    <div className="flex flex-col items-center text-center gap-5 pt-4 md:pt-2 reveal-stage">
+    <div className="flex flex-col items-center justify-center text-center gap-5 pt-4 md:pt-2 reveal-stage mx-auto w-full max-w-[520px]">
       <Confetti key={burstKey} colors={confettiColors} />
 
       <div className="reveal-headline" style={{ color: isRare ? rarityMeta.tint : "var(--leather-mid, #2C2118)" }}>
@@ -1992,7 +1992,7 @@ function ResultStep({
         {isRare && <span className="card-shine" aria-hidden="true" />}
       </div>
 
-      <div className="flex flex-wrap justify-center gap-3 mt-1">
+      <div className="inline-flex flex-wrap justify-center items-center gap-3 mt-1">
         <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
           {storyBusy ? "Pressing…" : "Share to Story"}
         </button>
