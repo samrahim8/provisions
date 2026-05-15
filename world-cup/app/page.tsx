@@ -2051,8 +2051,8 @@ function ResultStep({
           opacity: 0;
           transform-origin: center;
           transform: translate(-50%, -50%) scale(2.6) rotate(-12deg);
-          animation: stampSlam 700ms cubic-bezier(0.6, 0.05, 0.35, 1.5) 2400ms both,
-                     stampSettle 1400ms ease 3100ms both;
+          animation: stampSlam 700ms cubic-bezier(0.6, 0.05, 0.35, 1.5) 3800ms both,
+                     stampSettle 1400ms ease 4500ms both;
         }
         .card-shine {
           position: absolute; inset: 0;
