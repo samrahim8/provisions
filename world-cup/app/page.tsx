@@ -562,7 +562,7 @@ function IntroStep({ onStart }: { onStart: () => void }) {
               marginBottom: 18,
             }}
           >
-            The player card<br />for the rest of us.
+            You just got<br />called up.
           </h1>
           <p
             className="intro-sub"
@@ -575,7 +575,7 @@ function IntroStep({ onStart }: { onStart: () => void }) {
               marginBottom: 26,
             }}
           >
-            Seven taps. Pick a country, drop your name, grab a kit number. Yours in under a minute.
+            Pick a country, drop your kit, snap a card. Seven taps and you're in.
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }}>
             <button
