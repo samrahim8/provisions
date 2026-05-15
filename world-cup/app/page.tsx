@@ -46,8 +46,12 @@ export default function Page() {
   const [cardUrl, setCardUrl] = useState<string | null>(null);
   const [rarity, setRarity] = useState<Rarity>("standard");
 
-  async function generate() {
+  async function generate(photoOverride?: string | null) {
     if (!team) return;
+    // React state updates are async. When PhotoStep calls onPhoto(src) →
+    // setPhoto(src) → generate(), the `photo` in state hasn't updated yet,
+    // so we accept an override and prefer it over the stale state read.
+    const photoForApi = photoOverride !== undefined ? photoOverride : photo;
     setGenerating(true);
     try {
       const rolled = rollRarity();
@@ -56,7 +60,7 @@ export default function Page() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           teamCode: team.code,
-          photo, // may be null; API falls back to default silhouette
+          photo: photoForApi, // may be null; API falls back to no-photo silhouette
           name: name || "Your Name",
           position,
           number,
@@ -141,11 +145,11 @@ export default function Page() {
             onBack={() => setStep("rating")}
             onPhoto={(src) => {
               setPhoto(src);
-              generate();
+              generate(src);
             }}
             onSkip={() => {
               setPhoto(null);
-              generate();
+              generate(null);
             }}
           />
         )}
