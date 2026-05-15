@@ -2007,7 +2007,7 @@ function ResultStep({
         .reveal-headline {
           display: flex; flex-direction: column; align-items: center; gap: 6px;
           opacity: 0;
-          animation: revealHeadlineIn 600ms cubic-bezier(0.2, 0.7, 0.2, 1) 3000ms both;
+          animation: revealHeadlineIn 700ms cubic-bezier(0.2, 0.7, 0.2, 1) 4100ms both;
         }
         .reveal-eyebrow {
           font-family: 'Syne', sans-serif; font-weight: 700;
@@ -2051,8 +2051,8 @@ function ResultStep({
           opacity: 0;
           transform-origin: center;
           transform: translate(-50%, -50%) scale(2.6) rotate(-12deg);
-          animation: stampSlam 700ms cubic-bezier(0.6, 0.05, 0.35, 1.5) 3800ms both,
-                     stampSettle 1400ms ease 4500ms both;
+          animation: stampSlam 800ms cubic-bezier(0.6, 0.05, 0.35, 1.5) 5400ms both,
+                     stampSettle 1600ms ease 6200ms both;
         }
         .card-shine {
           position: absolute; inset: 0;
@@ -2066,7 +2066,7 @@ function ResultStep({
           background-size: 240% 100%;
           background-position: -120% 0;
           mix-blend-mode: overlay;
-          animation: cardShine 1400ms cubic-bezier(0.2, 0.6, 0.2, 1) 2800ms both;
+          animation: cardShine 1600ms cubic-bezier(0.2, 0.6, 0.2, 1) 3900ms both;
           border-radius: 8px;
         }
         @keyframes stampSlam {
@@ -2186,7 +2186,7 @@ function PackReveal({ cardUrl, team }: { cardUrl: string; team: Team }) {
             transparent 65%);
           mix-blend-mode: multiply;
           filter: blur(2px);
-          animation: packGlow 1300ms ease 900ms both;
+          animation: packGlow 1500ms ease 1200ms both;
         }
         @keyframes packGlow {
           0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
@@ -2203,7 +2203,7 @@ function PackReveal({ cardUrl, team }: { cardUrl: string; team: Team }) {
             transparent 65%);
           mix-blend-mode: screen;
           filter: blur(6px);
-          animation: packBurst 700ms cubic-bezier(0.2, 0.7, 0.3, 1) 1300ms both;
+          animation: packBurst 900ms cubic-bezier(0.2, 0.7, 0.3, 1) 1800ms both;
         }
         @keyframes packBurst {
           0%   { width: 60px;  height: 60px;  opacity: 0; }
@@ -2219,7 +2219,7 @@ function PackReveal({ cardUrl, team }: { cardUrl: string; team: Team }) {
             transparent 70%);
           mix-blend-mode: screen;
           filter: blur(3px);
-          animation: packBeam 1700ms ease 1400ms both;
+          animation: packBeam 2100ms ease 1900ms both;
         }
         @keyframes packBeam {
           0%   { opacity: 0; }
@@ -2237,10 +2237,10 @@ function PackReveal({ cardUrl, team }: { cardUrl: string; team: Team }) {
           justify-content: center;
           will-change: transform, opacity;
           animation:
-            packDropIn 620ms cubic-bezier(0.18, 0.9, 0.25, 1.1) both,
-            packHover  900ms ease 620ms,
-            packCharge 380ms cubic-bezier(0.5, 0.05, 0.5, 1.4) 1000ms,
-            packFall   1100ms cubic-bezier(0.4, 0, 0.65, 1) 1900ms forwards;
+            packDropIn 850ms cubic-bezier(0.18, 0.9, 0.25, 1.1) both,
+            packHover  1300ms ease 850ms,
+            packCharge 500ms cubic-bezier(0.5, 0.05, 0.5, 1.4) 1500ms,
+            packFall   1400ms cubic-bezier(0.4, 0, 0.65, 1) 2700ms forwards;
         }
         @keyframes packDropIn {
           0%   { opacity: 0; transform: translateY(-180%) scale(0.86) rotate(-3deg); }
@@ -2280,7 +2280,7 @@ function PackReveal({ cardUrl, team }: { cardUrl: string; team: Team }) {
           padding: 10px 12px 14px;
           transform-origin: top center;
           transform: perspective(1100px) rotateX(0deg);
-          animation: packTear 620ms cubic-bezier(0.4, 0, 0.2, 1.05) 1320ms forwards;
+          animation: packTear 800ms cubic-bezier(0.4, 0, 0.2, 1.05) 1900ms forwards;
           z-index: 3;
         }
         @keyframes packTear {
@@ -2421,7 +2421,7 @@ function PackReveal({ cardUrl, team }: { cardUrl: string; team: Team }) {
           z-index: 2;
           opacity: 0;
           will-change: transform, opacity;
-          animation: cardEmerge 900ms cubic-bezier(0.2, 0.8, 0.25, 1.05) 1600ms forwards;
+          animation: cardEmerge 1100ms cubic-bezier(0.2, 0.8, 0.25, 1.05) 2200ms forwards;
         }
         @keyframes cardEmerge {
           0%   { opacity: 0; transform: scale(0.35) translateY(60px); }
@@ -2436,7 +2436,7 @@ function PackReveal({ cardUrl, team }: { cardUrl: string; team: Team }) {
           transform-style: preserve-3d;
           transform: rotateY(0deg);
           will-change: transform;
-          animation: cardFlip 900ms cubic-bezier(0.4, 0, 0.2, 1) 1850ms forwards;
+          animation: cardFlip 1100ms cubic-bezier(0.4, 0, 0.2, 1) 2800ms forwards;
         }
         @keyframes cardFlip {
           0%   { transform: rotateY(0deg); }
@@ -2522,8 +2522,8 @@ function Confetti({ colors }: { colors: string[] }) {
         id: i,
         color: c,
         left: Math.random() * 100,
-        // Confetti bursts as the card lands from the pack reveal (~2.6s mark).
-        delay: 2600 + Math.random() * 400,
+        // Confetti bursts as the card lands from the pack reveal (~3.7s mark).
+        delay: 3700 + Math.random() * 500,
         duration: 1500 + Math.random() * 1700,
         rotate: Math.round((Math.random() - 0.5) * 720),
         w: 6 + Math.random() * 8,
