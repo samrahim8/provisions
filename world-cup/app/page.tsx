@@ -1968,7 +1968,7 @@ function ResultStep({
   const burstKey = cardUrl;
 
   return (
-    <div className="flex flex-col items-center justify-center text-center gap-5 pt-4 md:pt-2 reveal-stage mx-auto w-full max-w-[520px]">
+    <div className="flex flex-col items-center justify-center text-center gap-3 pt-2 md:pt-0 reveal-stage mx-auto w-full max-w-[600px]">
       <Confetti key={burstKey} colors={confettiColors} />
 
       <div className="reveal-headline" style={{ color: isRare ? rarityMeta.tint : "var(--leather-mid, #2C2118)" }}>
@@ -2000,8 +2000,8 @@ function ResultStep({
         <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
           {storyBusy ? "Pressing…" : "Share to Story"}
         </button>
-        <button onClick={save} className="btn-ghost">Save</button>
-        <button onClick={onRestart} className="btn-ghost">Make another</button>
+        <button onClick={save} className="btn-secondary">Save</button>
+        <button onClick={onRestart} className="btn-secondary">Make another</button>
       </div>
 
       <style jsx>{`
@@ -2020,10 +2020,11 @@ function ResultStep({
         }
         .reveal-h1 {
           font-weight: 800;
-          font-size: clamp(28px, 4vw, 44px);
+          font-size: clamp(26px, 3.4vw, 38px);
           line-height: 1.0;
           letter-spacing: -0.025em;
           margin: 0;
+          white-space: nowrap;
         }
         .reveal-sub {
           font-family: 'Inter', sans-serif;
@@ -2038,8 +2039,8 @@ function ResultStep({
         }
         .card-reveal-img {
           width: auto;
-          max-width: 260px;
-          max-height: 60vh;
+          max-width: 220px;
+          max-height: 50vh;
           border-radius: 8px;
           border: 1px solid var(--border, #DDD7CC);
           box-shadow: 0 30px 60px -20px rgba(26,23,20,0.4), 0 8px 20px -8px rgba(26,23,20,0.18);
@@ -2048,7 +2049,10 @@ function ResultStep({
           animation: cardReveal 1100ms cubic-bezier(0.18, 0.9, 0.25, 1.05) 220ms both;
         }
         @media (min-width: 640px) {
-          .card-reveal-img { max-width: 300px; }
+          .card-reveal-img { max-width: 260px; max-height: 54vh; }
+        }
+        @media (min-height: 900px) {
+          .card-reveal-img { max-height: 58vh; }
         }
         .callup-stamp {
           position: absolute;
