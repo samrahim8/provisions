@@ -1814,6 +1814,26 @@ function ResultStep({
   const [storyBusy, setStoryBusy] = useState(false);
   const rarityMeta = RARITY_META[rarity];
   const isRare = rarity !== "standard";
+
+  // On mobile, take over the screen during the pack reveal animation
+  // (~5.5s), then drop back to the inline result layout.
+  const [isMobileOverlay, setIsMobileOverlay] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(max-width: 720px)").matches;
+  });
+  useEffect(() => {
+    if (!isMobileOverlay) return;
+    document.body.style.overflow = "hidden";
+    const t = setTimeout(() => {
+      setIsMobileOverlay(false);
+      document.body.style.overflow = "";
+    }, 5500);
+    return () => {
+      clearTimeout(t);
+      document.body.style.overflow = "";
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const headlineMap: Record<Rarity, string> = {
     standard: "On the team sheet.",
     silver:   "Man of the Match.",
@@ -1867,8 +1887,9 @@ function ResultStep({
     const img = await new Promise<HTMLImageElement>((resolve, reject) => {
       const i = new Image();
       i.onload = () => resolve(i);
-      i.onerror = reject;
-      i.crossOrigin = "anonymous";
+      i.onerror = (e) => reject(new Error("Card image failed to load: " + String(e)));
+      // cardUrl is a blob: URL from URL.createObjectURL — no CORS attr needed
+      // (setting crossOrigin can actually make blob: image loads fail in some browsers).
       i.src = cardUrl;
     });
 
@@ -1950,7 +1971,13 @@ function ResultStep({
         setTimeout(() => URL.revokeObjectURL(url), 60 * 1000);
       }
     } catch (e) {
-      console.error("Story share failed:", e);
+      const err = e as Error;
+      if (err && err.name === "AbortError") {
+        // User cancelled the native share sheet — silent
+      } else {
+        console.error("Story share failed:", err);
+        alert("Share failed. Try Save and post manually.");
+      }
     } finally {
       setStoryBusy(false);
     }
@@ -1968,7 +1995,7 @@ function ResultStep({
   const burstKey = cardUrl;
 
   return (
-    <div className="flex flex-col items-center justify-center text-center gap-3 pt-2 md:pt-0 reveal-stage mx-auto w-full max-w-[600px]">
+    <div className={`flex flex-col items-center justify-center text-center gap-3 pt-2 md:pt-0 reveal-stage mx-auto w-full max-w-[600px] ${isMobileOverlay ? "is-overlay" : ""}`}>
       <Confetti key={burstKey} colors={confettiColors} />
 
       <div className="reveal-headline" style={{ color: isRare ? rarityMeta.tint : "var(--leather-mid, #2C2118)" }}>
@@ -1993,6 +2020,30 @@ function ResultStep({
       <style jsx>{`
         .reveal-stage {
           position: relative;
+        }
+        /* Mobile overlay: takes over the viewport during the pack reveal.
+           After the animation completes (~5.5s) the class drops and the
+           stage falls back to its inline layout. */
+        .reveal-stage.is-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 200;
+          max-width: 100vw;
+          width: 100vw;
+          height: 100vh;
+          margin: 0;
+          padding: 28px 20px;
+          background: #F5F1EB;
+          animation: revealOverlayIn 280ms ease both;
+        }
+        @keyframes revealOverlayIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        /* Pack stage scales up inside the overlay so the reveal lands as a hero moment */
+        .reveal-stage.is-overlay :global(.pack-stage) {
+          width: min(72vw, 320px);
+          height: min(72vw * 1.4, 448px);
         }
         .reveal-headline {
           display: flex; flex-direction: column; align-items: center; gap: 6px;
