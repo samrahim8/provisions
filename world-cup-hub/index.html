@@ -2661,8 +2661,7 @@
     function selectTeam(code) {
       const team = WC_TEAMS.find(t => t[0] === code);
       if (!team) return;
-      // Persist for cross-page Repaint
-      try { localStorage.setItem('provisions.team', code); } catch (e) {}
+      // Repaint is in-memory only; refresh always returns to default palette.
       // Close modals first so user sees the press overlay full-screen
       closeRepaintModal();
       const teamBar = document.getElementById('teamBar');
@@ -2750,16 +2749,9 @@
     }
 
     // ── Days counter + press date ──
-    // ── Boot — keep Provisions default palette; team-mode is opt-in ──
+    // ── Boot — always start in default Provisions palette; team-mode is opt-in per session ──
     renderTeamGrid(null);
     renderLedger();
-    // Cross-page persistence: re-apply previously chosen team on return.
-    try {
-      const savedTeam = localStorage.getItem('provisions.team');
-      if (savedTeam && WC_TEAMS.some(t => t[0] === savedTeam)) {
-        selectTeam(savedTeam);
-      }
-    } catch (e) {}
     // (Legacy first-load scramble removed — old whistle ticket replaced by .kickoff-portrait)
 
     // ── Kickoff countdown (mutable: updates when user picks a team) ──

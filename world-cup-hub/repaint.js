@@ -19,8 +19,6 @@
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'provisions.team';
-
   const WC_TEAMS = [
     ['USA','United States','#0A2D5C',['#C8334B','#FFFFFF']],
     ['MEX','Mexico','#006847',['#FFFFFF','#CE1126']],
@@ -177,14 +175,11 @@
   // ── State ──
   let _currentCode = null;
 
-  function setTeam(code, save) {
+  function setTeam(code) {
     const team = WC_TEAMS.find(t => t[0] === code);
     if (!team) return;
     _currentCode = code;
     applyPalette(paletteFromKit(team[2], team[3]));
-    if (save !== false) {
-      try { localStorage.setItem(STORAGE_KEY, code); } catch (e) {}
-    }
     updateButtonChip();
     updateActiveInGrid();
     document.dispatchEvent(new CustomEvent('provisions:repaint', { detail: { code, team } }));
@@ -192,7 +187,6 @@
 
   function reset() {
     _currentCode = null;
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     resetPalette();
     updateButtonChip();
     updateActiveInGrid();
@@ -445,15 +439,10 @@
   }
 
   // ── Init ──
+  // No persistence: every page load starts in the default Provisions palette.
+  // Repaint applies in-memory for the current page only; refresh resets it.
   function init() {
     injectStyles();
-    // Hydrate saved team
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved && WC_TEAMS.some(t => t[0] === saved)) {
-        setTeam(saved, false);
-      }
-    } catch (e) {}
 
     // Find the script tag for this file and check for opt-out attributes
     const scripts = document.querySelectorAll('script[src*="repaint.js"]');
