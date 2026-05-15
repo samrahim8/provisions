@@ -1874,11 +1874,11 @@ function ResultStep({
     holo:     "1 of 1.",
   };
   const subMap: Record<Rarity, string> = {
-    standard: "You made the eleven. Pack-fresh. Free for fans.",
-    silver:   "Solid shift. Roughly 1 in 8 rips. Free for fans.",
-    gold:     "Top scorer pull. ~1 in 17 packs. Free for fans.",
-    platinum: "Golden Ball. ~1 in 33 packs. Free for fans.",
-    holo:     "Legend pull. 1 in 100 ever lands here. Free for fans.",
+    standard: "You made the eleven. Pack-fresh.",
+    silver:   "Solid shift. Roughly 1 in 8 rips.",
+    gold:     "Top scorer pull. ~1 in 17 packs.",
+    platinum: "Golden Ball. ~1 in 33 packs.",
+    holo:     "Legend pull. 1 in 100 ever lands here.",
   };
 
   function _lum(hex: string): number {
