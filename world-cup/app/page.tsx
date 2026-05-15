@@ -1812,6 +1812,8 @@ function ResultStep({
   onRestart: () => void;
 }) {
   const [storyBusy, setStoryBusy] = useState(false);
+  const [shareStatus, setShareStatus] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const rarityMeta = RARITY_META[rarity];
   const isRare = rarity !== "standard";
 
@@ -1847,21 +1849,12 @@ function ResultStep({
   };
 
   async function save() {
-    const filename = `${(name || "card").replace(/\s+/g, "-")}-${team.code}.png`;
+    let succeeded = false;
     try {
-      // Story composition is a nice-to-have for the saved file but the raw
-      // card is the must-have. Fall back if the canvas compose fails.
-      let blob: Blob;
-      try {
-        blob = await buildStoryBlob();
-      } catch (e) {
-        console.warn("Story compose failed, saving raw card:", e);
-        const res = await fetch(cardUrl);
-        if (!res.ok) throw new Error("Card fetch failed: " + res.status);
-        blob = await res.blob();
-      }
-
-      // Always trigger a download (works on every device including iOS Safari).
+      const res = await fetch(cardUrl);
+      if (!res.ok) throw new Error(`Card fetch ${res.status}`);
+      const blob = await res.blob();
+      const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -1870,12 +1863,16 @@ function ResultStep({
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 60 * 1000);
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      succeeded = true;
     } catch (e) {
       const err = e as Error;
-      if (err?.name !== "AbortError") {
-        console.error("Save failed:", err);
-        alert("Save failed: " + (err?.message || "unknown error"));
+      console.error("Save failed:", err);
+      alert("Save failed: " + (err?.message || "unknown error"));
+    } finally {
+      if (succeeded) {
+        setSaveStatus("Saved ✓");
+        setTimeout(() => setSaveStatus(null), 2200);
       }
     }
   }
@@ -1952,61 +1949,61 @@ function ResultStep({
     });
   }
 
+  // Minimum-viable share flow. No canvas composition, no font loading,
+  // no Image() — just fetch the cardUrl blob and either hand it to the
+  // native share sheet or trigger a download. Every layer that could
+  // silently fail has been removed.
   async function shareStory() {
     if (storyBusy) return;
     setStoryBusy(true);
+    let succeeded = false;
     try {
-      // Try the 1080x1920 story composition first. If anything blows up
-      // (font load, canvas taint, blob image fetch), fall back to the
-      // raw card blob so the share never silently fails.
-      let blob: Blob;
-      try {
-        blob = await buildStoryBlob();
-      } catch (e) {
-        console.warn("Story compose failed, falling back to raw card:", e);
-        const res = await fetch(cardUrl);
-        if (!res.ok) throw new Error("Card fetch failed: " + res.status);
-        blob = await res.blob();
-      }
-
-      const filename = `${(name || "card").replace(/\s+/g, "-")}-${team.code}.png`;
+      const res = await fetch(cardUrl);
+      if (!res.ok) throw new Error(`Card fetch ${res.status}`);
+      const blob = await res.blob();
+      const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
       const file = new File([blob], filename, { type: "image/png" });
 
-      const canNativeShare =
+      const canNative =
         typeof navigator !== "undefined" &&
-        typeof navigator.share === "function" &&
         typeof navigator.canShare === "function" &&
+        typeof navigator.share === "function" &&
         navigator.canShare({ files: [file] });
 
-      if (canNativeShare) {
-        await navigator.share({
-          files: [file],
-          title: `${name} · ${team.name}`,
-          text: `My Summer '26 card`,
-        });
-      } else {
-        // No Web Share with files — download to disk instead. Trigger
-        // an explicit click on an anchor so browser shows a save dialog.
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        a.rel = "noopener";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 60 * 1000);
+      if (canNative) {
+        try {
+          await navigator.share({ files: [file], title: `${name} · ${team.name}`, text: "My Summer '26 card" });
+          succeeded = true;
+          return;
+        } catch (e) {
+          const err = e as Error;
+          if (err?.name === "AbortError") { succeeded = true; return; } // user cancelled, treat as ok
+          // any other navigator.share error → fall through to download
+          console.warn("navigator.share failed, falling back to download:", err);
+        }
       }
+
+      // Universal floor: trigger a download.
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      succeeded = true;
     } catch (e) {
       const err = e as Error;
-      if (err && err.name === "AbortError") {
-        // User cancelled the native share sheet — silent
-      } else {
-        console.error("Story share failed:", err);
-        alert("Share failed: " + (err?.message || "unknown error") + ". Try Save instead.");
-      }
+      console.error("Share failed:", err);
+      alert("Share failed: " + (err?.message || "unknown error"));
     } finally {
       setStoryBusy(false);
+      if (succeeded) {
+        setShareStatus("Saved ✓");
+        setTimeout(() => setShareStatus(null), 2200);
+      }
     }
   }
 
@@ -2038,9 +2035,11 @@ function ResultStep({
 
       <div className="reveal-actions inline-flex flex-wrap justify-center items-center gap-3 mt-1">
         <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
-          {storyBusy ? "Pressing…" : "Share to Story"}
+          {shareStatus ?? (storyBusy ? "Pressing…" : "Share to Story")}
         </button>
-        <button onClick={save} className="btn-secondary">Save</button>
+        <button onClick={save} className="btn-secondary">
+          {saveStatus ?? "Save"}
+        </button>
         <button onClick={onRestart} className="btn-secondary">Make another</button>
       </div>
 
