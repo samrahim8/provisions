@@ -53,22 +53,46 @@ export default function Page() {
     // so we accept an override and prefer it over the stale state read.
     const photoForApi = photoOverride !== undefined ? photoOverride : photo;
     setGenerating(true);
+
+    const rolled = rollRarity();
+    const body = JSON.stringify({
+      teamCode: team.code,
+      photo: photoForApi,
+      name: name || "Your Name",
+      position,
+      number,
+      rating,
+      rarity: rolled,
+    });
+
+    // Retry the card render up to 3x with backoff. iOS Safari throws a
+    // generic "Load failed" on any fetch hiccup (cold-start, connection
+    // drop, transient network); the user has just invested 7 steps and
+    // shouldn't have to redo them all for one blip.
+    async function fetchCard(attempt: number): Promise<Response> {
+      try {
+        const res = await fetch(asset("/api/card"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body,
+        });
+        if (!res.ok && attempt < 2) {
+          await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
+          return fetchCard(attempt + 1);
+        }
+        return res;
+      } catch (e) {
+        if (attempt < 2) {
+          await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
+          return fetchCard(attempt + 1);
+        }
+        throw e;
+      }
+    }
+
     try {
-      const rolled = rollRarity();
-      const res = await fetch(asset("/api/card"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          teamCode: team.code,
-          photo: photoForApi, // may be null; API falls back to no-photo silhouette
-          name: name || "Your Name",
-          position,
-          number,
-          rating,
-          rarity: rolled,
-        }),
-      });
-      if (!res.ok) throw new Error("Card render failed");
+      const res = await fetchCard(0);
+      if (!res.ok) throw new Error(`Card render failed (status ${res.status})`);
       const blob = await res.blob();
       // Hold the press a beat longer on rare pulls so the reveal has weight
       if (rolled !== "standard") {
@@ -78,7 +102,9 @@ export default function Page() {
       setCardUrl(URL.createObjectURL(blob));
       setStep("result");
     } catch (e) {
-      alert((e as Error).message);
+      const err = e as Error;
+      console.error("Card render failed:", err);
+      alert("Couldn't make the card. Check your connection and tap the photo step's Continue again. (" + (err?.message || "unknown") + ")");
     } finally {
       setGenerating(false);
     }
