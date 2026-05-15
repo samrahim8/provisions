@@ -907,7 +907,7 @@ export async function POST(req: Request) {
     loadFont(FONT_URLS.homemade),
     loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark.png"),
     loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark-white.png"),
-    hasUserPhoto ? Promise.resolve("") : loadImageDataUrl(req, "/world-cup/card-generator/sam.png"),
+    hasUserPhoto ? Promise.resolve("") : loadImageDataUrl(req, "/world-cup/card-generator/no-photo.png"),
   ]);
   const photoToUse = hasUserPhoto ? photo : defaultPhoto;
 
