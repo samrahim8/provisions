@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { TEAMS, POSITIONS, type Team, type Position } from "@/lib/teams";
 import { flagUrl } from "@/lib/flagIso";
 
-type Step = "team" | "photo" | "details" | "result";
+type Step = "team" | "name" | "position" | "number" | "rating" | "photo" | "result";
 type Rarity = "standard" | "silver" | "gold" | "platinum" | "holo";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -41,7 +41,7 @@ export default function Page() {
   const [rarity, setRarity] = useState<Rarity>("standard");
 
   async function generate() {
-    if (!team || !photo) return;
+    if (!team) return;
     setGenerating(true);
     try {
       const rolled = rollRarity();
@@ -50,7 +50,7 @@ export default function Page() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           teamCode: team.code,
-          photo,
+          photo, // may be null; API falls back to default silhouette
           name: name || "Your Name",
           position,
           number,
@@ -80,40 +80,63 @@ export default function Page() {
 
       <Nav step={step} />
 
-      <section className={`relative max-w-[1100px] mx-auto px-5 sm:px-8 ${step === "details" || step === "result" ? "min-h-[calc(100vh-72px)] flex flex-col justify-center py-4" : "py-8 sm:py-16"}`}>
+      <section className={`relative max-w-[1100px] mx-auto px-5 sm:px-8 ${step === "result" ? "min-h-[calc(100vh-72px)] flex flex-col justify-center py-4" : "py-0"}`}>
         {step === "team" && (
           <TeamPicker
             onPick={(t) => {
               setTeam(t);
-              setStep("photo");
+              setStep("name");
             }}
+          />
+        )}
+        {step === "name" && team && (
+          <NameStep
+            team={team}
+            name={name}
+            setName={setName}
+            onBack={() => setStep("team")}
+            onNext={() => setStep("position")}
+          />
+        )}
+        {step === "position" && team && (
+          <PositionStep
+            team={team}
+            position={position}
+            setPosition={setPosition}
+            onBack={() => setStep("name")}
+            onNext={() => setStep("number")}
+          />
+        )}
+        {step === "number" && team && (
+          <NumberStep
+            team={team}
+            number={number}
+            setNumber={setNumber}
+            onBack={() => setStep("position")}
+            onNext={() => setStep("rating")}
+          />
+        )}
+        {step === "rating" && team && (
+          <RatingStep
+            team={team}
+            rating={rating}
+            setRating={setRating}
+            onBack={() => setStep("number")}
+            onNext={() => setStep("photo")}
           />
         )}
         {step === "photo" && team && (
           <PhotoStep
             team={team}
-            onBack={() => setStep("team")}
+            onBack={() => setStep("rating")}
             onPhoto={(src) => {
               setPhoto(src);
-              setStep("details");
+              generate();
             }}
-          />
-        )}
-        {step === "details" && team && photo && (
-          <DetailsStep
-            team={team}
-            photo={photo}
-            name={name}
-            setName={setName}
-            position={position}
-            setPosition={setPosition}
-            number={number}
-            setNumber={setNumber}
-            rating={rating}
-            setRating={setRating}
-            generating={generating}
-            onBack={() => setStep("photo")}
-            onGenerate={generate}
+            onSkip={() => {
+              setPhoto(null);
+              generate();
+            }}
           />
         )}
         {step === "result" && cardUrl && team && (
@@ -334,8 +357,11 @@ function PressingOverlay({ team }: { team: Team }) {
 function Nav({ step }: { step: Step }) {
   const labels: { id: Step; label: string }[] = [
     { id: "team", label: "Team" },
+    { id: "name", label: "Name" },
+    { id: "position", label: "Pos" },
+    { id: "number", label: "No." },
+    { id: "rating", label: "Rate" },
     { id: "photo", label: "Photo" },
-    { id: "details", label: "Stats" },
     { id: "result", label: "Card" },
   ];
   const idx = labels.findIndex((l) => l.id === step);
@@ -631,10 +657,12 @@ function PhotoStep({
   team,
   onPhoto,
   onBack,
+  onSkip,
 }: {
   team: Team;
   onPhoto: (src: string) => void;
   onBack: () => void;
+  onSkip?: () => void;
 }) {
   const [mode, setMode] = useState<"choose" | "camera">("choose");
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -959,10 +987,15 @@ function PhotoStep({
         </aside>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 flex items-center justify-between gap-3">
         <button onClick={onBack} className="text-text-soft hover:text-leather text-sm">
-          ← Change team
+          ← Back
         </button>
+        {onSkip && (
+          <button onClick={onSkip} className="text-text-soft hover:text-leather text-sm underline">
+            Skip the photo →
+          </button>
+        )}
       </div>
     </div>
   );
@@ -977,121 +1010,494 @@ function Tip({ children }: { children: React.ReactNode }) {
   );
 }
 
-function DetailsStep(props: {
-  team: Team;
-  photo: string;
-  name: string;
-  setName: (s: string) => void;
-  position: Position;
-  setPosition: (p: Position) => void;
-  number: string;
-  setNumber: (s: string) => void;
-  rating: string;
-  setRating: (s: string) => void;
-  generating: boolean;
-  onBack: () => void;
-  onGenerate: () => void;
-}) {
-  const { team, photo, name, setName, position, setPosition, number, setNumber, rating, setRating, generating, onBack, onGenerate } = props;
-  return (
-    <div>
-      <div className="label mb-2">Step Three · Stats</div>
-      <h1 className="font-display font-bold text-leather text-[clamp(1.8rem,4vw,2.4rem)] leading-[1.05] tracking-[-0.02em] mb-1">
-        Fill in your kit.
-      </h1>
-      <p className="text-text-soft mb-5 max-w-xl text-sm">
-        Name, position, number, rating. Live preview on the right.
-      </p>
-      <div className="grid md:grid-cols-[1fr,auto] gap-8 md:gap-10 items-center">
-        <div>
-          <div className="space-y-3">
-            <Field label="Name">
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value.slice(0, 22))}
-                placeholder="Lionel Rahim"
-                className="input"
-              />
-            </Field>
-            <div role="group" aria-label="Position">
-              <div className="label mb-2">Position</div>
-              <div className="flex gap-2">
-                {POSITIONS.map((p) => {
-                  const active = position === p;
-                  return (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => {
-                        setPosition(p);
-                      }}
-                      aria-pressed={active}
-                      style={{
-                        flex: 1,
-                        padding: "0.7rem 0",
-                        borderRadius: 6,
-                        borderWidth: 2,
-                        borderStyle: "solid",
-                        borderColor: active ? "#2C2118" : "rgba(44, 33, 24, 0.15)",
-                        background: active ? "#F8F5EF" : "rgba(248, 245, 239, 0.6)",
-                        color: active ? "#2C2118" : "#6B6259",
-                        fontFamily: "Syne, sans-serif",
-                        fontWeight: 700,
-                        fontSize: 12,
-                        letterSpacing: "0.16em",
-                        textTransform: "uppercase",
-                        cursor: "pointer",
-                        transition: "all 200ms ease",
-                        boxShadow: active ? "0 4px 12px rgba(26,23,20,0.08)" : "none",
-                      }}
-                    >
-                      {p}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="Number">
-                <input
-                  inputMode="numeric"
-                  value={number}
-                  onChange={(e) => setNumber(e.target.value.replace(/\D/g, "").slice(0, 2))}
-                  className="input"
-                />
-              </Field>
-              <Field label="Rating">
-                <input
-                  inputMode="numeric"
-                  value={rating}
-                  onChange={(e) => setRating(e.target.value.replace(/\D/g, "").slice(0, 2))}
-                  className="input"
-                />
-              </Field>
-            </div>
-          </div>
-          <div className="mt-5 flex items-center gap-3">
-            <button onClick={onBack} className="btn-ghost">Back</button>
-            <button onClick={onGenerate} disabled={generating} className="btn-primary">
-              {generating ? "Pressing your card…" : "Make my card"}
-            </button>
-          </div>
-        </div>
+/* ─────────── Typeform-style step chrome ─────────── */
 
-        <div className="w-[240px] md:w-[260px] justify-self-center">
-          <ArchPreview team={team} photo={photo} name={name || "Your Name"} position={position} number={number} rating={rating} />
-        </div>
+function StepShell({
+  team,
+  stepNum,
+  stepTotal,
+  eyebrow,
+  question,
+  sub,
+  children,
+  onBack,
+  onNext,
+  nextLabel = "Continue →",
+  nextDisabled = false,
+  hint,
+}: {
+  team: Team;
+  stepNum: number;
+  stepTotal: number;
+  eyebrow: string;
+  question: string;
+  sub?: string;
+  children: React.ReactNode;
+  onBack: () => void;
+  onNext?: () => void;
+  nextLabel?: string;
+  nextDisabled?: boolean;
+  hint?: string;
+}) {
+  const accent = team.secondary || team.accent || team.primary;
+  return (
+    <div
+      className="step-shell"
+      style={{
+        minHeight: "calc(100vh - 72px)",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "32px 4px 80px",
+        position: "relative",
+        ["--step-accent" as string]: accent,
+        animation: "stepFadeIn 360ms cubic-bezier(0.2, 0.7, 0.2, 1)",
+      }}
+    >
+      <div
+        className="flex items-center gap-3 mb-3"
+        style={{
+          fontFamily: "Syne, sans-serif",
+          fontWeight: 700,
+          fontSize: 11,
+          letterSpacing: "0.28em",
+          textTransform: "uppercase",
+          color: "var(--text-soft, #6B6259)",
+        }}
+      >
+        <span style={{ color: accent }}>
+          {String(stepNum).padStart(2, "0")} / {String(stepTotal).padStart(2, "0")}
+        </span>
+        <span style={{ opacity: 0.4 }}>·</span>
+        <span>{eyebrow}</span>
       </div>
+      <h1
+        className="font-display"
+        style={{
+          fontWeight: 800,
+          fontSize: "clamp(36px, 6.5vw, 72px)",
+          lineHeight: 0.98,
+          letterSpacing: "-0.03em",
+          color: "var(--leather-mid, #2C2118)",
+          marginBottom: sub ? 12 : 24,
+          maxWidth: "18ch",
+        }}
+      >
+        {question}
+      </h1>
+      {sub && (
+        <p
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontWeight: 400,
+            fontSize: 15,
+            lineHeight: 1.5,
+            color: "var(--text-soft, #6B6259)",
+            marginBottom: 28,
+            maxWidth: "44ch",
+          }}
+        >
+          {sub}
+        </p>
+      )}
+      <div style={{ marginBottom: 24 }}>{children}</div>
+
+      <div className="flex items-center gap-4">
+        <button onClick={onBack} className="text-text-soft hover:text-leather text-sm">
+          ← Back
+        </button>
+        {onNext && (
+          <button
+            onClick={onNext}
+            disabled={nextDisabled}
+            className="btn-primary"
+            style={{
+              opacity: nextDisabled ? 0.45 : 1,
+              cursor: nextDisabled ? "not-allowed" : "pointer",
+            }}
+          >
+            {nextLabel}
+          </button>
+        )}
+        {hint && (
+          <span
+            className="hidden sm:inline-flex items-center gap-2"
+            style={{
+              fontFamily: "Syne, sans-serif",
+              fontWeight: 700,
+              fontSize: 10,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "var(--text-soft, #6B6259)",
+              opacity: 0.7,
+            }}
+          >
+            <kbd
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: 10,
+                padding: "2px 6px",
+                border: "1px solid rgba(44,33,24,0.18)",
+                borderRadius: 3,
+                background: "rgba(245,241,235,0.7)",
+                letterSpacing: 0,
+              }}
+            >
+              {hint}
+            </kbd>
+          </span>
+        )}
+      </div>
+
+      <style jsx>{`
+        @keyframes stepFadeIn {
+          from { opacity: 0; transform: translateY(14px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function NameStep({
+  team,
+  name,
+  setName,
+  onBack,
+  onNext,
+}: {
+  team: Team;
+  name: string;
+  setName: (s: string) => void;
+  onBack: () => void;
+  onNext: () => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => { inputRef.current?.focus(); }, []);
+  const ok = name.trim().length > 0;
   return (
-    <label className="block">
-      <div className="label mb-2">{label}</div>
-      {children}
-    </label>
+    <StepShell
+      team={team}
+      stepNum={2}
+      stepTotal={7}
+      eyebrow="Your name"
+      question="What name's on the back?"
+      sub="We use it on the card. We use it for your signature too."
+      onBack={onBack}
+      onNext={ok ? onNext : undefined}
+      nextDisabled={!ok}
+      hint="↵ Enter"
+    >
+      <input
+        ref={inputRef}
+        value={name}
+        maxLength={22}
+        onChange={(e) => setName(e.target.value.slice(0, 22))}
+        onKeyDown={(e) => { if (e.key === "Enter" && ok) onNext(); }}
+        placeholder="Lionel Rahim"
+        style={{
+          appearance: "none",
+          width: "100%",
+          maxWidth: 640,
+          background: "transparent",
+          border: "none",
+          borderBottom: "3px solid var(--step-accent, #2C2118)",
+          padding: "12px 4px",
+          fontFamily: "Big Shoulders Display, Syne, sans-serif",
+          fontWeight: 800,
+          fontSize: "clamp(32px, 5.5vw, 56px)",
+          lineHeight: 1.05,
+          letterSpacing: "-0.02em",
+          color: "var(--leather-mid, #2C2118)",
+          outline: "none",
+        }}
+        autoComplete="off"
+      />
+    </StepShell>
+  );
+}
+
+function PositionStep({
+  team,
+  position,
+  setPosition,
+  onBack,
+  onNext,
+}: {
+  team: Team;
+  position: Position;
+  setPosition: (p: Position) => void;
+  onBack: () => void;
+  onNext: () => void;
+}) {
+  const POS_META: Record<Position, { label: string; full: string; tag: string }> = {
+    GK:  { label: "GK",  full: "Goalkeeper",   tag: "A" },
+    DEF: { label: "DEF", full: "Defender",     tag: "B" },
+    MID: { label: "MID", full: "Midfielder",   tag: "C" },
+    FWD: { label: "FWD", full: "Forward",      tag: "D" },
+  };
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const key = e.key.toUpperCase();
+      const map: Record<string, Position> = { A: "GK", B: "DEF", C: "MID", D: "FWD" };
+      if (map[key]) { setPosition(map[key]); setTimeout(onNext, 220); }
+      if (e.key === "Enter") onNext();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onNext, setPosition]);
+  return (
+    <StepShell
+      team={team}
+      stepNum={3}
+      stepTotal={7}
+      eyebrow="Your position"
+      question="Where do you play?"
+      onBack={onBack}
+      onNext={onNext}
+      hint="A B C D"
+    >
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+          gap: 12,
+          maxWidth: 720,
+        }}
+      >
+        {POSITIONS.map((p) => {
+          const active = position === p;
+          const meta = POS_META[p];
+          return (
+            <button
+              key={p}
+              type="button"
+              onClick={() => { setPosition(p); setTimeout(onNext, 180); }}
+              style={{
+                appearance: "none",
+                cursor: "pointer",
+                background: active ? "var(--step-accent, #2C2118)" : "transparent",
+                color: active ? (team.primary === "#FFFFFF" ? "#1A1A1A" : "#fff") : "var(--leather-mid, #2C2118)",
+                border: `2px solid ${active ? "var(--step-accent, #2C2118)" : "rgba(44,33,24,0.18)"}`,
+                borderRadius: 8,
+                padding: "22px 18px",
+                textAlign: "left",
+                transition: "all 220ms ease",
+                transform: active ? "translateY(-2px)" : "translateY(0)",
+                boxShadow: active ? "0 12px 28px -14px rgba(0,0,0,0.45)" : "none",
+                fontFamily: "Syne, sans-serif",
+                position: "relative",
+              }}
+            >
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 26,
+                  height: 26,
+                  marginBottom: 12,
+                  border: `1.5px solid ${active ? "currentColor" : "rgba(44,33,24,0.3)"}`,
+                  borderRadius: 4,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: 0.05,
+                  opacity: 0.85,
+                }}
+              >
+                {meta.tag}
+              </span>
+              <div
+                style={{
+                  fontWeight: 800,
+                  fontSize: 28,
+                  lineHeight: 1,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                {meta.label}
+              </div>
+              <div
+                style={{
+                  fontWeight: 500,
+                  fontSize: 13,
+                  marginTop: 6,
+                  letterSpacing: "0.04em",
+                  opacity: active ? 0.85 : 0.6,
+                }}
+              >
+                {meta.full}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </StepShell>
+  );
+}
+
+function NumberStep({
+  team,
+  number,
+  setNumber,
+  onBack,
+  onNext,
+}: {
+  team: Team;
+  number: string;
+  setNumber: (s: string) => void;
+  onBack: () => void;
+  onNext: () => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => { ref.current?.focus(); ref.current?.select(); }, []);
+  const n = parseInt(number || "0", 10);
+  const ok = n >= 1 && n <= 99;
+  return (
+    <StepShell
+      team={team}
+      stepNum={4}
+      stepTotal={7}
+      eyebrow="Your number"
+      question="Pick a number, 1 to 99."
+      sub="The one stitched on your back. Captains tend to go 10. Goalkeepers tend to go 1."
+      onBack={onBack}
+      onNext={ok ? onNext : undefined}
+      nextDisabled={!ok}
+      hint="↵ Enter"
+    >
+      <input
+        ref={ref}
+        inputMode="numeric"
+        pattern="[0-9]*"
+        value={number}
+        onChange={(e) => setNumber(e.target.value.replace(/\D/g, "").slice(0, 2))}
+        onKeyDown={(e) => { if (e.key === "Enter" && ok) onNext(); }}
+        placeholder="10"
+        style={{
+          appearance: "none",
+          width: "100%",
+          maxWidth: 280,
+          background: "transparent",
+          border: "none",
+          borderBottom: "3px solid var(--step-accent, #2C2118)",
+          padding: "12px 4px",
+          fontFamily: "Big Shoulders Display, Syne, sans-serif",
+          fontWeight: 900,
+          fontSize: "clamp(72px, 14vw, 160px)",
+          lineHeight: 1,
+          letterSpacing: "-0.04em",
+          color: "var(--leather-mid, #2C2118)",
+          textAlign: "left",
+          outline: "none",
+        }}
+        autoComplete="off"
+      />
+    </StepShell>
+  );
+}
+
+function RatingStep({
+  team,
+  rating,
+  setRating,
+  onBack,
+  onNext,
+}: {
+  team: Team;
+  rating: string;
+  setRating: (s: string) => void;
+  onBack: () => void;
+  onNext: () => void;
+}) {
+  const n = Math.max(50, Math.min(99, parseInt(rating || "0", 10) || 0));
+  useEffect(() => { if (rating === "") setRating("92"); }, [rating, setRating]);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Enter") onNext(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onNext]);
+  const tier = n >= 92 ? "Generational" : n >= 87 ? "Elite" : n >= 80 ? "Top of the league" : n >= 70 ? "Honest pro" : n >= 60 ? "Solid Sunday-leaguer" : "Pub squad legend";
+  return (
+    <StepShell
+      team={team}
+      stepNum={5}
+      stepTotal={7}
+      eyebrow="Your rating"
+      question="How good are you, really?"
+      sub="Be honest. The cards remember."
+      onBack={onBack}
+      onNext={onNext}
+      hint="↵ Enter"
+    >
+      <div style={{ maxWidth: 720 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            gap: 18,
+            marginBottom: 22,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "Big Shoulders Display, Syne, sans-serif",
+              fontWeight: 900,
+              fontSize: "clamp(96px, 18vw, 200px)",
+              lineHeight: 1,
+              letterSpacing: "-0.04em",
+              color: "var(--step-accent, #2C2118)",
+              transition: "color 280ms ease",
+            }}
+          >
+            {n}
+          </span>
+          <span
+            style={{
+              fontFamily: "Syne, sans-serif",
+              fontWeight: 700,
+              fontSize: "clamp(14px, 1.4vw, 18px)",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--leather-mid, #2C2118)",
+            }}
+          >
+            {tier}
+          </span>
+        </div>
+        <input
+          type="range"
+          min={50}
+          max={99}
+          value={n}
+          onChange={(e) => setRating(String(e.target.value))}
+          style={{
+            width: "100%",
+            maxWidth: 640,
+            accentColor: team.secondary || team.accent || team.primary,
+            cursor: "pointer",
+          }}
+          aria-label="Rating"
+        />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            maxWidth: 640,
+            marginTop: 10,
+            fontFamily: "Syne, sans-serif",
+            fontWeight: 700,
+            fontSize: 10,
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            color: "var(--text-soft, #6B6259)",
+            opacity: 0.75,
+          }}
+        >
+          <span>50</span><span>75</span><span>99</span>
+        </div>
+      </div>
+    </StepShell>
   );
 }
 
