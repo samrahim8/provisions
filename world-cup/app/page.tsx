@@ -30,6 +30,12 @@ const RARITY_META: Record<Rarity, { label: string; odds: string; tint: string }>
 
 export default function Page() {
   const [step, setStep] = useState<Step>("intro");
+
+  // Snap to top whenever the user advances or rewinds steps. Without this,
+  // scroll position from a long step (rating, photo) bleeds into short ones.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [step]);
   const [team, setTeam] = useState<Team | null>(null);
   const [photo, setPhoto] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -498,19 +504,35 @@ function Nav({ step }: { step: Step }) {
 }
 
 function IntroStep({ onStart }: { onStart: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Enter") onStart(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onStart]);
   return (
     <div
+      className="intro-shell"
       style={{
-        minHeight: "calc(100vh - 72px)",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "32px 4px 80px",
+        height: "calc(100vh - 72px)",
+        minHeight: 560,
+        maxHeight: 920,
+        display: "grid",
+        placeItems: "center",
         animation: "stepFadeIn 360ms cubic-bezier(0.2, 0.7, 0.2, 1)",
       }}
     >
-      <div className="grid lg:grid-cols-[1.25fr,1fr] gap-8 lg:gap-16 items-center">
-        <div>
+      <div
+        className="intro-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1.05fr 0.95fr",
+          gap: 56,
+          alignItems: "center",
+          width: "100%",
+          maxWidth: 1040,
+        }}
+      >
+        <div className="intro-copy">
           <div
             style={{
               fontFamily: "Syne, sans-serif",
@@ -519,80 +541,145 @@ function IntroStep({ onStart }: { onStart: () => void }) {
               letterSpacing: "0.28em",
               textTransform: "uppercase",
               color: "var(--terracotta, #A0422A)",
-              marginBottom: 14,
+              marginBottom: 18,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
             }}
           >
-            Provisions · Summer '26
+            <span>Provisions</span>
+            <span style={{ opacity: 0.4 }}>·</span>
+            <span style={{ color: "var(--leather-mid, #2C2118)", opacity: 0.7 }}>Summer '26</span>
           </div>
           <h1
-            className="font-display"
+            className="font-display intro-h1"
             style={{
               fontWeight: 800,
-              fontSize: "clamp(38px, 7.4vw, 88px)",
-              lineHeight: 0.96,
-              letterSpacing: "-0.035em",
+              fontSize: "clamp(34px, 4.4vw, 60px)",
+              lineHeight: 0.98,
+              letterSpacing: "-0.03em",
               color: "var(--leather-mid, #2C2118)",
-              marginBottom: 20,
-              maxWidth: "16ch",
+              marginBottom: 18,
             }}
           >
             The player card<br />for the rest of us.
           </h1>
           <p
+            className="intro-sub"
             style={{
               fontFamily: "Inter, sans-serif",
-              fontSize: 17,
+              fontSize: 16,
               lineHeight: 1.5,
               color: "var(--text-soft, #6B6259)",
-              maxWidth: "44ch",
-              marginBottom: 28,
+              maxWidth: "38ch",
+              marginBottom: 26,
             }}
           >
-            Seven quick steps. Pick a country, drop your name, grab your kit number. Walk away with a real-deal card you can share.
+            Seven taps. Pick a country, drop your name, grab a kit number. Yours in under a minute.
           </p>
-          <button
-            onClick={onStart}
-            className="btn-primary inline-flex items-center gap-2"
-            style={{ fontSize: 13 }}
-          >
-            Make my card
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M13 5l7 7-7 7" />
-            </svg>
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }}>
+            <button
+              onClick={onStart}
+              className="btn-primary inline-flex items-center gap-2"
+              style={{ fontSize: 13, padding: "14px 22px" }}
+            >
+              Make my card
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 5l7 7-7 7" />
+              </svg>
+            </button>
+            <span
+              style={{
+                fontFamily: "Syne, sans-serif",
+                fontWeight: 700,
+                fontSize: 10,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                color: "var(--text-soft, #6B6259)",
+                opacity: 0.7,
+              }}
+            >
+              ~ 60 seconds · Free
+            </span>
+          </div>
           <div
+            className="intro-steps"
             style={{
-              marginTop: 18,
+              marginTop: 32,
               display: "flex",
-              gap: 16,
+              gap: 6,
+              flexWrap: "wrap",
               fontFamily: "Syne, sans-serif",
               fontWeight: 700,
               fontSize: 10,
-              letterSpacing: "0.22em",
+              letterSpacing: "0.18em",
               textTransform: "uppercase",
               color: "var(--text-soft, #6B6259)",
-              opacity: 0.7,
+              opacity: 0.55,
             }}
           >
-            <span>~ 60 seconds</span>
-            <span>·</span>
-            <span>Free for fans</span>
+            {["Country","Name","Position","Number","Rating","Photo","Card"].map((s, i) => (
+              <span key={s} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <span style={{ opacity: 0.55 }}>{String(i+1).padStart(2,"0")}</span>
+                <span>{s}</span>
+                {i < 6 && <span style={{ opacity: 0.35 }}>·</span>}
+              </span>
+            ))}
           </div>
         </div>
-        <div className="flex justify-center lg:justify-end">
-          <div className="relative">
+
+        <div className="intro-card-wrap" style={{ display: "flex", justifyContent: "center" }}>
+          <div
+            style={{
+              position: "relative",
+              animation: "introCardFloat 6s ease-in-out infinite",
+            }}
+          >
             <img
               src={asset("/hero-card.png")}
               alt="Example player card"
               width={360}
               height={504}
               fetchPriority="high"
-              className="rounded-md w-[220px] sm:w-[260px] lg:w-[360px] h-auto"
-              style={{ boxShadow: "0 30px 60px -20px rgba(26,23,20,0.35), 0 8px 20px -8px rgba(26,23,20,0.18)" }}
+              className="intro-card-img"
+              style={{
+                display: "block",
+                width: "min(80vh, 360px)",
+                maxWidth: "100%",
+                height: "auto",
+                borderRadius: 8,
+                boxShadow: "0 36px 70px -22px rgba(26,23,20,0.4), 0 12px 24px -10px rgba(26,23,20,0.18)",
+                transform: "rotate(2deg)",
+              }}
             />
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes introCardFloat {
+          0%, 100% { transform: translateY(0); }
+          50%      { transform: translateY(-8px); }
+        }
+        @media (max-width: 880px) {
+          .intro-shell {
+            height: auto !important;
+            min-height: calc(100vh - 72px) !important;
+            padding: 32px 0 64px;
+          }
+          .intro-grid {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
+          .intro-card-wrap {
+            order: -1;
+          }
+          .intro-card-img {
+            width: min(56vh, 220px) !important;
+          }
+          .intro-steps { display: none !important; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -1464,7 +1551,15 @@ function NumberStep({
   onNext: () => void;
 }) {
   const ref = useRef<HTMLInputElement>(null);
-  useEffect(() => { ref.current?.focus(); ref.current?.select(); }, []);
+  useEffect(() => {
+    // Focus without selecting (selection styling can paint the whole field
+    // in the team accent, which reads as a highlight bug).
+    ref.current?.focus();
+    requestAnimationFrame(() => {
+      const len = ref.current?.value.length ?? 0;
+      ref.current?.setSelectionRange(len, len);
+    });
+  }, []);
   const n = parseInt(number || "0", 10);
   const ok = n >= 1 && n <= 99;
   return (

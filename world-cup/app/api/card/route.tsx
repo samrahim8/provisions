@@ -897,9 +897,9 @@ export async function POST(req: Request) {
 
   const team = teamByCode(teamCode);
   if (!team) return new Response("Unknown team", { status: 400 });
-  if (!photo?.startsWith("data:image")) return new Response("Bad photo", { status: 400 });
+  const hasUserPhoto = typeof photo === "string" && photo.startsWith("data:image");
 
-  const [bs8, bs9, bebas, plex, sig, markDark, markLight] = await Promise.all([
+  const [bs8, bs9, bebas, plex, sig, markDark, markLight, defaultPhoto] = await Promise.all([
     loadFont(FONT_URLS.bigShoulders800),
     loadFont(FONT_URLS.bigShoulders900),
     loadFont(FONT_URLS.bebas),
@@ -907,7 +907,9 @@ export async function POST(req: Request) {
     loadFont(FONT_URLS.homemade),
     loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark.png"),
     loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark-white.png"),
+    hasUserPhoto ? Promise.resolve("") : loadImageDataUrl(req, "/world-cup/card-generator/sam.png"),
   ]);
+  const photoToUse = hasUserPhoto ? photo : defaultPhoto;
 
   const markUrl = isLight(PAPER) ? markDark : markLight;
   const validRarities: Rarity[] = ["standard", "silver", "gold", "platinum", "holo"];
@@ -915,7 +917,7 @@ export async function POST(req: Request) {
 
   const props = {
     team,
-    photo,
+    photo: photoToUse,
     name: name || "Your Name",
     position,
     number,
