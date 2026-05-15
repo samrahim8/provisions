@@ -1815,33 +1815,35 @@ function ResultStep({
   const [shareStatus, setShareStatus] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
-  // Pre-compose the 1080x1920 IG-story blob on mount and cache it in a ref.
-  // Two reasons:
-  //   1. iOS Safari requires navigator.share() to be invoked synchronously
-  //      inside the user gesture. Awaiting fetch/compose before share kills
-  //      the gesture context and the share silently fails. With the blob
-  //      already cached, the click handler can call navigator.share()
-  //      without awaiting first.
-  //   2. The composed story image is 1080x1920 (9:16) so it fits IG Stories
-  //      natively without zoom/crop. The raw card is 5:7 which IG zooms.
+  // Cache a shareable blob on mount. We fetch the raw card (fast) AND
+  // try to compose the 1080x1920 story image (slower) in PARALLEL. The
+  // share buttons enable as soon as ANY blob is ready. If compose
+  // succeeds, it overwrites the raw card for better IG Story framing.
+  //
+  // CRITICAL on iOS Safari: navigator.share() must be invoked inside
+  // the user gesture WITHOUT any prior await. Caching the blob in a
+  // ref lets the click handler call navigator.share() synchronously.
   const blobRef = useRef<Blob | null>(null);
   useEffect(() => {
     let cancelled = false;
-    (async () => {
-      try {
-        const composed = await buildStoryBlob();
-        if (!cancelled) blobRef.current = composed;
-      } catch (e) {
-        console.warn("Story compose failed on prefetch, caching raw card:", e);
-        try {
-          const res = await fetch(cardUrl);
-          const raw = await res.blob();
-          if (!cancelled) blobRef.current = raw;
-        } catch (e2) {
-          console.warn("Raw card prefetch also failed:", e2);
-        }
-      }
-    })();
+
+    // Step 1: raw card blob (fast path — just resolves the existing blob: URL)
+    fetch(cardUrl)
+      .then((r) => r.blob())
+      .then((b) => {
+        if (cancelled) return;
+        if (!blobRef.current) blobRef.current = b;
+      })
+      .catch((e) => console.warn("Raw card prefetch failed:", e));
+
+    // Step 2: composed story blob (better for IG Stories — 9:16)
+    buildStoryBlob()
+      .then((b) => {
+        if (cancelled) return;
+        blobRef.current = b; // upgrade the cached blob
+      })
+      .catch((e) => console.warn("Story compose failed (will use raw card):", e));
+
     return () => { cancelled = true; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardUrl]);
@@ -1878,39 +1880,6 @@ function ResultStep({
     platinum: "Golden Ball. ~1 in 33 packs.",
     holo:     "Legend pull. 1 in 100 ever lands here.",
   };
-
-  function save() {
-    const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
-    const flash = () => {
-      setSaveStatus("Saved ✓");
-      setTimeout(() => setSaveStatus(null), 2200);
-    };
-    const cached = blobRef.current;
-    if (cached) {
-      triggerDownload(cached, filename);
-      flash();
-      return;
-    }
-    // Not cached yet — async fallback
-    (async () => {
-      try {
-        let blob: Blob;
-        try { blob = await buildStoryBlob(); }
-        catch {
-          const res = await fetch(cardUrl);
-          if (!res.ok) throw new Error(`Card fetch ${res.status}`);
-          blob = await res.blob();
-        }
-        blobRef.current = blob;
-        triggerDownload(blob, filename);
-        flash();
-      } catch (e) {
-        const err = e as Error;
-        console.error("Save failed:", err);
-        alert("Save failed: " + (err?.message || "unknown error"));
-      }
-    })();
-  }
 
   function _lum(hex: string): number {
     const r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -1988,79 +1957,90 @@ function ResultStep({
   // no Image() — just fetch the cardUrl blob and either hand it to the
   // native share sheet or trigger a download. Every layer that could
   // silently fail has been removed.
-  // Share to Story. CRITICAL on iOS: navigator.share() must run inside the
-  // user gesture, so this function awaits NOTHING before calling it when
-  // the blob is already cached (which it almost always is — buildStoryBlob
-  // pre-runs on mount). The download fallback handles desktop and any
-  // browser where Web Share is unavailable.
+  // Share to Story — synchronous path. iOS Safari rejects navigator.share()
+  // if any await happens between the click and the call. blobRef is filled
+  // by the mount-time prefetch; this handler reads it synchronously.
   function shareStory() {
     if (storyBusy) return;
+    const blob = blobRef.current;
+    if (!blob) {
+      alert("Still preparing — try again in a second.");
+      return;
+    }
+    setStoryBusy(true);
+
+    const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
+    const file = new File([blob], filename, { type: "image/png" });
+
     const finish = (outcome: "shared" | "saved") => {
       setStoryBusy(false);
       setShareStatus(outcome === "shared" ? "Shared ✓" : "Saved ✓");
       setTimeout(() => setShareStatus(null), 2200);
     };
-    const fail = (err: Error) => {
-      setStoryBusy(false);
-      console.error("Share failed:", err);
-      alert("Share failed: " + (err?.message || "unknown error"));
-    };
 
-    const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
+    const canNative =
+      typeof navigator !== "undefined" &&
+      typeof navigator.canShare === "function" &&
+      typeof navigator.share === "function" &&
+      navigator.canShare({ files: [file] });
 
-    // Synchronous path — only run if the blob was pre-composed on mount.
-    // This is the iOS-friendly path because no awaits precede navigator.share().
-    const cached = blobRef.current;
-    if (cached) {
-      setStoryBusy(true);
-      const file = new File([cached], filename, { type: "image/png" });
-      const canNative =
-        typeof navigator !== "undefined" &&
-        typeof navigator.canShare === "function" &&
-        typeof navigator.share === "function" &&
-        navigator.canShare({ files: [file] });
-
-      if (canNative) {
-        // Invoke navigator.share IMMEDIATELY (still in the user gesture).
-        // Don't await — handle the promise inline so the call itself is sync.
-        navigator
-          .share({ files: [file], title: `${name} · ${team.name}`, text: "My Summer '26 card" })
-          .then(() => finish("shared"))
-          .catch((e: Error) => {
-            if (e?.name === "AbortError") { finish("shared"); return; }
-            console.warn("navigator.share failed, falling back to download:", e);
-            triggerDownload(cached, filename);
-            finish("saved");
-          });
-        return;
-      }
-
-      // No Web Share — download
-      triggerDownload(cached, filename);
-      finish("saved");
+    if (canNative) {
+      // CALL IMMEDIATELY — no await. The promise handlers run later, but
+      // navigator.share's invocation is inside the click's user gesture.
+      navigator
+        .share({ files: [file], title: `${name} · ${team.name}`, text: "My Summer '26 card" })
+        .then(() => finish("shared"))
+        .catch((e: Error) => {
+          if (e?.name === "AbortError") { finish("shared"); return; }
+          console.warn("navigator.share rejected, falling back to download:", e);
+          triggerDownload(blob, filename);
+          finish("saved");
+        });
       return;
     }
 
-    // Async fallback — blob not yet cached. Will likely lose iOS gesture
-    // context but at least desktop downloads will still work.
-    setStoryBusy(true);
-    (async () => {
-      try {
-        let blob: Blob;
-        try {
-          blob = await buildStoryBlob();
-        } catch {
-          const res = await fetch(cardUrl);
-          if (!res.ok) throw new Error(`Card fetch ${res.status}`);
-          blob = await res.blob();
-        }
-        blobRef.current = blob;
-        triggerDownload(blob, filename);
-        finish("saved");
-      } catch (e) {
-        fail(e as Error);
-      }
-    })();
+    // Desktop / no Web Share: download.
+    triggerDownload(blob, filename);
+    finish("saved");
+  }
+
+  // Save — on mobile, route through the native share sheet (user picks
+  // "Save Image" → goes to Photos). On desktop, download.
+  function save() {
+    const blob = blobRef.current;
+    if (!blob) {
+      alert("Still preparing — try again in a second.");
+      return;
+    }
+    const filename = `${(name || "card").replace(/\s+/g, "-").toLowerCase()}-${team.code.toLowerCase()}.png`;
+    const file = new File([blob], filename, { type: "image/png" });
+
+    const flash = () => {
+      setSaveStatus("Saved ✓");
+      setTimeout(() => setSaveStatus(null), 2200);
+    };
+
+    const canNative =
+      typeof navigator !== "undefined" &&
+      typeof navigator.canShare === "function" &&
+      typeof navigator.share === "function" &&
+      navigator.canShare({ files: [file] });
+
+    if (canNative) {
+      navigator
+        .share({ files: [file], title: `${name} · ${team.name}` })
+        .then(flash)
+        .catch((e: Error) => {
+          if (e?.name === "AbortError") { flash(); return; }
+          console.warn("save share rejected, falling back to download:", e);
+          triggerDownload(blob, filename);
+          flash();
+        });
+      return;
+    }
+
+    triggerDownload(blob, filename);
+    flash();
   }
 
   function triggerDownload(blob: Blob, filename: string) {
