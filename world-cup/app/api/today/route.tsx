@@ -322,7 +322,7 @@ export async function GET(req: Request) {
             fontWeight: 600,
           }}
         >
-          <span style={{ opacity: 0.95, display: "flex" }}>{teamLine}WORLD CUP '26</span>
+          <span style={{ opacity: 0.95, display: "flex" }}>{teamLine}SUMMER '26</span>
         </div>
 
         {/* Big header */}

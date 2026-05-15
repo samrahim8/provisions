@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You Know Ball · Provisions World Cup Quiz</title>
+  <meta name="description" content="10 questions of World Cup history, from layups to deep cuts. Find out if you actually know ball.">
+  <link rel="canonical" href="https://provisions.soccer/you-know-ball">
+
+  <meta property="og:title" content="You Know Ball · World Cup Quiz">
+  <meta property="og:description" content="10 questions. No Google. Do you actually know ball?">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://provisions.soccer/you-know-ball">
+  <meta property="og:image" content="https://provisions.soccer/images/og-quiz.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Do you know ball? · A Provisions World Cup quiz">
+  <meta property="og:site_name" content="Provisions">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@samdape">
+  <meta name="twitter:title" content="You Know Ball · World Cup Quiz">
+  <meta name="twitter:description" content="10 questions. No Google. Do you actually know ball?">
+  <meta name="twitter:image" content="https://provisions.soccer/images/og-quiz.png">
+  <meta name="twitter:image:alt" content="Do you know ball? · A Provisions World Cup quiz">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=IBM+Plex+Mono:wght@500;600&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="./repaint.js" defer></script>
+
+  <style>
+    /* ── BRAND TOKENS (mirrors index.html exactly) ── */
+    :root {
+      --parchment: #F5F1EB;
+      --parchment-el: #F8F5EF;
+      --leather: #2C2118;
+      --leather-mid: #4A3D32;
+      --terracotta: #A0422A;
+      --terracotta-light: #B8533A;
+      --terracotta-glow: #E58769;
+      --text-soft: #6B6259;
+      --border: #DDD7CC;
+      --on-accent: #FFFFFF;
+      --on-leather: #FFFFFF;
+      --green: #2E8B57;
+      --red: #C13A2B;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--parchment);
+      color: var(--leather-mid);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      max-width: 100vw;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    img, svg, video { max-width: 100%; height: auto; }
+    h1, h2, h3, h4 { font-family: 'Syne', sans-serif; font-weight: 700; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    ::selection { background: var(--terracotta); color: var(--parchment); }
+
+    /* ── Grain overlay (above content) ── */
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 200;
+      opacity: 0.05;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+    /* ── Brand grid backdrop ── */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+      mix-blend-mode: multiply;
+      background-image:
+        linear-gradient(to right, rgba(120,108,92,0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120,108,92,0.18) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+    nav.topbar, main, footer { position: relative; z-index: 1; }
+
+    /* ── NAV / MAST (mirrors index.html .mast pattern) ── */
+    nav.topbar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px;
+      padding: 14px 32px;
+      background: rgba(245,241,235,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--leather-mid);
+    }
+    .nav-mark { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .nav-mark img { width: 22px; height: 22px; object-fit: contain; }
+    .nav-mark strong {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14px;
+      letter-spacing: 0.18em; color: var(--leather-mid); text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex; gap: 24px;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .nav-links a {
+      text-decoration: none; color: var(--leather-mid);
+      opacity: 0.55;
+      transition: opacity 0.15s ease, color 0.15s ease;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a.active { opacity: 1; color: var(--terracotta); }
+
+    /* ── LAYOUT ── */
+    main { flex: 1; max-width: 1280px; margin: 0 auto; padding: 32px 64px 48px; width: 100%; }
+    .panel { max-width: 720px; margin: 0 auto; }
+
+    /* ── HERO (designed card chassis, mirrors score-card, viewport-fit) ── */
+    .hero {
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      min-height: calc(100vh - 60px);
+      padding: 24px 0 16px;
+    }
+    .quiz-hero-card {
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      border: 2px solid var(--leather-mid);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--parchment-el);
+      box-shadow: 0 18px 40px -22px rgba(0,0,0,0.35);
+      text-align: center;
+    }
+    .quiz-hero-eyebrow {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 22px;
+      background: var(--leather-mid);
+      color: var(--on-leather);
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      gap: 12px;
+    }
+    .quiz-hero-eyebrow > span:first-child { color: var(--terracotta-glow); }
+    .quiz-hero-body {
+      padding: 22px 28px 20px;
+    }
+    .quiz-hero-body h1 {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(38px, 5.2vw, 60px); line-height: 0.96;
+      letter-spacing: -0.035em;
+      color: var(--leather);
+      margin-bottom: 10px;
+    }
+    .quiz-hero-body h1 .accent { color: var(--terracotta); }
+    .quiz-hero-body .lede {
+      font-family: 'Inter', sans-serif; font-weight: 400;
+      font-size: 14px; line-height: 1.5;
+      color: var(--text-soft);
+      max-width: 440px;
+      margin: 0 auto 14px;
+    }
+    .tier-ladder {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      max-width: 560px;
+      margin: 0 auto 16px;
+      padding: 10px 0 8px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .tier-ladder-label {
+      grid-column: 1 / -1;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--terracotta); text-align: center; margin-bottom: 4px;
+    }
+    .tier-rung {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 6px 4px;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 12px; line-height: 1.15;
+      letter-spacing: -0.005em;
+      color: var(--leather-mid);
+      gap: 4px;
+      text-align: center;
+    }
+    .tier-rung .range {
+      font-family: 'Inter', sans-serif; font-weight: 500;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-soft); white-space: nowrap;
+    }
+    .tier-rung-top {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      color: var(--terracotta);
+      font-size: 13px;
+    }
+    .tier-rung-top .range { color: var(--terracotta); opacity: 0.8; }
+    .start-btn {
+      appearance: none; border: none; cursor: pointer;
+      background: var(--terracotta); color: var(--on-accent);
+      padding: 14px 28px;
+      border-radius: 5px;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+      width: 100%; max-width: 280px;
+    }
+    .start-btn:hover { background: var(--terracotta-light); transform: translateY(-1px); }
+    .quiz-hero-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 22px;
+      background: var(--leather);
+      color: var(--on-leather);
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+      border-top: 2px solid var(--leather-mid);
+      gap: 8px;
+    }
+    .quiz-hero-foot > span:nth-child(2) { color: var(--terracotta-glow); }
+
+    /* ── QUIZ CARD ── */
+    .quiz { display: none; }
+    .quiz.active { display: block; }
+    .quiz-card {
+      background: var(--parchment-el);
+      border: 2px solid var(--leather-mid);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .quiz-card-eyebrow {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 18px;
+      background: var(--leather-mid);
+      color: var(--on-leather);
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      gap: 12px;
+    }
+    .quiz-card-eyebrow > span:first-child { color: var(--terracotta-glow); }
+    .progress-bar {
+      height: 3px; background: rgba(44,33,24,0.1);
+      position: relative;
+    }
+    .progress-fill {
+      position: absolute; top: 0; left: 0; bottom: 0;
+      background: var(--terracotta);
+      transition: width 0.35s ease;
+    }
+    .quiz-card-body { padding: 24px 24px 18px; }
+    .question {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: clamp(22px, 2.6vw, 28px); line-height: 1.2;
+      letter-spacing: -0.015em;
+      color: var(--leather);
+      margin-bottom: 20px;
+    }
+    .options { display: flex; flex-direction: column; gap: 8px; }
+    .option {
+      appearance: none; cursor: pointer;
+      background: var(--parchment);
+      border: 1.5px solid var(--border);
+      border-radius: 5px;
+      padding: 12px 16px;
+      font-family: 'Inter', sans-serif; font-weight: 500;
+      font-size: 15px;
+      color: var(--leather-mid);
+      text-align: left;
+      transition: all 0.15s ease;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .option:not(:disabled):hover {
+      border-color: var(--leather-mid);
+      transform: translateX(1px);
+    }
+    .option-letter {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px;
+      background: var(--leather-mid); color: var(--on-leather);
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.04em;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .option.correct {
+      background: rgba(46,139,87,0.1);
+      border-color: var(--green);
+      color: var(--leather);
+    }
+    .option.correct .option-letter { background: var(--green); }
+    .option.wrong {
+      background: rgba(193,58,43,0.08);
+      border-color: var(--red);
+    }
+    .option.wrong .option-letter { background: var(--red); }
+    .option:disabled { cursor: default; }
+    .option.dimmed { opacity: 0.35; }
+
+    .explanation {
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: var(--leather-mid);
+      color: var(--on-leather);
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif; font-weight: 400;
+      font-size: 13px; line-height: 1.55;
+      display: none;
+    }
+    .explanation.show { display: flex; flex-direction: column; gap: 6px; animation: slideIn 0.25s ease; }
+    .explanation .label {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--terracotta-glow);
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .quiz-card-foot {
+      padding: 12px 18px;
+      border-top: 1px solid var(--border);
+      background: var(--parchment);
+      display: flex; align-items: center; justify-content: space-between;
+      min-height: 52px;
+      gap: 12px;
+    }
+    .foot-hint {
+      font-family: 'Inter', sans-serif; font-weight: 500;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    .next-btn {
+      appearance: none; border: none; cursor: pointer;
+      background: var(--leather-mid); color: var(--on-leather);
+      padding: 10px 22px;
+      border-radius: 5px;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      transition: opacity 0.2s, transform 0.2s;
+      display: none;
+    }
+    .next-btn.show { display: inline-block; }
+    .next-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ── RESULT (designed score card, share-ready) ── */
+    .result { display: none; }
+    .result.active { display: block; }
+    .result-eyebrow {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 14px;
+    }
+    .result { text-align: center; }
+    .result-eyebrow { display: block; }
+    .score-card {
+      max-width: 460px;
+      margin: 0 auto 24px;
+      border: 2px solid var(--leather-mid);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--parchment-el);
+      box-shadow: 0 18px 40px -22px rgba(0,0,0,0.35);
+      text-align: left;
+    }
+    .score-card-eyebrow {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px;
+      background: var(--leather-mid);
+      color: var(--on-leather);
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      gap: 12px;
+    }
+    .score-card-eyebrow > span:first-child { color: var(--terracotta-glow); }
+    .score-card-body {
+      padding: 36px 28px 28px;
+      text-align: center;
+    }
+    .score-card-score {
+      display: flex; align-items: baseline; justify-content: center; gap: 6px;
+      margin-bottom: 12px;
+    }
+    .score-card-score .num {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(112px, 18vw, 180px); line-height: 0.85;
+      letter-spacing: -0.045em;
+      color: var(--leather);
+    }
+    .score-card-score .den {
+      font-family: 'Syne', sans-serif; font-weight: 600;
+      font-size: clamp(28px, 4vw, 38px); line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--text-soft);
+    }
+    .score-card-divider {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px;
+      margin: 14px auto 18px;
+    }
+    .score-card-divider::before, .score-card-divider::after {
+      content: ""; flex: 1; max-width: 80px; height: 1px;
+      background: var(--border);
+    }
+    .score-card-divider .mark {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--terracotta);
+    }
+    .score-card-tier {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(26px, 3.2vw, 36px); line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--leather);
+      margin: 0 0 10px;
+    }
+    .score-card-sub {
+      font-family: 'Inter', sans-serif; font-weight: 400;
+      font-size: 14px; line-height: 1.55;
+      color: var(--text-soft);
+      margin: 0 auto 24px;
+      max-width: 320px;
+    }
+    .score-card-dots {
+      display: flex; justify-content: center; gap: 6px;
+      margin-bottom: 4px;
+    }
+    .score-card-dots .dot {
+      width: 18px; height: 18px; border-radius: 3px;
+      background: rgba(44,33,24,0.14);
+    }
+    .score-card-dots .dot.green { background: var(--green); }
+    .score-card-dots .dot.red { background: var(--red); }
+    .score-card-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 20px;
+      background: var(--leather);
+      color: var(--on-leather);
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+      border-top: 2px solid var(--leather-mid);
+    }
+    .score-card-foot > span:last-child { color: var(--terracotta-glow); }
+    .result-actions {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      max-width: 460px; margin: 0 auto;
+    }
+    .result-actions button, .result-actions a {
+      appearance: none; border: none; cursor: pointer;
+      padding: 14px 26px;
+      border-radius: 5px;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, opacity 0.2s;
+    }
+    .result-actions .btn-primary {
+      background: var(--terracotta); color: var(--on-accent);
+    }
+    .result-actions .btn-primary:hover { background: var(--terracotta-light); transform: translateY(-1px); }
+    .result-actions .btn-ghost {
+      background: transparent; color: var(--leather-mid);
+      border: 1.5px solid var(--leather-mid);
+    }
+    .result-actions .btn-ghost:hover { background: var(--leather-mid); color: var(--on-leather); }
+
+    /* ── FOOTER ── */
+    footer.programme-footer {
+      padding: 16px 64px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    footer.programme-footer a { color: inherit; }
+
+    @media (max-width: 900px) {
+      main { padding: 24px 24px 36px; }
+    }
+    @media (max-width: 700px) {
+      nav.topbar { padding: 12px 18px; gap: 12px; }
+      .nav-mark strong { font-size: 12px; letter-spacing: 0.14em; }
+      .nav-links { gap: 14px; font-size: 10px; letter-spacing: 0.14em; }
+      main { padding: 20px 18px 32px; }
+      .hero { min-height: 0; padding: 12px 0 24px; justify-content: flex-start; }
+      .quiz-hero-card { max-width: 100%; }
+      .quiz-hero-eyebrow { padding: 11px 16px; font-size: 10px; letter-spacing: 0.18em; gap: 8px; }
+      .quiz-hero-body { padding: 32px 22px 24px; }
+      .quiz-hero-body h1 { font-size: clamp(46px, 12vw, 66px); line-height: 0.95; margin-bottom: 14px; }
+      .quiz-hero-body .lede { font-size: 14px; margin-bottom: 20px; max-width: 320px; line-height: 1.5; }
+      .tier-ladder {
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding: 12px 0 8px;
+        margin-bottom: 20px;
+      }
+      .tier-ladder-label { font-size: 10px; margin-bottom: 8px; letter-spacing: 0.26em; }
+      .tier-rung {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 9px 4px;
+        font-size: 14px;
+        gap: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      .tier-rung:last-child { border-bottom: none; }
+      .tier-rung-top { font-size: 15px; }
+      .tier-rung .range { font-size: 9px; letter-spacing: 0.18em; }
+      .start-btn { padding: 15px 26px; font-size: 12px; letter-spacing: 0.2em; max-width: 100%; }
+      .quiz-hero-foot { padding: 11px 16px; font-size: 10px; letter-spacing: 0.18em; }
+      .option { font-size: 14px; padding: 12px 14px; }
+      .option-letter { width: 22px; height: 22px; font-size: 10px; }
+      .question { font-size: 19px; line-height: 1.25; }
+      .quiz-card-body { padding: 18px 18px 14px; }
+      .quiz-card-eyebrow { padding: 9px 14px; font-size: 10px; letter-spacing: 0.16em; }
+      .quiz-card-foot { padding: 10px 14px; min-height: 48px; }
+      .next-btn { padding: 9px 18px; font-size: 10px; }
+      .foot-hint { font-size: 10px; letter-spacing: 0.14em; }
+      .score-card { margin: 0 auto 20px; }
+      .score-card-body { padding: 26px 20px 22px; }
+      .score-card-eyebrow { padding: 10px 16px; font-size: 10px; letter-spacing: 0.18em; }
+      .score-card-foot { padding: 9px 16px; font-size: 9px; letter-spacing: 0.2em; }
+      .score-card-score .num { font-size: 96px; }
+      .score-card-score .den { font-size: 24px; }
+      .score-card-tier { font-size: 22px; }
+      .score-card-sub { font-size: 13px; }
+      .score-card-dots .dot { width: 14px; height: 14px; }
+      .score-card-dots { gap: 5px; }
+      .result-actions { flex-direction: column; }
+      .result-actions button { width: 100%; }
+      footer.programme-footer { padding: 14px 18px; flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+  
+    /* ── Hamburger menu (universal nav) ── */
+    .wc-burger {
+      appearance: none; border: none; cursor: pointer;
+      background: transparent;
+      padding: 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #4A3D32;
+      transition: color 0.15s ease;
+    }
+    .wc-burger:hover { color: #A0422A; }
+    .wc-burger svg { width: 24px; height: 24px; display: block; }
+    .wc-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #2C2118;
+      color: #F5F1EB;
+      display: none;
+      flex-direction: column;
+      padding: 28px 32px 40px;
+      overflow-y: auto;
+    }
+    .wc-overlay[data-open="true"] { display: flex; animation: wcFadeIn 0.18s ease; }
+    @keyframes wcFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .wc-overlay-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 48px;
+    }
+    .wc-overlay-mark {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: inherit;
+    }
+    .wc-overlay-mark img { width: 22px; height: 22px; object-fit: contain; }
+    .wc-overlay-mark strong {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .wc-overlay-close {
+      appearance: none; border: none; cursor: pointer;
+      background: transparent; color: inherit;
+      padding: 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .wc-overlay-close svg { width: 22px; height: 22px; display: block; }
+    .wc-overlay-menu {
+      display: flex; flex-direction: column;
+      max-width: 720px; width: 100%;
+      margin: 0 auto;
+      background: transparent;
+      position: static;
+      border: none;
+    }
+    .wc-overlay-menu a {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(245,241,235,0.12);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 5.5vw, 44px); line-height: 1;
+      letter-spacing: -0.02em;
+      color: #F5F1EB;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .wc-overlay-menu a:hover { color: #E58769; }
+    .wc-overlay-menu a.is-active { color: #E58769; }
+    .wc-overlay-menu a .num {
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+      font-size: 12px; letter-spacing: 0.18em;
+      color: rgba(245,241,235,0.42);
+    }
+    .wc-overlay-foot {
+      max-width: 720px; width: 100%; margin: 36px auto 0;
+      padding-top: 22px;
+      border-top: 1px solid rgba(245,241,235,0.12);
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .wc-overlay-foot a {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(245,241,235,0.6); text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .wc-overlay-foot a:hover { color: #E58769; }
+    body.wc-locked { overflow: hidden; }
+
+  </style>
+</head>
+<body data-route="quiz">
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <nav class="topbar">
+    <a href="https://provisions.soccer" class="nav-mark" aria-label="Provisions">
+      <img src="./images/provisions-mark.png" alt="Provisions">
+      <strong>Provisions</strong>
+    </a>
+    <button class="wc-burger" aria-label="Open menu" onclick="wcOpenMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="13" x2="20" y2="13"/><line x1="4" y1="19" x2="20" y2="19"/></svg></button>
+  </nav>
+
+  <main>
+    <div class="panel">
+      <!-- HERO -->
+      <section class="hero" id="hero">
+        <div class="quiz-hero-card">
+          <div class="quiz-hero-eyebrow">
+            <span>You Know Ball</span>
+            <span>World Cup History</span>
+          </div>
+          <div class="quiz-hero-body">
+            <h1>Do you know<br><span class="accent">ball?</span></h1>
+            <p class="lede">Layups any fan should know. Deep cuts only the heads will get. No Google.</p>
+            <div class="tier-ladder">
+              <div class="tier-ladder-label">★ The Tiers ★</div>
+              <div class="tier-rung"><span>Full Kit Wanker</span><span class="range">0–5</span></div>
+              <div class="tier-rung"><span>Casual</span><span class="range">6–7</span></div>
+              <div class="tier-rung"><span>Footy Head</span><span class="range">8</span></div>
+              <div class="tier-rung tier-rung-top"><span>You Know Ball</span><span class="range">9–10</span></div>
+            </div>
+            <button class="start-btn" id="startBtn">Take the quiz →</button>
+          </div>
+          <div class="quiz-hero-foot">
+            <span>10 questions</span>
+            <span>★</span>
+            <span>~90 seconds</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="quiz" id="quiz">
+        <div class="quiz-card">
+          <div class="quiz-card-eyebrow">
+            <span>Question <strong id="qIndex">1</strong> / 10</span>
+            <span id="qDifficulty">Easy</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 10%"></div></div>
+          <div class="quiz-card-body">
+            <div class="question" id="qText">Loading…</div>
+            <div class="options" id="qOptions"></div>
+            <div class="explanation" id="qExplain">
+              <span class="label" id="explainLabel">Did you know</span>
+              <span id="explainText"></span>
+            </div>
+          </div>
+          <div class="quiz-card-foot">
+            <span class="foot-hint" id="footHint">Pick an answer</span>
+            <button class="next-btn" id="nextBtn">Next →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULT -->
+      <section class="result" id="result">
+        <div class="result-eyebrow">The Verdict</div>
+        <div class="score-card" id="scoreCard">
+          <div class="score-card-eyebrow">
+            <span>You Know Ball</span>
+            <span>World Cup History</span>
+          </div>
+          <div class="score-card-body">
+            <div class="score-card-score">
+              <span class="num" id="rScore">––</span>
+              <span class="den">/ 10</span>
+            </div>
+            <div class="score-card-divider"><span class="mark">★</span></div>
+            <h2 class="score-card-tier" id="rTier">––</h2>
+            <p class="score-card-sub" id="rSub">––</p>
+            <div class="score-card-dots" id="rDots"></div>
+          </div>
+          <div class="score-card-foot">
+            <span>Beat me</span>
+            <span>provisions.soccer</span>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button class="btn-primary" id="shareBtn">Share to Story</button>
+          <button class="btn-ghost" id="replayBtn">Play again</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="programme-footer">
+    <span>Provisions · World Cup '26</span>
+    <span><a href="https://provisions.work">provisions.work →</a></span>
+  </footer>
+
+  <script>
+    // ── QUESTION POOL (50 questions) ──
+    // Difficulty: 1 = easy (15), 2 = medium (20), 3 = hard (15)
+    const POOL = [
+      { d: 1, q: "Which country has won the most World Cups?", o: ["Germany", "Italy", "Brazil", "Argentina"], a: 2, e: "Brazil have 5 (1958, 1962, 1970, 1994, 2002). Italy and Germany are tied second with 4 each." },
+      { d: 1, q: "Who scored the famous 'Hand of God' goal?", o: ["Pelé", "Diego Maradona", "Romário", "Garrincha"], a: 1, e: "Maradona vs England in the 1986 quarter-final. Four minutes later, he scored the 'Goal of the Century' in the same match." },
+      { d: 1, q: "In what year did Lionel Messi finally win his first World Cup?", o: ["2014", "2018", "2022", "2026"], a: 2, e: "Argentina beat France on penalties in Qatar after a 3-3 draw, widely called the greatest final ever played." },
+      { d: 1, q: "Where was the first World Cup held, in 1930?", o: ["Italy", "Brazil", "France", "Uruguay"], a: 3, e: "Uruguay hosted and won. Only 13 teams entered. Four from Europe made the boat trip." },
+      { d: 1, q: "How many World Cups did Pelé win as a player?", o: ["1", "2", "3", "4"], a: 2, e: "Pelé won in 1958, 1962, and 1970. Still the only player to win three." },
+      { d: 1, q: "Which country won the 2018 World Cup?", o: ["Croatia", "France", "Belgium", "England"], a: 1, e: "France beat Croatia 4-2 in Moscow. Mbappé scored to become, at 19, the second teenager ever to score in a final after Pelé." },
+      { d: 1, q: "Who scored the winning goal in the 2014 World Cup final?", o: ["Mario Götze", "Thomas Müller", "Bastian Schweinsteiger", "Miroslav Klose"], a: 0, e: "Götze came on as a sub and volleyed in the 113th minute. Germany 1, Argentina 0." },
+      { d: 1, q: "The 2018 World Cup was held in:", o: ["Brazil", "Russia", "Qatar", "South Africa"], a: 1, e: "First and only World Cup hosted by Russia, across 11 cities from Kaliningrad to Yekaterinburg." },
+      { d: 1, q: "Who is the all-time top scorer in World Cup history?", o: ["Ronaldo (Brazil)", "Miroslav Klose", "Gerd Müller", "Pelé"], a: 1, e: "Klose has 16 goals across four tournaments (2002 to 2014). He passed Ronaldo's 15 in the 2014 semifinal vs Brazil." },
+      { d: 1, q: "Spain won their only World Cup in:", o: ["2006", "2010", "2014", "2018"], a: 1, e: "Andrés Iniesta scored in extra time vs Netherlands in Johannesburg. Spain won 1-0 in every knockout game." },
+      { d: 1, q: "Cristiano Ronaldo plays for which country?", o: ["Brazil", "Portugal", "Spain", "Argentina"], a: 1, e: "Ronaldo is Portugal's all-time top scorer. He's played in five World Cups." },
+      { d: 1, q: "Brazil won their 5th World Cup in:", o: ["1998", "2002", "2006", "2014"], a: 1, e: "South Korea/Japan 2002. Ronaldo Nazário scored twice in the final vs Germany after coming back from horror knee injuries." },
+      { d: 1, q: "The 'Three Lions' is the nickname for which national team?", o: ["Scotland", "Wales", "England", "Northern Ireland"], a: 2, e: "From the Royal Arms of England. Three golden lions on a red shield." },
+      { d: 1, q: "Where will the 2026 World Cup be held?", o: ["USA only", "USA, Mexico, Canada", "Mexico only", "Canada and USA"], a: 1, e: "First time three countries co-host. 48 teams, 104 matches, 16 host cities across North America." },
+      { d: 1, q: "How many teams will compete in the 2026 World Cup?", o: ["32", "40", "48", "64"], a: 2, e: "Up from 32 in 2022. The expansion adds 16 teams, 40 matches, and a new 12-group format." },
+      { d: 1, q: "How often is the World Cup held?", o: ["Every 2 years", "Every 3 years", "Every 4 years", "Every 5 years"], a: 2, e: "Quadrennial since 1930, with breaks only for World War II (1942 and 1946 cancelled)." },
+      { d: 1, q: "Argentina has won how many World Cups?", o: ["1", "2", "3", "4"], a: 2, e: "1978 (home), 1986 (Maradona), 2022 (Messi). All three feature unforgettable individual performances." },
+      { d: 1, q: "How many World Cups has England won?", o: ["1", "2", "3", "Never"], a: 0, e: "Just 1966, at home. Geoff Hurst scored a hat-trick in the final at Wembley." },
+      { d: 1, q: "Lionel Messi wears what jersey number for Argentina?", o: ["7", "9", "10", "11"], a: 2, e: "He inherited the #10 from Riquelme. Maradona wore it before that. Pelé wore #10. It's the most iconic number in football." },
+      { d: 1, q: "Which country is known as 'Les Bleus'?", o: ["Italy", "France", "Argentina", "Uruguay"], a: 1, e: "The Blues. France's home kit has been royal blue since the 1900s." },
+      { d: 1, q: "Who won the 2014 World Cup?", o: ["Brazil", "Argentina", "Germany", "Netherlands"], a: 2, e: "Germany 1, Argentina 0 in extra time at the Maracanã. The same Germany that destroyed Brazil 7-1 in the semifinal." },
+      { d: 1, q: "The 1998 World Cup was hosted by:", o: ["Germany", "Italy", "France", "Spain"], a: 2, e: "France hosted and won. The final vs Brazil was 3-0, with Zidane scoring two headers." },
+      { d: 1, q: "The 1994 World Cup was held in:", o: ["USA", "Italy", "Mexico", "Argentina"], a: 0, e: "First and only World Cup in the USA before 2026. Average attendance is still a record (~69,000 per match)." },
+      { d: 1, q: "The 2002 World Cup was co-hosted by:", o: ["China and Japan", "South Korea and Japan", "Singapore and Thailand", "Australia and Japan"], a: 1, e: "First World Cup outside Europe or the Americas. South Korea shocked everyone by reaching the semi-finals." },
+      { d: 1, q: "The 2022 World Cup was held in:", o: ["Saudi Arabia", "Qatar", "UAE", "Bahrain"], a: 1, e: "First in the Middle East. Held in November and December to avoid summer heat. First Arab nation to host." },
+      { d: 1, q: "Which foot was Maradona famously dominant with?", o: ["Right", "Left", "Both equally", "He was right-footed only"], a: 1, e: "Left foot. He's widely considered the greatest left-footed player ever. Even his right-footed shots were rare exhibits." },
+      { d: 1, q: "The 'Cruyff Turn' is named after a player from which country?", o: ["Germany", "Netherlands", "Belgium", "France"], a: 1, e: "Johan Cruyff invented it during the 1974 World Cup. He pretended to pass, then dragged the ball behind his standing leg." },
+      { d: 1, q: "Brazil's national team kit is traditionally:", o: ["Red and white", "Yellow and green", "Blue and white", "Green and white"], a: 1, e: "The yellow shirt with green trim was adopted in 1953, after the 1950 Maracanazo loss prompted a redesign. Originally Brazil wore white." },
+      { d: 1, q: "Argentina's home kit is famously:", o: ["Sky blue and white stripes", "Red and white", "All blue", "Black and white"], a: 0, e: "Albiceleste, meaning 'white and sky blue.' The vertical stripes have been Argentina's identity since 1908." },
+      { d: 1, q: "Italy has won how many World Cups?", o: ["2", "3", "4", "5"], a: 2, e: "1934, 1938, 1982, 2006. Despite the pedigree, they failed to qualify for both 2018 and 2022." },
+      { d: 1, q: "Germany has won how many World Cups?", o: ["2", "3", "4", "5"], a: 2, e: "1954, 1974, 1990, 2014. As West Germany for the first three. Reunified Germany lifted in 2014." },
+      { d: 1, q: "How many World Cups has Uruguay won?", o: ["1", "2", "3", "4"], a: 1, e: "1930 at home, and 1950 (the Maracanazo). They wear four stars but officially FIFA recognizes two." },
+      { d: 1, q: "Cristiano Ronaldo wears what jersey number for Portugal?", o: ["7", "9", "10", "17"], a: 0, e: "#7 since 2008. CR7 is one of the most marketable numbers in sport history." },
+      { d: 1, q: "Mexico has hosted the World Cup how many times?", o: ["Once", "Twice", "Three times", "Never"], a: 1, e: "1970 (Brazil won) and 1986 (Argentina/Maradona won). 2026 will be their third, co-hosting with USA and Canada." },
+      { d: 1, q: "The 'Maracanazo' refers to which event?", o: ["A famous goal", "Brazil's 1950 home loss", "A stadium opening", "A trophy ceremony"], a: 1, e: "Brazil's shock 2-1 loss to Uruguay in the 1950 deciding match at the Maracanã. The trauma reshaped Brazilian football identity for decades." },
+      { d: 1, q: "Which country has appeared in every World Cup?", o: ["Italy", "Germany", "Brazil", "Argentina"], a: 2, e: "Brazil. They have played in all 22 World Cups since 1930. The only country with this record." },
+      { d: 1, q: "What color is the World Cup trophy?", o: ["Silver", "Gold", "Bronze", "Platinum"], a: 1, e: "18-carat gold body with a malachite (green) base. Weighs about 6.1 kg. Made in Italy." },
+      { d: 1, q: "What was the World Cup trophy called before 1974?", o: ["FIFA Trophy", "Jules Rimet Trophy", "Coupe du Monde", "Victory Cup"], a: 1, e: "Named after the FIFA president who created the tournament. Brazil kept it permanently after winning in 1970, their third title." },
+      { d: 1, q: "At what age did Pelé win his first World Cup?", o: ["15", "17", "19", "21"], a: 1, e: "1958 in Sweden. He scored twice in the final vs the hosts and burst onto the global stage at 17." },
+      { d: 1, q: "Who hosted the 2010 World Cup?", o: ["Brazil", "South Africa", "Argentina", "Australia"], a: 1, e: "First World Cup on African soil. Spain won. The vuvuzela became a cultural symbol of the tournament." },
+      { d: 1, q: "Who hosted the 2014 World Cup?", o: ["Argentina", "Mexico", "Brazil", "Spain"], a: 2, e: "Brazil. They lost 7-1 to Germany in the semifinal in Belo Horizonte. National trauma." },
+      { d: 1, q: "How long is a regulation World Cup match?", o: ["80 minutes", "90 minutes", "100 minutes", "2 halves of 45 plus extra"], a: 1, e: "90 minutes regulation, two halves of 45. Extra time (2 × 15 mins) only in knockout rounds if tied." },
+      { d: 1, q: "In a World Cup match, how many players are on each team?", o: ["10", "11", "12", "9"], a: 1, e: "Eleven players per side, including the goalkeeper. Same as standard football." },
+      { d: 1, q: "The 1966 World Cup was hosted by:", o: ["West Germany", "Italy", "England", "France"], a: 2, e: "England's only title to date. Geoff Hurst's hat-trick in the final at Wembley sealed it." },
+      { d: 1, q: "Which player is known as 'The King' in Brazilian football?", o: ["Romário", "Pelé", "Ronaldo", "Zico"], a: 1, e: "O Rei. Pelé is widely regarded as the greatest player ever. He scored 1,283 career goals (Santos and Brazil records)." },
+      { d: 1, q: "What does FIFA stand for?", o: ["French International Football Association", "Federation of International Football Associations", "Fédération Internationale de Football Association", "Football International Federation Authority"], a: 2, e: "Founded in Paris, 1904. The official language for the acronym is French." },
+      { d: 1, q: "How many continents have hosted the World Cup?", o: ["3", "4", "5", "6"], a: 2, e: "Europe, South America, North America, Asia, Africa. Only Oceania and Antarctica haven't hosted." },
+      { d: 1, q: "Who beat Germany in the 2018 World Cup group stage?", o: ["South Korea", "Mexico", "Sweden", "Both Mexico and South Korea"], a: 3, e: "Germany lost to both Mexico and South Korea, finishing bottom of their group. First time they crashed out in the group stage since 1938." },
+      { d: 1, q: "Mbappé scored in the 2018 final at what age?", o: ["18", "19", "20", "21"], a: 1, e: "19 years old. He became the second teenager to score in a World Cup final, after Pelé in 1958." },
+      { d: 1, q: "Argentina's win in 2022 was their how many-th World Cup title?", o: ["First", "Second", "Third", "Fourth"], a: 2, e: "After 1978 and 1986. Messi finally got his crown 36 years after Maradona's." },
+      { d: 1, q: "What's a World Cup hat-trick?", o: ["Three saves", "Three assists", "Three goals in one match", "Three cards"], a: 2, e: "Three goals by one player in a single match. Mbappé's three in the 2022 final was the first hat-trick in a final since Hurst in 1966." },
+      { d: 1, q: "Cristiano Ronaldo has appeared in how many World Cups?", o: ["3", "4", "5", "6"], a: 2, e: "Five tournaments (2006, 2010, 2014, 2018, 2022). He shares this record with Messi and a few others." },
+      { d: 1, q: "In the 2010 final, Spain beat which team?", o: ["Germany", "Brazil", "Netherlands", "Italy"], a: 2, e: "Spain 1, Netherlands 0 in extra time. Iniesta's goal in the 116th minute. Holland's third final loss." },
+      { d: 1, q: "Which country won the 2006 World Cup?", o: ["France", "Brazil", "Germany", "Italy"], a: 3, e: "Italy beat France on penalties after Zidane was sent off for the famous headbutt on Materazzi." },
+      { d: 1, q: "The official ball of the 2014 World Cup was called:", o: ["Jabulani", "Brazuca", "Telstar 18", "Tango"], a: 1, e: "Brazuca, named via fan poll in Brazil. Adidas has supplied every official match ball since 1970." },
+      { d: 1, q: "Pelé's birth name is:", o: ["Edson Arantes do Nascimento", "Edivaldo Pereira", "Pelé Santos", "Edson Pelé"], a: 0, e: "He was reportedly nicknamed Pelé after mispronouncing a goalkeeper named 'Bilé' as a child. He hated the nickname growing up." },
+      { d: 1, q: "Which is the official anthem-singing pre-match ritual?", o: ["The teams sing", "Both anthems play", "Captains shake hands first", "All of the above happen"], a: 3, e: "Both team anthems play, players line up, captains shake hands and exchange pennants. Standard pre-match for all FIFA international matches." },
+      { d: 1, q: "How many goals did Geoff Hurst score in the 1966 final?", o: ["1", "2", "3", "4"], a: 2, e: "Hat-trick. England beat West Germany 4-2 in extra time at Wembley. Still the only hat-trick in a men's World Cup final until Mbappé in 2022." },
+      { d: 1, q: "What was Diego Maradona's primary playing position?", o: ["Striker", "Attacking midfielder", "Defender", "Goalkeeper"], a: 1, e: "Number 10. Attacking midfielder, playmaker, second striker. The classic Argentine '10' role: deep-lying creator who also scored." },
+      { d: 1, q: "What country eliminated USA in the 2014 World Cup?", o: ["Germany", "Portugal", "Ghana", "Belgium"], a: 3, e: "Belgium beat USA 2-1 in extra time in the Round of 16. Tim Howard made 16 saves, a World Cup record." },
+      { d: 2, q: "In 1986, Maradona scored the 'Goal of the Century' against which team?", o: ["Brazil", "England", "Belgium", "Germany"], a: 1, e: "Same match as the Hand of God. He went past five England players over 60 yards to score one of the greatest goals ever." },
+      { d: 2, q: "Who won the Golden Boot at the 2018 World Cup?", o: ["Kylian Mbappé", "Romelu Lukaku", "Harry Kane", "Antoine Griezmann"], a: 2, e: "Kane scored 6 goals including a hat-trick vs Panama. Three were penalties, one was off his heel from a corner." },
+      { d: 2, q: "Zidane was sent off in his last match (2006 final) for headbutting whom?", o: ["Fabio Cannavaro", "Gennaro Gattuso", "Marco Materazzi", "Andrea Pirlo"], a: 2, e: "Italy won on penalties. Zidane's headbutt to Materazzi's chest is one of the most replayed clips in football history." },
+      { d: 2, q: "Which African country was the first to reach the World Cup quarterfinals?", o: ["Nigeria", "Senegal", "Cameroon", "Ghana"], a: 2, e: "Cameroon at Italia '90, eliminated by England in extra time after Roger Milla's iconic corner-flag dancing." },
+      { d: 2, q: "Germany 7, Brazil 1. In which round did this happen?", o: ["Group stage", "Round of 16", "Quarter-final", "Semi-final"], a: 3, e: "2014 semi-final in Belo Horizonte. Germany scored 5 in 18 minutes. Klose's goal in this match made him the all-time top scorer." },
+      { d: 2, q: "Diego Forlán won the Golden Ball at the 2010 World Cup. He played for:", o: ["Argentina", "Uruguay", "Spain", "Netherlands"], a: 1, e: "Uruguay finished 4th. Forlán scored 5 goals including spectacular long-range strikes vs Germany and South Africa." },
+      { d: 2, q: "Who scored the only goal in the 1990 World Cup final?", o: ["Lothar Matthäus", "Andreas Brehme", "Jürgen Klinsmann", "Rudi Völler"], a: 1, e: "Brehme's penalty in the 85th minute. West Germany 1, Argentina 0. A rematch of '86, and Maradona was in tears at full time." },
+      { d: 2, q: "France's first World Cup title came in:", o: ["1990", "1994", "1998", "2002"], a: 2, e: "Zidane scored twice in the final vs Brazil at home in Paris. France went on to also win Euro 2000." },
+      { d: 2, q: "Roger Milla scored 4 goals at age 38 at Italia '90 for:", o: ["Senegal", "Nigeria", "Ghana", "Cameroon"], a: 3, e: "He came out of international retirement on the president's personal request. The corner-flag dance became a tournament signature." },
+      { d: 2, q: "Ronaldo (Brazilian) scored how many goals at the 2002 World Cup?", o: ["6", "7", "8", "9"], a: 2, e: "8 goals including both in the final vs Germany. Won the Golden Boot and arguably his greatest individual tournament." },
+      { d: 2, q: "Which player has the most World Cup appearances ever?", o: ["Lothar Matthäus", "Cristiano Ronaldo", "Lionel Messi", "Cafu"], a: 2, e: "Messi has 26 appearances across five tournaments, passing Matthäus's 25 in Qatar 2022." },
+      { d: 2, q: "How was the 1994 World Cup final decided?", o: ["Extra time goal", "Golden goal", "Penalty shootout", "Late winner"], a: 2, e: "Brazil 3-2 Italy on penalties. Roberto Baggio's miss is one of the most famous in football history." },
+      { d: 2, q: "Who won the Golden Ball at the 2022 World Cup?", o: ["Kylian Mbappé", "Lionel Messi", "Luka Modrić", "Antoine Griezmann"], a: 1, e: "Messi finally got the trophy that had eluded him, plus the personal award. Mbappé won the Golden Boot." },
+      { d: 2, q: "Pelé scored his 1000th career goal in which year?", o: ["1965", "1969", "1972", "1975"], a: 1, e: "November 1969 at the Maracanã, a penalty for Santos vs Vasco da Gama. The match stopped for 20+ minutes of celebration." },
+      { d: 2, q: "Which country eliminated Brazil in the 2022 World Cup?", o: ["Croatia", "Argentina", "Netherlands", "France"], a: 0, e: "Croatia won on penalties in the quarter-final. Croatia made the semis for the second consecutive World Cup." },
+      { d: 2, q: "Who managed France to their 1998 World Cup title?", o: ["Roger Lemerre", "Aimé Jacquet", "Raymond Domenech", "Didier Deschamps"], a: 1, e: "Jacquet was heavily criticized in the press before the tournament. After the win, the L'Équipe coverage of him became a national meme." },
+      { d: 2, q: "How many goals did Just Fontaine score at the 1958 World Cup?", o: ["10", "11", "12", "13"], a: 3, e: "13 goals in 6 matches, a record that still stands. He wasn't even first-choice striker before René Bliard's injury." },
+      { d: 2, q: "In which year did the World Cup expand from 24 to 32 teams?", o: ["1994", "1998", "2002", "2006"], a: 1, e: "France 1998. The format stayed at 32 teams through 2022. 2026 expands to 48." },
+      { d: 2, q: "The 'Battle of Santiago' in 1962 was a brutal match between Chile and:", o: ["Brazil", "Italy", "Argentina", "Mexico"], a: 1, e: "David Coleman called it 'the most stupid, appalling, disgusting and disgraceful exhibition of football' he'd ever seen. Two Italians were sent off." },
+      { d: 2, q: "Which player is Italy's record World Cup scorer?", o: ["Paolo Rossi", "Roberto Baggio", "Christian Vieri", "Salvatore Schillaci"], a: 0, e: "Rossi scored 9 World Cup goals. Six came in 1982 alone (Golden Boot), including the hat-trick vs Brazil that knocked the favorites out." },
+      { d: 2, q: "Who managed Argentina to their 2022 World Cup title?", o: ["Diego Simeone", "Marcelo Bielsa", "Mauricio Pochettino", "Lionel Scaloni"], a: 3, e: "Scaloni was only 43 at the start of the tournament. His side hadn't lost in 36 matches before the opener vs Saudi Arabia." },
+      { d: 2, q: "Who managed Brazil to their 2002 title?", o: ["Carlos Alberto Parreira", "Mário Zagallo", "Luiz Felipe Scolari", "Tite"], a: 2, e: "Felipão. Brazil won every match including the final 2-0 over Germany. They went on to also win the 2003 Copa América under different management." },
+      { d: 2, q: "Which 1990 quarter-final eliminated England (Italia '90)?", o: ["Italy", "Germany", "Argentina", "Cameroon"], a: 3, e: "England beat Cameroon in the QF 3-2 (extra time). England then lost the semi to West Germany on penalties. Lineker, Gascoigne, Pearce, Waddle." },
+      { d: 2, q: "In which year did Argentina LAST win a World Cup before 2022?", o: ["1978", "1986", "1990", "2014"], a: 1, e: "36-year gap. Maradona in '86, Messi in 2022. Argentina lost the 1990 and 2014 finals in between." },
+      { d: 2, q: "What was the score of the 2014 World Cup final?", o: ["1-0", "2-0", "2-1", "1-0 AET"], a: 3, e: "Germany 1, Argentina 0, after extra time. Götze scored the only goal in the 113th minute." },
+      { d: 2, q: "Bobby Moore captained which team to their only World Cup?", o: ["Wales", "Scotland", "England", "Northern Ireland"], a: 2, e: "Moore was 25 when England won at home in 1966. The statue of him outside Wembley shows him holding the Jules Rimet trophy aloft." },
+      { d: 2, q: "Which country won the very first World Cup match in 1930?", o: ["Uruguay", "Argentina", "France", "USA"], a: 2, e: "France beat Mexico 4-1 in Montevideo. Lucien Laurent of France scored the first ever World Cup goal." },
+      { d: 2, q: "Eusébio won the 1966 Golden Boot with how many goals?", o: ["7", "8", "9", "10"], a: 2, e: "9 goals for Portugal. He scored 4 in a single match vs North Korea, who had stunned Italy in the group stage." },
+      { d: 2, q: "Who knocked Italy out of the 1966 World Cup in the group stage?", o: ["Brazil", "North Korea", "Soviet Union", "Hungary"], a: 1, e: "North Korea won 1-0, one of the greatest upsets in WC history. North Korea then took a 3-0 lead vs Portugal before Eusébio scored 4." },
+      { d: 2, q: "Who scored the 'phantom goal' that England-Germany 1966 fans still debate?", o: ["Bobby Charlton", "Geoff Hurst", "Roger Hunt", "Martin Peters"], a: 1, e: "Hurst's third goal hit the crossbar, bounced down, then was cleared. The Soviet linesman Tofik Bakhramov ruled it crossed the line." },
+      { d: 2, q: "The 1970 World Cup final saw Brazil beat which team?", o: ["Italy", "West Germany", "England", "Uruguay"], a: 0, e: "Brazil 4, Italy 1. Carlos Alberto's iconic team goal capped it. The 1970 team is regarded as the greatest ever assembled." },
+      { d: 2, q: "Who scored the iconic 'team goal' for Brazil in the 1970 final?", o: ["Pelé", "Jairzinho", "Tostão", "Carlos Alberto"], a: 3, e: "After nine Brazilian passes, Pelé laid it off for Carlos Alberto to thunder home. Often voted the greatest team goal in WC history." },
+      { d: 2, q: "Pelé scored in how many World Cup finals?", o: ["1", "2", "3", "4"], a: 1, e: "Two: 1958 (twice as a 17-year-old vs Sweden) and 1970 (header vs Italy). He missed parts of 1962 and 1966 due to injury." },
+      { d: 2, q: "Who knocked Brazil out of the 1982 World Cup?", o: ["West Germany", "Italy", "Argentina", "France"], a: 1, e: "Italy 3, Brazil 2. Paolo Rossi hat-trick. One of the greatest games ever, regarded as the day artistry lost to ruthless finishing." },
+      { d: 2, q: "The 1982 World Cup featured a notorious 'corruption' match between West Germany and:", o: ["Algeria", "Austria", "Spain", "Hungary"], a: 1, e: "West Germany 1, Austria 0, an arranged result that sent both teams through and eliminated Algeria. FIFA changed group-stage scheduling rules afterward." },
+      { d: 2, q: "In 1990, Italy's top scorer 'Toto' Schillaci won the Golden Boot with how many goals?", o: ["4", "5", "6", "8"], a: 2, e: "6 goals. Schillaci was a surprise pick by manager Vicini. He'd only debuted for Italy in March 1990." },
+      { d: 2, q: "At Italia '90, who scored the late winning goal in the West Germany vs Argentina final?", o: ["Lothar Matthäus", "Andreas Brehme", "Rudi Völler", "Jürgen Klinsmann"], a: 1, e: "Brehme converted a controversial penalty in the 85th minute. Argentina had two players sent off." },
+      { d: 2, q: "Which European nation reached the 1994 World Cup semi-final, shocking everyone?", o: ["Bulgaria", "Romania", "Sweden", "Both Bulgaria and Sweden"], a: 3, e: "Both did. Bulgaria knocked out Germany in the quarter-final. Sweden finished 3rd. Hristo Stoichkov co-won the Golden Boot." },
+      { d: 2, q: "Who scored Brazil's penalty-shootout winner in the 1994 final?", o: ["Romário", "Dunga", "Branco", "Bebeto"], a: 1, e: "Dunga slotted the decisive penalty after Baggio missed his. Brazil 3-2 on penalties after a 0-0 draw, the first goalless final." },
+      { d: 2, q: "Which Croatian striker won the 1998 World Cup Golden Boot?", o: ["Davor Šuker", "Robert Prosinečki", "Zvonimir Boban", "Robert Jarni"], a: 0, e: "Šuker scored 6 goals as Croatia finished 3rd in their very first World Cup as an independent nation." },
+      { d: 2, q: "The first World Cup final to need penalty kicks was in:", o: ["1986", "1990", "1994", "1998"], a: 2, e: "Brazil-Italy 1994. Roberto Baggio's skied effort gave Brazil their 4th title and the first ever penalty-decided final." },
+      { d: 2, q: "Which trophy did teams compete for from 1930 to 1970?", o: ["FIFA World Cup Trophy", "Jules Rimet Trophy", "Goddess of Victory", "Hercules Cup"], a: 1, e: "The Jules Rimet Trophy depicted Nike, the goddess of victory. Brazil's third win in 1970 earned them permanent custody." },
+      { d: 2, q: "What replaced the Jules Rimet Trophy after 1970?", o: ["The FIFA Cup", "The FIFA World Cup Trophy", "The Coupe du Monde", "The Victory Cup"], a: 1, e: "The current trophy was designed by Silvio Gazzaniga and first awarded in 1974 to West Germany. It depicts two figures lifting the Earth." },
+      { d: 2, q: "Who is the oldest player to score at a World Cup?", o: ["Pepe", "Roger Milla", "Cristiano Ronaldo", "Cuauhtémoc Blanco"], a: 1, e: "Milla scored vs Russia in 1994 at age 42. He'd already become the oldest goal scorer four years earlier." },
+      { d: 2, q: "The 1958 World Cup hosts were:", o: ["West Germany", "Sweden", "France", "Switzerland"], a: 1, e: "Sweden hosted, lost the final 5-2 to Brazil. Pelé scored twice as a 17-year-old. The home fans gave Brazil a standing ovation." },
+      { d: 2, q: "What country is Carlos Alberto Parreira best known for managing?", o: ["Brazil", "Argentina", "Saudi Arabia", "All of the above"], a: 3, e: "He managed Brazil to the 1994 title, plus Saudi Arabia, UAE, Kuwait, Ghana, and South Africa across his career. Six different national teams at the World Cup." },
+      { d: 2, q: "Which country has reached the most World Cup finals without ever winning?", o: ["Hungary", "Netherlands", "Czechoslovakia", "Sweden"], a: 1, e: "Netherlands: 1974, 1978, 2010. Hungary and Czechoslovakia have 2 each. The Dutch curse of the final is real." },
+      { d: 2, q: "Who scored Argentina's only goal in the 1990 final?", o: ["No one (it was 0-0)", "Maradona", "No one (it was 1-0)", "Caniggia"], a: 2, e: "West Germany 1, Argentina 0. Brehme's penalty. Argentina were reduced to nine men by the end. Maradona was in tears." },
+      { d: 2, q: "The first World Cup in Africa was held in:", o: ["Cameroon", "Morocco", "South Africa", "Nigeria"], a: 2, e: "South Africa 2010. The bid edged out Morocco. Spain won. The tournament's symbol was the vuvuzela horn." },
+      { d: 2, q: "In which year did Ronaldo (Brazil) win his second World Cup?", o: ["1994", "1998", "2002", "Never won twice"], a: 2, e: "1994 as a 17-year-old (squad member, didn't play) and 2002 as the tournament's star (8 goals). Brazil 5x champions, R9 has two winners' medals." },
+      { d: 2, q: "Which player was the youngest goal-scorer in a World Cup final?", o: ["Pelé", "Mbappé", "Diego Forlán", "Wayne Rooney"], a: 0, e: "Pelé at 17 years 249 days vs Sweden in 1958. He scored two. Mbappé in 2018 was the second teenage final scorer at 19." },
+      { d: 2, q: "Which African country was Senegal's coach when they beat France in 2002?", o: ["Bruno Metsu", "Aliou Cissé", "Henri Kasperczak", "Claude Le Roy"], a: 0, e: "Frenchman Bruno Metsu. Senegal stunned the defending champions France 1-0 in the opening match. Papa Bouba Diop scored." },
+      { d: 2, q: "What was the score of the 2018 World Cup final?", o: ["3-1", "4-2", "2-1", "3-2"], a: 1, e: "France 4, Croatia 2 in Moscow. Mandžukić, Perišić, and own-goal for Croatia; Mandžukić's own-goal, Pogba, Mbappé, Griezmann for France." },
+      { d: 2, q: "The 1974 World Cup final saw West Germany beat which team?", o: ["Brazil", "Italy", "Netherlands", "Poland"], a: 2, e: "Cruyff's 'Total Football' Netherlands lost 2-1 in Munich. They scored after 80 seconds, before a German had even touched the ball." },
+      { d: 2, q: "Who scored Argentina's 2nd goal in the 2022 final?", o: ["Messi", "Di María", "Álvarez", "Mac Allister"], a: 1, e: "Ángel Di María's emotional second goal made it 2-0. He was crying on the touchline before halftime as it sank in." },
+      { d: 2, q: "Mbappé's hat-trick in the 2022 final was the first in a final since:", o: ["1958 Pelé", "1962 Vavá", "1966 Hurst", "1970 Pelé"], a: 2, e: "56 years. Geoff Hurst was the only previous final hat-trick scorer. Mbappé scored 3, lost, and won the Golden Boot." },
+      { d: 2, q: "Which year did the World Cup format switch to 32 teams in 8 groups of 4?", o: ["1994", "1998", "2002", "2006"], a: 1, e: "France 1998. The format ran continuously for 24 years until 2026 changes it to 48 teams in 12 groups of 4." },
+      { d: 2, q: "Which African nation reached the 2010 World Cup quarter-finals?", o: ["Algeria", "Ivory Coast", "Cameroon", "Ghana"], a: 3, e: "Ghana lost on penalties to Uruguay after Asamoah Gyan missed in the last minute of extra time, following Suárez's deliberate handball on the line." },
+      { d: 2, q: "Which famous handball denied Ghana a 2010 World Cup semi-final spot?", o: ["Diego Maradona", "Thierry Henry", "Luis Suárez", "Cuauhtémoc Blanco"], a: 2, e: "Suárez handled on the line in the last minute of extra time. Gyan missed the penalty. Uruguay won on penalties to advance." },
+      { d: 2, q: "Which player has played the most consecutive World Cups?", o: ["Antonio Carbajal", "Lothar Matthäus", "Lionel Messi", "Rafael Márquez"], a: 1, e: "Matthäus played 5 consecutive (1982, 1986, 1990, 1994, 1998). Several others have appeared in 5 total but with gaps." },
+      { d: 2, q: "Who scored Italy's winning penalty in the 2006 final shootout?", o: ["Andrea Pirlo", "Fabio Grosso", "Marco Materazzi", "Alessandro Del Piero"], a: 1, e: "Grosso converted the fifth penalty. Italy won 5-3 after a 1-1 draw, with Trezeguet missing for France." },
+      { d: 2, q: "What was the score of the 2002 World Cup final?", o: ["1-0", "2-0", "2-1", "3-2"], a: 1, e: "Brazil 2, Germany 0 in Yokohama. Ronaldo scored both, completing his comeback from the 1998 Final breakdown." },
+      { d: 2, q: "Who won the 1962 World Cup?", o: ["Brazil", "Italy", "Chile", "Hungary"], a: 0, e: "Brazil retained the title even with Pelé injured for most of the tournament. Garrincha was the breakout star, winning both the Golden Ball and Golden Boot." },
+      { d: 2, q: "The 1962 World Cup was hosted by:", o: ["Argentina", "Chile", "Mexico", "Brazil"], a: 1, e: "Chile, despite a devastating earthquake two years before. They finished 3rd, their best-ever WC result." },
+      { d: 2, q: "Who was Argentina's coach in 1986?", o: ["César Luis Menotti", "Carlos Bilardo", "Daniel Passarella", "Diego Maradona"], a: 1, e: "Bilardo's pragmatic 3-5-2 system with Maradona as the free roamer brought Argentina their second title." },
+      { d: 2, q: "Who was Argentina's coach in 1978?", o: ["César Luis Menotti", "Carlos Bilardo", "Sergio Goycochea", "José Pekerman"], a: 0, e: "Menotti, 'El Flaco' (the thin one). The polar stylistic opposite of Bilardo. Menotti emphasized attacking football and individual expression." },
+      { d: 2, q: "At the 1958 World Cup, what was the score in the final?", o: ["3-1", "5-2", "4-2", "2-1"], a: 1, e: "Brazil 5, Sweden 2 at Råsunda. Pelé scored twice, Vavá twice, Zagallo once. Sweden led 1-0 inside 4 minutes." },
+      { d: 2, q: "Who was Brazil's coach in 1958 (the squad with teenage Pelé)?", o: ["Vicente Feola", "Mário Zagallo", "Aymoré Moreira", "Tele Santana"], a: 0, e: "Feola coached Brazil to their first title. Zagallo was a player on that team and later coached Brazil to the 1970 title." },
+      { d: 2, q: "At the 1986 World Cup, England-Argentina was played in which round?", o: ["Round of 16", "Quarter-final", "Semi-final", "Group stage"], a: 1, e: "Quarter-final at the Estadio Azteca, Mexico City. Argentina won 2-1, both Maradona goals (Hand of God + Goal of the Century)." },
+      { d: 2, q: "What was the average attendance at the 1994 USA World Cup?", o: ["~38,000", "~52,000", "~69,000", "~84,000"], a: 2, e: "Around 69,000 per match, still a World Cup record. Total attendance topped 3.6 million across the tournament." },
+      { d: 2, q: "Which country first hosted the World Cup outside Europe and the Americas?", o: ["Japan", "South Korea", "South Korea/Japan jointly", "Qatar"], a: 2, e: "2002 was co-hosted by South Korea and Japan, the first WC outside of the European-American axis." },
+      { d: 2, q: "In the 1966 World Cup, which team unexpectedly reached the quarter-finals from Asia?", o: ["South Korea", "Japan", "North Korea", "Iran"], a: 2, e: "North Korea beat Italy 1-0 in the group, then took a 3-0 lead vs Portugal in the QF before losing 5-3 to Eusébio." },
+      { d: 2, q: "Italy's 1982 captain who lifted the World Cup was:", o: ["Dino Zoff", "Marco Tardelli", "Paolo Rossi", "Bruno Conti"], a: 0, e: "Dino Zoff was 40 years and 133 days old, still the oldest player to win a World Cup. He was the goalkeeper and captain." },
+      { d: 2, q: "The 'Cruyff Turn' was first performed at which World Cup?", o: ["1970", "1974", "1978", "1982"], a: 1, e: "1974, vs Sweden's Jan Olsson. Cruyff faked a pass with his right, dragged the ball with the inside of the same foot, and was past Olsson." },
+      { d: 2, q: "Lev Yashin, the only goalkeeper to win the Ballon d'Or, played for:", o: ["East Germany", "Soviet Union", "Yugoslavia", "Czechoslovakia"], a: 1, e: "USSR. He won the Ballon d'Or in 1963. The 'Black Spider' wore all-black kit and saved 150+ career penalties." },
+      { d: 2, q: "Who was the manager of West Germany in 1990?", o: ["Helmut Schön", "Jupp Derwall", "Franz Beckenbauer", "Berti Vogts"], a: 2, e: "Beckenbauer. He'd captained West Germany to the 1974 title, and now managed them to the 1990 title at age 44." },
+      { d: 2, q: "Beckenbauer is one of how many people to win the WC as both player and coach?", o: ["2", "3", "4", "5"], a: 1, e: "Three: Mário Zagallo (Brazil), Franz Beckenbauer (Germany), Didier Deschamps (France). Each lifted the trophy in both roles." },
+      { d: 2, q: "Didier Deschamps won the WC as captain in 1998 and as manager in:", o: ["2006", "2010", "2014", "2018"], a: 3, e: "2018, France 4-2 Croatia. Deschamps is one of three managers to win the World Cup having previously captained their nation to it." },
+      { d: 2, q: "At the 1994 World Cup, who scored Colombia's goal in their loss to USA?", o: ["Faustino Asprilla", "Carlos Valderrama", "Andres Escobar (own goal)", "No one (USA won 1-0)"], a: 2, e: "Andrés Escobar scored an own goal in the 35th minute. Days after returning home, he was murdered outside a Medellín nightclub." },
+      { d: 2, q: "The 'Battle of Bern' was a brutal 1954 quarter-final between Hungary and:", o: ["West Germany", "Brazil", "Uruguay", "England"], a: 1, e: "Hungary 4, Brazil 2. Three players sent off. The match continued in the dressing rooms with a full brawl. One of football's darkest matches." },
+      { d: 2, q: "Mario Zagallo's iconic role in Brazil 1970 was:", o: ["Manager", "Captain", "Top scorer", "Assistant manager"], a: 0, e: "Zagallo coached. He'd won as a player in 1958 and 1962. He led the legendary 1970 side, then assisted Parreira in 1994 (3rd title)." },
+      { d: 2, q: "Which year did the World Cup expand from 16 to 24 teams?", o: ["1974", "1978", "1982", "1986"], a: 2, e: "Spain 1982. The format ran with 24 teams through 1994. Expansion to 32 came in France 1998." },
+      { d: 2, q: "At the 2014 World Cup, who knocked out Mexico in the round of 16?", o: ["Argentina", "Brazil", "Costa Rica", "Netherlands"], a: 3, e: "Netherlands 2, Mexico 1. Robben won a controversial late penalty. Mexico has been eliminated in the Round of 16 in 7 consecutive World Cups." },
+      { d: 2, q: "Mexico has been knocked out in the Round of 16 in how many consecutive World Cups (through 2018)?", o: ["5", "6", "7", "8"], a: 2, e: "Seven straight (1994-2018). 'El Quinto Partido' (the fifth game, meaning the quarter-final) became a national obsession that never quite materialized." },
+      { d: 2, q: "Mbappé became the youngest player to score in a World Cup final since:", o: ["Pelé in 1958", "Pelé in 1970", "Beckenbauer in 1966", "Gerd Müller in 1974"], a: 0, e: "Pelé scored two in the 1958 final at 17. Mbappé scored at 19 in 2018. The teenage final-scorer category remains exclusive." },
+      { d: 2, q: "Brazil's manager during the 2014 7-1 loss to Germany was:", o: ["Dunga", "Mano Menezes", "Tite", "Luiz Felipe Scolari"], a: 3, e: "Felipão, in his second stint with Brazil. He'd won the 2002 World Cup with the same federation. He was sacked weeks after the 2014 disaster." },
+      { d: 3, q: "Oleg Salenko scored a record 5 goals in one World Cup match (1994). For which country?", o: ["Russia", "Bulgaria", "Sweden", "Ukraine"], a: 0, e: "Russia 6-1 Cameroon. Still the only player to score 5 in a single World Cup match. Salenko shared the Golden Boot with 6 total goals." },
+      { d: 3, q: "Who was the first person to win the World Cup as BOTH player and manager?", o: ["Franz Beckenbauer", "Mário Zagallo", "Didier Deschamps", "César Luis Menotti"], a: 1, e: "Zagallo: player in 1958 and 1962, head coach in 1970. Beckenbauer and Deschamps later joined the club." },
+      { d: 3, q: "Just Fontaine scored a record 13 goals at a single World Cup. For which country?", o: ["Hungary", "France", "Germany", "Sweden"], a: 1, e: "1958 in Sweden, for France, who finished 3rd. Fontaine wasn't even first-choice striker before the tournament." },
+      { d: 3, q: "The fastest goal in World Cup history was scored after how many seconds?", o: ["8 seconds", "11 seconds", "15 seconds", "22 seconds"], a: 1, e: "Hakan Şükür, Turkey vs South Korea, 2002 third-place playoff. Eleven seconds in. Turkey won 3-2." },
+      { d: 3, q: "Geoff Hurst's hat-trick in the 1966 final included a controversial goal. What did the linesman rule?", o: ["Goal", "No goal", "Replay", "Penalty"], a: 0, e: "Tofik Bakhramov, the Soviet linesman, signaled a goal after the ball hit the crossbar and bounced down. Decades of replays still don't settle it." },
+      { d: 3, q: "Paolo Rossi won the Golden Boot at the 1982 World Cup with how many goals?", o: ["5", "6", "7", "8"], a: 1, e: "6 goals. Rossi had just returned from a 2-year match-fixing ban. Italy won the tournament, including the iconic 3-2 over Brazil." },
+      { d: 3, q: "The 1962 World Cup was held in:", o: ["Brazil", "Chile", "Argentina", "Mexico"], a: 1, e: "Chile hosted despite a massive earthquake two years before that nearly cost them the rights. They finished 3rd." },
+      { d: 3, q: "Hungary's 'Magical Magyars' lost the 1954 final to West Germany. The match is nicknamed:", o: ["The Miracle of Bern", "The Battle of Bern", "The Bern Catastrophe", "The Swiss Surprise"], a: 0, e: "Hungary were unbeaten for 4 years going in. They led 2-0 in 8 minutes and lost 3-2. 'Das Wunder von Bern.'" },
+      { d: 3, q: "Diego Maradona scored 5 goals at the 1986 World Cup. He also led the tournament in:", o: ["Tackles", "Yellow cards", "Assists", "Minutes played"], a: 2, e: "5 assists too. He directly created or scored 10 of Argentina's 14 goals. Arguably the greatest single-player World Cup performance ever." },
+      { d: 3, q: "Bobby Moore died at what age?", o: ["48", "51", "55", "60"], a: 1, e: "Cancer, age 51, in 1993. The statue of him outside Wembley shows him holding the Jules Rimet trophy aloft." },
+      { d: 3, q: "Brazil were given the original Jules Rimet trophy permanently after which year's title?", o: ["1958", "1962", "1970", "1994"], a: 2, e: "Winning 3 times earned permanent custody. The trophy was stolen from Brazilian FA HQ in 1983 and has never been recovered." },
+      { d: 3, q: "In the 1966 World Cup, the Jules Rimet trophy was stolen in England. It was found by:", o: ["Police", "A dog", "A delivery man", "A schoolchild"], a: 1, e: "A dog named Pickles found it wrapped in newspaper under a hedge in South London, 7 days after the theft." },
+      { d: 3, q: "Who is the only player to score in 4 consecutive World Cup finals (the tournaments, not the finals)?", o: ["Pelé", "Uwe Seeler", "Miroslav Klose", "Both Seeler and Klose"], a: 3, e: "Uwe Seeler (1958-66-70-74 for West Germany) and Miroslav Klose (2002-06-10-14 for Germany) both scored in four consecutive WCs." },
+      { d: 3, q: "At the 1958 World Cup, Pelé scored his first WC goal against:", o: ["Sweden", "Wales", "France", "USSR"], a: 1, e: "Quarter-final vs Wales, the only goal of the game. The 17-year-old was just getting started." },
+      { d: 3, q: "The 1994 World Cup Final was the first in WC history to:", o: ["End 0-0 in regulation", "Be decided by penalties", "Be hosted in North America", "All of the above"], a: 3, e: "All three. Brazil 0-0 Italy after 120 minutes, decided by penalties in the Rose Bowl. First WC final to require shootout." },
+      { d: 3, q: "What was the score in the 1958 World Cup final?", o: ["3-1", "4-2", "5-2", "2-0"], a: 2, e: "Brazil 5, Sweden 2. Pelé scored twice (one a famous lob and volley), Vavá twice, and Zagallo one. At 17, Pelé became the youngest WC final scorer." },
+      { d: 3, q: "Which manager beat Brazil twice in World Cups (1982 and 1986)?", o: ["Carlos Bilardo", "Enzo Bearzot", "Helmut Schön", "No one did this"], a: 1, e: "Enzo Bearzot's Italy beat Brazil 3-2 in 1982 (Rossi hat-trick). Bilardo beat Brazil in '86 as Argentina manager (the wrong tournament). Bearzot only beat Brazil once." },
+      { d: 3, q: "Italy's 1982 Golden Boot Paolo Rossi had returned from a ban for what?", o: ["Match-fixing", "Drug use", "Tax fraud", "Assault"], a: 0, e: "Rossi was banned 2 years (originally 3, reduced) for his role in the Totonero match-fixing scandal. He played his first matches back just weeks before the WC." },
+      { d: 3, q: "At the 1990 World Cup, Cameroon's Roger Milla was how old when he scored his first goal?", o: ["36", "38", "40", "42"], a: 1, e: "38 years and 71 days. He scored 4 goals at the tournament, making Cameroon the first African quarter-finalists." },
+      { d: 3, q: "Cuauhtémoc Blanco invented a famous WC dribble move. What is it called?", o: ["Cuauhtemiña", "Marseille Turn", "Elastico", "Bombita"], a: 0, e: "The 'Cuauhtemiña' (also called the bunny hop): squeezing the ball between his ankles to leap past defenders. He did it at France 1998." },
+      { d: 3, q: "Who scored the first ever goal at a World Cup?", o: ["Lucien Laurent", "Bernabé Ferreyra", "Bart McGhee", "Pelé"], a: 0, e: "Lucien Laurent of France in the 19th minute vs Mexico, July 13 1930 in Montevideo. The first WC goal ever scored." },
+      { d: 3, q: "In the 1970 final, Italy were exhausted because they'd just played:", o: ["A 90-min extra-time semi", "The Game of the Century vs West Germany", "Two extra-time matches in 5 days", "All of the above"], a: 1, e: "Italy 4, West Germany 3 in extra time. Five goals scored in extra time. Widely called 'the Game of the Century.' Italy were spent for the final." },
+      { d: 3, q: "Carlos Alberto Torres (Brazil) lifted the 1970 World Cup wearing what shirt number?", o: ["4", "5", "6", "8"], a: 0, e: "#4 as captain. He scored the iconic final goal, that team move ending the 4-1 win over Italy." },
+      { d: 3, q: "At the 2002 World Cup, Senegal's coach was:", o: ["Aliou Cissé", "Bruno Metsu", "Hamidou Niang", "Henri Kasperczak"], a: 1, e: "Frenchman Bruno Metsu. Senegal stunned reigning champions France 1-0 in the opener and reached the quarter-finals." },
+      { d: 3, q: "What unusual fate did the original Jules Rimet trophy meet after being stolen from Brazil in 1983?", o: ["It was returned", "It's in a museum", "Likely melted down", "It was found by a dog"], a: 2, e: "Brazilian police believe the thieves melted it down for gold. Despite a major investigation, it was never recovered." },
+      { d: 3, q: "Antonio Carbajal was the first player to appear in 5 World Cups. For which country?", o: ["Brazil", "Argentina", "Mexico", "Italy"], a: 2, e: "Mexican goalkeeper Carbajal played 1950, 1954, 1958, 1962, 1966. He set the standard now held by many (Matthäus, CR7, Messi, Buffon, Pepe)." },
+      { d: 3, q: "The 1974 World Cup final saw Johan Neeskens score what kind of goal in the 2nd minute?", o: ["Header", "Long-range volley", "Penalty", "Free kick"], a: 2, e: "A penalty after just 80 seconds, before a German player had even touched the ball. Cruyff had been fouled by Hoeneß." },
+      { d: 3, q: "At the 1982 WC, the West Germany vs Austria 'Disgrace of Gijón' result was:", o: ["West Germany 1-0", "West Germany 2-0", "West Germany 1-1 then they tossed a coin", "2-2 draw"], a: 0, e: "West Germany 1, Austria 0. Both teams kicked the ball around for 80 minutes after the early goal, ensuring both advanced and eliminating Algeria." },
+      { d: 3, q: "Which player was sent off in the 1994 World Cup final?", o: ["Roberto Baggio", "Mauro Tassotti", "No one was sent off", "Cafu"], a: 2, e: "No one was sent off in the 1994 final. It was the first 0-0 final and the first decided by penalty shootout. Baggio missed the decisive penalty." },
+      { d: 3, q: "Who is the only player to score in three consecutive World Cup finals (the games)?", o: ["Pelé", "Vavá", "Geoff Hurst", "No one — never been done"], a: 1, e: "Vavá for Brazil scored in the 1958 and 1962 finals. No one has scored in three different World Cup finals. Pelé scored in two (1958, 1970)." },
+      { d: 3, q: "The 1986 World Cup was originally awarded to which country before being moved to Mexico?", o: ["Colombia", "Brazil", "USA", "Spain"], a: 0, e: "Colombia withdrew due to economic concerns in 1982. Mexico stepped in at short notice, becoming the first country to host twice." },
+      { d: 3, q: "At the 1978 World Cup, which Argentine player won the Golden Boot with 6 goals?", o: ["Mario Kempes", "Daniel Bertoni", "Leopoldo Luque", "Daniel Passarella"], a: 0, e: "Kempes won the Golden Ball AND Golden Boot. He scored in the final, including the 105th-minute extra-time goal vs Netherlands." },
+      { d: 3, q: "What was the final score of the 1978 World Cup final?", o: ["2-1", "3-1", "3-2", "4-2"], a: 1, e: "Argentina 3, Netherlands 1 in extra time. Kempes scored twice and made another. The Dutch were robbed in many neutral observers' views." },
+      { d: 3, q: "Which African nation knocked Argentina out of the 1986 World Cup?", o: ["Morocco", "Tunisia", "No African team beat Argentina in 1986", "Algeria"], a: 2, e: "Argentina won the 1986 World Cup (Maradona). No African nation beat them. Morocco did top their group but lost to West Germany in the Round of 16." },
+      { d: 3, q: "Which 1986 Round of 16 match was the first World Cup KO knockout-stage African appearance?", o: ["Morocco vs West Germany", "Algeria vs France", "Cameroon vs USA", "Tunisia vs Argentina"], a: 0, e: "Morocco vs West Germany in the Round of 16, 1986. Morocco won Group F and became the first African/Arab nation to reach the knockout rounds." },
+      { d: 3, q: "Who designed the current FIFA World Cup Trophy (used since 1974)?", o: ["Abel Lafleur", "Silvio Gazzaniga", "Luigi Berto", "Diego Rivera"], a: 1, e: "Italian sculptor Silvio Gazzaniga. He won an international competition to replace the stolen Jules Rimet. His trophy depicts two figures lifting the Earth." },
+      { d: 3, q: "The 'Telstar' match ball was introduced at which World Cup?", o: ["1966", "1970", "1974", "1978"], a: 1, e: "1970 Mexico. The black-and-white panel design was made visible on early TV broadcasts. Adidas has supplied the ball ever since." },
+      { d: 3, q: "Who scored Italy's winning goal in the 1982 World Cup final vs West Germany?", o: ["Marco Tardelli", "Paolo Rossi", "Alessandro Altobelli", "All three scored"], a: 3, e: "Italy 3, West Germany 1. Rossi, Tardelli, and Altobelli scored. Tardelli's celebration is one of the most iconic in football history." },
+      { d: 3, q: "Hungary scored 27 goals in 5 matches at the 1954 World Cup. Their forward duo was:", o: ["Puskás and Kocsis", "Czibor and Hidegkuti", "Bozsik and Grosics", "Puskás and Hidegkuti"], a: 0, e: "Ferenc Puskás and Sándor Kocsis combined for the most prolific WC attack ever. Hungary still lost the final to West Germany." },
+      { d: 3, q: "Which team did Brazil beat in their second World Cup final (1962)?", o: ["Sweden", "Czechoslovakia", "Hungary", "USSR"], a: 1, e: "Brazil 3, Czechoslovakia 1 in Santiago. Pelé was injured early in the tournament. Garrincha carried Brazil with Golden Ball performances." },
+      { d: 3, q: "The 'Total Football' system was associated with which 1974 Netherlands manager?", o: ["Rinus Michels", "Ernst Happel", "Leo Beenhakker", "Guus Hiddink"], a: 0, e: "Rinus Michels developed Total Football at Ajax. The Dutch national team applied it at the 1974 WC, finishing runner-up to host West Germany." },
+      { d: 3, q: "Italy's 2006 World Cup-winning captain was:", o: ["Fabio Cannavaro", "Andrea Pirlo", "Marco Materazzi", "Gianluigi Buffon"], a: 0, e: "Cannavaro lifted the trophy and won the Ballon d'Or later that year. He's still one of only three defenders ever to win the Ballon d'Or." },
+      { d: 3, q: "Which 1998 World Cup Croatian striker scored 6 goals as Croatia finished 3rd?", o: ["Davor Šuker", "Goran Vlaović", "Alen Bokšić", "Mario Stanić"], a: 0, e: "Šuker won the Golden Boot. Croatia, in their first ever World Cup as an independent nation, beat Netherlands in the 3rd-place match." },
+      { d: 3, q: "In 1990, who scored West Germany's winning penalty in the final?", o: ["Lothar Matthäus", "Andreas Brehme", "Rudi Völler", "Pierre Littbarski"], a: 1, e: "Brehme converted in the 85th minute vs Argentina. The match was reduced to nine men (Argentina); the goalkeeper Goycochea had won them the semi on pens." },
+      { d: 3, q: "What was the only year the World Cup didn't take place between 1930 and 2022 (excluding war cancellations)?", o: ["It took place every 4 years except 1942 and 1946", "1950 was postponed", "1970 was moved to 1971", "Never moved"], a: 0, e: "The Cup happened every 4 years on schedule, except 1942 and 1946 which were cancelled due to WW2. 2022 was moved within the year (to Nov-Dec)." },
+      { d: 3, q: "How many minutes was Maradona's 1986 'Goal of the Century'?", o: ["First half", "51st minute", "60-second dribble starting from his own half", "All of the above"], a: 3, e: "After the Hand of God (51st min), the 'Goal of the Century' came in the 55th. The dribble began in his own half and lasted ~10 seconds, beating 5 England players." },
+      { d: 3, q: "Who was the first goal-scorer in the 2014 World Cup final?", o: ["Mario Götze", "Thomas Müller", "Lionel Messi", "Gonzalo Higuaín"], a: 0, e: "Götze scored the only goal of the game in the 113th minute. He came on as a sub for Klose. André Schürrle assisted." },
+      { d: 3, q: "Which player has scored in five consecutive World Cup tournaments?", o: ["Cristiano Ronaldo", "Lionel Messi", "Miroslav Klose", "All three"], a: 3, e: "Ronaldo (2006-22), Messi (2006-22), and Klose (2002-14). The exclusive 'five-WCs-scored-in' club is small but growing." },
+      { d: 3, q: "Diego Maradona's drug ban came at which World Cup?", o: ["1990", "1994", "1998", "2002"], a: 1, e: "1994 USA. He was sent home after testing positive for ephedrine following Argentina's win over Nigeria. He never played for Argentina again." },
+      { d: 3, q: "Which 1998 finalist played the final wearing one of two shirts because of a stadium ad clash?", o: ["France", "Brazil", "Both teams", "Neither"], a: 3, e: "Neither team had to change. The kit clash question comes up often, but France in home blue and Brazil in away white were both fine in Paris." },
+      { d: 3, q: "The 1994 USA WC saw an iconic Bebeto rocking-a-baby celebration. Who scored that goal?", o: ["Bebeto", "Romário", "Branco", "Dunga"], a: 0, e: "Bebeto vs Netherlands in the QF. He'd just become a father. Romário and Mazinho joined the cradle-rocking celebration." },
+      { d: 3, q: "The 'Battle of Nuremberg' at 2006 WC produced how many yellow + red cards?", o: ["12 yellows, 2 reds", "16 cards total", "20 cards total (16y, 4r)", "No record"], a: 2, e: "Portugal vs Netherlands, Round of 16. Referee Valentin Ivanov issued 16 yellow and 4 red cards. A WC record for cards in a single match." },
+      { d: 3, q: "What was the score of the 1966 World Cup final?", o: ["3-2", "4-2", "4-3", "2-1"], a: 1, e: "England 4, West Germany 2 in extra time at Wembley. Hurst hat-trick. The 'they think it's all over... it is now' commentary was for Hurst's third." },
+      { d: 3, q: "Mario Zagallo wore #7 for Brazil in which Cup he won as a player?", o: ["1950", "1958", "1962", "Both 58 and 62"], a: 3, e: "Zagallo played the left wing for Brazil in both 1958 and 1962. He later managed them to the 1970 title and assisted in 1994." },
+      { d: 3, q: "Pelé was the youngest hat-trick scorer in a World Cup match. He did it vs:", o: ["France 1958", "Sweden 1958", "Spain 1962", "Czechoslovakia 1962"], a: 0, e: "At 17 years, 244 days vs France in the 1958 semi-final, Pelé scored 3 in Brazil's 5-2 win. He then scored 2 more in the final." },
+      { d: 3, q: "Who scored Senegal's winning goal vs France in the 2002 opener?", o: ["El Hadji Diouf", "Papa Bouba Diop", "Khalilou Fadiga", "Henri Camara"], a: 1, e: "Papa Bouba Diop in the 30th minute. He died of ALS in 2020 at age 42. The goal is one of the great upsets in WC history." },
+      { d: 3, q: "In the 1962 quarter-final, Garrincha scored 2 vs England. The match score?", o: ["2-1", "3-1", "2-0", "3-2"], a: 1, e: "Brazil 3, England 1. Garrincha was unstoppable that tournament, winning both Golden Ball and Golden Boot. Pelé was injured." },
+      { d: 3, q: "Which Italian striker scored 5 goals at the 1990 World Cup?", o: ["Salvatore 'Toto' Schillaci", "Roberto Baggio", "Gianluca Vialli", "Roberto Mancini"], a: 0, e: "Schillaci's 6 goals won him the Golden Boot. Italy finished 3rd. He made his Italy debut in March 1990 and ended up the tournament's top scorer." },
+      { d: 3, q: "In the 1986 quarter-final, what was the score in Argentina vs England?", o: ["1-0", "2-0", "2-1", "3-1"], a: 2, e: "Argentina 2, England 1. Both Argentine goals by Maradona (Hand of God + Goal of the Century). Lineker scored for England." },
+      { d: 3, q: "Pelé suffered a tournament-ending injury at which World Cup?", o: ["1958", "1962", "1966", "Both 1962 and 1966"], a: 3, e: "He pulled a thigh muscle vs Czechoslovakia in 1962, then was kicked out by Portugal in 1966 (badly fouled, no subs allowed). Returned in 1970 to win." },
+    ];
+
+    // ── TIERS ──
+    const TIERS = [
+      { min: 0, max: 5, title: "Full Kit Wanker", sub: "All gear, no idea." },
+      { min: 6, max: 7, title: "Casual",          sub: "You tune in for the big ones." },
+      { min: 8, max: 8, title: "Footy Head",      sub: "Friends text you before kickoff." },
+      { min: 9, max: 9, title: "You Know Ball",   sub: "Hours of football watched. It shows." },
+      { min: 10, max: 10, title: "You Know Ball", sub: "Perfect run. Mute the group chat." },
+    ];
+
+    // ── STATE ──
+    const state = {
+      questions: [],
+      idx: 0,
+      score: 0,
+      answers: [], // array of booleans
+    };
+
+    function pickQuestions() {
+      // Shuffle pool, then pick 3 easy → 4 medium → 3 hard
+      const byDiff = { 1: [], 2: [], 3: [] };
+      for (const q of POOL) byDiff[q.d].push(q);
+      function shuffle(a) {
+        const arr = a.slice();
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+      const easy = shuffle(byDiff[1]).slice(0, 3);
+      const med = shuffle(byDiff[2]).slice(0, 4);
+      const hard = shuffle(byDiff[3]).slice(0, 3);
+      return [...easy, ...med, ...hard];
+    }
+
+    const DIFF_LABEL = { 1: "Easy", 2: "Medium", 3: "Hard" };
+
+    function startQuiz() {
+      state.questions = pickQuestions();
+      state.idx = 0;
+      state.score = 0;
+      state.answers = [];
+      document.getElementById("hero").style.display = "none";
+      document.getElementById("result").classList.remove("active");
+      document.getElementById("quiz").classList.add("active");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = state.questions[state.idx];
+      document.getElementById("qIndex").textContent = state.idx + 1;
+      document.getElementById("qDifficulty").textContent = DIFF_LABEL[q.d];
+      document.getElementById("progressFill").style.width = ((state.idx + 1) / 10 * 100) + "%";
+      document.getElementById("qText").textContent = q.q;
+
+      const opts = document.getElementById("qOptions");
+      opts.innerHTML = "";
+      const letters = ["A", "B", "C", "D"];
+      q.o.forEach((label, i) => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${label}</span>`;
+        btn.addEventListener("click", () => choose(i));
+        opts.appendChild(btn);
+      });
+
+      document.getElementById("qExplain").classList.remove("show");
+      document.getElementById("nextBtn").classList.remove("show");
+      document.getElementById("footHint").textContent = "Pick an answer";
+      document.getElementById("footHint").style.display = "inline";
+    }
+
+    function choose(picked) {
+      const q = state.questions[state.idx];
+      const correct = picked === q.a;
+      state.answers.push(correct);
+      if (correct) state.score++;
+
+      const buttons = document.querySelectorAll(".option");
+      buttons.forEach((b, i) => {
+        b.disabled = true;
+        if (i === q.a) b.classList.add("correct");
+        else if (i === picked) b.classList.add("wrong");
+        else b.classList.add("dimmed");
+      });
+
+      const expl = document.getElementById("qExplain");
+      document.getElementById("explainLabel").textContent = correct ? "Correct ★" : "Not quite";
+      document.getElementById("explainText").textContent = q.e;
+      expl.classList.add("show");
+
+      const next = document.getElementById("nextBtn");
+      next.textContent = state.idx === 9 ? "See the verdict →" : "Next →";
+      next.classList.add("show");
+      document.getElementById("footHint").style.display = "none";
+    }
+
+    function nextQuestion() {
+      if (state.idx === 9) {
+        showResult();
+      } else {
+        state.idx++;
+        renderQuestion();
+      }
+    }
+
+    function showResult() {
+      document.getElementById("quiz").classList.remove("active");
+      document.getElementById("result").classList.add("active");
+      document.getElementById("rScore").textContent = state.score;
+
+      const tier = TIERS.find((t) => state.score >= t.min && state.score <= t.max);
+      document.getElementById("rTier").textContent = tier.title;
+      document.getElementById("rSub").textContent = tier.sub;
+
+      const dots = document.getElementById("rDots");
+      dots.innerHTML = "";
+      state.answers.forEach((c) => {
+        const d = document.createElement("div");
+        d.className = "dot " + (c ? "green" : "red");
+        dots.appendChild(d);
+      });
+    }
+
+    function replay() {
+      document.getElementById("result").classList.remove("active");
+      document.getElementById("hero").style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ── SHARE: render result card as PNG ──
+    // ── Render the on-screen score card as a 1080×1920 IG-Story-ready PNG ──
+    async function buildShareBlob() {
+      const tier = TIERS.find((t) => state.score >= t.min && state.score <= t.max);
+
+      // Brand tokens (mirror site CSS variables)
+      const PARCHMENT = "#F5F1EB";
+      const PARCHMENT_EL = "#F8F5EF";
+      const LEATHER = "#2C2118";
+      const LEATHER_MID = "#4A3D32";
+      const TERRACOTTA = "#A0422A";
+      const TERRACOTTA_GLOW = "#E58769";
+      const TEXT_SOFT = "#6B6259";
+      const BORDER = "#DDD7CC";
+
+      // Make sure fonts are loaded before rastering
+      try {
+        await Promise.all([
+          document.fonts.load("800 200px Syne"),
+          document.fonts.load("700 14px Syne"),
+          document.fonts.load("400 16px Inter"),
+        ]);
+      } catch {}
+
+      const W = 1080, H = 1920;
+      const canvas = document.createElement("canvas");
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext("2d");
+
+      // 1) Page background (parchment)
+      ctx.fillStyle = PARCHMENT;
+      ctx.fillRect(0, 0, W, H);
+
+      // 2) Subtle grid backdrop, multiply blend
+      ctx.save();
+      ctx.globalAlpha = 0.18;
+      ctx.fillStyle = "rgba(120,108,92,0.4)";
+      const gridSize = 36;
+      for (let x = 0; x < W; x += gridSize) { ctx.fillRect(x, 0, 1, H); }
+      for (let y = 0; y < H; y += gridSize) { ctx.fillRect(0, y, W, 1); }
+      ctx.restore();
+
+      // 3) The score card. Inset, centered horizontally, vertically in safe area.
+      const cardX = 80;
+      const cardY = 240;
+      const cardW = W - cardX * 2;
+      const cardH = 1340;
+      const headerH = 96;
+      const footerH = 84;
+      const radius = 18;
+
+      // Card shadow
+      ctx.save();
+      ctx.shadowColor = "rgba(0,0,0,0.32)";
+      ctx.shadowBlur = 60;
+      ctx.shadowOffsetY = 24;
+      // Body fill
+      roundRect(ctx, cardX, cardY, cardW, cardH, radius);
+      ctx.fillStyle = PARCHMENT_EL;
+      ctx.fill();
+      ctx.restore();
+
+      // Card border (2px leather)
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = LEATHER_MID;
+      roundRect(ctx, cardX, cardY, cardW, cardH, radius);
+      ctx.stroke();
+
+      // Top eyebrow strip (leather)
+      ctx.save();
+      ctx.beginPath();
+      roundRect(ctx, cardX, cardY, cardW, headerH, radius, "top");
+      ctx.fillStyle = LEATHER_MID;
+      ctx.fill();
+      ctx.restore();
+
+      // Eyebrow text — left + right
+      ctx.font = '700 26px "Syne", sans-serif';
+      try { ctx.letterSpacing = "5px"; } catch {}
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "left";
+      ctx.fillStyle = TERRACOTTA_GLOW;
+      ctx.fillText("YOU KNOW BALL", cardX + 36, cardY + headerH / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = PARCHMENT;
+      ctx.fillText("WORLD CUP HISTORY", cardX + cardW - 36, cardY + headerH / 2);
+
+      // Body centerline (vertical center of cream body area)
+      const bodyTop = cardY + headerH;
+      const bodyBottom = cardY + cardH - footerH;
+      const bodyMid = (bodyTop + bodyBottom) / 2;
+
+      // Giant score numeral, with "/ 10" baseline-aligned
+      const scoreY = bodyTop + 280;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "alphabetic";
+      try { ctx.letterSpacing = "-12px"; } catch {}
+      ctx.font = '800 360px "Syne", sans-serif';
+      ctx.fillStyle = LEATHER;
+      // Measure to center the score + " / 10" group
+      const scoreText = String(state.score);
+      const denText = " / 10";
+      const scoreW = ctx.measureText(scoreText).width;
+      try { ctx.letterSpacing = "-3px"; } catch {}
+      ctx.font = '600 84px "Syne", sans-serif';
+      const denW = ctx.measureText(denText).width;
+      const groupW = scoreW + denW;
+      const groupX = (W - groupW) / 2;
+      // Draw score (large)
+      try { ctx.letterSpacing = "-12px"; } catch {}
+      ctx.font = '800 360px "Syne", sans-serif';
+      ctx.textAlign = "left";
+      ctx.fillStyle = LEATHER;
+      ctx.fillText(scoreText, groupX, scoreY);
+      // Draw / 10 (small, baseline aligned)
+      try { ctx.letterSpacing = "-3px"; } catch {}
+      ctx.font = '600 84px "Syne", sans-serif';
+      ctx.fillStyle = TEXT_SOFT;
+      ctx.fillText(denText, groupX + scoreW, scoreY);
+      try { ctx.letterSpacing = "0"; } catch {}
+
+      // Star divider
+      const divY = scoreY + 80;
+      ctx.strokeStyle = BORDER;
+      ctx.lineWidth = 2;
+      const divHalf = 140;
+      ctx.beginPath();
+      ctx.moveTo(W/2 - divHalf, divY);
+      ctx.lineTo(W/2 - 30, divY);
+      ctx.moveTo(W/2 + 30, divY);
+      ctx.lineTo(W/2 + divHalf, divY);
+      ctx.stroke();
+      ctx.font = '700 24px "Syne", sans-serif';
+      try { ctx.letterSpacing = "4px"; } catch {}
+      ctx.fillStyle = TERRACOTTA;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("★", W/2, divY);
+
+      // Tier title
+      ctx.textBaseline = "alphabetic";
+      ctx.font = '800 78px "Syne", sans-serif';
+      try { ctx.letterSpacing = "-2px"; } catch {}
+      ctx.fillStyle = LEATHER;
+      ctx.fillText(tier.title.toUpperCase(), W/2, divY + 92);
+      try { ctx.letterSpacing = "0"; } catch {}
+
+      // Tier sub (Inter, wrapped)
+      ctx.font = '400 30px "Inter", sans-serif';
+      ctx.fillStyle = TEXT_SOFT;
+      const lines = wrapText(ctx, tier.sub, cardW - 100);
+      const subY0 = divY + 156;
+      lines.forEach((line, i) => {
+        ctx.fillText(line, W/2, subY0 + i * 42);
+      });
+
+      // Dot grid (10 squares)
+      const dotSize = 46;
+      const dotGap = 12;
+      const dotsTotalW = 10 * dotSize + 9 * dotGap;
+      const dotsX = (W - dotsTotalW) / 2;
+      const dotsY = bodyBottom - 90;
+      state.answers.forEach((c, i) => {
+        ctx.fillStyle = c ? "#2E8B57" : "#C13A2B";
+        const rx = dotsX + i * (dotSize + dotGap);
+        roundRect(ctx, rx, dotsY, dotSize, dotSize, 6);
+        ctx.fill();
+      });
+
+      // Bottom strip (leather)
+      ctx.save();
+      ctx.beginPath();
+      roundRect(ctx, cardX, cardY + cardH - footerH, cardW, footerH, radius, "bottom");
+      ctx.fillStyle = LEATHER;
+      ctx.fill();
+      ctx.restore();
+      // Foot text
+      ctx.font = '700 22px "Syne", sans-serif';
+      try { ctx.letterSpacing = "5px"; } catch {}
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = PARCHMENT;
+      ctx.textAlign = "left";
+      ctx.fillText("BEAT ME", cardX + 36, cardY + cardH - footerH / 2);
+      ctx.fillStyle = TERRACOTTA_GLOW;
+      ctx.textAlign = "right";
+      ctx.fillText("PROVISIONS.SOCCER", cardX + cardW - 36, cardY + cardH - footerH / 2);
+
+      // Above-card eyebrow text
+      ctx.font = '700 28px "Syne", sans-serif';
+      try { ctx.letterSpacing = "6px"; } catch {}
+      ctx.fillStyle = TERRACOTTA;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "alphabetic";
+      ctx.fillText("THE VERDICT", W/2, cardY - 56);
+
+      // Below-card mascot + provisions
+      ctx.font = '700 22px "Syne", sans-serif';
+      try { ctx.letterSpacing = "5px"; } catch {}
+      ctx.fillStyle = TEXT_SOFT;
+      ctx.fillText("A PROVISIONS JOINT", W/2, cardY + cardH + 90);
+
+      return await new Promise((res) => canvas.toBlob(res, "image/png", 0.95));
+    }
+
+    // Helper: rounded rect with optional one-side rounding
+    function roundRect(ctx, x, y, w, h, r, side) {
+      const rtl = (side === "top" || side === undefined) ? r : 0;
+      const rtr = (side === "top" || side === undefined) ? r : 0;
+      const rbr = (side === "bottom" || side === undefined) ? r : 0;
+      const rbl = (side === "bottom" || side === undefined) ? r : 0;
+      ctx.beginPath();
+      ctx.moveTo(x + rtl, y);
+      ctx.lineTo(x + w - rtr, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + rtr);
+      ctx.lineTo(x + w, y + h - rbr);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - rbr, y + h);
+      ctx.lineTo(x + rbl, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - rbl);
+      ctx.lineTo(x, y + rtl);
+      ctx.quadraticCurveTo(x, y, x + rtl, y);
+      ctx.closePath();
+    }
+
+    function wrapText(ctx, text, maxWidth) {
+      const words = text.split(" ");
+      const lines = [];
+      let cur = "";
+      for (const w of words) {
+        const test = cur ? cur + " " + w : w;
+        if (ctx.measureText(test).width > maxWidth) { lines.push(cur); cur = w; }
+        else cur = test;
+      }
+      if (cur) lines.push(cur);
+      return lines;
+    }
+
+    async function shareScore() {
+      const btn = document.getElementById("shareBtn");
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "Pressing…";
+      try {
+        const blob = await buildShareBlob();
+        const file = new File([blob], `you-know-ball-${state.score}of10.png`, { type: "image/png" });
+        const isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+        if (isTouch && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: "You Know Ball", text: `I scored ${state.score}/10 on the World Cup quiz. Beat me.` });
+        } else {
+          // Desktop: download to disk
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `you-know-ball-${state.score}of10.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 60000);
+        }
+      } catch (e) {
+        if (e && e.name !== "AbortError") console.error("Share failed:", e);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    }
+
+    // Wire it up
+    document.getElementById("startBtn").addEventListener("click", startQuiz);
+    document.getElementById("nextBtn").addEventListener("click", nextQuestion);
+    document.getElementById("replayBtn").addEventListener("click", replay);
+    document.getElementById("shareBtn").addEventListener("click", shareScore);
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+
+  <div class="wc-overlay" id="wcOverlay" data-open="false">
+    <div class="wc-overlay-head">
+      <a href="https://provisions.soccer" class="wc-overlay-mark">
+        <img src="/favicon-192x192.png" alt="">
+        <strong>Provisions</strong>
+      </a>
+      <button class="wc-overlay-close" aria-label="Close menu" onclick="wcCloseMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="wc-overlay-menu">
+      <a href="https://provisions.soccer" data-route="home"><span>Home</span><span class="num">01</span></a>
+      <a href="https://provisions.soccer/daily" data-route="daily"><span>The Daily</span><span class="num">02</span></a>
+      <a href="https://provisions.soccer/you-know-ball" data-route="quiz"><span>You Know Ball</span><span class="num">03</span></a>
+      <a href="https://provisions.soccer/kits" data-route="kits"><span>The Kit Index</span><span class="num">04</span></a>
+      <a href="https://provisions.soccer/card" data-route="card"><span>The Player Card</span><span class="num">05</span></a>
+    </nav>
+    <div class="wc-overlay-foot">
+      <a href="https://provisions.work">A Provisions joint →</a>
+      <a href="mailto:sam@provisions.work?subject=World%20Cup">Commission a piece →</a>
+    </div>
+  </div>
+
+
+  <script>
+    (function () {
+      var route = document.body.dataset.route || "";
+      document.querySelectorAll('.wc-overlay-menu a').forEach(function (a) {
+        if (a.dataset.route === route) a.classList.add('is-active');
+      });
+    })();
+    function wcOpenMenu() {
+      document.getElementById('wcOverlay').dataset.open = 'true';
+      document.body.classList.add('wc-locked');
+    }
+    function wcCloseMenu() {
+      document.getElementById('wcOverlay').dataset.open = 'false';
+      document.body.classList.remove('wc-locked');
+    }
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') wcCloseMenu();
+    });
+  </script>
+
+</body>
+</html>

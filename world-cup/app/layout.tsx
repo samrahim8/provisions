@@ -5,12 +5,12 @@ const OG_IMAGE = "https://provisions.soccer/card/api/og";
 
 export const metadata: Metadata = {
   title: "A lineup of goods for '26 — Provisions",
-  description: "World Cup products for brands, agencies + fans. Pick a country, snap a photo, share it with your squad.",
+  description: "Summer '26 products for brands, agencies + fans. Pick a country, snap a photo, share it with your squad.",
   metadataBase: new URL("https://provisions.work"),
   alternates: { canonical: "/world-cup/card-generator" },
   openGraph: {
     title: "A lineup of goods for '26 — Provisions",
-    description: "World Cup products for brands, agencies + fans. Pick a country, snap a photo, share it with your squad.",
+    description: "Summer '26 products for brands, agencies + fans. Pick a country, snap a photo, share it with your squad.",
     url: "https://provisions.soccer/card",
     siteName: "Provisions",
     type: "website",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "A lineup of goods for '26 — Provisions",
-    description: "World Cup products for brands, agencies + fans.",
+    description: "Summer '26 products for brands, agencies + fans.",
     images: [OG_IMAGE],
   },
 };

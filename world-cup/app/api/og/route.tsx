@@ -78,7 +78,7 @@ export async function GET(req: Request) {
                 display: "flex",
               }}
             >
-              PROVISIONS · WORLD CUP '26
+              PROVISIONS · SUMMER '26
             </div>
           </div>
 
@@ -109,7 +109,7 @@ export async function GET(req: Request) {
                 marginTop: 8,
               }}
             >
-              World Cup products for brands, agencies + fans.
+              Summer '26 products for brands, agencies + fans.
             </div>
           </div>
 

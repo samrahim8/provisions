@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cover · provisions.soccer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=IBM+Plex+Mono:wght@500;600&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --parchment: #F5F1EB;
+      --parchment-el: #F8F5EF;
+      --leather: #2C2118;
+      --leather-mid: #4A3D32;
+      --terracotta: #A0422A;
+      --terracotta-glow: #E58769;
+      --text-soft: #6B6259;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      background: #1a1a1a;
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      color: var(--leather);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    .page-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 32px 16px 64px;
+      gap: 24px;
+    }
+    .toolbar {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      padding: 14px 18px;
+      background: var(--parchment);
+      border: 2px solid var(--leather-mid);
+      border-radius: 6px;
+      max-width: 1080px;
+    }
+    .toolbar-label {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--leather-mid);
+      align-self: center;
+      margin-right: 6px;
+    }
+    .btn {
+      appearance: none; border: none; cursor: pointer;
+      background: var(--terracotta); color: #fff;
+      padding: 10px 18px;
+      border-radius: 4px;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn:hover { background: #B8533A; transform: translateY(-1px); }
+    .btn.ghost {
+      background: transparent; color: var(--leather-mid);
+      border: 1.5px solid var(--leather-mid);
+    }
+    .btn.ghost:hover { background: var(--leather-mid); color: #fff; }
+
+    /* ── COVER (9:16, 1080×1920) ── */
+    .cover {
+      width: 1080px;
+      height: 1920px;
+      position: relative;
+      background: var(--parchment);
+      overflow: hidden;
+      box-shadow: 0 28px 60px -22px rgba(0,0,0,0.55);
+      transform-origin: top center;
+    }
+    /* responsive preview scaling: cover stays 1080×1920 in DOM, scaled visually */
+    .cover-scale {
+      transform: scale(0.5);
+      transform-origin: top center;
+      margin-bottom: -960px; /* compensate for scale-down so layout flows tightly */
+    }
+    @media (max-width: 720px) {
+      .cover-scale { transform: scale(0.32); margin-bottom: -1300px; }
+    }
+    @media (max-width: 480px) {
+      .cover-scale { transform: scale(0.26); margin-bottom: -1420px; }
+    }
+
+    /* Brand grid backdrop inside cover */
+    .cover .grid-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      opacity: 0.30; mix-blend-mode: multiply;
+      background-image:
+        linear-gradient(to right, rgba(120,108,92,0.16) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120,108,92,0.16) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .cover .grain {
+      position: absolute; inset: 0; pointer-events: none;
+      opacity: 0.06; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    /* Top eyebrow strip */
+    .cover-top {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 36px 56px;
+      background: var(--leather);
+      color: #fff;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 28px; letter-spacing: 0.32em; text-transform: uppercase;
+    }
+    .cover-top .l { color: var(--terracotta-glow); }
+    .cover-top .stars { letter-spacing: 0.12em; opacity: 0.85; }
+
+    /* Hero block (centered) */
+    .cover-hero {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -54%);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 48px;
+    }
+    .hero-frame {
+      width: 660px; height: 660px;
+      background: var(--parchment-el);
+      border: 6px solid var(--leather-mid);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 32px 72px -28px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .hero-frame::before, .hero-frame::after {
+      content: ''; position: absolute;
+      width: 36px; height: 36px;
+      border: 4px solid var(--leather);
+    }
+    .hero-frame::before {
+      top: -22px; left: -22px;
+      border-right: none; border-bottom: none;
+    }
+    .hero-frame::after {
+      bottom: -22px; right: -22px;
+      border-left: none; border-top: none;
+    }
+    .hero-frame .corner-tr, .hero-frame .corner-bl {
+      position: absolute; width: 36px; height: 36px; border: 4px solid var(--leather);
+    }
+    .hero-frame .corner-tr {
+      top: -22px; right: -22px;
+      border-left: none; border-bottom: none;
+    }
+    .hero-frame .corner-bl {
+      bottom: -22px; left: -22px;
+      border-right: none; border-top: none;
+    }
+    .hero-frame img {
+      width: 540px; height: 540px;
+      object-fit: contain;
+      display: block;
+    }
+    .hero-tagline {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 56px; line-height: 1.0;
+      letter-spacing: -0.025em;
+      color: var(--leather);
+      text-align: center;
+      max-width: 800px;
+    }
+    .hero-tagline .accent { color: var(--terracotta); }
+    .hero-eyebrow {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 22px; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--terracotta);
+      text-align: center;
+    }
+
+    /* Bottom wordmark slab */
+    .cover-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: var(--leather);
+      color: #fff;
+      padding: 56px 56px 64px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 14px;
+      border-top: 6px solid var(--leather-mid);
+    }
+    .wordmark {
+      font-family: 'Syne', sans-serif; font-weight: 900;
+      font-size: 120px; line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    .wordmark .dot { color: var(--terracotta-glow); }
+    .url-strip {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace; font-weight: 600;
+      font-size: 22px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--terracotta-glow);
+      opacity: 0.95;
+    }
+    .url-strip span { color: #fff; opacity: 0.6; margin: 0 12px; }
+
+    /* Provisions corner marks (full cover) */
+    .cover-corner {
+      position: absolute; width: 56px; height: 56px;
+      border: 4px solid var(--leather);
+      pointer-events: none;
+    }
+    .cover-corner.tl { top: 24px; left: 24px; border-right: none; border-bottom: none; }
+    .cover-corner.tr { top: 24px; right: 24px; border-left: none; border-bottom: none; }
+    .cover-corner.bl { bottom: 24px; left: 24px; border-right: none; border-top: none; }
+    .cover-corner.br { bottom: 24px; right: 24px; border-left: none; border-top: none; }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <div class="toolbar">
+      <span class="toolbar-label">Cover · 9:16 · 1080×1920</span>
+      <button class="btn" id="downloadBtn">Download PNG</button>
+      <button class="btn ghost" id="openTabBtn">Open PNG in new tab</button>
+    </div>
+
+    <div class="cover-scale">
+      <div class="cover" id="cover">
+        <div class="grid-bg"></div>
+        <div class="grain"></div>
+
+        <!-- Top eyebrow -->
+        <div class="cover-top">
+          <span class="l">Provisions</span>
+          <span class="stars">★ ★ ★</span>
+          <span>Summer '26</span>
+        </div>
+
+        <!-- Hero block -->
+        <div class="cover-hero">
+          <div class="hero-eyebrow">A lineup of goods</div>
+          <div class="hero-frame">
+            <span class="corner-tr"></span>
+            <span class="corner-bl"></span>
+            <img src="./favicon-512x512.png" alt="Provisions">
+          </div>
+          <h1 class="hero-tagline">The summer's<br><span class="accent">on us.</span></h1>
+        </div>
+
+        <!-- Bottom slab -->
+        <div class="cover-bottom">
+          <div class="wordmark">provisions<span class="dot">.</span>soccer</div>
+          <div class="url-strip">FAN GOODS<span>·</span>BY PROVISIONS</div>
+        </div>
+
+        <!-- Corner marks -->
+        <div class="cover-corner tl"></div>
+        <div class="cover-corner tr"></div>
+        <div class="cover-corner bl"></div>
+        <div class="cover-corner br"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function renderToPng() {
+      const node = document.getElementById('cover');
+      const W = 1080, H = 1920;
+      // Use foreignObject + SVG to rasterize the DOM. To keep the cover crisp,
+      // we serialize via an inline SVG wrapper that hosts the cover as XHTML.
+      const clone = node.cloneNode(true);
+      // Inline external CSS into the clone by copying computed styles is heavy;
+      // instead, we read this page's stylesheet and inline it.
+      const css = [...document.styleSheets]
+        .map(s => { try { return [...s.cssRules].map(r => r.cssText).join('\n'); } catch(e) { return ''; } })
+        .join('\n');
+
+      // We also need to resolve the favicon image into a data URL so the SVG renders it offline.
+      const imgEl = clone.querySelector('.hero-frame img');
+      if (imgEl) {
+        const dataUrl = await imageToDataUrl(imgEl.getAttribute('src'));
+        imgEl.setAttribute('src', dataUrl);
+      }
+
+      const html =
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${W}px;height:${H}px;">` +
+          `<style>${css}</style>` +
+          clone.outerHTML +
+        `</div>`;
+
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">` +
+          `<foreignObject width="100%" height="100%">${html}</foreignObject>` +
+        `</svg>`;
+
+      const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      return new Promise((resolve, reject) => {
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = W; canvas.height = H;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#F5F1EB';
+          ctx.fillRect(0, 0, W, H);
+          ctx.drawImage(img, 0, 0, W, H);
+          URL.revokeObjectURL(url);
+          canvas.toBlob(b => resolve(b), 'image/png', 1.0);
+        };
+        img.onerror = (e) => { URL.revokeObjectURL(url); reject(e); };
+        img.src = url;
+      });
+    }
+
+    function imageToDataUrl(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          const c = document.createElement('canvas');
+          c.width = img.naturalWidth; c.height = img.naturalHeight;
+          c.getContext('2d').drawImage(img, 0, 0);
+          resolve(c.toDataURL('image/png'));
+        };
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    document.getElementById('downloadBtn').addEventListener('click', async () => {
+      try {
+        const blob = await renderToPng();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'provisions-soccer-cover-9x16.png';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+      } catch (e) {
+        alert('Export failed: ' + e.message);
+      }
+    });
+    document.getElementById('openTabBtn').addEventListener('click', async () => {
+      try {
+        const blob = await renderToPng();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      } catch (e) {
+        alert('Export failed: ' + e.message);
+      }
+    });
+  </script>
+</body>
+</html>

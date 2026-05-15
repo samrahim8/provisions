@@ -5,9 +5,28 @@ import { TEAMS, POSITIONS, type Team, type Position } from "@/lib/teams";
 import { flagUrl } from "@/lib/flagIso";
 
 type Step = "team" | "photo" | "details" | "result";
+type Rarity = "standard" | "silver" | "gold" | "platinum" | "holo";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const asset = (p: string) => `${BASE_PATH}${p}`;
+
+// Drop rates: standard 78% / silver 12% / gold 6% / platinum 3% / holo 1%
+function rollRarity(): Rarity {
+  const r = Math.random();
+  if (r < 0.01) return "holo";
+  if (r < 0.04) return "platinum";
+  if (r < 0.10) return "gold";
+  if (r < 0.22) return "silver";
+  return "standard";
+}
+
+const RARITY_META: Record<Rarity, { label: string; odds: string; tint: string }> = {
+  standard: { label: "STANDARD", odds: "", tint: "#2C2118" },
+  silver:   { label: "SILVER FOIL", odds: "1 IN 8",  tint: "#8C97A3" },
+  gold:     { label: "GOLD",        odds: "1 IN 17", tint: "#C8932E" },
+  platinum: { label: "PLATINUM",    odds: "1 IN 33", tint: "#9BA4AE" },
+  holo:     { label: "HOLOGRAPHIC", odds: "1 IN 100", tint: "#C8462E" },
+};
 
 export default function Page() {
   const [step, setStep] = useState<Step>("team");
@@ -19,11 +38,13 @@ export default function Page() {
   const [rating, setRating] = useState("92");
   const [generating, setGenerating] = useState(false);
   const [cardUrl, setCardUrl] = useState<string | null>(null);
+  const [rarity, setRarity] = useState<Rarity>("standard");
 
   async function generate() {
     if (!team || !photo) return;
     setGenerating(true);
     try {
+      const rolled = rollRarity();
       const res = await fetch(asset("/api/card"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,10 +55,16 @@ export default function Page() {
           position,
           number,
           rating,
+          rarity: rolled,
         }),
       });
       if (!res.ok) throw new Error("Card render failed");
       const blob = await res.blob();
+      // Hold the press a beat longer on rare pulls so the reveal has weight
+      if (rolled !== "standard") {
+        await new Promise((r) => setTimeout(r, rolled === "holo" ? 1200 : 700));
+      }
+      setRarity(rolled);
       setCardUrl(URL.createObjectURL(blob));
       setStep("result");
     } catch (e) {
@@ -53,7 +80,7 @@ export default function Page() {
 
       <Nav step={step} />
 
-      <section className="relative max-w-[1100px] mx-auto px-5 sm:px-8 py-8 sm:py-16">
+      <section className={`relative max-w-[1100px] mx-auto px-5 sm:px-8 ${step === "details" || step === "result" ? "min-h-[calc(100vh-72px)] flex flex-col justify-center py-4" : "py-8 sm:py-16"}`}>
         {step === "team" && (
           <TeamPicker
             onPick={(t) => {
@@ -94,11 +121,13 @@ export default function Page() {
             cardUrl={cardUrl}
             name={name || "Your Name"}
             team={team}
+            rarity={rarity}
             onRestart={() => {
               setStep("team");
               setTeam(null);
               setPhoto(null);
               setCardUrl(null);
+              setRarity("standard");
             }}
           />
         )}
@@ -311,51 +340,130 @@ function Nav({ step }: { step: Step }) {
   ];
   const idx = labels.findIndex((l) => l.id === step);
   const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
   return (
-    <header className="sticky top-0 z-50 bg-parchment-elevated border-b border-border">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 min-h-[72px] flex items-center justify-between gap-3">
-        <a
-          href="https://provisions.soccer"
-          className="flex items-center gap-3 group flex-shrink-0"
-          aria-label="Provisions"
-        >
-          <img
-            src={`${BASE}/provisions-mark.png`}
-            alt="Provisions"
-            width={26}
-            height={26}
-            className="object-contain"
-          />
-        </a>
-        <ol className="hidden lg:flex items-center gap-4">
-          {labels.map((l, i) => (
-            <li key={l.id} className="flex items-center gap-2">
-              <span
-                className={`w-5 h-5 grid place-items-center text-[10px] font-display font-bold rounded-sm transition-colors ${
-                  i <= idx ? "bg-terracotta text-white" : "bg-border text-text-soft"
-                }`}
-              >
-                {i + 1}
+    <>
+      <header className="sticky top-0 z-50 bg-parchment-elevated border-b border-border">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 min-h-[72px] flex items-center justify-between gap-3">
+          <a
+            href="https://provisions.soccer"
+            className="flex items-center gap-3 group flex-shrink-0"
+            aria-label="Provisions"
+          >
+            <img
+              src={`${BASE}/provisions-mark.png`}
+              alt="Provisions"
+              width={22}
+              height={22}
+              className="object-contain"
+            />
+            <strong className="font-display font-extrabold uppercase tracking-[0.18em] text-[14px] text-leather-mid">
+              Provisions
+            </strong>
+          </a>
+          <ol className="hidden lg:flex items-center gap-4">
+            {labels.map((l, i) => (
+              <li key={l.id} className="flex items-center gap-2">
+                <span
+                  className={`w-5 h-5 grid place-items-center text-[10px] font-display font-bold rounded-sm transition-colors ${
+                    i <= idx ? "bg-terracotta text-white" : "bg-border text-text-soft"
+                  }`}
+                >
+                  {i + 1}
+                </span>
+                <span
+                  className={`font-display font-bold uppercase tracking-label text-[11px] transition-colors ${
+                    i <= idx ? "text-leather-mid" : "text-text-soft"
+                  }`}
+                >
+                  {l.label}
+                </span>
+              </li>
+            ))}
+          </ol>
+          <button
+            type="button"
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(true)}
+            className="p-2 inline-flex items-center justify-center text-leather-mid hover:text-terracotta transition-colors"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="4" y1="7" x2="20" y2="7" />
+              <line x1="4" y1="13" x2="20" y2="13" />
+              <line x1="4" y1="19" x2="20" y2="19" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      {/* Hamburger overlay — matches the static pages' menu */}
+      <div
+        className="fixed inset-0 z-[300] flex-col overflow-y-auto px-8 py-7 sm:px-10 sm:py-8"
+        style={{
+          display: menuOpen ? "flex" : "none",
+          background: "#2C2118",
+          color: "#F5F1EB",
+        }}
+      >
+        <div className="flex items-center justify-between mb-12">
+          <a href="https://provisions.soccer" className="flex items-center gap-3 text-inherit">
+            <img src={`${BASE}/provisions-mark.png`} alt="" width={22} height={22} className="object-contain" style={{ filter: "invert(1)" }} />
+            <strong className="font-display font-extrabold uppercase tracking-[0.18em] text-[14px]">Provisions</strong>
+          </a>
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={() => setMenuOpen(false)}
+            className="p-2 inline-flex items-center justify-center"
+            style={{ color: "inherit" }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="6" y1="6" x2="18" y2="18" />
+              <line x1="18" y1="6" x2="6" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <nav className="flex flex-col mx-auto w-full max-w-[720px]">
+          {[
+            { href: "https://provisions.soccer", label: "Home", num: "01" },
+            { href: "https://provisions.soccer/daily", label: "The Daily", num: "02" },
+            { href: "https://provisions.soccer/you-know-ball", label: "You Know Ball", num: "03" },
+            { href: "https://provisions.soccer/kits", label: "The Kit Index", num: "04" },
+            { href: "https://provisions.soccer/card", label: "The Player Card", num: "05", active: true },
+          ].map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="flex items-baseline justify-between gap-4 py-[18px] font-display font-extrabold leading-none text-[clamp(28px,5.5vw,44px)] tracking-[-0.02em] transition-colors"
+              style={{
+                color: item.active ? "#E58769" : "#F5F1EB",
+                borderBottom: "1px solid rgba(245,241,235,0.12)",
+              }}
+            >
+              <span>{item.label}</span>
+              <span className="font-mono font-semibold text-[12px] tracking-[0.18em]" style={{ color: "rgba(245,241,235,0.42)" }}>
+                {item.num}
               </span>
-              <span
-                className={`font-display font-bold uppercase tracking-label text-[11px] transition-colors ${
-                  i <= idx ? "text-leather-mid" : "text-text-soft"
-                }`}
-              >
-                {l.label}
-              </span>
-            </li>
+            </a>
           ))}
-        </ol>
-        <a
-          href="https://provisions.soccer"
-          className="h-[44px] inline-flex items-center bg-leather-mid text-white px-4 sm:px-5 font-display font-extrabold uppercase tracking-label text-[10px] sm:text-[12px] border border-leather-mid hover:bg-terracotta hover:border-terracotta transition-all"
-          style={{ boxShadow: "0 3px 0 rgba(0,0,0,0.12)" }}
-        >
-          ← Back to the team sheet
-        </a>
+        </nav>
+        <div className="mx-auto w-full max-w-[720px] mt-9 pt-6 flex flex-col gap-3" style={{ borderTop: "1px solid rgba(245,241,235,0.12)" }}>
+          <a href="https://provisions.work" className="font-display font-bold uppercase tracking-[0.22em] text-[11px]" style={{ color: "rgba(245,241,235,0.6)" }}>
+            A Provisions joint →
+          </a>
+          <a href="mailto:sam@provisions.work?subject=World%20Cup" className="font-display font-bold uppercase tracking-[0.22em] text-[11px]" style={{ color: "rgba(245,241,235,0.6)" }}>
+            Commission a piece →
+          </a>
+        </div>
       </div>
-    </header>
+    </>
   );
 }
 
@@ -399,7 +507,7 @@ function TeamPicker({ onPick }: { onPick: (t: Team) => void }) {
           </div>
         </div>
         <div className="flex justify-center lg:justify-end">
-          <div className="relative" style={{ transform: "rotate(3deg)" }}>
+          <div className="relative">
             <img
               src={asset("/hero-card.png")}
               alt="Example player card"
@@ -532,7 +640,14 @@ function PhotoStep({
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  // Crop editor state
+  const [srcUrl, setSrcUrl] = useState<string | null>(null);
+  const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
+  const [scale, setScale] = useState(1);
+  const [tx, setTx] = useState(0);
+  const [ty, setTy] = useState(0);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [viewportSize, setViewportSize] = useState(0);
 
   useEffect(() => {
     if (mode !== "camera") return;
@@ -540,7 +655,7 @@ function PhotoStep({
     (async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user", width: { ideal: 1080 }, height: { ideal: 1080 } },
+          video: { facingMode: "user", width: { ideal: 1440 }, height: { ideal: 1440 } },
           audio: false,
         });
         if (cancelled) {
@@ -564,40 +679,175 @@ function PhotoStep({
     };
   }, [mode]);
 
+  // Measure viewport on mount / resize for crop math
+  useEffect(() => {
+    if (!srcUrl) return;
+    const measure = () => setViewportSize(viewportRef.current?.clientWidth ?? 0);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [srcUrl]);
+
+  function loadIntoEditor(dataUrl: string) {
+    const img = new Image();
+    img.onload = () => {
+      setNatural({ w: img.naturalWidth, h: img.naturalHeight });
+      setScale(1);
+      setTx(0);
+      setTy(0);
+      setSrcUrl(dataUrl);
+    };
+    img.src = dataUrl;
+  }
+
   function snap() {
     const v = videoRef.current;
     if (!v) return;
-    const size = Math.min(v.videoWidth, v.videoHeight);
-    const sx = (v.videoWidth - size) / 2;
-    const sy = (v.videoHeight - size) / 2;
     const canvas = document.createElement("canvas");
-    canvas.width = 720;
-    canvas.height = 720;
+    canvas.width = v.videoWidth;
+    canvas.height = v.videoHeight;
     const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(v, sx, sy, size, size, 0, 0, 720, 720);
-    setPreview(canvas.toDataURL("image/jpeg", 0.9));
+    ctx.drawImage(v, 0, 0);
+    loadIntoEditor(canvas.toDataURL("image/jpeg", 0.92));
   }
 
   function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const size = Math.min(img.width, img.height);
-        const sx = (img.width - size) / 2;
-        const sy = (img.height - size) / 2;
-        const canvas = document.createElement("canvas");
-        canvas.width = 720;
-        canvas.height = 720;
-        const ctx = canvas.getContext("2d")!;
-        ctx.drawImage(img, sx, sy, size, size, 0, 0, 720, 720);
-        setPreview(canvas.toDataURL("image/jpeg", 0.9));
-      };
-      img.src = String(reader.result);
-    };
+    reader.onload = () => loadIntoEditor(String(reader.result));
     reader.readAsDataURL(f);
+  }
+
+  // ── Geometry helpers ──
+  // At scale=1, image is rendered "cover": min dimension fills viewport.
+  // coverScale = V / min(Iw, Ih). Rendered size in CSS px at user scale `scale`:
+  //   W = Iw * coverScale * scale,  H = Ih * coverScale * scale.
+  // Pan (tx, ty) shifts the centered image; clamp so it always fills viewport.
+  const coverScale =
+    natural && viewportSize ? viewportSize / Math.min(natural.w, natural.h) : 1;
+  const renderedW = natural ? natural.w * coverScale * scale : 0;
+  const renderedH = natural ? natural.h * coverScale * scale : 0;
+  const maxTx = Math.max(0, (renderedW - viewportSize) / 2);
+  const maxTy = Math.max(0, (renderedH - viewportSize) / 2);
+  const clampedTx = Math.max(-maxTx, Math.min(maxTx, tx));
+  const clampedTy = Math.max(-maxTy, Math.min(maxTy, ty));
+
+  // ── Touch & pointer gestures ──
+  const gesture = useRef<{
+    mode: "none" | "pan" | "pinch";
+    startX: number;
+    startY: number;
+    startTx: number;
+    startTy: number;
+    pinchStartDist: number;
+    pinchStartScale: number;
+  }>({
+    mode: "none",
+    startX: 0,
+    startY: 0,
+    startTx: 0,
+    startTy: 0,
+    pinchStartDist: 0,
+    pinchStartScale: 1,
+  });
+
+  function dist(t1: React.Touch, t2: React.Touch) {
+    const dx = t1.clientX - t2.clientX;
+    const dy = t1.clientY - t2.clientY;
+    return Math.hypot(dx, dy);
+  }
+
+  function onTouchStart(e: React.TouchEvent) {
+    if (e.touches.length === 2) {
+      gesture.current = {
+        mode: "pinch",
+        startX: 0,
+        startY: 0,
+        startTx: clampedTx,
+        startTy: clampedTy,
+        pinchStartDist: dist(e.touches[0], e.touches[1]),
+        pinchStartScale: scale,
+      };
+    } else if (e.touches.length === 1) {
+      gesture.current = {
+        mode: "pan",
+        startX: e.touches[0].clientX,
+        startY: e.touches[0].clientY,
+        startTx: clampedTx,
+        startTy: clampedTy,
+        pinchStartDist: 0,
+        pinchStartScale: scale,
+      };
+    }
+  }
+
+  function onTouchMove(e: React.TouchEvent) {
+    if (gesture.current.mode === "pinch" && e.touches.length === 2) {
+      const d = dist(e.touches[0], e.touches[1]);
+      const ratio = d / gesture.current.pinchStartDist;
+      const next = Math.max(1, Math.min(4, gesture.current.pinchStartScale * ratio));
+      setScale(next);
+      e.preventDefault();
+    } else if (gesture.current.mode === "pan" && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - gesture.current.startX;
+      const dy = e.touches[0].clientY - gesture.current.startY;
+      setTx(gesture.current.startTx + dx);
+      setTy(gesture.current.startTy + dy);
+      e.preventDefault();
+    }
+  }
+
+  function onTouchEnd() {
+    gesture.current.mode = "none";
+  }
+
+  // Desktop drag
+  const dragging = useRef(false);
+  function onPointerDown(e: React.PointerEvent) {
+    if (e.pointerType === "touch") return; // touch handled separately
+    dragging.current = true;
+    gesture.current.startX = e.clientX;
+    gesture.current.startY = e.clientY;
+    gesture.current.startTx = clampedTx;
+    gesture.current.startTy = clampedTy;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  }
+  function onPointerMove(e: React.PointerEvent) {
+    if (!dragging.current || e.pointerType === "touch") return;
+    setTx(gesture.current.startTx + (e.clientX - gesture.current.startX));
+    setTy(gesture.current.startTy + (e.clientY - gesture.current.startY));
+  }
+  function onPointerUp() {
+    dragging.current = false;
+  }
+
+  function onWheel(e: React.WheelEvent) {
+    const delta = -e.deltaY / 500;
+    setScale((s) => Math.max(1, Math.min(4, s + delta)));
+  }
+
+  function bakeCrop() {
+    if (!srcUrl || !natural || !viewportSize) return;
+    const img = new Image();
+    img.onload = () => {
+      // Map viewport (0..V) back to natural image pixels.
+      // Centered image top-left in viewport = (V/2 - W/2 + tx, V/2 - H/2 + ty)
+      // where W = natural.w * coverScale * scale, H = natural.h * coverScale * scale.
+      // Viewport.x=0 maps to natural x = (W/2 - V/2 - tx) / (coverScale * scale)
+      const s = coverScale * scale;
+      const sourceX = natural.w / 2 - (viewportSize / 2 + clampedTx) / s;
+      const sourceY = natural.h / 2 - (viewportSize / 2 + clampedTy) / s;
+      const sourceSize = viewportSize / s;
+      const canvas = document.createElement("canvas");
+      canvas.width = 720;
+      canvas.height = 720;
+      const ctx = canvas.getContext("2d")!;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, sourceX, sourceY, sourceSize, sourceSize, 0, 0, 720, 720);
+      onPhoto(canvas.toDataURL("image/jpeg", 0.92));
+    };
+    img.src = srcUrl;
   }
 
   return (
@@ -607,12 +857,12 @@ function PhotoStep({
         Strike a pose for {team.name}.
       </h1>
       <p className="text-text-soft mb-10 max-w-xl text-lg">
-        Upload a photo or use your camera. We'll square-crop it for you.
+        Upload a photo or use your camera. Drag to position, pinch or use the slider to zoom.
       </p>
 
       <div className="grid md:grid-cols-[1.1fr,1fr] gap-8">
         <div className="bg-parchment-elevated rounded-card border border-border shadow-card p-6">
-          {mode === "choose" && !preview && (
+          {mode === "choose" && !srcUrl && (
             <div className="space-y-3">
               <button onClick={() => fileRef.current?.click()} className="btn-primary w-full">
                 Upload a photo
@@ -623,7 +873,7 @@ function PhotoStep({
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onFile} />
             </div>
           )}
-          {mode === "camera" && !preview && (
+          {mode === "camera" && !srcUrl && (
             <div className="space-y-3">
               <div className="aspect-square rounded-nested overflow-hidden bg-leather">
                 <video ref={videoRef} className="w-full h-full object-cover" playsInline muted />
@@ -636,19 +886,61 @@ function PhotoStep({
               </button>
             </div>
           )}
-          {preview && (
-            <div className="space-y-3">
-              <div className="relative aspect-square rounded-nested overflow-hidden border border-border">
-                <img src={preview} alt="preview" className="w-full h-full object-cover" />
-              </div>
-              <button
-                onClick={() => preview && onPhoto(preview)}
-                className="btn-primary w-full"
+          {srcUrl && natural && (
+            <div className="space-y-4">
+              <div
+                ref={viewportRef}
+                className="relative aspect-square rounded-nested overflow-hidden border border-border bg-leather select-none touch-none"
+                style={{ cursor: "grab" }}
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+                onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={onPointerUp}
+                onPointerCancel={onPointerUp}
+                onWheel={onWheel}
               >
+                {viewportSize > 0 && (
+                  <img
+                    src={srcUrl}
+                    alt="crop preview"
+                    draggable={false}
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      top: "50%",
+                      width: renderedW,
+                      height: renderedH,
+                      transform: `translate(calc(-50% + ${clampedTx}px), calc(-50% + ${clampedTy}px))`,
+                      maxWidth: "none",
+                      pointerEvents: "none",
+                    }}
+                  />
+                )}
+                {/* Center guide */}
+                <div className="absolute inset-0 pointer-events-none ring-1 ring-white/10" />
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-text-soft text-xs uppercase tracking-label">Zoom</span>
+                <input
+                  type="range"
+                  min={1}
+                  max={4}
+                  step={0.01}
+                  value={scale}
+                  onChange={(e) => setScale(parseFloat(e.target.value))}
+                  className="flex-1 accent-terracotta"
+                />
+              </div>
+              <button onClick={bakeCrop} className="btn-primary w-full">
                 Use this photo
               </button>
               <button
-                onClick={() => setPreview(null)}
+                onClick={() => {
+                  setSrcUrl(null);
+                  setNatural(null);
+                }}
                 className="text-text-soft hover:text-leather w-full text-sm py-2"
               >
                 Retake
@@ -660,7 +952,7 @@ function PhotoStep({
         <aside className="hidden md:block">
           <div className="label mb-4">Notes</div>
           <ul className="space-y-3 text-leather">
-            <Tip>Center your face. Square crop.</Tip>
+            <Tip>Drag to position. Pinch or use the slider to zoom.</Tip>
             <Tip>Even, natural light reads best.</Tip>
             <Tip>Plain backgrounds keep the focus on you.</Tip>
           </ul>
@@ -703,16 +995,16 @@ function DetailsStep(props: {
   const { team, photo, name, setName, position, setPosition, number, setNumber, rating, setRating, generating, onBack, onGenerate } = props;
   return (
     <div>
-      <div className="label mb-4">Step Three · Stats</div>
-      <h1 className="font-display font-bold text-leather text-[clamp(2.2rem,5.5vw,3.8rem)] leading-[1.05] tracking-[-0.02em] mb-3">
+      <div className="label mb-2">Step Three · Stats</div>
+      <h1 className="font-display font-bold text-leather text-[clamp(1.8rem,4vw,2.4rem)] leading-[1.05] tracking-[-0.02em] mb-1">
         Fill in your kit.
       </h1>
-      <p className="text-text-soft mb-10 max-w-xl text-lg">
+      <p className="text-text-soft mb-5 max-w-xl text-sm">
         Name, position, number, rating. Live preview on the right.
       </p>
-      <div className="grid md:grid-cols-[1fr,1.1fr] gap-10">
+      <div className="grid md:grid-cols-[1fr,auto] gap-8 md:gap-10 items-center">
         <div>
-          <div className="space-y-5">
+          <div className="space-y-3">
             <Field label="Name">
               <input
                 value={name}
@@ -778,7 +1070,7 @@ function DetailsStep(props: {
               </Field>
             </div>
           </div>
-          <div className="mt-8 flex items-center gap-3">
+          <div className="mt-5 flex items-center gap-3">
             <button onClick={onBack} className="btn-ghost">Back</button>
             <button onClick={onGenerate} disabled={generating} className="btn-primary">
               {generating ? "Pressing your card…" : "Make my card"}
@@ -786,7 +1078,9 @@ function DetailsStep(props: {
           </div>
         </div>
 
-        <ArchPreview team={team} photo={photo} name={name || "Your Name"} position={position} number={number} rating={rating} />
+        <div className="w-[240px] md:w-[260px] justify-self-center">
+          <ArchPreview team={team} photo={photo} name={name || "Your Name"} position={position} number={number} rating={rating} />
+        </div>
       </div>
     </div>
   );
@@ -840,7 +1134,7 @@ function ArchPreview({
   const full = team.name.toUpperCase();
   return (
     <div className="flex items-start justify-center">
-      <div className="relative w-[340px] aspect-[5/7]" style={{ boxShadow: "0 18px 40px -18px rgba(0,0,0,0.3)" }}>
+      <div className="relative w-full max-w-[260px] aspect-[5/7]" style={{ boxShadow: "0 18px 40px -18px rgba(0,0,0,0.3)" }}>
         <div className="absolute inset-0 rounded-md" style={{ background: "#F5EFE0", padding: 8 }}>
           <div className="absolute inset-1.5 rounded-sm" style={{ background: accent }} />
           <div className="absolute inset-2.5 rounded-sm" style={{ background: "#F5EFE0" }} />
@@ -898,25 +1192,42 @@ function ResultStep({
   cardUrl,
   name,
   team,
+  rarity,
   onRestart,
 }: {
   cardUrl: string;
   name: string;
   team: Team;
+  rarity: Rarity;
   onRestart: () => void;
 }) {
   const [storyBusy, setStoryBusy] = useState(false);
+  const rarityMeta = RARITY_META[rarity];
+  const isRare = rarity !== "standard";
+  const headlineMap: Record<Rarity, string> = {
+    standard: "On the team sheet.",
+    silver:   "Man of the Match.",
+    gold:     "Golden Boot.",
+    platinum: "Player of the Tournament.",
+    holo:     "1 of 1.",
+  };
+  const subMap: Record<Rarity, string> = {
+    standard: "You made the eleven. Pack-fresh.",
+    silver:   "Solid shift. Roughly 1 in 8 rips.",
+    gold:     "Top scorer pull. ~1 in 17 packs.",
+    platinum: "Golden Ball. ~1 in 33 packs.",
+    holo:     "Legend pull. 1 in 100 ever lands here.",
+  };
 
   async function save() {
-    const filename = `${name.replace(/\s+/g, "-")}-${team.code}.png`;
+    const filename = `${name.replace(/\s+/g, "-")}-${team.code}-story.png`;
     const isTouch = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
     try {
-      const res = await fetch(cardUrl);
-      const blob = await res.blob();
+      const blob = await buildStoryBlob();
       const file = new File([blob], filename, { type: "image/png" });
       // Mobile: native share sheet → user picks "Save Image" → goes to Photos
       if (isTouch && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-        await navigator.share({ files: [file], title: `${name} · ${team.name}`, text: `My World Cup '26 card` });
+        await navigator.share({ files: [file], title: `${name} · ${team.name}`, text: `My Summer '26 card` });
         return;
       }
       // Desktop: download to Downloads folder
@@ -940,87 +1251,82 @@ function ResultStep({
     return 0.299 * r + 0.587 * g + 0.114 * b;
   }
 
+  async function buildStoryBlob(): Promise<Blob> {
+    // Make sure the typeface is loaded so canvas text renders correctly
+    try { await (document as Document & { fonts?: FontFaceSet }).fonts?.load("700 24px Syne"); } catch {}
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = reject;
+      i.crossOrigin = "anonymous";
+      i.src = cardUrl;
+    });
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 1080;
+    canvas.height = 1920;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("No 2D context");
+
+    const primary = team.primary;
+    const textColor = _lum(primary) > 0.55 ? "#1A1A1A" : "#F0E9DC";
+    const ruleColor = _lum(primary) > 0.55 ? "rgba(26,33,24,0.35)" : "rgba(240,233,220,0.45)";
+
+    ctx.fillStyle = primary;
+    ctx.fillRect(0, 0, 1080, 1920);
+
+    const grad = ctx.createRadialGradient(540, 960, 200, 540, 960, 1000);
+    grad.addColorStop(0, "rgba(0,0,0,0)");
+    grad.addColorStop(1, "rgba(0,0,0,0.22)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 1080, 1920);
+
+    ctx.fillStyle = textColor;
+    ctx.font = "700 26px Syne, sans-serif";
+    try { (ctx as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = "6px"; } catch {}
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(team.name.toUpperCase(), 540, 300);
+
+    ctx.strokeStyle = ruleColor;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(56, 340); ctx.lineTo(1024, 340); ctx.stroke();
+
+    const cardW = 820;
+    const cardH = 1148;
+    ctx.save();
+    ctx.translate(540, 960);
+    ctx.shadowColor = "rgba(0,0,0,0.35)";
+    ctx.shadowBlur = 60;
+    ctx.shadowOffsetY = 30;
+    ctx.drawImage(img, -cardW / 2, -cardH / 2, cardW, cardH);
+    ctx.restore();
+    ctx.shadowColor = "transparent";
+
+    ctx.strokeStyle = ruleColor;
+    ctx.beginPath(); ctx.moveTo(56, 1580); ctx.lineTo(1024, 1580); ctx.stroke();
+
+    ctx.fillStyle = textColor;
+    ctx.font = "700 24px Syne, sans-serif";
+    ctx.fillText("PROVISIONS.SOCCER", 540, 1620);
+
+    return await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png");
+    });
+  }
+
   async function shareStory() {
     if (storyBusy) return;
     setStoryBusy(true);
     try {
-      // Make sure the typeface is loaded so canvas text renders correctly
-      try { await (document as Document & { fonts?: FontFaceSet }).fonts?.load("700 24px Syne"); } catch {}
-      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-        const i = new Image();
-        i.onload = () => resolve(i);
-        i.onerror = reject;
-        i.crossOrigin = "anonymous";
-        i.src = cardUrl;
-      });
-
-      const canvas = document.createElement("canvas");
-      canvas.width = 1080;
-      canvas.height = 1920;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("No 2D context");
-
-      const primary = team.primary;
-      const textColor = _lum(primary) > 0.55 ? "#1A1A1A" : "#F0E9DC";
-      const ruleColor = _lum(primary) > 0.55 ? "rgba(26,33,24,0.35)" : "rgba(240,233,220,0.45)";
-
-      // Background
-      ctx.fillStyle = primary;
-      ctx.fillRect(0, 0, 1080, 1920);
-
-      // Subtle vignette
-      const grad = ctx.createRadialGradient(540, 960, 200, 540, 960, 1000);
-      grad.addColorStop(0, "rgba(0,0,0,0)");
-      grad.addColorStop(1, "rgba(0,0,0,0.22)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 1080, 1920);
-
-      // Top hairline
-      ctx.strokeStyle = ruleColor;
-      ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(56, 100); ctx.lineTo(1024, 100); ctx.stroke();
-
-      // Top text — just the team name, centered
-      ctx.fillStyle = textColor;
-      ctx.font = "700 26px Syne, sans-serif";
-      try { (ctx as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = "6px"; } catch {}
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(team.name.toUpperCase(), 540, 50);
-
-      // Card: flat, shadowed, centered
-      const cardW = 820;
-      const cardH = 1148;
-      ctx.save();
-      ctx.translate(540, 960);
-      ctx.shadowColor = "rgba(0,0,0,0.35)";
-      ctx.shadowBlur = 60;
-      ctx.shadowOffsetY = 30;
-      ctx.drawImage(img, -cardW / 2, -cardH / 2, cardW, cardH);
-      ctx.restore();
-      ctx.shadowColor = "transparent";
-
-      // Bottom hairline
-      ctx.strokeStyle = ruleColor;
-      ctx.beginPath(); ctx.moveTo(56, 1820); ctx.lineTo(1024, 1820); ctx.stroke();
-
-      // Bottom text — single centered line
-      ctx.fillStyle = textColor;
-      ctx.font = "700 24px Syne, sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("PROVISIONS.SOCCER", 540, 1870);
-
-      // Export
-      const blob: Blob = await new Promise((resolve, reject) => {
-        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png");
-      });
+      const blob = await buildStoryBlob();
       const file = new File([blob], `${name.replace(/\s+/g, "-")}-${team.code}-story.png`, { type: "image/png" });
       const isTouch = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
       if (isTouch && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
         await navigator.share({
           files: [file],
           title: `${name} · ${team.name}`,
-          text: `My World Cup '26 card`,
+          text: `My Summer '26 card`,
         });
       } else {
         // Desktop: download
@@ -1041,27 +1347,29 @@ function ResultStep({
   }
 
   return (
-    <div className="grid md:grid-cols-[1fr,1fr] gap-8 md:gap-12 items-center">
-      <div className="order-2 md:order-1">
-        <div className="label mb-4 hidden md:block">Your Card</div>
-        <h1 className="font-display font-bold text-leather text-[clamp(2.2rem,5.5vw,3.8rem)] leading-[1.05] tracking-[-0.02em] mb-3">
-          You made the squad.
-        </h1>
-        <p className="text-text-soft mb-8 text-lg max-w-md">
-          Save it, post it, dare a friend to make theirs.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
-            {storyBusy ? "Pressing…" : "Share to Story"}
-          </button>
-          <button onClick={save} className="btn-ghost">Save</button>
-          <button onClick={onRestart} className="text-text-soft hover:text-leather px-2 py-3">
-            Make another
-          </button>
-        </div>
+    <div className="flex flex-col items-center text-center gap-4 pt-4 md:pt-2">
+      <div className="relative">
+        <img
+          src={cardUrl}
+          alt="Your card"
+          className="w-auto max-w-[240px] sm:max-w-[280px] max-h-[58vh] rounded-card shadow-card border border-border"
+        />
       </div>
-      <div className="order-1 md:order-2 flex justify-center">
-        <img src={cardUrl} alt="Your card" className="w-full max-w-sm rounded-card shadow-card border border-border" />
+      <div className="flex flex-wrap justify-center gap-3">
+        <button onClick={shareStory} disabled={storyBusy} className="btn-primary">
+          {storyBusy ? "Pressing…" : "Share to Story"}
+        </button>
+        <button onClick={save} className="btn-ghost">Save</button>
+        <button onClick={onRestart} className="btn-ghost">Make another</button>
+      </div>
+      <div className="max-w-md">
+        <h1
+          className="font-display font-bold text-[clamp(1.6rem,3.5vw,2.2rem)] leading-[1.05] tracking-[-0.02em] mb-1"
+          style={{ color: isRare ? rarityMeta.tint : "#2C2118" }}
+        >
+          {headlineMap[rarity]}
+        </h1>
+        <p className="text-text-soft text-sm">{subMap[rarity]}</p>
       </div>
     </div>
   );
@@ -1071,7 +1379,7 @@ function Footer() {
   return (
     <footer className="relative bg-leather-mid text-white mt-24">
       <div className="max-w-[1280px] mx-auto px-8 sm:px-16 py-5 flex items-center justify-between gap-4 flex-wrap font-display font-semibold uppercase tracking-label text-[10px] opacity-75">
-        <span>Provisions · World Cup ’26</span>
+        <span>Provisions · Summer ’26</span>
         <span>Set in Syne + Inter</span>
         <a
           href="https://provisions.work"

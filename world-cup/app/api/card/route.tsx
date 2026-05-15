@@ -187,6 +187,59 @@ type BrandOverlay = {
 } | null;
 
 // --- Arch (B) ---
+type Rarity = "standard" | "silver" | "gold" | "platinum" | "holo";
+
+// ── Foil backgrounds: each is a stack of (top→bottom):
+//   1) bright specular highlight (upper-left)
+//   2) softer secondary highlight (lower-right)
+//   3) brushed-metal striations (subtle diagonal pearl streaks)
+//   4) base metallic gradient (palette oscillates for polished-metal look)
+const GOLD_BG =
+  // White-hot specular highlight (upper left, intense)
+  "radial-gradient(circle at 18% 12%, rgba(255,255,255,0.95) 0%, rgba(255,250,210,0.45) 10%, rgba(255,255,255,0) 32%)," +
+  // Secondary specular (upper right)
+  "radial-gradient(circle at 78% 22%, rgba(255,245,200,0.6) 0%, rgba(255,255,255,0) 22%)," +
+  // Warm copper glow (lower middle)
+  "radial-gradient(ellipse at 50% 82%, rgba(255,205,110,0.5) 0%, rgba(255,205,110,0) 50%)," +
+  // Edge darkening (vignette) — makes highlights pop harder
+  "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.28) 100%)," +
+  // Crosshatch pearl streaks — primary diagonal
+  "repeating-linear-gradient(112deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0) 7px, rgba(255,255,255,0.22) 9px, rgba(255,255,255,0) 12px)," +
+  // Crosshatch pearl streaks — perpendicular (creates faceted shimmer)
+  "repeating-linear-gradient(22deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0) 16px, rgba(255,255,255,0.1) 17px, rgba(255,255,255,0) 20px)," +
+  // Rose-gold warm tint band (adds color variation across the metal)
+  "linear-gradient(160deg, rgba(255,170,120,0) 0%, rgba(255,170,120,0.28) 50%, rgba(255,170,120,0) 100%)," +
+  // Base metallic — full dynamic range, deep mahogany shadows to white-hot peak
+  "linear-gradient(135deg, #2E1A05 0%, #6B3F0A 8%, #9F6B14 16%, #D49733 26%, #F0C04A 36%, #FFE49A 44%, #FFFAE0 50%, #FFE49A 56%, #F0C04A 64%, #D49733 74%, #9F6B14 84%, #6B3F0A 92%, #2E1A05 100%)";
+
+const SILVER_BG =
+  "radial-gradient(ellipse at 22% 14%, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0) 45%)," +
+  "radial-gradient(ellipse at 82% 88%, rgba(210,225,240,0.45) 0%, rgba(210,225,240,0) 45%)," +
+  "repeating-linear-gradient(112deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0) 10px, rgba(255,255,255,0.18) 12px, rgba(255,255,255,0) 16px)," +
+  "linear-gradient(135deg, #3E4751 0%, #79858F 10%, #B5BEC7 22%, #E2E7EC 34%, #FAFBFC 44%, #E2E7EC 54%, #B5BEC7 66%, #79858F 78%, #3E4751 100%)";
+
+const PLATINUM_BG =
+  "radial-gradient(ellipse at 22% 14%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 48%)," +
+  "radial-gradient(ellipse at 82% 88%, rgba(225,235,250,0.4) 0%, rgba(225,235,250,0) 45%)," +
+  "repeating-linear-gradient(112deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0) 12px, rgba(255,255,255,0.2) 14px, rgba(255,255,255,0) 18px)," +
+  "linear-gradient(135deg, #6E7884 0%, #9BA4AE 10%, #C9D0D7 22%, #E8ECF1 32%, #F6F8FA 42%, #FFFFFF 50%, #F6F8FA 58%, #E8ECF1 68%, #C9D0D7 78%, #9BA4AE 88%, #6E7884 100%)";
+
+const HOLO_BG =
+  "radial-gradient(ellipse at 22% 16%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 50%)," +
+  "radial-gradient(ellipse at 80% 88%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0) 45%)," +
+  "repeating-linear-gradient(112deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0) 14px, rgba(255,255,255,0.16) 16px, rgba(255,255,255,0) 20px)," +
+  "linear-gradient(135deg, #FF5FA3 0%, #FFB061 12%, #FFE56D 24%, #8AF2A1 38%, #5FD2FF 52%, #B58AFF 66%, #FF6BD2 80%, #FFB061 100%)";
+
+function paperBg(rarity: Rarity): string {
+  switch (rarity) {
+    case "gold": return GOLD_BG;
+    case "silver": return SILVER_BG;
+    case "platinum": return PLATINUM_BG;
+    case "holo": return HOLO_BG;
+    default: return PAPER;
+  }
+}
+
 function ArchCard({
   team,
   photo,
@@ -197,6 +250,8 @@ function ArchCard({
   signature,
   markUrl,
   brand,
+  rarity = "standard",
+  holoSerial,
 }: {
   team: Team;
   photo: string;
@@ -207,6 +262,8 @@ function ArchCard({
   signature: string;
   markUrl: string;
   brand?: BrandOverlay;
+  rarity?: Rarity;
+  holoSerial?: string;
 }) {
   const accentColor = contrastColor(team);
   const teamColor = displayPrimary(team);
@@ -219,7 +276,7 @@ function ArchCard({
       style={{
         width: px(500),
         height: px(700),
-        background: PAPER,
+        background: paperBg(rarity),
         position: "relative",
         padding: px(18),
         display: "flex",
@@ -245,7 +302,7 @@ function ArchCard({
           left: px(22),
           right: px(22),
           bottom: px(22),
-          background: PAPER,
+          background: paperBg(rarity),
           borderRadius: px(2),
           display: "flex",
         }}
@@ -687,7 +744,7 @@ function ArchCard({
               display: "flex",
             }}
           >
-            WORLD CUP '26
+            SUMMER '26
           </div>
         </div>
       ) : (
@@ -707,9 +764,10 @@ function ArchCard({
           }}
         >
           <span>SERIES ONE · {todayStamp()}</span>
-          <span>WORLD CUP '26</span>
+          <span>SUMMER '26</span>
         </div>
       )}
+
     </div>
   );
 }
@@ -799,6 +857,9 @@ export async function GET(req: Request) {
   ]);
   const markUrl = isLight(PAPER) ? markDark : markLight;
 
+  const rarity = (url.searchParams.get("rarity") || "standard").toLowerCase() as Rarity;
+  const holoSerial = url.searchParams.get("serial") || undefined;
+
   const props = {
     team,
     photo: photoData,
@@ -809,6 +870,8 @@ export async function GET(req: Request) {
     signature: "Sam Rahim",
     markUrl,
     brand: brandOverlay,
+    rarity,
+    holoSerial,
   };
 
   return new ImageResponse(<ArchCard {...props} />, {
@@ -822,13 +885,14 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
   if (!body) return new Response("Bad JSON", { status: 400 });
-  const { teamCode, photo, name, position, number, rating } = body as {
+  const { teamCode, photo, name, position, number, rating, rarity: rarityIn } = body as {
     teamCode: string;
     photo: string;
     name: string;
     position: string;
     number: string;
     rating: string;
+    rarity?: string;
   };
 
   const team = teamByCode(teamCode);
@@ -845,8 +909,9 @@ export async function POST(req: Request) {
     loadImageDataUrl(req, "/world-cup/card-generator/provisions-mark-white.png"),
   ]);
 
-  // Pick mark color based on PAPER luminance — light paper → dark mark, dark paper → light mark
   const markUrl = isLight(PAPER) ? markDark : markLight;
+  const validRarities: Rarity[] = ["standard", "silver", "gold", "platinum", "holo"];
+  const rarity: Rarity = (validRarities.includes(rarityIn as Rarity) ? rarityIn : "standard") as Rarity;
 
   const props = {
     team,
@@ -857,6 +922,7 @@ export async function POST(req: Request) {
     rating,
     signature: name || "Your Name",
     markUrl,
+    rarity,
   };
 
   const W = px(500);

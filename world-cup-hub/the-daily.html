@@ -3,22 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Daily — Provisions Series, Summer '26</title>
+  <title>The Daily · Provisions Series, Summer '26</title>
   <meta name="description" content="Every match of the World Cup, day by day. Kickoff times, venues, kit colors, countdowns. Reference plate, free for fans.">
   <link rel="canonical" href="https://provisions.soccer/daily">
 
-  <meta property="og:title" content="The Daily — Provisions Series">
+  <meta property="og:title" content="The Daily · Provisions Series">
   <meta property="og:description" content="Every match of the World Cup, day by day.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://provisions.soccer/daily">
-  <meta property="og:image" content="https://provisions.soccer/images/og-image.png">
+  <meta property="og:image" content="https://provisions.soccer/images/og-daily.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Daily · Every match of the World Cup, day by day">
   <meta property="og:site_name" content="Provisions">
+  <meta property="og:locale" content="en_US">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@samdape">
-  <meta name="twitter:title" content="The Daily — Provisions Series">
+  <meta name="twitter:creator" content="@samdape">
+  <meta name="twitter:title" content="The Daily · Provisions Series">
   <meta name="twitter:description" content="Every match of the World Cup, day by day.">
-  <meta name="twitter:image" content="https://provisions.soccer/images/og-image.png">
+  <meta name="twitter:image" content="https://provisions.soccer/images/og-daily.png">
+  <meta name="twitter:image:alt" content="The Daily · Every match of the World Cup, day by day">
 
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -27,6 +33,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="./repaint.js" defer></script>
 
   <style>
     :root {
@@ -177,6 +184,12 @@
       padding: 0 64px; min-height: 72px;
       display: flex; align-items: center; justify-content: space-between;
       gap: 18px;
+    }
+    .nav-mark { display: flex; align-items: center; gap: 12px; }
+    .nav-mark strong {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--leather-mid, #4A3D32);
     }
     .nav-mark img { width: 26px; height: 26px; object-fit: contain; }
     .nav-back {
@@ -732,7 +745,8 @@
       min-height: 0;
       max-width: 360px;
     }
-    .share-preview img {
+    .share-preview img,
+    .share-preview video {
       max-width: 100%;
       max-height: calc(100vh - 240px);
       width: auto;
@@ -740,6 +754,7 @@
       object-fit: contain;
       display: block;
     }
+    .share-modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .share-preview .skeleton {
       width: 320px;
       height: 569px;
@@ -814,7 +829,9 @@
       .share-modal { padding: 16px; }
       .share-modal-body { flex-direction: column; padding: 16px; gap: 16px; }
       .share-preview { max-width: 100%; }
-      .share-preview img { max-height: 50vh; }
+      .share-preview img,
+      .share-preview video { max-height: 42vh; }
+      .share-actions { align-self: stretch; min-width: 0; }
     }
     @media (max-width: 900px) {
       .team-filter-inner { grid-template-columns: 1fr; gap: 12px; }
@@ -868,20 +885,105 @@
       letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--text-soft);
     }
+  
+    /* ── Hamburger menu (universal nav) ── */
+    .wc-burger {
+      appearance: none; border: none; cursor: pointer;
+      background: transparent;
+      padding: 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #4A3D32;
+      transition: color 0.15s ease;
+    }
+    .wc-burger:hover { color: #A0422A; }
+    .wc-burger svg { width: 24px; height: 24px; display: block; }
+    .wc-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #2C2118;
+      color: #F5F1EB;
+      display: none;
+      flex-direction: column;
+      padding: 28px 32px 40px;
+      overflow-y: auto;
+    }
+    .wc-overlay[data-open="true"] { display: flex; animation: wcFadeIn 0.18s ease; }
+    @keyframes wcFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .wc-overlay-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 48px;
+    }
+    .wc-overlay-mark {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: inherit;
+    }
+    .wc-overlay-mark img { width: 22px; height: 22px; object-fit: contain; }
+    .wc-overlay-mark strong {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .wc-overlay-close {
+      appearance: none; border: none; cursor: pointer;
+      background: transparent; color: inherit;
+      padding: 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .wc-overlay-close svg { width: 22px; height: 22px; display: block; }
+    .wc-overlay-menu {
+      display: flex; flex-direction: column;
+      max-width: 720px; width: 100%;
+      margin: 0 auto;
+      background: transparent;
+      position: static;
+      border: none;
+    }
+    .wc-overlay-menu a {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(245,241,235,0.12);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 5.5vw, 44px); line-height: 1;
+      letter-spacing: -0.02em;
+      color: #F5F1EB;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .wc-overlay-menu a:hover { color: #E58769; }
+    .wc-overlay-menu a.is-active { color: #E58769; }
+    .wc-overlay-menu a .num {
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+      font-size: 12px; letter-spacing: 0.18em;
+      color: rgba(245,241,235,0.42);
+    }
+    .wc-overlay-foot {
+      max-width: 720px; width: 100%; margin: 36px auto 0;
+      padding-top: 22px;
+      border-top: 1px solid rgba(245,241,235,0.12);
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .wc-overlay-foot a {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(245,241,235,0.6); text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .wc-overlay-foot a:hover { color: #E58769; }
+    body.wc-locked { overflow: hidden; }
+
   </style>
 </head>
-<body>
+<body data-route="daily">
   <div class="grid-bg"></div>
   <div class="grain"></div>
 
-  <div class="day-strip" id="dayStrip">Day — of the wait</div>
 
   <nav>
     <div class="nav-inner">
       <a href="https://provisions.soccer" class="nav-mark" aria-label="Provisions">
-        <img src="./images/provisions-mark.png" alt="Provisions" width="26" height="26">
+        <img src="./images/provisions-mark.png" alt="Provisions" width="22" height="22">
+        <strong>Provisions</strong>
       </a>
-      <a href="https://provisions.soccer" class="nav-back">← Back to the team sheet</a>
+      <button class="wc-burger" aria-label="Open menu" onclick="wcOpenMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="13" x2="20" y2="13"/><line x1="4" y1="19" x2="20" y2="19"/></svg></button>
     </div>
   </nav>
 
@@ -892,21 +994,6 @@
       <p class="lede">Every match of the World Cup, day by day. Kickoff times, venues, kit colors, and a countdown to the next whistle. Free to use, free to share.</p>
     </div>
   </header>
-
-  <section class="nextup">
-    <div class="nextup-card" id="nextupCard">
-      <div class="nextup-lhs">
-        <span class="nextup-tag">First Whistle</span>
-        <span class="nextup-meta" id="nextupMatch">MEX vs RSA · Estadio Banorte</span>
-      </div>
-      <div class="nextup-count" id="nextupCount">
-        <span class="unit">Kicks off in</span>
-        <span id="kuDays">––</span><span class="unit" style="margin: 0 4px;">d</span>
-        <span id="kuHrs">––</span><span class="unit" style="margin: 0 4px;">h</span>
-        <span id="kuMin">––</span><span class="unit" style="margin: 0 4px;">m</span>
-      </div>
-    </div>
-  </section>
 
   <div class="team-filter">
     <div class="team-filter-inner">
@@ -976,8 +1063,16 @@
 
   <footer>
     <div class="footer-inner">
-      <span>Provisions · Summer '26 · UTC-5 to UTC-7</span>
-      <span><a href="https://provisions.work">provisions.work</a></span>
+      <a href="https://provisions.work" style="display:flex;align-items:center;gap:10px;color:var(--on-leather);text-decoration:none;letter-spacing:0.16em;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="6" r="2"/>
+          <path d="M9 8 v3 l-3 4 v6 M9 11 l3 4 v6 M5 14 h8 M11 13 l-2 -3"/>
+        </svg>
+        <strong style="font-weight:700;">Provisions</strong>
+        <span style="opacity:0.5;">·</span>
+        <span>World Cup '26</span>
+      </a>
+      <span>© 2026 · A <a href="https://provisions.work">Provisions</a> joint, made by <a href="https://samrahim.com">Sam Rahim</a></span>
     </div>
     <div class="attribution">
       Kickoff times are scheduled in local stadium time. Times and venues are based on the December 2025 final draw and may shift. For official broadcast schedules, check your federation or local rights-holder.
@@ -1388,8 +1483,8 @@
       const group = btn.getAttribute("data-group") || "";
       const round = btn.getAttribute("data-round") || "";
       const params = new URLSearchParams({ h: home, a: away, iso, venue, city, group, round });
-      const url = `https://provisions.soccer/card/api/story?${params.toString()}`;
-      const filename = `${home}-vs-${away}-world-cup-26.png`;
+      const pngUrl = `https://provisions.soccer/card/api/story?${params.toString()}`;
+      const mp4Url = `/share/${home.toLowerCase()}-${away.toLowerCase()}.mp4`;
       const originalLabel = btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg> Pressing…`;
@@ -1398,19 +1493,28 @@
       openShareModal(home, away);
 
       try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Render failed");
+        // Try MP4 first; fall back to PNG if not pre-rendered for this fixture
+        let res = await fetch(mp4Url);
+        let isVideo = res.ok;
+        if (!isVideo) {
+          res = await fetch(pngUrl);
+          if (!res.ok) throw new Error("Render failed");
+        }
         const blob = await res.blob();
+        const filename = isVideo
+          ? `${home}-vs-${away}-world-cup-26.mp4`
+          : `${home}-vs-${away}-world-cup-26.png`;
+        const mime = isVideo ? "video/mp4" : "image/png";
         _currentShareBlob = blob;
         _currentShareFilename = filename;
-        // For Web Share — pre-build the File and stash with the blob
-        _currentShareFile = new File([blob], filename, { type: "image/png" });
+        _currentShareFile = new File([blob], filename, { type: mime });
         _currentShareLabel = `${home} vs ${away}`;
-        // Render the preview into the modal
         const blobUrl = URL.createObjectURL(blob);
         const preview = document.getElementById("sharePreview");
         if (preview) {
-          preview.innerHTML = `<img src="${blobUrl}" alt="${home} vs ${away} story card">`;
+          preview.innerHTML = isVideo
+            ? `<video src="${blobUrl}" autoplay muted loop playsinline style="width:100%;display:block;border-radius:inherit"></video>`
+            : `<img src="${blobUrl}" alt="${home} vs ${away} story card">`;
         }
         // Show the right action set: on touch devices, the "Share to Story" button is primary
         const shareBtn = document.getElementById("shareNative");
@@ -1962,6 +2066,54 @@
     setInterval(updateAllCountdowns, 60 * 1000);
     // Re-paint day strip every 5 min so it ticks over midnight properly
     setInterval(paintDayStrip, 5 * 60 * 1000);
+  </script>
+
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+
+  <div class="wc-overlay" id="wcOverlay" data-open="false">
+    <div class="wc-overlay-head">
+      <a href="https://provisions.soccer" class="wc-overlay-mark">
+        <img src="/favicon-192x192.png" alt="">
+        <strong>Provisions</strong>
+      </a>
+      <button class="wc-overlay-close" aria-label="Close menu" onclick="wcCloseMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="wc-overlay-menu">
+      <a href="https://provisions.soccer" data-route="home"><span>Home</span><span class="num">01</span></a>
+      <a href="https://provisions.soccer/daily" data-route="daily"><span>The Daily</span><span class="num">02</span></a>
+      <a href="https://provisions.soccer/you-know-ball" data-route="quiz"><span>You Know Ball</span><span class="num">03</span></a>
+      <a href="https://provisions.soccer/kits" data-route="kits"><span>The Kit Index</span><span class="num">04</span></a>
+      <a href="https://provisions.soccer/card" data-route="card"><span>The Player Card</span><span class="num">05</span></a>
+    </nav>
+    <div class="wc-overlay-foot">
+      <a href="https://provisions.work">A Provisions joint →</a>
+      <a href="mailto:sam@provisions.work?subject=World%20Cup">Commission a piece →</a>
+    </div>
+  </div>
+
+
+  <script>
+    (function () {
+      var route = document.body.dataset.route || "";
+      document.querySelectorAll('.wc-overlay-menu a').forEach(function (a) {
+        if (a.dataset.route === route) a.classList.add('is-active');
+      });
+    })();
+    function wcOpenMenu() {
+      document.getElementById('wcOverlay').dataset.open = 'true';
+      document.body.classList.add('wc-locked');
+    }
+    function wcCloseMenu() {
+      document.getElementById('wcOverlay').dataset.open = 'false';
+      document.body.classList.remove('wc-locked');
+    }
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') wcCloseMenu();
+    });
   </script>
 
 </body>
