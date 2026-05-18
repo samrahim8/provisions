@@ -2323,35 +2323,47 @@
         .al-item button {
           width: 100%;
           display: grid;
-          grid-template-columns: 76px 1fr auto;
-          gap: 16px; align-items: center;
-          padding: 14px 20px;
+          grid-template-columns: 92px 1fr auto;
+          gap: 22px; align-items: center;
+          padding: 18px 22px;
           background: transparent; border: none; cursor: pointer;
-          text-align: left; transition: background 150ms;
+          text-align: left;
+          transition: background 180ms ease;
           font-family: 'Inter', sans-serif;
           color: var(--leather);
         }
-        .al-item button:hover { background: rgba(160,66,42,0.07); }
-        .al-item.is-active button { background: rgba(160,66,42,0.12); }
+        .al-item button:hover { background: rgba(160,66,42,0.06); }
+        .al-item.is-active button { background: rgba(160,66,42,0.10); }
+        .al-item.is-active .al-title { color: var(--terracotta); }
         .al-year {
           font-family: 'Syne', sans-serif; font-weight: 800;
-          font-size: 19px; color: var(--terracotta); letter-spacing: 0.02em;
+          font-size: 22px; color: var(--terracotta); letter-spacing: 0.01em;
+          line-height: 1; font-variant-numeric: tabular-nums;
         }
-        .al-stack { min-width: 0; }
+        .al-stack {
+          display: flex; flex-direction: column; gap: 4px;
+          min-width: 0;
+        }
         .al-title {
+          display: block;
           font-family: 'Syne', sans-serif; font-weight: 700;
-          font-size: 15px; color: var(--leather);
+          font-size: 16px; line-height: 1.25; color: var(--leather);
+          letter-spacing: -0.005em;
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+          transition: color 180ms ease;
         }
         .al-artist {
-          font-family: 'Inter', sans-serif; font-size: 12px;
-          color: var(--text-soft); margin-top: 2px;
+          display: block;
+          font-family: 'Inter', sans-serif; font-weight: 400;
+          font-size: 12.5px; line-height: 1.2;
+          color: var(--text-soft);
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .al-host {
           font-family: 'Syne', sans-serif; font-weight: 600;
-          font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+          font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
           color: var(--text-soft);
+          white-space: nowrap;
         }
 
         .anthems-yt-mount {
@@ -2366,7 +2378,9 @@
           .ap-play { width: 56px; height: 56px; }
           .ap-icon { width: 22px; height: 22px; }
           .ap-toggle { grid-column: 1 / -1; justify-content: center; margin-top: 6px; }
-          .al-item button { grid-template-columns: 60px 1fr; padding: 12px 16px; gap: 12px; }
+          .al-item button { grid-template-columns: 64px 1fr; padding: 14px 16px; gap: 16px; }
+          .al-year { font-size: 18px; }
+          .al-title { font-size: 15px; }
           .al-host { display: none; }
         }
       </style>
