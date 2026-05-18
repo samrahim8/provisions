@@ -2195,6 +2195,143 @@
         </h2>
       </section>
 
+      <!-- THE ROLL OF CHAMPIONS -->
+      <section class="roll" id="roll" aria-labelledby="rollH">
+        <header class="roll-head">
+          <span class="roll-eyebrow">The Roll</span>
+          <h2 id="rollH">Eight nations. Twenty-two crowns.</h2>
+          <p class="roll-sub">Every champion since 1930.</p>
+        </header>
+        <div class="roll-card">
+          <ol class="roll-list" id="rollList"></ol>
+        </div>
+      </section>
+
+      <style>
+        .roll { max-width: 980px; margin: 96px auto 56px; padding: 0 24px; }
+        .roll-head { text-align: center; margin-bottom: 28px; }
+        .roll-eyebrow {
+          display: inline-block;
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+          color: var(--terracotta);
+        }
+        .roll-head h2 {
+          font-family: 'Syne', sans-serif; font-weight: 800;
+          font-size: clamp(28px, 5vw, 48px); line-height: 1.05;
+          color: var(--leather); margin: 10px 0 10px;
+          letter-spacing: -0.025em;
+        }
+        .roll-sub {
+          font-family: 'Inter', sans-serif; font-size: 15px;
+          color: var(--text-soft); margin: 0;
+        }
+        .roll-card {
+          background: var(--parchment-el);
+          border: 2px solid var(--leather);
+          border-radius: 14px;
+          box-shadow: 0 6px 0 var(--leather);
+          overflow: hidden;
+        }
+        .roll-list {
+          list-style: none; padding: 0; margin: 0;
+          font-variant-numeric: tabular-nums;
+        }
+        .roll-row {
+          display: grid;
+          grid-template-columns: 80px 32px 1fr auto auto;
+          gap: 18px; align-items: center;
+          padding: 14px 22px;
+          border-top: 1px solid rgba(44,33,24,0.08);
+          font-family: 'Inter', sans-serif;
+        }
+        .roll-row:first-child { border-top: none; }
+        .roll-row:hover { background: rgba(160,66,42,0.05); }
+        .roll-year {
+          font-family: 'Syne', sans-serif; font-weight: 800;
+          font-size: 22px; line-height: 1;
+          color: var(--terracotta); letter-spacing: 0.01em;
+        }
+        .roll-flag {
+          width: 32px; height: 22px; object-fit: cover;
+          border-radius: 2px;
+          box-shadow: 0 0 0 1px rgba(44,33,24,0.18);
+          background: #d9d3c8;
+        }
+        .roll-stack { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+        .roll-champ {
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 17px; line-height: 1.2; color: var(--leather);
+          letter-spacing: -0.005em;
+        }
+        .roll-runner {
+          font-family: 'Inter', sans-serif; font-size: 12.5px;
+          color: var(--text-soft); line-height: 1.2;
+        }
+        .roll-score {
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 16px; color: var(--leather);
+          letter-spacing: 0.02em; white-space: nowrap;
+        }
+        .roll-host {
+          font-family: 'Syne', sans-serif; font-weight: 600;
+          font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+          color: var(--text-soft);
+          min-width: 140px; text-align: right; white-space: nowrap;
+        }
+        @media (max-width: 720px) {
+          .roll-row { grid-template-columns: 62px 28px 1fr auto; gap: 12px; padding: 12px 16px; }
+          .roll-flag { width: 28px; height: 20px; }
+          .roll-year { font-size: 18px; }
+          .roll-champ { font-size: 15px; }
+          .roll-host { display: none; }
+        }
+      </style>
+
+      <script>
+        (function(){
+          const WINNERS = [
+            { year: 1930, champ: 'Uruguay',      iso: 'uy',     score: '4–2',          runner: 'Argentina',     host: 'Uruguay' },
+            { year: 1934, champ: 'Italy',        iso: 'it',     score: '2–1',          runner: 'Czechoslovakia',host: 'Italy' },
+            { year: 1938, champ: 'Italy',        iso: 'it',     score: '4–2',          runner: 'Hungary',       host: 'France' },
+            { year: 1950, champ: 'Uruguay',      iso: 'uy',     score: '2–1',          runner: 'Brazil',        host: 'Brazil' },
+            { year: 1954, champ: 'West Germany', iso: 'de',     score: '3–2',          runner: 'Hungary',       host: 'Switzerland' },
+            { year: 1958, champ: 'Brazil',       iso: 'br',     score: '5–2',          runner: 'Sweden',        host: 'Sweden' },
+            { year: 1962, champ: 'Brazil',       iso: 'br',     score: '3–1',          runner: 'Czechoslovakia',host: 'Chile' },
+            { year: 1966, champ: 'England',      iso: 'gb-eng', score: '4–2 (a.e.t.)', runner: 'West Germany',  host: 'England' },
+            { year: 1970, champ: 'Brazil',       iso: 'br',     score: '4–1',          runner: 'Italy',         host: 'Mexico' },
+            { year: 1974, champ: 'West Germany', iso: 'de',     score: '2–1',          runner: 'Netherlands',   host: 'West Germany' },
+            { year: 1978, champ: 'Argentina',    iso: 'ar',     score: '3–1 (a.e.t.)', runner: 'Netherlands',   host: 'Argentina' },
+            { year: 1982, champ: 'Italy',        iso: 'it',     score: '3–1',          runner: 'West Germany',  host: 'Spain' },
+            { year: 1986, champ: 'Argentina',    iso: 'ar',     score: '3–2',          runner: 'West Germany',  host: 'Mexico' },
+            { year: 1990, champ: 'West Germany', iso: 'de',     score: '1–0',          runner: 'Argentina',     host: 'Italy' },
+            { year: 1994, champ: 'Brazil',       iso: 'br',     score: '0–0 (3–2 p)',  runner: 'Italy',         host: 'United States' },
+            { year: 1998, champ: 'France',       iso: 'fr',     score: '3–0',          runner: 'Brazil',        host: 'France' },
+            { year: 2002, champ: 'Brazil',       iso: 'br',     score: '2–0',          runner: 'Germany',       host: 'Korea / Japan' },
+            { year: 2006, champ: 'Italy',        iso: 'it',     score: '1–1 (5–3 p)',  runner: 'France',        host: 'Germany' },
+            { year: 2010, champ: 'Spain',        iso: 'es',     score: '1–0 (a.e.t.)', runner: 'Netherlands',   host: 'South Africa' },
+            { year: 2014, champ: 'Germany',      iso: 'de',     score: '1–0 (a.e.t.)', runner: 'Argentina',     host: 'Brazil' },
+            { year: 2018, champ: 'France',       iso: 'fr',     score: '4–2',          runner: 'Croatia',       host: 'Russia' },
+            { year: 2022, champ: 'Argentina',    iso: 'ar',     score: '3–3 (4–2 p)',  runner: 'France',        host: 'Qatar' }
+          ];
+          const root = document.getElementById('rollList');
+          WINNERS.forEach(w => {
+            const li = document.createElement('li');
+            li.className = 'roll-row';
+            li.innerHTML =
+              '<span class="roll-year">' + w.year + '</span>' +
+              '<img class="roll-flag" src="https://flagcdn.com/w40/' + w.iso + '.png" alt="" loading="lazy">' +
+              '<span class="roll-stack">' +
+                '<span class="roll-champ">' + w.champ + '</span>' +
+                '<span class="roll-runner">def. ' + w.runner + '</span>' +
+              '</span>' +
+              '<span class="roll-score">' + w.score + '</span>' +
+              '<span class="roll-host">' + w.host + '</span>';
+            root.appendChild(li);
+          });
+        })();
+      </script>
+
       <!-- THE SONGBOOK -->
       <section class="anthems" id="anthems" aria-labelledby="anthemsH">
         <header class="anthems-head">
