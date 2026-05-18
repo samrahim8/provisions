@@ -2203,11 +2203,19 @@
           <p class="anthems-sub">From Italia '90 to Qatar '22. Pick a year, hit play.</p>
         </header>
         <div class="anthems-player">
-          <button class="ap-play" id="apPlay" type="button" aria-label="Play">
-            <svg class="ap-icon ap-icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-            <svg class="ap-icon ap-icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-            <svg class="ap-icon ap-icon-loading" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="40 60" stroke-linecap="round"/></svg>
-          </button>
+          <div class="ap-controls">
+            <button class="ap-step" id="apPrev" type="button" aria-label="Previous track">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM20 5L9 12l11 7z"/></svg>
+            </button>
+            <button class="ap-play" id="apPlay" type="button" aria-label="Play">
+              <svg class="ap-icon ap-icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="ap-icon ap-icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+              <svg class="ap-icon ap-icon-loading" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="40 60" stroke-linecap="round"/></svg>
+            </button>
+            <button class="ap-step" id="apNext" type="button" aria-label="Next track">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg>
+            </button>
+          </div>
           <div class="ap-track">
             <div class="ap-meta-row">
               <span class="ap-year" id="apYear">1990</span>
@@ -2253,11 +2261,26 @@
           border-radius: 14px;
           padding: 20px 22px;
           display: grid;
-          grid-template-columns: 68px 1fr auto;
-          gap: 20px;
+          grid-template-columns: auto 1fr auto;
+          gap: 22px;
           align-items: center;
           box-shadow: 0 6px 0 var(--leather);
         }
+        .ap-controls {
+          display: inline-flex; align-items: center; gap: 10px;
+        }
+        .ap-step {
+          width: 38px; height: 38px; border-radius: 50%;
+          background: transparent;
+          border: 1.5px solid rgba(44,33,24,0.25);
+          color: var(--leather);
+          display: inline-flex; align-items: center; justify-content: center;
+          cursor: pointer; padding: 0;
+          transition: background 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms ease;
+        }
+        .ap-step:hover { background: var(--leather); border-color: var(--leather); color: var(--on-leather); transform: translateY(-1px); }
+        .ap-step:active { transform: translateY(0); }
+        .ap-step svg { width: 16px; height: 16px; fill: currentColor; }
         .ap-play {
           width: 68px; height: 68px; border-radius: 50%;
           background: var(--terracotta); border: none;
@@ -2374,9 +2397,12 @@
 
         @media (max-width: 640px) {
           .anthems { margin: 64px auto 40px; }
-          .anthems-player { grid-template-columns: 56px 1fr; padding: 16px; gap: 14px; }
+          .anthems-player { grid-template-columns: auto 1fr; padding: 16px; gap: 14px; }
+          .ap-controls { gap: 8px; }
           .ap-play { width: 56px; height: 56px; }
           .ap-icon { width: 22px; height: 22px; }
+          .ap-step { width: 34px; height: 34px; }
+          .ap-step svg { width: 14px; height: 14px; }
           .ap-toggle { grid-column: 1 / -1; justify-content: center; margin-top: 6px; }
           .al-item button { grid-template-columns: 64px 1fr; padding: 14px 16px; gap: 16px; }
           .al-year { font-size: 18px; }
@@ -2490,6 +2516,14 @@
             player.loadVideoById(TRACKS[currentIdx].yt);
           }
           $play.addEventListener('click', togglePlay);
+
+          function step(delta){
+            currentIdx = (currentIdx + delta + TRACKS.length) % TRACKS.length;
+            renderTrack();
+            loadAndPlay();
+          }
+          document.getElementById('apPrev').addEventListener('click', () => step(-1));
+          document.getElementById('apNext').addEventListener('click', () => step(1));
 
           // Load YouTube IFrame API
           window.onYouTubeIframeAPIReady = function(){
