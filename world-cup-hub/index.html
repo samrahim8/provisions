@@ -2195,6 +2195,332 @@
         </h2>
       </section>
 
+      <!-- THE SONGBOOK -->
+      <section class="anthems" id="anthems" aria-labelledby="anthemsH">
+        <header class="anthems-head">
+          <span class="anthems-eyebrow">The Songbook</span>
+          <h2 id="anthemsH">Every anthem. One press.</h2>
+          <p class="anthems-sub">From Italia '90 to Qatar '22. Pick a year, hit play.</p>
+        </header>
+        <div class="anthems-player">
+          <button class="ap-play" id="apPlay" type="button" aria-label="Play">
+            <svg class="ap-icon ap-icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="ap-icon ap-icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+            <svg class="ap-icon ap-icon-loading" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="40 60" stroke-linecap="round"/></svg>
+          </button>
+          <div class="ap-track">
+            <div class="ap-meta-row">
+              <span class="ap-year" id="apYear">1990</span>
+              <span class="ap-host" id="apHost">Italy</span>
+            </div>
+            <div class="ap-title" id="apTitle">Un'estate italiana</div>
+            <div class="ap-artist" id="apArtist">Bennato & Nannini</div>
+            <div class="ap-progress" id="apProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="ap-progress-fill" id="apFill"></div>
+            </div>
+          </div>
+          <button class="ap-toggle" id="apToggle" type="button" aria-expanded="false" aria-controls="anthemsList">
+            <span class="ap-toggle-label">Tracklist</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z"/></svg>
+          </button>
+        </div>
+        <ul class="anthems-list" id="anthemsList" hidden></ul>
+        <div class="anthems-yt-mount" aria-hidden="true"><div id="ytMount"></div></div>
+      </section>
+
+      <style>
+        .anthems { max-width: 980px; margin: 96px auto 56px; padding: 0 24px; }
+        .anthems-head { text-align: center; margin-bottom: 28px; }
+        .anthems-eyebrow {
+          display: inline-block;
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+          color: var(--terracotta);
+        }
+        .anthems-head h2 {
+          font-family: 'Syne', sans-serif; font-weight: 800;
+          font-size: clamp(28px, 5vw, 48px); line-height: 1.05;
+          color: var(--leather); margin: 10px 0 10px;
+          letter-spacing: -0.025em;
+        }
+        .anthems-sub {
+          font-family: 'Inter', sans-serif; font-size: 15px;
+          color: var(--text-soft); margin: 0;
+        }
+        .anthems-player {
+          background: var(--parchment-el);
+          border: 2px solid var(--leather);
+          border-radius: 14px;
+          padding: 20px 22px;
+          display: grid;
+          grid-template-columns: 68px 1fr auto;
+          gap: 20px;
+          align-items: center;
+          box-shadow: 0 6px 0 var(--leather);
+        }
+        .ap-play {
+          width: 68px; height: 68px; border-radius: 50%;
+          background: var(--terracotta); border: none;
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; color: #fff; padding: 0;
+          transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+          box-shadow: 0 3px 0 rgba(44,33,24,0.4);
+          position: relative;
+        }
+        .ap-play:hover { background: var(--terracotta-light); transform: translateY(-1px); box-shadow: 0 4px 0 rgba(44,33,24,0.4); }
+        .ap-play:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(44,33,24,0.4); }
+        .ap-icon { width: 28px; height: 28px; fill: currentColor; display: none; }
+        .ap-play[data-state="paused"] .ap-icon-play { display: block; }
+        .ap-play[data-state="playing"] .ap-icon-pause { display: block; }
+        .ap-play[data-state="loading"] .ap-icon-loading { display: block; animation: apSpin 900ms linear infinite; }
+        @keyframes apSpin { to { transform: rotate(360deg); } }
+        .ap-track { min-width: 0; }
+        .ap-meta-row { display: flex; align-items: center; gap: 10px; }
+        .ap-year {
+          font-family: 'Syne', sans-serif; font-weight: 800;
+          font-size: 12px; letter-spacing: 0.26em; color: var(--terracotta);
+        }
+        .ap-host {
+          font-family: 'Inter', sans-serif; font-size: 12px;
+          color: var(--text-soft); letter-spacing: 0.04em;
+        }
+        .ap-title {
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 19px; line-height: 1.2; color: var(--leather);
+          margin: 4px 0 2px;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .ap-artist {
+          font-family: 'Inter', sans-serif; font-size: 13px;
+          color: var(--text-soft); margin-bottom: 10px;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .ap-progress { height: 4px; background: rgba(44,33,24,0.12); border-radius: 2px; overflow: hidden; }
+        .ap-progress-fill { height: 100%; width: 0%; background: var(--terracotta); transition: width 200ms linear; }
+        .ap-toggle {
+          display: inline-flex; align-items: center; gap: 8px;
+          background: transparent; color: var(--leather);
+          border: 1.5px solid var(--leather);
+          padding: 10px 14px; border-radius: 6px; cursor: pointer;
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+          transition: background 150ms, color 150ms;
+        }
+        .ap-toggle:hover { background: var(--leather); color: var(--on-leather); }
+        .ap-toggle svg { width: 14px; height: 14px; fill: currentColor; transition: transform 200ms ease; }
+        .ap-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+        .anthems-list {
+          list-style: none; padding: 0; margin: 14px 0 0;
+          background: var(--parchment-el);
+          border: 2px solid var(--leather);
+          border-radius: 14px;
+          overflow: hidden;
+          box-shadow: 0 6px 0 var(--leather);
+        }
+        .al-item { border-bottom: 1px solid rgba(44,33,24,0.10); }
+        .al-item:last-child { border-bottom: none; }
+        .al-item button {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 76px 1fr auto;
+          gap: 16px; align-items: center;
+          padding: 14px 20px;
+          background: transparent; border: none; cursor: pointer;
+          text-align: left; transition: background 150ms;
+          font-family: 'Inter', sans-serif;
+          color: var(--leather);
+        }
+        .al-item button:hover { background: rgba(160,66,42,0.07); }
+        .al-item.is-active button { background: rgba(160,66,42,0.12); }
+        .al-year {
+          font-family: 'Syne', sans-serif; font-weight: 800;
+          font-size: 19px; color: var(--terracotta); letter-spacing: 0.02em;
+        }
+        .al-stack { min-width: 0; }
+        .al-title {
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 15px; color: var(--leather);
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .al-artist {
+          font-family: 'Inter', sans-serif; font-size: 12px;
+          color: var(--text-soft); margin-top: 2px;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .al-host {
+          font-family: 'Syne', sans-serif; font-weight: 600;
+          font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+          color: var(--text-soft);
+        }
+
+        .anthems-yt-mount {
+          position: fixed; right: 0; bottom: 0;
+          width: 1px; height: 1px; overflow: hidden;
+          opacity: 0.01; pointer-events: none; z-index: -1;
+        }
+
+        @media (max-width: 640px) {
+          .anthems { margin: 64px auto 40px; }
+          .anthems-player { grid-template-columns: 56px 1fr; padding: 16px; gap: 14px; }
+          .ap-play { width: 56px; height: 56px; }
+          .ap-icon { width: 22px; height: 22px; }
+          .ap-toggle { grid-column: 1 / -1; justify-content: center; margin-top: 6px; }
+          .al-item button { grid-template-columns: 60px 1fr; padding: 12px 16px; gap: 12px; }
+          .al-host { display: none; }
+        }
+      </style>
+
+      <script>
+        (function(){
+          const TRACKS = [
+            { year: 1990, host: "Italy",         title: "Un'estate italiana",                artist: "Bennato & Nannini",                  yt: "SrfFZYjXtN0" },
+            { year: 1998, host: "France",        title: "The Cup of Life",                   artist: "Ricky Martin",                       yt: "dZDj2CnG5dE" },
+            { year: 2002, host: "Korea / Japan", title: "Boom",                              artist: "Anastacia",                          yt: "G3qkyftTagk" },
+            { year: 2006, host: "Germany",       title: "The Time of Our Lives",             artist: "Il Divo & Toni Braxton",             yt: "4aOxDHqWyK0" },
+            { year: 2010, host: "South Africa",  title: "Waka Waka (This Time for Africa)",  artist: "Shakira",                            yt: "pRpeEdMmmQ0" },
+            { year: 2014, host: "Brazil",        title: "We Are One (Ole Ola)",              artist: "Pitbull, J.Lo, Claudia Leitte",      yt: "TGtWWb9emYI" },
+            { year: 2018, host: "Russia",        title: "Live It Up",                        artist: "Nicky Jam, Will Smith, Era Istrefi", yt: "0qgrxAPYW78" },
+            { year: 2022, host: "Qatar",         title: "Hayya Hayya (Better Together)",     artist: "Cardona, Davido, Aisha",             yt: "vyDjFVZgJoo" }
+          ];
+
+          let player = null;
+          let currentIdx = 0;
+          let isPlaying = false;
+          let isLoading = false;
+          let progressTimer = null;
+          let pendingPlay = false;
+
+          const $play   = document.getElementById('apPlay');
+          const $year   = document.getElementById('apYear');
+          const $host   = document.getElementById('apHost');
+          const $title  = document.getElementById('apTitle');
+          const $artist = document.getElementById('apArtist');
+          const $fill   = document.getElementById('apFill');
+          const $prog   = document.getElementById('apProgress');
+          const $toggle = document.getElementById('apToggle');
+          const $list   = document.getElementById('anthemsList');
+
+          function setState(s){
+            $play.setAttribute('data-state', s);
+            $play.setAttribute('aria-label', s === 'playing' ? 'Pause' : 'Play');
+          }
+          setState('paused');
+
+          function renderTrack(){
+            const t = TRACKS[currentIdx];
+            $year.textContent = t.year;
+            $host.textContent = t.host;
+            $title.textContent = t.title;
+            $artist.textContent = t.artist;
+            $fill.style.width = '0%';
+            $prog.setAttribute('aria-valuenow', '0');
+            document.querySelectorAll('.al-item').forEach((el, i) => {
+              el.classList.toggle('is-active', i === currentIdx);
+            });
+          }
+
+          function buildList(){
+            TRACKS.forEach((t, i) => {
+              const li = document.createElement('li');
+              li.className = 'al-item' + (i === currentIdx ? ' is-active' : '');
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.innerHTML =
+                '<span class="al-year">' + t.year + '</span>' +
+                '<span class="al-stack"><span class="al-title">' + t.title + '</span><span class="al-artist">' + t.artist + '</span></span>' +
+                '<span class="al-host">' + t.host + '</span>';
+              btn.addEventListener('click', () => {
+                if (i === currentIdx) {
+                  togglePlay();
+                } else {
+                  currentIdx = i;
+                  renderTrack();
+                  loadAndPlay();
+                }
+                closeList();
+              });
+              li.appendChild(btn);
+              $list.appendChild(li);
+            });
+          }
+
+          function openList(){ $list.hidden = false; $toggle.setAttribute('aria-expanded','true'); }
+          function closeList(){ $list.hidden = true;  $toggle.setAttribute('aria-expanded','false'); }
+          $toggle.addEventListener('click', () => $list.hidden ? openList() : closeList());
+
+          function startProgress(){
+            stopProgress();
+            progressTimer = setInterval(() => {
+              if (!player || !player.getDuration) return;
+              const d = player.getDuration();
+              const c = player.getCurrentTime();
+              if (d > 0) {
+                const pct = Math.min(100, (c / d) * 100);
+                $fill.style.width = pct + '%';
+                $prog.setAttribute('aria-valuenow', String(Math.round(pct)));
+              }
+            }, 250);
+          }
+          function stopProgress(){ if (progressTimer) { clearInterval(progressTimer); progressTimer = null; } }
+
+          function togglePlay(){
+            if (!player) { pendingPlay = true; return; }
+            if (isPlaying) player.pauseVideo();
+            else player.playVideo();
+          }
+          function loadAndPlay(){
+            if (!player) { pendingPlay = true; return; }
+            isLoading = true; setState('loading');
+            player.loadVideoById(TRACKS[currentIdx].yt);
+          }
+          $play.addEventListener('click', togglePlay);
+
+          // Load YouTube IFrame API
+          window.onYouTubeIframeAPIReady = function(){
+            player = new YT.Player('ytMount', {
+              height: '1', width: '1',
+              videoId: TRACKS[currentIdx].yt,
+              playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1, fs: 0, iv_load_policy: 3 },
+              events: {
+                onReady: () => {
+                  if (pendingPlay) { pendingPlay = false; player.playVideo(); }
+                },
+                onStateChange: (e) => {
+                  const S = YT.PlayerState;
+                  if (e.data === S.PLAYING) {
+                    isPlaying = true; isLoading = false; setState('playing'); startProgress();
+                  } else if (e.data === S.PAUSED) {
+                    isPlaying = false; setState('paused'); stopProgress();
+                  } else if (e.data === S.ENDED) {
+                    isPlaying = false; setState('paused'); stopProgress();
+                    // auto-advance
+                    currentIdx = (currentIdx + 1) % TRACKS.length;
+                    renderTrack();
+                    loadAndPlay();
+                  } else if (e.data === S.BUFFERING) {
+                    if (!isPlaying) setState('loading');
+                  } else if (e.data === S.CUED) {
+                    isLoading = false; setState(isPlaying ? 'playing' : 'paused');
+                  }
+                },
+                onError: () => { isLoading = false; setState('paused'); }
+              }
+            });
+          };
+
+          buildList();
+          renderTrack();
+
+          if (!document.querySelector('script[data-yt-iframe-api]')) {
+            const tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            tag.setAttribute('data-yt-iframe-api', '1');
+            document.head.appendChild(tag);
+          }
+        })();
+      </script>
+
       <!-- THE LINEUP -->
       <section class="lineup" id="contents">
         <header class="lineup-head">
