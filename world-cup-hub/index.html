@@ -2570,6 +2570,161 @@
         })();
       </script>
 
+      <!-- THE DRAW -->
+      <section class="draw" id="draw" aria-labelledby="drawH">
+        <header class="draw-head">
+          <span class="draw-eyebrow">The Draw</span>
+          <h2 id="drawH">48 teams. 12 groups.</h2>
+          <p class="draw-sub">Finalized 5 December 2025. Kicks off 11 June.</p>
+        </header>
+        <div class="draw-grid" id="drawGrid"></div>
+      </section>
+
+      <style>
+        .draw { max-width: 1180px; margin: 96px auto 56px; padding: 0 24px; }
+        .draw-head { text-align: center; margin-bottom: 36px; }
+        .draw-eyebrow {
+          display: inline-block;
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+          color: var(--terracotta);
+        }
+        .draw-head h2 {
+          font-family: 'Syne', sans-serif; font-weight: 800;
+          font-size: clamp(28px, 5vw, 48px); line-height: 1.05;
+          color: var(--leather); margin: 10px 0 10px;
+          letter-spacing: -0.025em;
+        }
+        .draw-sub {
+          font-family: 'Inter', sans-serif; font-size: 15px;
+          color: var(--text-soft); margin: 0;
+        }
+        .draw-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+        }
+        @media (max-width: 980px) { .draw-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .draw-grid { grid-template-columns: 1fr; } }
+        .dg-card {
+          background: var(--parchment-el);
+          border: 2px solid var(--leather);
+          border-radius: 12px;
+          padding: 18px 18px 14px;
+          box-shadow: 0 5px 0 var(--leather);
+          display: flex; flex-direction: column;
+        }
+        .dg-head {
+          display: flex; align-items: baseline; justify-content: space-between;
+          padding-bottom: 12px; margin-bottom: 10px;
+          border-bottom: 1.5px solid rgba(44,33,24,0.14);
+        }
+        .dg-letter {
+          font-family: 'Syne', sans-serif; font-weight: 800;
+          font-size: 30px; line-height: 1; color: var(--terracotta);
+          letter-spacing: -0.01em;
+        }
+        .dg-label {
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+          color: var(--text-soft);
+        }
+        .dg-team {
+          display: grid;
+          grid-template-columns: 28px 1fr auto;
+          gap: 12px; align-items: center;
+          padding: 8px 2px;
+          font-family: 'Inter', sans-serif;
+        }
+        .dg-team + .dg-team { border-top: 1px solid rgba(44,33,24,0.06); }
+        .dg-flag {
+          width: 28px; height: 20px; object-fit: cover;
+          border-radius: 2px;
+          box-shadow: 0 0 0 1px rgba(44,33,24,0.15);
+          background: #d9d3c8;
+        }
+        .dg-name {
+          font-family: 'Syne', sans-serif; font-weight: 600;
+          font-size: 14px; color: var(--leather);
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .dg-code {
+          font-family: 'Syne', sans-serif; font-weight: 700;
+          font-size: 11px; letter-spacing: 0.16em;
+          color: var(--text-soft);
+        }
+      </style>
+
+      <script>
+        (function(){
+          // Derive groups from M1 fixture pairs (each row shares a group letter).
+          // M1 is defined later in this file via an IIFE; rebuild source list inline
+          // so this section is self-contained and doesn't depend on script order.
+          const PAIRS = [
+            ['MEX','RSA','A'],['KOR','CZE','A'],
+            ['CAN','BIH','B'],['QAT','SUI','B'],
+            ['BRA','MAR','C'],['HAI','SCO','C'],
+            ['USA','PAR','D'],['AUS','TUR','D'],
+            ['GER','CUW','E'],['CIV','ECU','E'],
+            ['NED','JPN','F'],['SWE','TUN','F'],
+            ['BEL','EGY','G'],['IRN','NZL','G'],
+            ['ESP','CPV','H'],['KSA','URU','H'],
+            ['FRA','SEN','I'],['IRQ','NOR','I'],
+            ['ARG','ALG','J'],['AUT','JOR','J'],
+            ['POR','COD','K'],['UZB','COL','K'],
+            ['ENG','CRO','L'],['GHA','PAN','L']
+          ];
+          const ISO = {
+            MEX:'mx', RSA:'za', KOR:'kr', CZE:'cz', CAN:'ca', BIH:'ba', QAT:'qa', SUI:'ch',
+            USA:'us', PAR:'py', AUS:'au', TUR:'tr', BRA:'br', MAR:'ma', HAI:'ht', SCO:'gb-sct',
+            GER:'de', CUW:'cw', CIV:'ci', ECU:'ec', NED:'nl', JPN:'jp', SWE:'se', TUN:'tn',
+            BEL:'be', EGY:'eg', IRN:'ir', NZL:'nz', ESP:'es', CPV:'cv', KSA:'sa', URU:'uy',
+            FRA:'fr', SEN:'sn', IRQ:'iq', NOR:'no', ARG:'ar', ALG:'dz', AUT:'at', JOR:'jo',
+            POR:'pt', COD:'cd', UZB:'uz', COL:'co', ENG:'gb-eng', CRO:'hr', GHA:'gh', PAN:'pa'
+          };
+          const NAME = {
+            MEX:'Mexico', RSA:'South Africa', KOR:'Korea Republic', CZE:'Czech Republic',
+            CAN:'Canada', BIH:'Bosnia & Herz.', QAT:'Qatar', SUI:'Switzerland',
+            BRA:'Brazil', MAR:'Morocco', HAI:'Haiti', SCO:'Scotland',
+            USA:'United States', PAR:'Paraguay', AUS:'Australia', TUR:'Türkiye',
+            GER:'Germany', CUW:'Curaçao', CIV:'Côte d’Ivoire', ECU:'Ecuador',
+            NED:'Netherlands', JPN:'Japan', SWE:'Sweden', TUN:'Tunisia',
+            BEL:'Belgium', EGY:'Egypt', IRN:'Iran', NZL:'New Zealand',
+            ESP:'Spain', CPV:'Cape Verde', KSA:'Saudi Arabia', URU:'Uruguay',
+            FRA:'France', SEN:'Senegal', IRQ:'Iraq', NOR:'Norway',
+            ARG:'Argentina', ALG:'Algeria', AUT:'Austria', JOR:'Jordan',
+            POR:'Portugal', COD:'DR Congo', UZB:'Uzbekistan', COL:'Colombia',
+            ENG:'England', CRO:'Croatia', GHA:'Ghana', PAN:'Panama'
+          };
+          const groups = {};
+          PAIRS.forEach(([a,b,g]) => {
+            (groups[g] = groups[g] || new Set()).add(a);
+            groups[g].add(b);
+          });
+          const letters = Object.keys(groups).sort();
+          const root = document.getElementById('drawGrid');
+          letters.forEach(L => {
+            const teams = Array.from(groups[L]);
+            const card = document.createElement('div');
+            card.className = 'dg-card';
+            const rows = teams.map(code => {
+              const iso = ISO[code] || '';
+              const name = NAME[code] || code;
+              const flag = iso
+                ? '<img class="dg-flag" src="https://flagcdn.com/w40/' + iso + '.png" alt="" loading="lazy">'
+                : '<span class="dg-flag" aria-hidden="true"></span>';
+              return '<div class="dg-team">' + flag +
+                     '<span class="dg-name">' + name + '</span>' +
+                     '<span class="dg-code">' + code + '</span></div>';
+            }).join('');
+            card.innerHTML =
+              '<div class="dg-head"><span class="dg-letter">' + L + '</span><span class="dg-label">Group ' + L + '</span></div>' +
+              rows;
+            root.appendChild(card);
+          });
+        })();
+      </script>
+
       <!-- THE LINEUP -->
       <section class="lineup" id="contents">
         <header class="lineup-head">
