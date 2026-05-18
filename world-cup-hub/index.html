@@ -2195,6 +2195,57 @@
         </h2>
       </section>
 
+      <!-- THE LINEUP -->
+      <section class="lineup" id="contents">
+        <header class="lineup-head">
+          <div>
+            <h2>The team sheet.</h2>
+            <p class="lineup-sub">Free for fans.</p>
+          </div>
+        </header>
+
+        <!-- STARTER -->
+        <a href="https://provisions.soccer/card" class="featured" style="text-decoration:none;color:inherit;">
+          <div class="featured-content">
+            <div class="featured-meta-row">
+              <span class="kit-no">No. 01</span>
+              <span class="status-pill status-starter">Starter</span>
+            </div>
+            <h3 class="featured-h3">The Player Card<br>Generator.</h3>
+            <p class="featured-body">The call-up the national team never sent. Pick a country, drop your kit, snap a card. Group chat ready in under a minute.</p>
+            <div class="featured-stats">
+              <div class="featured-stat"><div class="num">48</div><div class="lbl">Squads</div></div>
+              <div class="featured-stat"><div class="num">60</div><div class="lbl">Sec. to make</div></div>
+              <div class="featured-stat"><div class="num">0</div><div class="lbl">Sec. to share</div></div>
+            </div>
+          </div>
+          <div class="featured-image-frame" id="featuredCardFrame">
+            <img id="featuredCardImg" src="https://provisions.soccer/card/api/card?team=USA&v=5" alt="Player card example">
+            <div class="press-overlay" id="pressOverlay" role="status" aria-live="polite" aria-hidden="true">
+              <div class="press-card" id="pressCard">
+                <div class="press-card-inner">
+                  <div class="press-tape"></div>
+                  <div class="press-photo"><div class="press-photo-shimmer"></div></div>
+                  <div class="press-name"></div>
+                  <div class="press-stats"><div></div><div></div><div></div></div>
+                </div>
+                <div class="press-bar" aria-hidden="true"></div>
+              </div>
+              <div class="press-text">
+                <h3 class="press-headline">Pressing your card.</h3>
+                <p class="press-stage" id="pressStage">Loading the press…</p>
+              </div>
+              <div class="press-progress"><div class="press-progress-bar"></div></div>
+            </div>
+          </div>
+          <div class="featured-cta-row">
+            <span class="btn-dark">Open the generator →</span>
+          </div>
+        </a>
+
+        <!-- BENCH -->
+        <div class="ledger" id="ledger"></div>
+      </section>
       <!-- THE ROLL OF CHAMPIONS -->
       <section class="roll" id="roll" aria-labelledby="rollH">
         <header class="roll-head">
@@ -2862,57 +2913,6 @@
         })();
       </script>
 
-      <!-- THE LINEUP -->
-      <section class="lineup" id="contents">
-        <header class="lineup-head">
-          <div>
-            <h2>The team sheet.</h2>
-            <p class="lineup-sub">Free for fans.</p>
-          </div>
-        </header>
-
-        <!-- STARTER -->
-        <a href="https://provisions.soccer/card" class="featured" style="text-decoration:none;color:inherit;">
-          <div class="featured-content">
-            <div class="featured-meta-row">
-              <span class="kit-no">No. 01</span>
-              <span class="status-pill status-starter">Starter</span>
-            </div>
-            <h3 class="featured-h3">The Player Card<br>Generator.</h3>
-            <p class="featured-body">The call-up the national team never sent. Pick a country, drop your kit, snap a card. Group chat ready in under a minute.</p>
-            <div class="featured-stats">
-              <div class="featured-stat"><div class="num">48</div><div class="lbl">Squads</div></div>
-              <div class="featured-stat"><div class="num">60</div><div class="lbl">Sec. to make</div></div>
-              <div class="featured-stat"><div class="num">0</div><div class="lbl">Sec. to share</div></div>
-            </div>
-          </div>
-          <div class="featured-image-frame" id="featuredCardFrame">
-            <img id="featuredCardImg" src="https://provisions.soccer/card/api/card?team=USA&v=5" alt="Player card example">
-            <div class="press-overlay" id="pressOverlay" role="status" aria-live="polite" aria-hidden="true">
-              <div class="press-card" id="pressCard">
-                <div class="press-card-inner">
-                  <div class="press-tape"></div>
-                  <div class="press-photo"><div class="press-photo-shimmer"></div></div>
-                  <div class="press-name"></div>
-                  <div class="press-stats"><div></div><div></div><div></div></div>
-                </div>
-                <div class="press-bar" aria-hidden="true"></div>
-              </div>
-              <div class="press-text">
-                <h3 class="press-headline">Pressing your card.</h3>
-                <p class="press-stage" id="pressStage">Loading the press…</p>
-              </div>
-              <div class="press-progress"><div class="press-progress-bar"></div></div>
-            </div>
-          </div>
-          <div class="featured-cta-row">
-            <span class="btn-dark">Open the generator →</span>
-          </div>
-        </a>
-
-        <!-- BENCH -->
-        <div class="ledger" id="ledger"></div>
-      </section>
       <!-- COMMISSION + KICKOFF -->
       <section class="colophon">
         <div class="colophon-grid">
