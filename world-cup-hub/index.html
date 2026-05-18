@@ -2086,12 +2086,30 @@
       transition: color 0.15s ease;
     }
     .wc-overlay-menu a:hover { color: #E58769; }
+    .wc-overlay-menu a:hover .wc-arrow { transform: translateX(4px); }
     .wc-overlay-menu a.is-active { color: #E58769; }
     .wc-overlay-menu a .num {
       font-family: 'IBM Plex Mono', monospace; font-weight: 600;
       font-size: 12px; letter-spacing: 0.18em;
       color: rgba(245,241,235,0.42);
     }
+    .wc-overlay-menu .wc-overlay-section {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 10.5px; letter-spacing: 0.32em; text-transform: uppercase;
+      color: rgba(245,241,235,0.42);
+      padding: 22px 0 6px;
+      border-bottom: 1px solid rgba(245,241,235,0.12);
+      margin-bottom: 4px;
+    }
+    .wc-overlay-menu .wc-overlay-section:first-child { padding-top: 0; }
+    .wc-overlay-menu a .wc-arrow {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 22px; line-height: 1;
+      color: rgba(245,241,235,0.38);
+      transition: transform 0.18s ease, color 0.15s ease;
+    }
+    .wc-overlay-menu a:hover .wc-arrow { color: #E58769; }
+    .wc-overlay-menu a.wc-anchor:hover .wc-arrow { transform: translateY(3px); }
     .wc-overlay-foot {
       max-width: 720px; width: 100%; margin: 36px auto 0;
       padding-top: 22px;
@@ -3580,11 +3598,18 @@
       </button>
     </div>
     <nav class="wc-overlay-menu">
-      <a href="https://provisions.soccer" data-route="home"><span>Home</span><span class="num">01</span></a>
-      <a href="https://provisions.soccer/daily" data-route="daily"><span>The Daily</span><span class="num">02</span></a>
-      <a href="https://provisions.soccer/you-know-ball" data-route="quiz"><span>You Know Ball</span><span class="num">03</span></a>
-      <a href="https://provisions.soccer/kits" data-route="kits"><span>The Kit Index</span><span class="num">04</span></a>
-      <a href="https://provisions.soccer/card" data-route="card"><span>The Player Card</span><span class="num">05</span></a>
+      <div class="wc-overlay-section">Tools</div>
+      <a href="https://provisions.soccer/card" data-route="card"><span>The Player Card</span><span class="wc-arrow">→</span></a>
+      <a href="https://provisions.soccer/daily" data-route="daily"><span>The Daily</span><span class="wc-arrow">→</span></a>
+      <a href="https://provisions.soccer/kits" data-route="kits"><span>The Kit Index</span><span class="wc-arrow">→</span></a>
+      <a href="https://provisions.soccer/you-know-ball" data-route="quiz"><span>You Know Ball</span><span class="wc-arrow">→</span></a>
+      <a href="https://provisions.soccer/heritage" data-route="heritage"><span>Football Heritage</span><span class="wc-arrow">→</span></a>
+
+      <div class="wc-overlay-section">On this page</div>
+      <a href="https://provisions.soccer#contents" class="wc-anchor"><span>The Team Sheet</span><span class="wc-arrow">↓</span></a>
+      <a href="https://provisions.soccer#roll" class="wc-anchor"><span>The Roll</span><span class="wc-arrow">↓</span></a>
+      <a href="https://provisions.soccer#anthems" class="wc-anchor"><span>The Songbook</span><span class="wc-arrow">↓</span></a>
+      <a href="https://provisions.soccer#draw" class="wc-anchor"><span>The Draw</span><span class="wc-arrow">↓</span></a>
     </nav>
     <div class="wc-overlay-foot">
       <a href="https://provisions.work">A Provisions joint →</a>
@@ -3611,6 +3636,10 @@
     // Close on Escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') wcCloseMenu();
+    });
+    // Close overlay when an in-page anchor link is tapped so user lands on the section
+    document.querySelectorAll('.wc-overlay-menu a.wc-anchor').forEach(function (a) {
+      a.addEventListener('click', function () { wcCloseMenu(); });
     });
   </script>
 
