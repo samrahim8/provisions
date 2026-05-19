@@ -1019,7 +1019,7 @@ function PhotoStep({
     if (gesture.current.mode === "pinch" && e.touches.length === 2) {
       const d = dist(e.touches[0], e.touches[1]);
       const ratio = d / gesture.current.pinchStartDist;
-      const next = Math.max(1, Math.min(4, gesture.current.pinchStartScale * ratio));
+      const next = Math.max(0.4, Math.min(4, gesture.current.pinchStartScale * ratio));
       setScale(next);
       e.preventDefault();
     } else if (gesture.current.mode === "pan" && e.touches.length === 1) {
@@ -1064,20 +1064,24 @@ function PhotoStep({
     if (!srcUrl || !natural || !viewportSize) return;
     const img = new Image();
     img.onload = () => {
-      // Map viewport (0..V) back to natural image pixels.
-      // Centered image top-left in viewport = (V/2 - W/2 + tx, V/2 - H/2 + ty)
-      // where W = natural.w * coverScale * scale, H = natural.h * coverScale * scale.
-      // Viewport.x=0 maps to natural x = (W/2 - V/2 - tx) / (coverScale * scale)
-      const s = coverScale * scale;
-      const sourceX = natural.w / 2 - (viewportSize / 2 + clampedTx) / s;
-      const sourceY = natural.h / 2 - (viewportSize / 2 + clampedTy) / s;
-      const sourceSize = viewportSize / s;
+      // Destination-rect approach: place the entire image into the 720x720
+      // output at the right scaled position. Works for any scale (including
+      // < 1, where the image is smaller than the viewport).
+      const OUT = 720;
+      const outScale = OUT / viewportSize;
+      const destW = natural.w * coverScale * scale * outScale;
+      const destH = natural.h * coverScale * scale * outScale;
+      const destX = (OUT - destW) / 2 + clampedTx * outScale;
+      const destY = (OUT - destH) / 2 + clampedTy * outScale;
       const canvas = document.createElement("canvas");
-      canvas.width = 720;
-      canvas.height = 720;
+      canvas.width = OUT;
+      canvas.height = OUT;
       const ctx = canvas.getContext("2d")!;
       ctx.imageSmoothingQuality = "high";
-      ctx.drawImage(img, sourceX, sourceY, sourceSize, sourceSize, 0, 0, 720, 720);
+      // Parchment fill so zoom-out gaps match the card background.
+      ctx.fillStyle = "#F5EFE0";
+      ctx.fillRect(0, 0, OUT, OUT);
+      ctx.drawImage(img, 0, 0, natural.w, natural.h, destX, destY, destW, destH);
       onPhoto(canvas.toDataURL("image/jpeg", 0.92));
     };
     img.src = srcUrl;
@@ -1158,7 +1162,7 @@ function PhotoStep({
                 <span className="text-text-soft text-xs uppercase tracking-label">Zoom</span>
                 <input
                   type="range"
-                  min={1}
+                  min={0.4}
                   max={4}
                   step={0.01}
                   value={scale}
@@ -2138,16 +2142,16 @@ function ResultStep({
         {isRare && <span className="card-shine" aria-hidden="true" />}
       </div>
 
-      <div className="reveal-actions inline-flex flex-wrap justify-center items-center gap-3 mt-1">
+      <div className="reveal-actions inline-flex flex-wrap justify-center items-center gap-3 mt-1" style={{ position: "relative", zIndex: 50, pointerEvents: "auto" }}>
         {supportsShare && (
-          <button onClick={shareStory} className="btn-primary">
+          <button type="button" onClick={shareStory} className="btn-primary" style={{ position: "relative", zIndex: 1 }}>
             {shareStatus ?? "Share to Story"}
           </button>
         )}
-        <button onClick={saveToPhotos} className={supportsShare ? "btn-secondary" : "btn-primary"}>
+        <button type="button" onClick={saveToPhotos} className={supportsShare ? "btn-secondary" : "btn-primary"} style={{ position: "relative", zIndex: 1 }}>
           {saveStatus ?? "Save"}
         </button>
-        <button onClick={onRestart} className="btn-secondary">Make another</button>
+        <button type="button" onClick={onRestart} className="btn-secondary" style={{ position: "relative", zIndex: 1 }}>Make another</button>
       </div>
 
       <style jsx>{`
