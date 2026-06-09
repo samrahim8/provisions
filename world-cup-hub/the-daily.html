@@ -1754,17 +1754,6 @@
         const iso = el.getAttribute("data-countdown");
         el.textContent = countdownText(iso);
       });
-      // Nextup big countdown — anchored to whichever match is currently surfaced
-      const t = timeUntil(nextupMatch[4]);
-      if (t) {
-        document.getElementById("kuDays").textContent = String(t.days);
-        document.getElementById("kuHrs").textContent = String(t.hrs).padStart(2, "0");
-        document.getElementById("kuMin").textContent = String(t.mins).padStart(2, "0");
-      } else {
-        document.getElementById("kuDays").textContent = "00";
-        document.getElementById("kuHrs").textContent = "00";
-        document.getElementById("kuMin").textContent = "00";
-      }
     }
 
     // ── Build the team filter dropdown ──
