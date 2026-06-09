@@ -261,6 +261,20 @@
     const press = new Array(chars.length).fill(0);
     let mx = -1e4, my = -1e4, raf = 0, idleFrames = 0;
     const R = 150;
+    // Press toward dark ink on light parchment, paper-white on dark
+    // repaints, so the effect survives every team palette.
+    let ink = '16, 11, 7';
+    function readInk() {
+      const v = getComputedStyle(root).getPropertyValue('--parchment').trim();
+      const m = v.match(/^#([0-9a-f]{6})$/i);
+      if (!m) { ink = '16, 11, 7'; return; }
+      const lum = (0.299 * parseInt(m[1].slice(0, 2), 16)
+                 + 0.587 * parseInt(m[1].slice(2, 4), 16)
+                 + 0.114 * parseInt(m[1].slice(4, 6), 16)) / 255;
+      ink = lum < 0.55 ? '250, 247, 240' : '16, 11, 7';
+    }
+    readInk();
+    document.addEventListener('provisions:repaint', () => setTimeout(readInk, 50));
     function frame() {
       raf = 0;
       let live = false;
@@ -274,9 +288,9 @@
         const p = press[i];
         if (p > 0.004) {
           live = true;
-          chars[i].style.color = 'rgba(16, 11, 7, ' + (p * 0.92).toFixed(3) + ')';
+          chars[i].style.color = 'rgba(' + ink + ', ' + (p * 0.92).toFixed(3) + ')';
           chars[i].style.transform = 'translateY(' + (p * 1.1).toFixed(2) + 'px)';
-          chars[i].style.textShadow = '0 0 ' + (p * 7).toFixed(1) + 'px rgba(16,11,7,' + (p * 0.35).toFixed(3) + ')';
+          chars[i].style.textShadow = '0 0 ' + (p * 7).toFixed(1) + 'px rgba(' + ink + ',' + (p * 0.35).toFixed(3) + ')';
         } else if (press[i] !== 0) {
           chars[i].style.color = '';
           chars[i].style.transform = '';

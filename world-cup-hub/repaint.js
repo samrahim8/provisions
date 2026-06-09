@@ -101,6 +101,42 @@
   }
   function _onColor(hex) { return _lum(hex) > 0.55 ? '#1A1A1A' : '#FFFFFF'; }
 
+  // WCAG contrast ratio, used to guarantee accents stay readable on the
+  // parchment they will sit on, for every team palette.
+  function _wcagLum(hex) {
+    const [r, g, b] = _hexToRgb(hex).map(v => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+  function _contrast(a, b) {
+    const la = _wcagLum(a), lb = _wcagLum(b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+  function _ensureContrast(color, bg, min) {
+    return _ensureContrastMulti(color, [bg], min);
+  }
+  // Push toward white and toward black independently; keep whichever
+  // candidate clears `min` against EVERY surface with the fewest steps.
+  // A single direction can dead-end on mid-luminance parchments (red kits)
+  // where the panel tint and the parchment pull opposite ways.
+  function _ensureContrastMulti(color, bgs, min) {
+    const fits = (c) => Math.min.apply(null, bgs.map(b => _contrast(c, b)));
+    if (fits(color) >= min) return color;
+    let best = color, bestScore = fits(color);
+    for (const toward of ['#FFFFFF', '#000000']) {
+      let c = color;
+      for (let i = 0; i < 14; i++) {
+        c = _mix(c, toward, 0.16);
+        const s = fits(c);
+        if (s > bestScore) { best = c; bestScore = s; }
+        if (s >= min) return c;
+      }
+    }
+    return best;
+  }
+
   function paletteFromKit(primary, accents) {
     const pLum = _lum(primary);
     const isWhite = pLum > 0.93;
@@ -113,13 +149,21 @@
     if (!popAccent) {
       popAccent = pLum > 0.6 ? _mix(primary, '#000000', 0.45) : _mix(primary, '#FFFFFF', 0.5);
     }
-    const darkAccent = accents.find(a => _lum(a) < 0.35 && a !== '#000000') || _shade(popAccent, -45);
+    // Whatever was picked must read as small text on this team's parchment.
+    const parchmentBg = isWhite ? '#FAF8F2' : primary;
+    popAccent = _ensureContrastMulti(
+      popAccent,
+      _lum(parchmentBg) < 0.55 ? [parchmentBg, _mix(parchmentBg, '#FFFFFF', 0.25)] : [parchmentBg],
+      3
+    );
+    let darkAccent = accents.find(a => _lum(a) < 0.35 && a !== '#000000') || _shade(popAccent, -45);
+    darkAccent = _ensureContrast(darkAccent, parchmentBg, 4.5);
 
     if (isWhite) {
       return {
         parchment: '#FAF8F2', parchmentEl: '#EFEAE0',
         leather: darkAccent, leatherMid: '#1A1A1A',
-        terracotta: popAccent, terracottaLight: _shade(popAccent, 22),
+        terracotta: popAccent, terracottaLight: _ensureContrast(_shade(popAccent, 22), parchmentBg, 3),
         textSoft: '#7A6E5E', border: '#DAD3C5'
       };
     }
@@ -127,15 +171,15 @@
       return {
         parchment: primary, parchmentEl: _mix(primary, '#000000', 0.06),
         leather: darkAccent, leatherMid: '#1A1A1A',
-        terracotta: popAccent, terracottaLight: _shade(popAccent, 22),
+        terracotta: popAccent, terracottaLight: _ensureContrast(_shade(popAccent, 22), parchmentBg, 3),
         textSoft: 'rgba(26,26,26,0.6)', border: _mix(primary, '#000000', 0.18)
       };
     }
     return {
       parchment: primary, parchmentEl: _mix(primary, '#FFFFFF', 0.06),
       leather: _mix(primary, '#000000', 0.32), leatherMid: '#F0E9DC',
-      terracotta: popAccent, terracottaLight: _shade(popAccent, 22),
-      textSoft: 'rgba(240,233,220,0.78)', border: 'rgba(240,233,220,0.14)'
+      terracotta: popAccent, terracottaLight: _ensureContrast(_shade(popAccent, 22), parchmentBg, 3),
+      textSoft: _contrast('#F0E9DC', primary) >= 4.5 ? 'rgba(240,233,220,0.78)' : '#FFFFFF', border: 'rgba(240,233,220,0.14)'
     };
   }
 
@@ -143,20 +187,36 @@
     const r = document.documentElement.style;
     r.setProperty('--parchment', p.parchment);
     r.setProperty('--parchment-el', p.parchmentEl);
-    r.setProperty('--leather', p.leather);
+    // Some pages paint their surfaces from --bg/--text (The Daily); keep
+    // those in lockstep with --parchment or the page background stays
+    // light while the text vars flip dark-team cream.
+    r.setProperty('--bg', p.parchment);
+    r.setProperty('--bg-elevated', p.parchmentEl);
+    // --leather doubles as heading/text ink across the pages. On dark
+    // parchment it must fall through to the cream leatherMid or headings
+    // vanish into the background (mirrors The Daily's applyPalette).
+    const isDarkBg = _lum(p.parchment) < 0.55;
+    r.setProperty('--leather', isDarkBg ? p.leatherMid : p.leather);
     r.setProperty('--leather-mid', p.leatherMid);
     r.setProperty('--terracotta', p.terracotta);
     r.setProperty('--terracotta-light', p.terracottaLight);
+    r.setProperty('--text', isDarkBg ? p.leatherMid : p.leather);
     r.setProperty('--text-soft', p.textSoft);
     r.setProperty('--border', p.border);
+    r.setProperty('--rule', isDarkBg ? 'rgba(240,233,220,0.22)' : 'rgba(44,33,24,0.18)');
     r.setProperty('--on-accent', _onColor(p.terracotta));
     r.setProperty('--on-leather', _onColor(p.leatherMid));
+    // Accent used on leather and leather-mid bands (card eyebrows,
+    // colophon, footers); must clear both, including when they flip cream.
+    r.setProperty('--terracotta-glow',
+      _ensureContrastMulti(p.terracotta, [p.leatherMid, isDarkBg ? p.leatherMid : p.leather], 3));
   }
 
   function resetPalette() {
     const r = document.documentElement.style;
-    ['--parchment','--parchment-el','--leather','--leather-mid','--terracotta',
-     '--terracotta-light','--text-soft','--border','--on-accent','--on-leather']
+    ['--parchment','--parchment-el','--bg','--bg-elevated','--leather','--leather-mid',
+     '--terracotta','--terracotta-light','--terracotta-glow','--text','--text-soft',
+     '--border','--rule','--on-accent','--on-leather']
       .forEach(v => r.removeProperty(v));
   }
 
@@ -214,7 +274,7 @@
         position: fixed; right: 16px; bottom: 16px; z-index: 99;
         display: inline-flex; align-items: center; gap: 8px;
         padding: 9px 14px 9px 9px;
-        background: var(--leather, #2C2118); color: #fff;
+        background: var(--leather, #2C2118); color: var(--on-leather, #fff);
         border: 1.5px solid var(--leather-mid, #4A3D32);
         border-radius: 30px;
         font-family: 'Syne', sans-serif; font-weight: 700;
