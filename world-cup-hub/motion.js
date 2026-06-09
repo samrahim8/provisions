@@ -229,6 +229,7 @@
 
   /* ── Cursor-proximity ink press ── */
   function charify(el) {
+    if (el._mChars) return el._mChars;
     const walk = (node) => {
       if (node.nodeType === Node.TEXT_NODE) {
         const frag = document.createDocumentFragment();
@@ -244,13 +245,14 @@
         [...node.childNodes].forEach(walk);
       }
     };
-    el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+    el.setAttribute('aria-label', (el.innerText || el.textContent).replace(/\s+/g, ' ').trim());
     const wrap = document.createElement('span');
     wrap.setAttribute('aria-hidden', 'true');
     while (el.firstChild) wrap.appendChild(el.firstChild);
     el.appendChild(wrap);
     [...wrap.childNodes].forEach(walk);
-    return [...el.querySelectorAll('.m-ch')];
+    el._mChars = [...el.querySelectorAll('.m-ch')];
+    return el._mChars;
   }
   function inkpressInit(el) {
     if (REDUCED || !FINE) return;
@@ -291,6 +293,57 @@
   }
   /* Chars near the cursor darken toward near-black ink over the headline's
      own color, so the effect survives every team repaint. */
+
+  /* ── Split-flap riffle for display type ──
+     The headline keeps its own face and layout; each character flips
+     through a few intermediate letters with a flap rotation, staggered
+     across the line, before settling on the real text. */
+  function rifflePool(ch) {
+    if (/[a-z]/.test(ch)) return 'abcdefghijklmnopqrstuvwxyz';
+    if (/[A-Z]/.test(ch)) return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (/[0-9]/.test(ch)) return '0123456789';
+    return null; // punctuation holds still
+  }
+  function riffleInit(el) {
+    if (REDUCED) { el.classList.add('m-riffled'); return; }
+    const chars = charify(el);
+    if (!chars.length) { el.classList.add('m-riffled'); return; }
+    function run() {
+      // Lock each span to its final width so proportional type
+      // doesn't jitter sideways while the letters flip.
+      const widths = chars.map(s => s.getBoundingClientRect().width);
+      chars.forEach((s, i) => {
+        s.style.width = widths[i] + 'px';
+        s.style.textAlign = 'center';
+      });
+      el.classList.add('m-riffled');
+      chars.forEach((s, i) => {
+        const target = s.textContent;
+        const pool = rifflePool(target);
+        if (!pool) return;
+        const steps = 3 + Math.floor(Math.random() * 4);
+        let k = 0;
+        const tick = () => {
+          k++;
+          s.textContent = k >= steps ? target : pool[Math.floor(Math.random() * pool.length)];
+          s.animate(
+            [
+              { transform: 'perspective(420px) rotateX(-72deg)', opacity: 0.55 },
+              { transform: 'perspective(420px) rotateX(0deg)', opacity: 1 }
+            ],
+            { duration: 68, easing: 'ease-out' }
+          );
+          if (k < steps) setTimeout(tick, 72);
+          else { s.style.width = ''; s.style.textAlign = ''; }
+        };
+        setTimeout(tick, 140 + i * 34);
+      });
+    }
+    Promise.race([
+      document.fonts ? document.fonts.ready : Promise.resolve(),
+      new Promise(r => setTimeout(r, 900))
+    ]).then(run);
+  }
 
   /* ── Split-flap ── */
   const SF_CHARS = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789·:*\'';
@@ -452,6 +505,7 @@
     }
 
     driftInit([...document.querySelectorAll('[data-drift]')]);
+    [...document.querySelectorAll('[data-riffle]')].forEach(riffleInit);
     [...document.querySelectorAll('[data-inkpress]')].forEach(inkpressInit);
   }
 

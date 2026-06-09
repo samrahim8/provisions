@@ -8,8 +8,10 @@
 /* ── Reveal gating (only once JS has marked the page ready) ── */
 html.m-ready [data-stamp]:not(.m-stamped) { opacity: 0; }
 html.m-ready [data-ink]:not(.m-ink-on) { opacity: 0; }
+html.m-ready [data-riffle]:not(.m-riffled) { opacity: 0; }
 html.m-static [data-stamp],
-html.m-static [data-ink] { opacity: 1 !important; animation: none !important; }
+html.m-static [data-ink],
+html.m-static [data-riffle] { opacity: 1 !important; animation: none !important; }
 
 /* ── Stamp press ── */
 @media (prefers-reduced-motion: no-preference) {
