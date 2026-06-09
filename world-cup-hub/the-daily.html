@@ -33,6 +33,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./motion.css">
+  <script src="./motion.js" defer></script>
   <script src="./repaint.js" defer></script>
 
   <style>
@@ -990,8 +992,10 @@
   <header class="hero">
     <div class="hero-inner">
       <div class="label">No. 02 · The Daily</div>
-      <h1>The daily.</h1>
+      <h1 data-ink>The daily.</h1>
       <p class="lede">Every match of the World Cup, day by day. Kickoff times, venues, kit colors, and a countdown to the next whistle. Free to use, free to share.</p>
+      <div class="sf-board" id="flapBoard" role="timer" aria-label="Countdown to the next kickoff"></div>
+      <div class="sf-caption" id="flapCaption" style="text-align:center;">Next whistle</div>
     </div>
   </header>
 
@@ -1706,7 +1710,7 @@
         html += `
           <section class="round" data-round="${round}">
             <div class="round-head">
-              <div class="round-title">${round}</div>
+              <div class="round-title" data-stamp>${round}</div>
               <div class="round-meta">${matches.length} match${matches.length === 1 ? "" : "es"}</div>
             </div>
         `;
@@ -1733,10 +1737,12 @@
     let nextupMatch = SCHEDULE[0];
 
     function getNextupMatchForTeam(code) {
-      if (!code || code === "ALL") return SCHEDULE[0];
       const now = Date.now();
+      if (!code || code === "ALL") {
+        return SCHEDULE.find(m => new Date(m[4]).getTime() > now) || SCHEDULE[SCHEDULE.length - 1];
+      }
       const teamMatches = SCHEDULE.filter(m => m[0] === code || m[1] === code);
-      if (!teamMatches.length) return SCHEDULE[0];
+      if (!teamMatches.length) return getNextupMatchForTeam("ALL");
       return teamMatches.find(m => new Date(m[4]).getTime() > now) || teamMatches[teamMatches.length - 1];
     }
 
@@ -1794,13 +1800,36 @@
       // Update the nextup bar to follow the selected team
       renderNextup(getNextupMatchForTeam(code), !showAll);
       updateAllCountdowns();
-      // Repaint the page
-      if (showAll) {
-        resetPalette();
-      } else {
-        applyTeamPalette(code);
-      }
+      // Repaint the page; the swap rides a view transition so the new
+      // palette sweeps across instead of snapping
+      const repaint = () => { if (showAll) resetPalette(); else applyTeamPalette(code); };
+      if (window.Motion && window.Motion.transition) window.Motion.transition(repaint);
+      else repaint();
+      updateFlapBoard({ clatter: true, sound: true });
     }
+
+    // ── Split-flap departure board (next whistle) ──
+    let flapBoard = null;
+    function updateFlapBoard(opts) {
+      if (!flapBoard) return;
+      const m = nextupMatch;
+      const t = timeUntil(m[4]);
+      const line2 = t
+        ? `IN ${String(t.days).padStart(2, "0")}D ${String(t.hrs).padStart(2, "0")}H ${String(t.mins).padStart(2, "0")}M`
+        : "UNDERWAY";
+      flapBoard.set([`${m[0]} V ${m[1]}`, line2], opts);
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const mount = document.getElementById("flapBoard");
+      if (!window.Motion || !mount) return;
+      flapBoard = window.Motion.splitFlapBoard(mount, [9, 14]);
+      nextupMatch = getNextupMatchForTeam(document.getElementById("teamFilter")?.value);
+      updateFlapBoard({ clatter: true });
+      setInterval(() => {
+        nextupMatch = getNextupMatchForTeam(document.getElementById("teamFilter")?.value);
+        updateFlapBoard({});
+      }, 60 * 1000);
+    });
 
     // ── Palette helpers (mirror of hub's paletteFromKit) ──
     function _lum(hex) {

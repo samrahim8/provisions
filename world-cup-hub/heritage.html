@@ -23,6 +23,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=IBM+Plex+Mono:wght@500;600&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./motion.css">
+  <script src="./motion.js" defer></script>
   <script src="./repaint.js" defer></script>
 
   <style>
@@ -576,7 +578,7 @@
             <span>06 · A Provisions good</span>
           </div>
           <div class="hero-body">
-            <h1>Find your<br><span class="accent">team.</span></h1>
+            <h1 data-ink>Find your<br><span class="accent">team.</span></h1>
             <p class="lede">Most of us aren't from one place. Pick your way in. By the same rule the players use to qualify for a nation, we'll show you who you can root for.</p>
 
             <div class="rule-strip">
@@ -616,7 +618,7 @@
             <span>Method 01</span>
           </div>
           <div class="tree-card-body">
-            <h2>Where's your family from?</h2>
+            <h2 data-stamp>Where's your family from?</h2>
             <p class="lede">Fill what you know. Leave blanks where you don't. We use the one-grandparent rule — same as the players. Anything older than a grandparent doesn't count for player eligibility, so it doesn't count here either.</p>
 
             <div class="tree-name">
@@ -730,7 +732,7 @@
       <section class="screen" id="screenFallback">
         <div class="fallback-card">
           <div class="result-eyebrow">No Eligibility Found</div>
-          <h2>Your bloodline didn't make this tournament.</h2>
+          <h2 data-stamp>Your bloodline didn't make this tournament.</h2>
           <p>None of your family's countries qualified for 2026. That's a heavy 22 to leave off the squad. The Vibes quiz can match you by football identity instead — but it ships closer to kickoff.</p>
           <div class="actions-row" style="justify-content:center;">
             <button class="btn-ghost" id="fallbackRestart">Try again</button>

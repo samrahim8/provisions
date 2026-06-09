@@ -1,0 +1,144 @@
+/* ──────────────────────────────────────────────────────────────
+   Provisions motion layer
+   Shared by every page on provisions.soccer. Pairs with motion.js.
+   Everything here is progressive enhancement: if motion.js never
+   runs, no element is hidden and the page reads as before.
+   ────────────────────────────────────────────────────────────── */
+
+/* ── Reveal gating (only once JS has marked the page ready) ── */
+html.m-ready [data-stamp]:not(.m-stamped) { opacity: 0; }
+html.m-ready [data-ink]:not(.m-ink-on) { opacity: 0; }
+html.m-static [data-stamp],
+html.m-static [data-ink] { opacity: 1 !important; animation: none !important; }
+
+/* ── Stamp press ── */
+@media (prefers-reduced-motion: no-preference) {
+  .m-stamped {
+    animation: m-stamp 0.42s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  }
+  @keyframes m-stamp {
+    0%   { opacity: 0; transform: scale(1.45) rotate(-1.2deg); }
+    55%  { opacity: 1; transform: scale(0.965) rotate(0.2deg); }
+    72%  { transform: scale(1.015) rotate(0deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+}
+
+/* ── Repaint sweep (view transitions) ── */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: m-vt-hold 0.5s steps(1, end) both;
+  }
+  ::view-transition-new(root) {
+    animation: m-vt-sweep 0.5s cubic-bezier(0.45, 0, 0.18, 1) both;
+  }
+  @keyframes m-vt-hold {
+    from { opacity: 1; } to { opacity: 1; }
+  }
+  @keyframes m-vt-sweep {
+    from { clip-path: polygon(0 0, 12% 0, -8% 100%, 0 100%); }
+    to   { clip-path: polygon(0 0, 120% 0, 100% 100%, 0 100%); }
+  }
+}
+
+/* ── Per-character spans (cursor-proximity ink) ── */
+.m-ch {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ── Halftone watermark ── */
+.m-wash {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(540px, 82vw);
+  height: auto;
+  opacity: 0.09;
+  pointer-events: none;
+  z-index: 0;
+}
+.m-wash ~ * { position: relative; z-index: 1; }
+
+/* ── Split-flap board ── */
+.sf-board {
+  --sf-w: clamp(17px, calc((100vw - 72px) / 14), 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: center;
+  margin-top: 26px;
+  /* reserve two rows before JS builds the cells, so nothing jumps */
+  min-height: calc(var(--sf-w) * 2.76 + 7px);
+}
+.sf-row {
+  display: flex;
+  gap: 4px;
+}
+.sf-cell {
+  position: relative;
+  width: var(--sf-w);
+  height: calc(var(--sf-w) * 1.38);
+  perspective: calc(var(--sf-w) * 9);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-weight: 600;
+  font-size: calc(var(--sf-w) * 0.92);
+  color: var(--parchment, #F5EFE0);
+}
+.sf-cell::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 3;
+}
+.sf-half {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  background: var(--leather, #2C2118);
+  backface-visibility: hidden;
+}
+.sf-half > span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: calc(var(--sf-w) * 1.38);
+  line-height: calc(var(--sf-w) * 1.38);
+  text-align: center;
+}
+.sf-top { top: 0; border-radius: 3px 3px 0 0; border: 1px solid rgba(0,0,0,0.35); border-bottom: none; }
+.sf-bot { top: 50%; border-radius: 0 0 3px 3px; border: 1px solid rgba(0,0,0,0.35); border-top: none; }
+.sf-top > span { top: 0; }
+.sf-bot > span { top: -100%; }
+.sf-flap {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 50%;
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+  z-index: 2;
+  display: none;
+}
+.sf-flap.is-on { display: block; }
+.sf-fl-front { top: 0; border-radius: 3px 3px 0 0; }
+.sf-fl-front > span { top: 0; }
+.sf-fl-back {
+  top: 0;
+  transform: rotateX(180deg);
+  border-radius: 0 0 3px 3px;
+}
+.sf-fl-back > span { top: -100%; }
+.sf-caption {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-soft, #6B5D4E);
+  margin-top: 10px;
+}

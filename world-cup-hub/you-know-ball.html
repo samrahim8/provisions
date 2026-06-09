@@ -28,6 +28,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=IBM+Plex+Mono:wght@500;600&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./motion.css">
+  <script src="./motion.js" defer></script>
   <script src="./repaint.js" defer></script>
 
   <style>
@@ -651,7 +653,7 @@
             <span>World Cup History</span>
           </div>
           <div class="quiz-hero-body">
-            <h1>Do you know<br><span class="accent">ball?</span></h1>
+            <h1 data-ink>Do you know<br><span class="accent">ball?</span></h1>
             <p class="lede">Layups any fan should know. Deep cuts only the heads will get. No Google.</p>
             <div class="tier-ladder">
               <div class="tier-ladder-label">★ The Tiers ★</div>
@@ -707,7 +709,7 @@
               <span class="den">/ 10</span>
             </div>
             <div class="score-card-divider"><span class="mark">★</span></div>
-            <h2 class="score-card-tier" id="rTier">––</h2>
+            <h2 class="score-card-tier" id="rTier" data-stamp>––</h2>
             <p class="score-card-sub" id="rSub">––</p>
             <div class="score-card-dots" id="rDots"></div>
           </div>

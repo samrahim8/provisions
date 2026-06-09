@@ -175,21 +175,32 @@
   // ── State ──
   let _currentCode = null;
 
+  // Repaint rides a view transition when available, so the new palette
+  // sweeps across the page instead of snapping (motion.js provides it).
+  function sweep(fn) {
+    if (window.Motion && window.Motion.transition) window.Motion.transition(fn);
+    else fn();
+  }
+
   function setTeam(code) {
     const team = WC_TEAMS.find(t => t[0] === code);
     if (!team) return;
     _currentCode = code;
-    applyPalette(paletteFromKit(team[2], team[3]));
-    updateButtonChip();
-    updateActiveInGrid();
+    sweep(() => {
+      applyPalette(paletteFromKit(team[2], team[3]));
+      updateButtonChip();
+      updateActiveInGrid();
+    });
     document.dispatchEvent(new CustomEvent('provisions:repaint', { detail: { code, team } }));
   }
 
   function reset() {
     _currentCode = null;
-    resetPalette();
-    updateButtonChip();
-    updateActiveInGrid();
+    sweep(() => {
+      resetPalette();
+      updateButtonChip();
+      updateActiveInGrid();
+    });
     document.dispatchEvent(new CustomEvent('provisions:repaint', { detail: { code: null } }));
   }
 
