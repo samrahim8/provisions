@@ -437,7 +437,8 @@
   function buildGrid() {
     const grid = document.getElementById('rptGrid');
     if (!grid) return;
-    grid.innerHTML = WC_TEAMS.map(t => {
+    const teams = [...WC_TEAMS].sort((a, b) => a[1].localeCompare(b[1]));
+    grid.innerHTML = teams.map(t => {
       const [code, name, primary, accents] = t;
       const active = code === _currentCode ? ' active' : '';
       return `<button type="button" data-code="${code}" class="${active.trim()}">

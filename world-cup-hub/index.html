@@ -3029,7 +3029,8 @@
     function renderTeamGrid(activeCode, gridId = 'teamGrid') {
       const grid = document.getElementById(gridId);
       if (!grid) return;
-      grid.innerHTML = WC_TEAMS.map(t => {
+      const teams = [...WC_TEAMS].sort((a, b) => a[1].localeCompare(b[1]));
+      grid.innerHTML = teams.map(t => {
         const [code, name, primary, accents] = t;
         const isActive = code === activeCode;
         return `<button type="button" data-code="${code}" class="${isActive ? 'active' : ''}">
