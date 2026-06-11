@@ -2267,41 +2267,25 @@
         </header>
 
         <!-- STARTER -->
-        <a href="https://provisions.soccer/card" class="featured" style="text-decoration:none;color:inherit;">
+        <a href="https://provisions.soccer/you-know-ball" class="featured" style="text-decoration:none;color:inherit;">
           <div class="featured-content">
             <div class="featured-meta-row">
               <span class="kit-no">No. 01</span>
-              <span class="status-pill status-starter">Starter</span>
+              <span class="status-pill status-starter">New daily</span>
             </div>
-            <h3 class="featured-h3">The Player Card<br>Generator.</h3>
-            <p class="featured-body">The call-up the national team never sent. Pick a country, drop your kit, snap a card. Group chat ready in under a minute.</p>
+            <h3 class="featured-h3">You Know<br>Ball.</h3>
+            <p class="featured-body">Five questions on today&rsquo;s matches, new every morning. One go, no Google. Score a tier, build a streak, drop the card in the chat.</p>
             <div class="featured-stats">
-              <div class="featured-stat"><div class="num">48</div><div class="lbl">Squads</div></div>
-              <div class="featured-stat"><div class="num">60</div><div class="lbl">Sec. to make</div></div>
-              <div class="featured-stat"><div class="num">0</div><div class="lbl">Sec. to share</div></div>
+              <div class="featured-stat"><div class="num">5</div><div class="lbl">Rounds</div></div>
+              <div class="featured-stat"><div class="num">15</div><div class="lbl">Points</div></div>
+              <div class="featured-stat"><div class="num">39</div><div class="lbl">Days</div></div>
             </div>
           </div>
-          <div class="featured-image-frame" id="featuredCardFrame">
-            <img id="featuredCardImg" src="https://provisions.soccer/card/api/card?team=USA&v=5" alt="Player card example">
-            <div class="press-overlay" id="pressOverlay" role="status" aria-live="polite" aria-hidden="true">
-              <div class="press-card" id="pressCard">
-                <div class="press-card-inner">
-                  <div class="press-tape"></div>
-                  <div class="press-photo"><div class="press-photo-shimmer"></div></div>
-                  <div class="press-name"></div>
-                  <div class="press-stats"><div></div><div></div><div></div></div>
-                </div>
-                <div class="press-bar" aria-hidden="true"></div>
-              </div>
-              <div class="press-text">
-                <h3 class="press-headline">Pressing your card.</h3>
-                <p class="press-stage" id="pressStage">Loading the press…</p>
-              </div>
-              <div class="press-progress"><div class="press-progress-bar"></div></div>
-            </div>
+          <div class="featured-image-frame">
+            <img src="./images/featured-ykb.png" alt="You Know Ball result card" loading="lazy">
           </div>
           <div class="featured-cta-row">
-            <span class="btn-dark">Open the generator →</span>
+            <span class="btn-dark">Play today&rsquo;s five →</span>
           </div>
         </a>
 
@@ -2693,6 +2677,25 @@
   </div>
 
 
+  <div class="press-overlay-host">
+            <div class="press-overlay" id="pressOverlay" role="status" aria-live="polite" aria-hidden="true">
+              <div class="press-card" id="pressCard">
+                <div class="press-card-inner">
+                  <div class="press-tape"></div>
+                  <div class="press-photo"><div class="press-photo-shimmer"></div></div>
+                  <div class="press-name"></div>
+                  <div class="press-stats"><div></div><div></div><div></div></div>
+                </div>
+                <div class="press-bar" aria-hidden="true"></div>
+              </div>
+              <div class="press-text">
+                <h3 class="press-headline">Pressing your card.</h3>
+                <p class="press-stage" id="pressStage">Loading the press…</p>
+              </div>
+              <div class="press-progress"><div class="press-progress-bar"></div></div>
+            </div>
+  </div>
+
   <script src="/schedule.js"></script>
   <script>
     // ── Team data ──
@@ -2974,8 +2977,8 @@
 
     // Bench (Nos. 02–06; No. 01 is the starter)
     const PRODUCTS = [
-      { id: '02', label: 'The Daily', title: 'The Daily', blurb: 'Every match of the summer, day by day. Kit-colored cards for all 104 fixtures, kickoff countdowns, venues, group context. The clubhouse wall of what’s on.', cta: 'See the schedule', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/daily' },
-      { id: '03', label: 'You Know Ball', title: 'You Know Ball', blurb: 'Five new questions every day of the tournament, tap-ins to top bins. Score a tier, build a streak, drop the card in the chat.', cta: 'Play today’s five', status: 'starter', statusLabel: 'New daily', href: 'https://provisions.soccer/you-know-ball' },
+      { id: '02', label: 'The Player Card', title: 'The Player Card Generator', blurb: 'The call-up the national team never sent. Pick a country, drop your kit, snap a card. Group chat ready in under a minute.', cta: 'Open the generator', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/card' },
+      { id: '03', label: 'The Daily', title: 'The Daily', blurb: 'Every match of the summer, day by day. Kit-colored cards for all 104 fixtures, kickoff countdowns, venues, group context. The clubhouse wall of what’s on.', cta: 'See the schedule', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/daily' },
       { id: '04', label: 'Kit Index', title: 'The Kit Index', blurb: 'A block-style catalog of all 48 home kits. Browse the design language of every nation’s tournament kit.', cta: 'Browse all 48', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/kits' },
       { id: '05', label: 'Repaint', title: 'The Repaint', blurb: 'Pick a country and the whole page repaints in their kit. A small widget for the fan who wants their team everywhere they look.', cta: 'Open the repainter', status: 'starter', statusLabel: 'Live', href: '#repaint', onClick: 'openRepaintModal' },
     ];
@@ -3441,10 +3444,10 @@
     </div>
     <nav class="wc-overlay-menu">
       <div class="wc-overlay-section">Tools</div>
+      <a href="https://provisions.soccer/you-know-ball" data-route="quiz"><span>You Know Ball</span><span class="wc-arrow">→</span></a>
       <a href="https://provisions.soccer/card" data-route="card"><span>The Player Card</span><span class="wc-arrow">→</span></a>
       <a href="https://provisions.soccer/daily" data-route="daily"><span>The Daily</span><span class="wc-arrow">→</span></a>
       <a href="https://provisions.soccer/kits" data-route="kits"><span>The Kit Index</span><span class="wc-arrow">→</span></a>
-      <a href="https://provisions.soccer/you-know-ball" data-route="quiz"><span>You Know Ball</span><span class="wc-arrow">→</span></a>
 
       <div class="wc-overlay-section">On this page</div>
       <a href="https://provisions.soccer#today" class="wc-anchor"><span>The Slate</span><span class="wc-arrow">↓</span></a>
