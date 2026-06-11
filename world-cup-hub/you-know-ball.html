@@ -1542,7 +1542,8 @@
     }
 
     function showResult() {
-      // Daily plays lock in: record once, never overwrite.
+      // Daily: the day counts toward the streak once; retakes overwrite the
+      // recorded run but never re-feed the streak.
       if (state.mode === "daily") {
         const s = loadStore();
         if (!s.days) s.days = {};
@@ -1550,9 +1551,9 @@
           const yest = dateKey(new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() - 1));
           s.streak = s.lastDay === yest ? (s.streak || 0) + 1 : 1;
           s.lastDay = TODAY_KEY;
-          s.days[TODAY_KEY] = { score: state.score, answers: state.answers };
-          saveStore(s);
         }
+        s.days[TODAY_KEY] = { score: state.score, answers: state.answers };
+        saveStore(s);
       }
       renderResult(true);
     }
@@ -1580,8 +1581,11 @@
         streakEl.hidden = true;
       }
 
-      // Daily: no replay, copyable token, countdown to the next five.
-      document.getElementById("replayBtn").style.display = daily ? "none" : "";
+      // Daily: retake allowed (latest run is the record), copyable token,
+      // countdown to the next five.
+      const replayBtn = document.getElementById("replayBtn");
+      replayBtn.style.display = "";
+      replayBtn.textContent = daily ? "Retake it" : "Play again";
       document.getElementById("copyBtn").style.display = daily ? "" : "none";
       const nextFive = document.getElementById("nextFive");
       nextFive.hidden = !daily;
@@ -1675,6 +1679,11 @@
     }
 
     function replay() {
+      if (state.mode === "daily" && TODAY_BANK) {
+        startQuiz("daily");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
       document.getElementById("result").classList.remove("active");
       document.getElementById("hero").style.display = "block";
       window.scrollTo({ top: 0, behavior: "smooth" });
