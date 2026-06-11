@@ -612,10 +612,11 @@
       font-family: 'Graduate', serif; font-weight: 400;
       font-size: inherit; line-height: 1;
       letter-spacing: 0.04em;
-      color: var(--terracotta);
-      background: color-mix(in srgb, var(--terracotta) 12%, transparent);
-      border: 3px solid var(--terracotta);
+      color: var(--on-accent);
+      background: var(--terracotta);
+      border: 2px solid var(--leather);
       border-radius: 4px;
+      box-shadow: 5px 5px 0 var(--leather);
       padding: 13px 22px 15px;
       transform: rotate(-2.5deg);
     }
@@ -2171,17 +2172,19 @@
       }
       const tw = ctx.measureText(title).width;
       const sh = ts + 70, scy = 1455;
+      const stampW = tw + 96;
       ctx.save();
       ctx.translate(W / 2, scy);
       ctx.rotate(-2.5 * Math.PI / 180);
+      // hard offset shadow, solid block, cream type — same family as the band
+      ctx.fillStyle = ink.band;
+      ctx.fillRect(-stampW / 2 + 12, -sh / 2 + 12, stampW, sh);
       ctx.fillStyle = ink.accent;
-      ctx.globalAlpha = 0.14;
-      ctx.fillRect(-tw / 2 - 48, -sh / 2, tw + 96, sh);
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = ink.accent;
-      ctx.lineWidth = 9;
-      ctx.strokeRect(-tw / 2 - 48, -sh / 2, tw + 96, sh);
-      ctx.fillStyle = ink.accent;
+      ctx.fillRect(-stampW / 2, -sh / 2, stampW, sh);
+      ctx.strokeStyle = ink.band;
+      ctx.lineWidth = 6;
+      ctx.strokeRect(-stampW / 2, -sh / 2, stampW, sh);
+      ctx.fillStyle = CREAM;
       ctx.textBaseline = "middle";
       ctx.fillText(title, 0, 6);
       ctx.restore();
