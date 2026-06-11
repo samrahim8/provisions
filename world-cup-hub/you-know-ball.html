@@ -371,6 +371,11 @@
     .option:disabled { cursor: default; }
     .option.dimmed { opacity: 0.35; }
 
+    .quiz-hero-eyebrow, .quiz-hero-foot,
+    .quiz-card-eyebrow, .quiz-card-foot,
+    .score-card-eyebrow, .score-card-foot {
+      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.045) 0 2px, transparent 2px 6px);
+    }
     .quiz-clues { display: flex; flex-direction: column; gap: 8px; margin: -4px 0 16px; }
     .quiz-clues[hidden] { display: none; }
     .clue-plate {
@@ -878,6 +883,14 @@
       font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
     }
 
+    .quiz-hero-card, .score-card { position: relative; }
+    .quiz-hero-card::after, .score-card::after {
+      content: "";
+      position: absolute; inset: 5px;
+      border: 1px solid color-mix(in srgb, var(--leather-mid) 30%, transparent);
+      border-radius: 3px;
+      pointer-events: none;
+    }
     .stripe-rule {
       height: 8px;
       background: linear-gradient(
@@ -1959,6 +1972,20 @@
       ctx.fillStyle = CREAM;
       ctx.fillRect(0, 0, W, H);
 
+      // Sunburst rays behind the score, barely-there vintage depth
+      ctx.save();
+      ctx.globalAlpha = 0.045;
+      ctx.strokeStyle = INK;
+      ctx.lineWidth = 3;
+      for (let i = 0; i < 28; i++) {
+        const ang = (i / 28) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(W / 2 + 150 * Math.cos(ang), 880 + 150 * Math.sin(ang));
+        ctx.lineTo(W / 2 + 720 * Math.cos(ang), 880 + 720 * Math.sin(ang));
+        ctx.stroke();
+      }
+      ctx.restore();
+
       // Brush-edged diagonal band behind the score
       ctx.save();
       ctx.rotate(-7 * Math.PI / 180);
@@ -2110,6 +2137,42 @@
       ctx.fillStyle = ink.band;
       ctx.fillText("PROVISIONS.SOCCER", W - 84, H - 96);
       ctx.textAlign = "center";
+
+      // Fold crease: this program lived in a back pocket
+      ctx.fillStyle = "rgba(0,0,0,0.05)";
+      ctx.fillRect(0, 1318, W, 1.5);
+      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.fillRect(0, 1319.5, W, 2);
+
+      // Printer's crop marks
+      ctx.strokeStyle = INK;
+      ctx.globalAlpha = 0.5;
+      ctx.lineWidth = 2;
+      const cm = (x, y, dx, dy) => {
+        ctx.beginPath();
+        ctx.moveTo(x + dx * 12, y); ctx.lineTo(x + dx * 46, y);
+        ctx.moveTo(x, y + dy * 12); ctx.lineTo(x, y + dy * 46);
+        ctx.stroke();
+      };
+      cm(30, 30, 1, 1); cm(W - 30, 30, -1, 1);
+      cm(30, H - 30, 1, -1); cm(W - 30, H - 30, -1, -1);
+      ctx.globalAlpha = 1;
+
+      // Ink color bar + edition number above the perforation
+      const swatches = [ink.band, ink.accent, "#C9A227", "#2E8B57", INK];
+      swatches.forEach((c, i) => {
+        ctx.fillStyle = c;
+        ctx.fillRect(84 + i * 26, H - 268, 20, 20);
+      });
+      if (daily) {
+        ctx.font = '600 24px "IBM Plex Mono"';
+        ctx.fillStyle = INK;
+        ctx.globalAlpha = 0.75;
+        ctx.textAlign = "right";
+        ctx.fillText(`№ ${String(TODAY_NUM).padStart(2, "0")} / 39`, W - 84, H - 250);
+        ctx.globalAlpha = 1;
+        ctx.textAlign = "center";
+      }
 
       // Paper grain over everything
       const grain = await grainImage();
