@@ -394,6 +394,36 @@
     .order-item.picked .order-slot { background: var(--leather-mid); color: var(--on-leather); }
     .order-item.correct .order-slot { background: var(--green); border-color: var(--green); color: #FFF; }
     .order-item.wrong .order-slot { background: var(--red); border-color: var(--red); color: #FFF; }
+    .year-wrap {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px;
+      padding: 8px 0 4px;
+    }
+    .year-btn {
+      appearance: none; cursor: pointer;
+      background: var(--parchment);
+      border: 2px solid var(--leather-mid);
+      border-radius: 4px;
+      box-shadow: 3px 3px 0 rgba(44,33,24,0.22);
+      font-family: 'Graduate', serif; font-size: 13px;
+      color: var(--leather-mid);
+      padding: 12px 10px;
+      min-width: 52px;
+      transition: transform 0.1s, box-shadow 0.1s, opacity 0.15s;
+    }
+    .year-btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 rgba(44,33,24,0.3); }
+    .year-btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(44,33,24,0.22); }
+    .year-btn:disabled { opacity: 0.35; cursor: default; }
+    .year-display {
+      font-family: 'Alfa Slab One', serif;
+      font-size: 44px; line-height: 1;
+      color: var(--leather);
+      min-width: 130px; text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+    .year-display.year-right { color: var(--green); }
+    .year-display.year-wrong { color: var(--red); font-size: 30px; }
+    .year-display.year-wrong s { opacity: 0.55; margin-right: 8px; }
     .order-lock {
       margin-top: 6px;
       appearance: none; cursor: pointer;
@@ -717,6 +747,10 @@
       .result-actions button { width: 100%; padding: 16px; }
       .result-actions .btn-text { width: auto; padding: 8px 12px; margin: 0 auto; }
       .result { padding-bottom: 72px; }
+      .year-wrap { gap: 6px; }
+      .year-btn { min-width: 42px; padding: 12px 4px; font-size: 11px; }
+      .year-display { min-width: 100px; font-size: 36px; }
+      .year-display.year-wrong { font-size: 24px; }
       .option { padding: 14px 16px; }
       .score-card-tier { font-size: 22px; }
       .score-card-sub { font-size: 13px; }
@@ -1328,6 +1362,7 @@
       answers: [], // array of booleans
       cluesShown: 1, // The Reveal
       orderSeq: [],  // The Order
+      yearGuess: 1978, // The Year dial
     };
 
     function pickQuestions() {
@@ -1355,10 +1390,12 @@
       score: "The Scoreline",
       ladder: "The Ladder",
       order: "The Order",
+      year: "The Year",
     };
     const FOOT_HINT = {
       reveal: "Answer when you’re sure",
       order: "Tap them into order",
+      year: "Dial it in, then lock",
     };
     // A day bank is either { rounds } (pentathlon) or legacy { questions } (all trivia)
     function dayRounds(bank) {
@@ -1427,7 +1464,25 @@
       const opts = document.getElementById("qOptions");
       opts.innerHTML = "";
       opts.dataset.t = r.t || "five";
-      if (r.t === "order") {
+      if (r.t === "year") {
+        state.yearGuess = 1978;
+        opts.innerHTML = `
+          <div class="year-wrap">
+            <button type="button" class="year-btn" data-step="-10">−10</button>
+            <button type="button" class="year-btn" data-step="-1">−1</button>
+            <div class="year-display" id="yearDisplay">1978</div>
+            <button type="button" class="year-btn" data-step="1">+1</button>
+            <button type="button" class="year-btn" data-step="10">+10</button>
+          </div>
+          <button type="button" id="yearLock" class="order-lock">Lock it in</button>`;
+        opts.querySelectorAll(".year-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            state.yearGuess = Math.max(1930, Math.min(2026, state.yearGuess + Number(btn.dataset.step)));
+            document.getElementById("yearDisplay").textContent = state.yearGuess;
+          });
+        });
+        document.getElementById("yearLock").addEventListener("click", lockYear);
+      } else if (r.t === "order") {
         state.orderSeq = [];
         r.items.forEach((label, i) => {
           const btn = document.createElement("button");
@@ -1488,6 +1543,24 @@
       const lock = document.getElementById("orderLock");
       const r = state.questions[state.idx];
       if (lock) lock.disabled = state.orderSeq.length !== r.items.length;
+    }
+
+    function lockYear() {
+      const r = state.questions[state.idx];
+      const diff = Math.abs(state.yearGuess - r.a);
+      const correct = diff === 0;
+      state.answers.push(correct);
+      if (correct) state.score++;
+      const pts = correct ? 3 : diff <= 4 ? 1 : 0;
+      state.pts += pts;
+      state.lastPts = pts;
+      const disp = document.getElementById("yearDisplay");
+      disp.classList.add(correct ? "year-right" : "year-wrong");
+      if (!correct) disp.innerHTML = `<s>${state.yearGuess}</s> ${r.a}`;
+      document.querySelectorAll(".year-btn").forEach((b) => { b.disabled = true; });
+      const lock = document.getElementById("yearLock");
+      if (lock) lock.style.display = "none";
+      finishRound(correct, r);
     }
 
     function checkOrder() {
