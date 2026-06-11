@@ -35,8 +35,8 @@
   <style>
     /* ── BRAND TOKENS (mirrors index.html exactly) ── */
     :root {
-      --parchment: #F5F1EB;
-      --parchment-el: #F8F5EF;
+      --parchment: #F2EBDD;
+      --parchment-el: #F7F1E5;
       --leather: #2C2118;
       --leather-mid: #4A3D32;
       --terracotta: #A0422A;
@@ -157,14 +157,40 @@
     .quiz-hero-body {
       padding: 22px 28px 20px;
     }
-    .quiz-hero-body h1 {
-      font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(38px, 5.2vw, 60px); line-height: 0.96;
-      letter-spacing: -0.035em;
-      color: var(--leather);
-      margin-bottom: 10px;
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0 0 0 0); white-space: nowrap; border: 0;
     }
-    .quiz-hero-body h1 .accent { color: var(--terracotta); }
+    .hero-arch {
+      display: block;
+      width: min(440px, 86%);
+      margin: 4px auto 2px;
+      overflow: visible;
+    }
+    .arch-text {
+      font-family: 'Graduate', serif;
+      font-size: 53px;
+      letter-spacing: 0.08em;
+      fill: var(--leather);
+    }
+    .arch-star { fill: var(--terracotta); }
+    .hero-band {
+      position: relative;
+      margin: 14px -28px 18px;
+      transform: rotate(-2.5deg);
+      background: var(--terracotta);
+      border-top: 2px solid var(--leather);
+      border-bottom: 2px solid var(--leather);
+      padding: 12px 0 14px;
+    }
+    .hero-band span {
+      font-family: 'Graduate', serif;
+      font-size: clamp(24px, 4vw, 34px);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--on-accent);
+    }
     .quiz-hero-body .lede {
       font-family: 'Inter', sans-serif; font-weight: 400;
       font-size: 14px; line-height: 1.5;
@@ -192,9 +218,9 @@
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       padding: 6px 4px;
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 12px; line-height: 1.15;
-      letter-spacing: -0.005em;
+      font-family: 'Graduate', serif; font-weight: 400;
+      font-size: 11px; line-height: 1.2;
+      letter-spacing: 0.02em;
       color: var(--leather-mid);
       gap: 4px;
       text-align: center;
@@ -205,22 +231,31 @@
       color: var(--text-soft); white-space: nowrap;
     }
     .tier-rung-top {
-      font-family: 'Syne', sans-serif; font-weight: 800;
       color: var(--terracotta);
-      font-size: 13px;
+      font-size: 12px;
     }
     .tier-rung-top .range { color: var(--terracotta); opacity: 0.8; }
     .start-btn {
-      appearance: none; border: none; cursor: pointer;
+      appearance: none; cursor: pointer;
       background: var(--terracotta); color: var(--on-accent);
-      padding: 14px 28px;
-      border-radius: 5px;
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
-      transition: background 0.2s, transform 0.2s;
-      width: 100%; max-width: 280px;
+      padding: 16px 28px;
+      border: 2px solid var(--leather);
+      border-radius: 4px;
+      box-shadow: 4px 4px 0 var(--leather);
+      font-family: 'Graduate', serif; font-weight: 400;
+      font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase;
+      transition: transform 0.12s, box-shadow 0.12s, background 0.2s;
+      width: 100%; max-width: 320px;
     }
-    .start-btn:hover { background: var(--terracotta-light); transform: translateY(-1px); }
+    .start-btn:hover:not(:disabled) {
+      background: var(--terracotta-light);
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 var(--leather);
+    }
+    .start-btn:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--leather);
+    }
     .quiz-hero-foot {
       display: flex; align-items: center; justify-content: space-between;
       padding: 10px 22px;
@@ -247,20 +282,24 @@
       padding: 10px 18px;
       background: var(--leather-mid);
       color: var(--on-leather);
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      font-family: 'Graduate', serif; font-weight: 400;
+      font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
       gap: 12px;
     }
     .quiz-card-eyebrow > span:first-child { color: var(--terracotta-glow); }
-    .progress-bar {
-      height: 3px; background: rgba(44,33,24,0.1);
-      position: relative;
+    .run-tracker {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      padding: 12px 0 4px;
+      background: var(--parchment-el);
     }
-    .progress-fill {
-      position: absolute; top: 0; left: 0; bottom: 0;
-      background: var(--terracotta);
-      transition: width 0.35s ease;
-    }
+    .run-tracker svg { width: 26px; height: 26px; display: block; }
+    .run-tracker.rt-dense { gap: 8px; }
+    .run-tracker.rt-dense svg { width: 18px; height: 18px; }
+    .run-tracker .rt-hit { fill: var(--terracotta); stroke: var(--leather); stroke-width: 1.4; }
+    .run-tracker .rt-miss { fill: none; stroke: var(--red); stroke-width: 1.8; opacity: 0.8; }
+    .run-tracker .rt-now { fill: none; stroke: var(--leather); stroke-width: 1.8; }
+    .run-tracker .rt-open { fill: none; stroke: var(--leather); stroke-width: 1.4; opacity: 0.28; }
+    .run-tracker .rt-pop { animation: dotPop 0.32s cubic-bezier(0.2, 1.5, 0.4, 1) both; }
     .quiz-card-body { padding: 24px 24px 18px; }
     .question {
       font-family: 'Syne', sans-serif; font-weight: 700;
@@ -273,26 +312,27 @@
     .option {
       appearance: none; cursor: pointer;
       background: var(--parchment);
-      border: 1.5px solid var(--border);
-      border-radius: 5px;
+      border: 2px solid var(--leather-mid);
+      border-radius: 4px;
+      box-shadow: 3px 3px 0 rgba(44,33,24,0.22);
       padding: 12px 16px;
       font-family: 'Inter', sans-serif; font-weight: 500;
       font-size: 15px;
       color: var(--leather-mid);
       text-align: left;
-      transition: all 0.15s ease;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s, border-color 0.15s, opacity 0.2s;
       display: flex; align-items: center; gap: 12px;
     }
     .option:not(:disabled):hover {
-      border-color: var(--leather-mid);
-      transform: translateX(1px);
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 rgba(44,33,24,0.3);
     }
     .option-letter {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 24px; height: 24px;
+      width: 26px; height: 26px;
       background: var(--leather-mid); color: var(--on-leather);
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 11px; letter-spacing: 0.04em;
+      font-family: 'Graduate', serif; font-weight: 400;
+      font-size: 12px;
       border-radius: 3px;
       flex-shrink: 0;
     }
@@ -322,8 +362,8 @@
     }
     .explanation.show { display: flex; flex-direction: column; gap: 6px; animation: slideIn 0.25s ease; }
     .explanation .label {
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      font-family: 'Graduate', serif; font-weight: 400;
+      font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--terracotta-glow);
     }
     @keyframes slideIn {
@@ -344,15 +384,18 @@
       color: var(--text-soft);
     }
     .next-btn {
-      appearance: none; border: none; cursor: pointer;
+      appearance: none; cursor: pointer;
       background: var(--leather-mid); color: var(--on-leather);
       padding: 10px 22px;
-      border-radius: 5px;
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
-      transition: opacity 0.2s, transform 0.2s;
+      border: 2px solid var(--leather);
+      border-radius: 4px;
+      box-shadow: 3px 3px 0 rgba(44,33,24,0.3);
+      font-family: 'Graduate', serif; font-weight: 400;
+      font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: transform 0.12s, box-shadow 0.12s;
       display: none;
     }
+    .next-btn.show:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 rgba(44,33,24,0.38); }
     .next-btn.show { display: inline-block; }
     .next-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
@@ -381,30 +424,48 @@
       padding: 12px 20px;
       background: var(--leather-mid);
       color: var(--on-leather);
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      font-family: 'Graduate', serif; font-weight: 400;
+      font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
       gap: 12px;
     }
     .score-card-eyebrow > span:first-child { color: var(--terracotta-glow); }
     .score-card-body {
-      padding: 36px 28px 28px;
+      padding: 30px 28px 28px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .score-band {
+      position: absolute;
+      left: -15%; right: -15%;
+      top: 50%; height: 88px;
+      transform: translateY(-58%) rotate(-4deg);
+      background: var(--terracotta);
+      border-top: 2px solid var(--leather);
+      border-bottom: 9px solid var(--leather);
+      pointer-events: none;
+      z-index: 0;
     }
     .score-card-score {
-      display: flex; align-items: baseline; justify-content: center; gap: 6px;
-      margin-bottom: 12px;
+      position: relative;
+      display: flex; align-items: baseline; justify-content: center; gap: 10px;
+      margin-bottom: 10px;
     }
+    .score-card-score .num, .score-card-score .den { position: relative; z-index: 1; }
     .score-card-score .num {
-      font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(112px, 18vw, 180px); line-height: 0.85;
-      letter-spacing: -0.045em;
-      color: var(--leather);
+      font-family: 'Alfa Slab One', serif; font-weight: 400;
+      font-size: clamp(120px, 19vw, 184px); line-height: 0.9;
+      color: var(--parchment-el);
+      -webkit-text-stroke: 4px var(--leather);
+      paint-order: stroke fill;
+      text-shadow: 7px 6px 0 var(--terracotta-light);
     }
     .score-card-score .den {
-      font-family: 'Syne', sans-serif; font-weight: 600;
-      font-size: clamp(28px, 4vw, 38px); line-height: 1;
-      letter-spacing: -0.02em;
-      color: var(--text-soft);
+      font-family: 'Alfa Slab One', serif; font-weight: 400;
+      font-size: clamp(30px, 4.4vw, 42px); line-height: 1;
+      color: var(--parchment-el);
+      -webkit-text-stroke: 2px var(--leather);
+      paint-order: stroke fill;
     }
     .score-card-divider {
       display: flex; align-items: center; justify-content: center;
@@ -427,14 +488,15 @@
     /* The verdict lands as a rubber stamp: rotated, terracotta, stroked. */
     .verdict-stamp {
       display: inline-block;
-      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-family: 'Graduate', serif; font-weight: 400;
       font-size: inherit; line-height: 1;
-      letter-spacing: -0.01em;
+      letter-spacing: 0.04em;
       color: var(--terracotta);
+      background: color-mix(in srgb, var(--terracotta) 12%, transparent);
       border: 3px solid var(--terracotta);
-      border-radius: 8px;
-      padding: 12px 20px 14px;
-      transform: rotate(-3deg);
+      border-radius: 4px;
+      padding: 13px 22px 15px;
+      transform: rotate(-2.5deg);
     }
     .stamp-in {
       animation: stampIn 0.42s cubic-bezier(0.16, 1.2, 0.4, 1) both;
@@ -475,16 +537,16 @@
       max-width: 320px;
     }
     .score-card-dots {
-      display: flex; justify-content: center; gap: 7px;
-      margin: 16px 0 2px;
-      min-height: 18px;
+      display: flex; justify-content: center; gap: 12px;
+      margin: 30px 0 2px;
+      min-height: 30px;
+      position: relative;
+      z-index: 1;
     }
-    .score-card-dots .dot {
-      width: 18px; height: 18px; border-radius: 3px;
-      background: rgba(44,33,24,0.14);
-    }
-    .score-card-dots .dot.green { background: var(--green); }
-    .score-card-dots .dot.red { background: var(--red); }
+    .score-card-dots .dot { width: 30px; height: 30px; background: none; }
+    .score-card-dots .dot svg { width: 100%; height: 100%; display: block; }
+    .score-card-dots .dot.green svg { fill: var(--terracotta); stroke: var(--leather); stroke-width: 1.4; }
+    .score-card-dots .dot.red svg { fill: none; stroke: var(--red); stroke-width: 1.8; opacity: 0.8; }
     .score-card-foot {
       display: flex; align-items: center; justify-content: space-between;
       padding: 10px 20px;
@@ -500,23 +562,28 @@
       max-width: 460px; margin: 0 auto;
     }
     .result-actions button, .result-actions a {
-      appearance: none; border: none; cursor: pointer;
-      padding: 14px 26px;
-      border-radius: 5px;
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+      appearance: none; cursor: pointer;
+      padding: 15px 26px;
+      border: 2px solid var(--leather);
+      border-radius: 4px;
+      box-shadow: 4px 4px 0 var(--leather);
+      font-family: 'Graduate', serif; font-weight: 400;
+      font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
       text-decoration: none;
-      transition: background 0.2s, transform 0.2s, opacity 0.2s;
+      transition: transform 0.12s, box-shadow 0.12s, background 0.2s, color 0.2s;
     }
+    .result-actions button:hover, .result-actions a:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 var(--leather);
+    }
+    .result-actions button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--leather); }
     .result-actions .btn-primary {
       background: var(--terracotta); color: var(--on-accent);
     }
-    .result-actions .btn-primary:hover { background: var(--terracotta-light); transform: translateY(-1px); }
+    .result-actions .btn-primary:hover { background: var(--terracotta-light); }
     .result-actions .btn-ghost {
-      background: transparent; color: var(--leather-mid);
-      border: 1.5px solid var(--leather-mid);
+      background: var(--parchment); color: var(--leather-mid);
     }
-    .result-actions .btn-ghost:hover { background: var(--leather-mid); color: var(--on-leather); }
 
     /* ── FOOTER ── */
     footer.programme-footer {
@@ -746,6 +813,13 @@
   </style>
 </head>
 <body data-route="quiz">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="starSym" viewBox="0 0 20 20">
+        <polygon points="10,0.6 12.47,6.6 19.51,6.91 13.99,11.3 15.88,18.09 10,14.2 4.12,18.09 6.01,11.3 0.49,6.91 7.53,6.6"/>
+      </symbol>
+    </defs>
+  </svg>
   <div class="grid-bg" aria-hidden="true"></div>
 
   <nav class="topbar">
@@ -766,7 +840,14 @@
             <span id="heroDay">Summer &rsquo;26</span>
           </div>
           <div class="quiz-hero-body">
-            <h1 data-ink>Today&rsquo;s<br><span class="accent">five.</span></h1>
+            <h1 class="sr-only">You Know Ball: today&rsquo;s five</h1>
+            <svg class="hero-arch" viewBox="0 0 640 168" aria-hidden="true">
+              <defs><path id="ykbArc" d="M 44 158 A 470 470 0 0 1 596 158" fill="none"/></defs>
+              <use href="#starSym" x="8" y="118" width="34" height="34" class="arch-star"></use>
+              <use href="#starSym" x="598" y="118" width="34" height="34" class="arch-star"></use>
+              <text class="arch-text"><textPath href="#ykbArc" startOffset="50%" text-anchor="middle">YOU KNOW BALL</textPath></text>
+            </svg>
+            <div class="hero-band" aria-hidden="true"><span>Today&rsquo;s Five</span></div>
             <p class="lede">New questions every morning, written for that day&rsquo;s matches. One go. No Google.</p>
             <div class="tier-ladder">
               <div class="tier-ladder-label">★ The Tiers ★</div>
@@ -793,7 +874,7 @@
             <span>Question <strong id="qIndex">1</strong> / <span id="qTotal">5</span></span>
             <span id="qDifficulty">Easy</span>
           </div>
-          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 20%"></div></div>
+          <div class="run-tracker" id="runTracker" aria-hidden="true"></div>
           <div class="quiz-card-body">
             <div class="question" id="qText">Loading…</div>
             <div class="options" id="qOptions"></div>
@@ -819,6 +900,7 @@
           </div>
           <div class="score-card-body">
             <div class="score-card-score">
+              <div class="score-band" aria-hidden="true"></div>
               <span class="num" id="rScore">––</span>
               <span class="den" id="rDen">/ 5</span>
             </div>
@@ -1139,6 +1221,28 @@
 
     const DIFF_LABEL = { 1: "Easy", 2: "Medium", 3: "Hard" };
 
+    function starSvgHtml(cls) {
+      return `<svg class="${cls}" viewBox="0 0 20 20" aria-hidden="true"><use href="#starSym"></use></svg>`;
+    }
+    // The run, visible while you play: hit / miss / current / still to come
+    function renderRunTracker() {
+      const el = document.getElementById("runTracker");
+      if (!el) return;
+      const total = state.questions.length;
+      el.classList.toggle("rt-dense", total > 5);
+      let html = "";
+      for (let i = 0; i < total; i++) {
+        if (i < state.answers.length) {
+          html += starSvgHtml((state.answers[i] ? "rt-hit" : "rt-miss") + (i === state.answers.length - 1 ? " rt-pop" : ""));
+        } else if (i === state.answers.length) {
+          html += starSvgHtml("rt-now");
+        } else {
+          html += starSvgHtml("rt-open");
+        }
+      }
+      el.innerHTML = html;
+    }
+
     function startQuiz(mode) {
       if (mode === "daily" && !TODAY_BANK) return;
       state.mode = mode;
@@ -1158,7 +1262,7 @@
       document.getElementById("qIndex").textContent = state.idx + 1;
       document.getElementById("qTotal").textContent = total;
       document.getElementById("qDifficulty").textContent = state.mode === "daily" ? DAY_LABEL : DIFF_LABEL[q.d];
-      document.getElementById("progressFill").style.width = ((state.idx + 1) / total * 100) + "%";
+      renderRunTracker();
       document.getElementById("qText").textContent = q.q;
 
       const opts = document.getElementById("qOptions");
@@ -1191,6 +1295,8 @@
         else if (i === picked) b.classList.add("wrong");
         else b.classList.add("dimmed");
       });
+
+      renderRunTracker();
 
       const expl = document.getElementById("qExplain");
       document.getElementById("explainLabel").textContent = correct ? "You know ball ★" : "Full kit behavior";
@@ -1250,7 +1356,7 @@
       const streakEl = document.getElementById("rStreak");
       const streak = currentStreak(loadStore());
       if (daily && streak > 1) {
-        streakEl.textContent = `${streak}-day streak`;
+        streakEl.textContent = `★ ${streak} days running ★`;
         streakEl.hidden = false;
       } else {
         streakEl.hidden = true;
@@ -1279,6 +1385,7 @@
       state.answers.forEach((c, i) => {
         const d = document.createElement("div");
         d.className = "dot " + (c ? "green" : "red") + (live ? " pop" : "");
+        d.innerHTML = starSvgHtml("");
         if (live) d.style.animationDelay = `${200 + i * DOT_STAGGER}ms`;
         dots.appendChild(d);
       });
@@ -1331,10 +1438,10 @@
     // ── Copyable result token (pastes clean into iMessage/WhatsApp) ──
     function buildToken() {
       const streak = currentStreak(loadStore());
-      const blocks = state.answers.map((c) => (c ? "■" : "□")).join("");
+      const stars = state.answers.map((c) => (c ? "★" : "☆")).join("");
       return [
         `You Know Ball · ${DAY_LABEL}`,
-        `${blocks} ${state.score}/5` + (streak > 1 ? ` · ${streak}-day streak` : ""),
+        `${stars} ${state.score}/5` + (streak > 1 ? ` · ${streak} days running` : ""),
         "provisions.soccer/you-know-ball",
       ].join("\n");
     }
@@ -1782,7 +1889,7 @@
       document.getElementById("heroDay").textContent = `${DAY_LABEL} · Summer ’26`;
       const s = loadStore();
       const streak = currentStreak(s);
-      if (streak > 1) document.getElementById("heroStreak").textContent = `${streak}-day streak`;
+      if (streak > 1) document.getElementById("heroStreak").textContent = `${streak} days running`;
       if (!TODAY_BANK) {
         const btn = document.getElementById("startBtn");
         btn.disabled = true;
