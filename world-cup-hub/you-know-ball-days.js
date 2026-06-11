@@ -1,9 +1,8 @@
 // You Know Ball — daily banks.
 // Keyed by LOCAL calendar date (matches the slate's local-day convention).
 //
-// Day 1 (Jun 11) shipped as five classic trivia questions — leave it.
-// From Jun 12 the daily is a PENTATHLON: five rounds, one of each format,
-// one star each. Round types:
+// Every day is a PENTATHLON: five rounds, one of each format, one star
+// each. (Legacy { questions } days still play as all-trivia.) Round types:
 //   five   — classic multiple choice            { t, q, o, a, e }
 //   reveal — name the player from 1-3 clues     { t, q, clues:[3], o, a, e }
 //   score  — pick the scoreline                 { t, q, o, a, e }
@@ -12,12 +11,12 @@
 window.YKB_DAYS = {
   "2026-06-11": {
     theme: "Opening Day",
-    questions: [
-      { q: "Mexico kicks off the tournament today. Counting this summer, how many World Cups have been staged at least partly in Mexico?", o: ["1", "2", "3", "4"], a: 2, e: "1970, 1986, and now 2026. No country had hosted three until today." },
-      { q: "Which stadium was the first ever to host two World Cup finals?", o: ["Maracanã", "Wembley", "Estadio Azteca", "San Siro"], a: 2, e: "Azteca staged Pelé's 1970 coronation and Maradona's 1986 masterpiece. Today it opens a third tournament." },
-      { q: "Today's opener is a rematch of the 2010 opener. Who scored that tournament's iconic first goal for South Africa against Mexico?", o: ["Steven Pienaar", "Siphiwe Tshabalala", "Katlego Mphela", "Bongani Khumalo"], a: 1, e: "Tshabalala's rocket and the corner-flag dance is one of the great opening-day moments. It ended 1-1." },
-      { q: "South Korea went further in 2002 than any Asian side ever has. Where did the run end?", o: ["Round of 16", "Quarter-final", "Semi-final", "The final"], a: 2, e: "Co-hosts Korea beat Italy and Spain before losing 1-0 to Germany in the semis. They finished fourth." },
-      { q: "Czechia's predecessors, Czechoslovakia, reached two World Cup finals. The 1962 final was lost to which team?", o: ["Italy", "Brazil", "England", "Hungary"], a: 1, e: "Brazil won 3-1 in Chile, with Garrincha running the tournament after Pelé got injured. The 1934 final was lost to Italy." },
+    rounds: [
+      { t: "five", q: "Mexico kicks off the tournament today. Counting this summer, how many World Cups have been staged at least partly in Mexico?", o: ["1", "2", "3", "4"], a: 2, e: "1970, 1986, and now 2026. No country had hosted three until today." },
+      { t: "reveal", q: "Name the player.", clues: ["Won two Champions Leagues in a Barcelona shirt.", "The only man to captain his country at five World Cups.", "Mexico's great No. 4 — El Káiser de Michoacán."], o: ["Hugo Sánchez", "Cuauhtémoc Blanco", "Rafael Márquez", "Andrés Guardado"], a: 2, e: "Márquez wore the armband from 2002 to 2018. Tonight a new Mexico captain walks out at the Azteca." },
+      { t: "score", q: "Today's opener is a rematch: South Africa v Mexico opened the 2010 World Cup. It finished:", o: ["1-1", "South Africa 1-0", "Mexico 2-1", "0-0"], a: 0, e: "Tshabalala's rocket and the corner-flag dance, then Márquez equalized. Sixteen years later they go again." },
+      { t: "ladder", q: "Which of tonight's Group A late-game sides made their World Cup debut first?", o: ["South Korea", "Czechia, as Czechoslovakia"], a: 1, e: "Czechoslovakia were finalists back in 1934. Korea arrived in 1954 and took a 9-0 from Hungary; they've come a long way since." },
+      { t: "order", q: "Earliest to latest:", items: ["South Korea reach a semifinal", "Mexico host for the first time", "The Azteca stages its second final"], order: [1, 2, 0], e: "1970, 1986, 2002. Tonight the Azteca era gets a third act." },
     ],
   },
   "2026-06-12": {
