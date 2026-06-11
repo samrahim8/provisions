@@ -35,15 +35,17 @@
   <style>
     /* ── BRAND TOKENS (mirrors index.html exactly) ── */
     :root {
+      /* USA-94 program ink: navy + old-glory red on cream. The repaint
+         overrides these per kit; reset falls back here. */
       --parchment: #F2EBDD;
       --parchment-el: #F7F1E5;
-      --leather: #2C2118;
-      --leather-mid: #4A3D32;
-      --terracotta: #A0422A;
-      --terracotta-light: #B8533A;
-      --terracotta-glow: #E58769;
-      --text-soft: #6B6259;
-      --border: #DDD7CC;
+      --leather: #122749;
+      --leather-mid: #1E3A66;
+      --terracotta: #B02A3C;
+      --terracotta-light: #C53A4C;
+      --terracotta-glow: #F0928B;
+      --text-soft: #56617A;
+      --border: #D6D2C4;
       --on-accent: #FFFFFF;
       --on-leather: #FFFFFF;
       --green: #2E8B57;
@@ -93,6 +95,18 @@
       background-size: 16px 16px;
     }
     nav.topbar, main, footer { position: relative; z-index: 1; }
+    /* Chalk center-circle, like the pitch under the program */
+    body::after {
+      content: "";
+      position: fixed;
+      top: -140px; right: -180px;
+      width: 520px; height: 520px;
+      border: 2px solid var(--leather-mid);
+      border-radius: 50%;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
 
     /* ── NAV / MAST (mirrors index.html .mast pattern) ── */
     nav.topbar {
@@ -157,6 +171,13 @@
     .quiz-hero-body {
       padding: 22px 28px 20px;
     }
+    .hero-record {
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--terracotta);
+      margin: -4px auto 12px;
+    }
+    .hero-record[hidden] { display: none; }
     .sr-only {
       position: absolute; width: 1px; height: 1px;
       padding: 0; margin: -1px; overflow: hidden;
@@ -634,6 +655,7 @@
     .score-card-dots .dot { width: 30px; height: 30px; background: none; }
     .score-card-dots .dot svg { width: 100%; height: 100%; display: block; }
     .score-card-dots .dot.green svg { fill: var(--terracotta); stroke: var(--leather); stroke-width: 1.4; }
+    .score-card-dots.perfect .dot.green svg { fill: #C9A227; }
     .score-card-dots .dot.red svg { fill: none; stroke: var(--red); stroke-width: 1.8; opacity: 0.8; }
     .score-card-foot {
       display: flex; align-items: center; justify-content: space-between;
@@ -856,6 +878,15 @@
       font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
     }
 
+    .stripe-rule {
+      height: 8px;
+      background: linear-gradient(
+        var(--terracotta) 0 3px,
+        transparent 3px 5px,
+        var(--leather-mid) 5px 8px
+      );
+    }
+
     /* ── Daily-five chrome ── */
     .exam-link {
       display: block;
@@ -998,6 +1029,7 @@
             <span>You Know Ball</span>
             <span id="heroDay">Summer &rsquo;26</span>
           </div>
+          <div class="stripe-rule" aria-hidden="true"></div>
           <div class="quiz-hero-body">
             <h1 class="sr-only">You Know Ball: today&rsquo;s five</h1>
             <svg class="hero-arch" viewBox="0 0 640 168" aria-hidden="true">
@@ -1008,6 +1040,7 @@
             </svg>
             <div class="hero-band" aria-hidden="true"><span>Today&rsquo;s Five</span></div>
             <p class="lede">New questions every morning, written for that day&rsquo;s matches. One go. No Google.</p>
+            <p class="hero-record" id="heroRecord" hidden></p>
             <div class="tier-ladder">
               <div class="tier-ladder-label">★ The Tiers ★</div>
               <div class="tier-rung"><span>Full Kit Wanker</span><span class="range">0–5</span></div>
@@ -1033,6 +1066,7 @@
             <span>Question <strong id="qIndex">1</strong> / <span id="qTotal">5</span></span>
             <span id="qDifficulty">Easy</span>
           </div>
+          <div class="stripe-rule" aria-hidden="true"></div>
           <div class="run-tracker" id="runTracker" aria-hidden="true"></div>
           <div class="quiz-card-body">
             <div class="question" id="qText">Loading…</div>
@@ -1058,6 +1092,7 @@
             <span>You Know Ball</span>
             <span id="rMode">Summer &rsquo;26</span>
           </div>
+          <div class="stripe-rule" aria-hidden="true"></div>
           <div class="score-card-body">
             <div class="score-card-score">
               <div class="score-band" aria-hidden="true"></div>
@@ -1087,7 +1122,7 @@
   </main>
 
   <footer class="programme-footer">
-    <span>Provisions · World Cup '26</span>
+    <span>It&rsquo;s called soccer · Summer &rsquo;26</span>
     <span><a href="https://provisions.work">provisions.work →</a></span>
   </footer>
 
@@ -1513,7 +1548,10 @@
 
       document.getElementById("qExplain").classList.remove("show");
       document.getElementById("nextBtn").classList.remove("show");
-      document.getElementById("footHint").textContent = FOOT_HINT[r.t] || "Lock one in";
+      document.getElementById("footHint").textContent =
+        state.mode === "daily" && state.idx === 3
+          ? `Halftime: ${state.pts} pts through three`
+          : (FOOT_HINT[r.t] || "Lock one in");
       document.getElementById("footHint").style.display = "inline";
     }
 
@@ -1704,6 +1742,7 @@
       const DOT_STAGGER = daily ? 110 : 60;
 
       dots.innerHTML = "";
+      dots.classList.toggle("perfect", daily && state.pts === 15);
       state.answers.forEach((c, i) => {
         const d = document.createElement("div");
         d.className = "dot " + (c ? "green" : "red") + (live ? " pop" : "");
@@ -1724,6 +1763,7 @@
             void card.offsetWidth;
             card.classList.add("thud");
           }
+          try { if (window.Motion && Motion.sfx && Motion.sfx.thunk) Motion.sfx.thunk(); } catch {}
         }, stampAt);
         setTimeout(() => {
           [document.getElementById("rSub"), streakEl].forEach((el) => {
@@ -1866,7 +1906,7 @@
         const accent = accents.find((a) => a !== "#FFFFFF" && _ylum(a) < 0.72) || _ymix(band, "#000000", 0.35);
         return { name, band, accent };
       }
-      return { name: null, band: "#A0422A", accent: "#2C2118" };
+      return { name: null, band: "#0A2D5C", accent: "#C8334B" };
     }
 
     function _star(ctx, cx, cy, r, rot) {
@@ -1990,10 +2030,11 @@
       const r = daily ? 52 : 30;
       const gap = daily ? 130 : 72;
       const x0 = W / 2 - ((n - 1) * gap) / 2;
+      const starFill = daily && state.pts === 15 ? "#C9A227" : ink.band;
       state.answers.forEach((c, i) => {
         const cx = x0 + i * gap, cy = 1250;
         if (c) {
-          ctx.fillStyle = ink.band;
+          ctx.fillStyle = starFill;
           _star(ctx, cx, cy, r); ctx.fill();
           ctx.strokeStyle = INK; ctx.lineWidth = daily ? 5 : 3;
           _star(ctx, cx, cy, r); ctx.stroke();
@@ -2234,6 +2275,13 @@
       const s = loadStore();
       const streak = currentStreak(s);
       if (streak > 1) document.getElementById("heroStreak").textContent = `${streak} days running`;
+      const history = Object.values(s.days || {});
+      if (history.length) {
+        const best = Math.max(...history.map((d) => (typeof d.pts === "number" ? d.pts : d.score * 3)));
+        const rec = document.getElementById("heroRecord");
+        rec.textContent = `Played ${history.length} · Best ${best}/15`;
+        rec.hidden = false;
+      }
       if (!TODAY_BANK) {
         const btn = document.getElementById("startBtn");
         btn.disabled = true;
