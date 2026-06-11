@@ -380,6 +380,18 @@
       transition: background 0.2s, transform 0.2s;
     }
     .btn-primary:hover { background: var(--terracotta-light); transform: translateY(-1px); }
+    .btn-ghost {
+      color: var(--leather);
+      padding: 14px 4px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--terracotta); }
     .btn-dark {
       background: var(--leather-mid);
       color: var(--on-leather);
@@ -1469,6 +1481,27 @@
       font-size: 11px; margin: 0 6px 0 1px;
     }
     .kickoff-portrait-countdown .kp-unit:last-of-type { margin-right: 0; }
+    .kickoff-portrait-live {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--display); font-weight: 900;
+      font-size: 18px; letter-spacing: 0.04em; line-height: 1;
+      text-transform: uppercase;
+      color: #A0422A;
+      white-space: nowrap;
+    }
+    .kickoff-portrait-live[hidden] { display: none; }
+    .kp-live-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: #A0422A;
+      animation: kpLivePulse 1.6s ease-in-out infinite;
+    }
+    @keyframes kpLivePulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.45); opacity: 0.55; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .kp-live-dot { animation: none; }
+    }
     .kickoff-portrait-tz {
       font-family: var(--mono, "IBM Plex Mono", monospace); font-size: 9px;
       letter-spacing: 0.22em; text-transform: uppercase;
@@ -1710,91 +1743,6 @@
       gap: 6px;
     }
 
-    /* ── HERITAGE TEASER MODAL ── */
-    .teaser-modal {
-      position: fixed; inset: 0; z-index: 200;
-      display: flex; align-items: center; justify-content: center;
-      padding: 32px 16px;
-      opacity: 0; pointer-events: none;
-      transition: opacity 220ms ease;
-    }
-    .teaser-modal[hidden] { display: none; }
-    .teaser-modal.open { opacity: 1; pointer-events: auto; }
-    .teaser-scrim {
-      position: absolute; inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-    }
-    .teaser-card {
-      position: relative;
-      max-width: 520px;
-      width: 100%;
-      background: var(--parchment-el);
-      border: 2px solid var(--leather-mid);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 28px 60px -22px rgba(0, 0, 0, 0.55);
-      transform: translateY(10px) scale(0.98);
-      opacity: 0;
-      transition: opacity 280ms ease, transform 280ms ease;
-    }
-    .teaser-modal.open .teaser-card {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
-    .teaser-close {
-      position: absolute; top: 12px; right: 12px;
-      width: 32px; height: 32px;
-      appearance: none; cursor: pointer;
-      background: var(--parchment);
-      border: 1.5px solid var(--border);
-      border-radius: 50%;
-      color: var(--leather-mid);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 2;
-      transition: all 0.15s;
-    }
-    .teaser-close:hover {
-      background: var(--leather-mid);
-      color: var(--on-leather);
-      border-color: var(--leather-mid);
-    }
-    .teaser-head {
-      padding: 24px 24px 18px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-    }
-    .teaser-tag {
-      display: block;
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--terracotta);
-      margin-bottom: 8px;
-    }
-    .teaser-title {
-      font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(28px, 4vw, 40px); line-height: 1;
-      letter-spacing: -0.025em;
-      color: var(--leather);
-      margin: 0 0 6px;
-    }
-    .teaser-sub {
-      font-family: 'Inter', sans-serif; font-weight: 400;
-      font-size: 14px; line-height: 1.45;
-      color: var(--text-soft);
-      margin: 0;
-    }
-    .teaser-media {
-      background: #000;
-      display: flex; align-items: center; justify-content: center;
-      min-height: 220px;
-    }
-    .teaser-media img {
-      display: block;
-      width: 100%;
-      height: auto;
-      max-height: 60vh;
-      object-fit: contain;
-    }
     .repaint-grid button {
       background: var(--parchment) !important;
       color: var(--leather-mid) !important;
@@ -2134,6 +2082,8 @@
   <div class="grid-bg"></div>
   <div class="grain"></div>
 
+  <div class="day-strip" id="dayStrip"></div>
+
   <header class="team-bar" id="teamBar">
     <div class="team-bar-row">
       <span class="team-bar-prompt">Pick your country and we’ll repaint the whole page in your kit</span>
@@ -2166,17 +2116,18 @@
       <!-- HERO LOCKUP -->
       <section class="hero-lockup">
         <div class="hero-text">
-          <h1 class="hero-h1" data-riffle data-inkpress data-drift>A lineup<br>of goods<br>for <span class="hero-accent">’26.</span></h1>
-          <p class="hero-body">Made for between the matches, designed to share. Free for fans.</p>
+          <h1 class="hero-h1" data-riffle data-inkpress data-drift>The<br>summer<br>is <span class="hero-accent">on.</span></h1>
+          <p class="hero-body">Free goods for matchdays and the spaces between. Made to share.</p>
           <div class="hero-cta-row">
-            <a href="#contents" class="btn-primary">View the lineup →</a>
+            <a href="https://provisions.soccer/daily" class="btn-primary">Today's matches →</a>
+            <a href="#contents" class="btn-ghost">The team sheet →</a>
           </div>
         </div>
         <aside class="hero-card">
-          <a href="/daily" class="kickoff-portrait" id="firstWhistleCard" aria-label="First whistle">
+          <a href="/daily" class="kickoff-portrait" id="firstWhistleCard" aria-label="Matchday">
             <div class="kickoff-portrait-eyebrow">
-              <span id="kpLabel">First Whistle</span>
-              <span id="kpDate">11 Jun · 19:00 CT</span>
+              <span id="kpLabel">Next whistle</span>
+              <span id="kpDate"></span>
             </div>
             <div class="kickoff-portrait-half" id="kpHomeHalf" style="background:#006847;color:#FFFFFF;">
               <img class="kickoff-portrait-flag" id="kpHomeFlag" src="https://flagcdn.com/w640/mx.png" alt="">
@@ -2185,13 +2136,16 @@
             </div>
             <div class="kickoff-portrait-center">
               <div class="kickoff-portrait-group" id="kpGroup">Group A</div>
-              <div class="kickoff-portrait-countdown">
+              <div class="kickoff-portrait-countdown" id="kpCountdown">
                 <span data-k="d">00</span><span class="kp-unit">d</span>
                 <span data-k="h">00</span><span class="kp-unit">h</span>
                 <span data-k="m">00</span><span class="kp-unit">m</span>
                 <span data-k="s">00</span><span class="kp-unit">s</span>
               </div>
-              <div class="kickoff-portrait-tz">Until kickoff</div>
+              <div class="kickoff-portrait-live" id="kpLive" hidden>
+                <span class="kp-live-dot" aria-hidden="true"></span>On now
+              </div>
+              <div class="kickoff-portrait-tz" id="kpTz">Until kickoff</div>
             </div>
             <div class="kickoff-portrait-half" id="kpAwayHalf" style="background:#FFB612;color:#1A1A1A;">
               <img class="kickoff-portrait-flag" id="kpAwayFlag" src="https://flagcdn.com/w640/za.png" alt="">
@@ -2204,6 +2158,102 @@
             </div>
           </a>
         </aside>
+      </section>
+
+      <!-- THE SLATE -->
+      <section class="slate" id="today" aria-labelledby="slateH">
+        <style>
+          .slate {
+            margin-top: 34px;
+            border-top: 1px solid var(--border);
+            padding-top: 26px;
+          }
+          .slate-head {
+            display: flex; align-items: baseline; justify-content: space-between;
+            gap: 14px; margin-bottom: 16px;
+          }
+          .slate-head h2 {
+            font-family: var(--display); font-weight: 900;
+            font-size: clamp(22px, 3.4vw, 30px); letter-spacing: -0.01em;
+            color: var(--leather);
+          }
+          .slate-link {
+            font-family: 'Syne', sans-serif; font-weight: 700;
+            font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+            color: var(--terracotta); white-space: nowrap;
+            transition: color 0.2s;
+          }
+          .slate-link:hover { color: var(--terracotta-light); }
+          .slate-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+          }
+          .slate-ticket {
+            display: flex; align-items: stretch;
+            background: var(--parchment-el);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            text-decoration: none; color: inherit;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+          }
+          .slate-ticket:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px -12px rgba(26,23,20,0.35);
+          }
+          .slate-ticket.is-ft { opacity: 0.55; }
+          .slate-ticket.is-ft:hover { opacity: 0.8; }
+          .slate-edge { display: flex; flex-direction: column; width: 5px; flex-shrink: 0; }
+          .slate-edge i { flex: 1; }
+          .slate-main { padding: 11px 14px 12px; min-width: 0; flex: 1; }
+          .slate-top {
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+            margin-bottom: 9px;
+          }
+          .slate-time { color: var(--terracotta); }
+          .is-ft .slate-time { color: var(--text-soft); }
+          .slate-live { display: inline-flex; align-items: center; gap: 6px; color: var(--terracotta); }
+          .slate-live i {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--terracotta);
+            animation: kpLivePulse 1.6s ease-in-out infinite;
+          }
+          .slate-group { color: var(--text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+          .slate-sides {
+            display: flex; align-items: center; gap: 8px;
+            font-family: var(--display); font-weight: 900;
+            font-size: 19px; letter-spacing: 0.01em; color: var(--leather);
+            white-space: nowrap;
+          }
+          .slate-sides img { width: 24px; height: 16px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
+          .slate-vs { font-size: 11px; font-weight: 600; color: var(--text-soft); margin: 0 2px; }
+          .slate-sides .slate-slot {
+            font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
+            white-space: normal; line-height: 1.25;
+          }
+          .slate-city {
+            margin-top: 8px;
+            font-size: 11px; color: var(--text-soft);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+          }
+          @media (max-width: 700px) {
+            .slate-row {
+              display: flex; overflow-x: auto;
+              scroll-snap-type: x mandatory;
+              margin: 0 -20px; padding: 0 20px 6px;
+              -webkit-overflow-scrolling: touch;
+            }
+            .slate-ticket { min-width: 240px; scroll-snap-align: start; }
+          }
+        </style>
+        <header class="slate-head">
+          <h2 id="slateH" data-stamp>Today&rsquo;s slate.</h2>
+          <a class="slate-link" href="https://provisions.soccer/daily">The Daily →</a>
+        </header>
+        <div class="slate-row" id="slateRow"></div>
       </section>
 
       <!-- THE MANIFESTO -->
@@ -2582,25 +2632,25 @@
           <div class="kickoff-card">
             <div class="kickoff-head">
               <div class="kickoff-head-l">
-                <span class="kickoff-tag">First Whistle</span>
-                <span class="kickoff-match">Match 1 · Group A</span>
+                <span class="kickoff-tag" id="kTag">Next Whistle</span>
+                <span class="kickoff-match" id="kMatch"></span>
               </div>
-              <div class="kickoff-date">11 Jun 2026<span>19:00 CDT</span></div>
+              <div class="kickoff-date" id="kDate"></div>
             </div>
             <div class="kickoff-grid">
-              <div class="kickoff-cell"><div class="kickoff-num" data-k="d" id="kDays">––</div><div class="kickoff-lbl">Days</div></div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kDays">––</div><div class="kickoff-lbl">Days</div></div>
               <div class="kickoff-divider">:</div>
-              <div class="kickoff-cell"><div class="kickoff-num" data-k="h" id="kHrs">––</div><div class="kickoff-lbl">Hours</div></div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kHrs">––</div><div class="kickoff-lbl">Hours</div></div>
               <div class="kickoff-divider">:</div>
-              <div class="kickoff-cell"><div class="kickoff-num" data-k="m" id="kMin">––</div><div class="kickoff-lbl">Min</div></div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kMin">––</div><div class="kickoff-lbl">Min</div></div>
               <div class="kickoff-divider">:</div>
-              <div class="kickoff-cell"><div class="kickoff-num" data-k="s" id="kSec">––</div><div class="kickoff-lbl">Sec</div></div>
+              <div class="kickoff-cell"><div class="kickoff-num" id="kSec">––</div><div class="kickoff-lbl">Sec</div></div>
             </div>
             <div class="kickoff-foot">
-              <span class="matchup">MEX <span style="opacity:0.55;font-weight:400;">vs</span> RSA</span>
+              <span class="matchup" id="kMatchup"></span>
               <span class="venue">
-                <strong>Estadio Azteca</strong>
-                <span>Mexico City · 87,000 cap.</span>
+                <strong id="kVenueName"></strong>
+                <span id="kVenueCity"></span>
               </span>
             </div>
           </div>
@@ -2641,24 +2691,8 @@
     </div>
   </div>
 
-  <!-- HERITAGE TEASER MODAL -->
-  <div class="teaser-modal" id="heritageTeaser" hidden>
-    <div class="teaser-scrim" onclick="closeHeritageTeaser()"></div>
-    <div class="teaser-card" role="dialog" aria-modal="true" aria-labelledby="teaserTitle">
-      <button class="teaser-close" type="button" aria-label="Close" onclick="closeHeritageTeaser()">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2 L12 12 M12 2 L2 12"/></svg>
-      </button>
-      <div class="teaser-head">
-        <span class="teaser-tag">No. 06 · Football Heritage</span>
-        <h3 class="teaser-title" id="teaserTitle">Not yet.</h3>
-        <p class="teaser-sub">Building it. Patience.</p>
-      </div>
-      <div class="teaser-media">
-        <img src="https://media.tenor.com/dt7y90qoqA8AAAAM/jose-mourinho.gif" alt="Not yet" loading="lazy" />
-      </div>
-    </div>
-  </div>
 
+  <script src="/schedule.js"></script>
   <script>
     // ── Team data ──
     const WC_TEAMS = [
@@ -2712,43 +2746,48 @@
       ['NZL','New Zealand','#000000',['#FFFFFF','#012169']],
     ];
 
-    // ── Matchday 1 fixtures (final draw, Dec 2025) ──
-    // Each entry: [opponentCode, venue, city, date]
-    const M1 = (function() {
-      // [home, away, venue, city, displayDate, isoZ, group]
-      const pairs = [
-        ['MEX','RSA','Estadio Banorte','Mexico City','11 Jun','2026-06-11T19:00:00Z','A'],
-        ['KOR','CZE','Estadio Akron','Guadalajara','11 Jun','2026-06-12T02:00:00Z','A'],
-        ['CAN','BIH','BMO Field','Toronto','12 Jun','2026-06-12T19:00:00Z','B'],
-        ['USA','PAR','SoFi Stadium','Inglewood','12 Jun','2026-06-13T01:00:00Z','D'],
-        ['QAT','SUI',"Levi's Stadium",'Santa Clara','13 Jun','2026-06-13T19:00:00Z','B'],
-        ['BRA','MAR','MetLife Stadium','East Rutherford','13 Jun','2026-06-13T22:00:00Z','C'],
-        ['HAI','SCO','Gillette Stadium','Foxborough','13 Jun','2026-06-14T01:00:00Z','C'],
-        ['AUS','TUR','BC Place','Vancouver','13 Jun','2026-06-14T04:00:00Z','D'],
-        ['GER','CUW','NRG Stadium','Houston','14 Jun','2026-06-14T17:00:00Z','E'],
-        ['NED','JPN','AT&T Stadium','Arlington','14 Jun','2026-06-14T20:00:00Z','F'],
-        ['CIV','ECU','Lincoln Financial Field','Philadelphia','14 Jun','2026-06-14T23:00:00Z','E'],
-        ['SWE','TUN','Estadio BBVA','Guadalupe','14 Jun','2026-06-15T02:00:00Z','F'],
-        ['ESP','CPV','Mercedes-Benz Stadium','Atlanta','15 Jun','2026-06-15T16:00:00Z','H'],
-        ['BEL','EGY','Lumen Field','Seattle','15 Jun','2026-06-15T19:00:00Z','G'],
-        ['KSA','URU','Hard Rock Stadium','Miami Gardens','15 Jun','2026-06-15T22:00:00Z','H'],
-        ['IRN','NZL','SoFi Stadium','Inglewood','15 Jun','2026-06-16T01:00:00Z','G'],
-        ['FRA','SEN','MetLife Stadium','East Rutherford','16 Jun','2026-06-16T19:00:00Z','I'],
-        ['IRQ','NOR','Gillette Stadium','Foxborough','16 Jun','2026-06-16T22:00:00Z','I'],
-        ['ARG','ALG','GEHA Field at Arrowhead Stadium','Kansas City','16 Jun','2026-06-17T01:00:00Z','J'],
-        ['AUT','JOR',"Levi's Stadium",'Santa Clara','16 Jun','2026-06-17T04:00:00Z','J'],
-        ['POR','COD','NRG Stadium','Houston','17 Jun','2026-06-17T17:00:00Z','K'],
-        ['ENG','CRO','AT&T Stadium','Arlington','17 Jun','2026-06-17T20:00:00Z','L'],
-        ['GHA','PAN','BMO Field','Toronto','17 Jun','2026-06-17T23:00:00Z','L'],
-        ['UZB','COL','Estadio Banorte','Mexico City','17 Jun','2026-06-18T02:00:00Z','K'],
-      ];
-      const map = {};
-      pairs.forEach(([a,b,venue,city,date,iso,group]) => {
-        map[a] = { opp: b, venue, city, date, iso, group };
-        map[b] = { opp: a, venue, city, date, iso, group };
-      });
-      return map;
-    })();
+    // ── Fixtures (shared source of truth: /schedule.js) ──
+    // Row: [home, away, venue, city, ISO kickoff (UTC), round, group]
+    const SCHEDULE = (window.WC_SCHEDULE || [])
+      .slice()
+      .sort((a, b) => new Date(a[4]) - new Date(b[4]));
+    const SLOT_NAMES = window.WC_SLOT_NAMES || {};
+    // Whistle to whistle, with halftime and stoppage to spare.
+    const MATCH_MS = 125 * 60 * 1000;
+
+    function fxTime(fx) { return new Date(fx[4]).getTime(); }
+    function fxIsLive(fx, now) { const t = fxTime(fx); return now >= t && now < t + MATCH_MS; }
+    function fxRoundLabel(fx) { return fx[6] ? `Group ${fx[6]}` : fx[5]; }
+    function localDayKey(ms) {
+      const d = new Date(ms);
+      return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    }
+    function fixturesOnLocalDay(dayKey) {
+      return SCHEDULE.filter(fx => localDayKey(fxTime(fx)) === dayKey);
+    }
+    // The team's current match if one is underway, otherwise their next.
+    function nextFixtureFor(code, now) {
+      return SCHEDULE.find(fx =>
+        (fx[0] === code || fx[1] === code) && now < fxTime(fx) + MATCH_MS
+      ) || null;
+    }
+    function fmtLocalTime(ms) {
+      const d = new Date(ms);
+      const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      const tzPart = new Intl.DateTimeFormat('en-US', { timeZoneName: 'short' })
+        .formatToParts(d).find(p => p.type === 'timeZoneName');
+      return tzPart ? `${time} ${tzPart.value}` : time;
+    }
+    function fmtLocalDate(ms) {
+      return new Date(ms).toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+    }
+    // "Today", "Tomorrow", or "17 Jun"
+    function dayWord(ms, now) {
+      const key = localDayKey(ms);
+      if (key === localDayKey(now)) return 'Today';
+      if (key === localDayKey(now + 86400000)) return 'Tomorrow';
+      return fmtLocalDate(ms);
+    }
 
     // FIFA code → ISO 3166 for flagcdn URLs
     const FIFA_ISO = {
@@ -2769,55 +2808,167 @@
       return 0.299*r + 0.587*g + 0.114*b > 0.55 ? '#1A1A1A' : '#FFFFFF';
     }
 
-    function updateKickoffPortrait(code) {
-      const fx = M1[code];
-      if (!fx) return;
-      const home = teamByCode(code);
-      const away = teamByCode(fx.opp);
-      if (!home || !away) return;
+    // ── Hero matchday card: a state machine over the schedule ──
+    // Modes: 'live' (a match is underway), 'next' (countdown to the next
+    // whistle), 'team' (picked side's next match), 'done' (tournament over).
+    let heroTeamCode = null;
+    let _heroKey = null;
+    let _heroBooted = false;
 
-      const card = document.getElementById('firstWhistleCard');
-      if (card) card.classList.add('kp-loading');
+    function heroState(now) {
+      if (heroTeamCode) {
+        const fx = nextFixtureFor(heroTeamCode, now);
+        if (fx) return { fx, mode: fxIsLive(fx, now) ? 'live' : 'team' };
+      }
+      const live = SCHEDULE.find(fx => fxIsLive(fx, now));
+      if (live) return { fx: live, mode: 'live' };
+      const next = SCHEDULE.find(fx => now < fxTime(fx));
+      if (next) return { fx: next, mode: 'next' };
+      return { fx: SCHEDULE[SCHEDULE.length - 1] || null, mode: 'done' };
+    }
 
-      // Wait a beat so the shimmer is visible, then swap content, then settle.
-      setTimeout(() => {
-        // Eyebrow + ISO countdown
-        document.getElementById('kpLabel').textContent = 'Your First Match';
-        if (fx.iso) {
-          const d = new Date(fx.iso);
-          const dateStr = d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', timeZone: 'America/Chicago' });
-          const timeStr = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Chicago' });
-          document.getElementById('kpDate').textContent = `${dateStr} · ${timeStr} CT`;
-          KICKOFF = d.getTime();
+    function renderPortraitHalf(prefix, code) {
+      const half = document.getElementById(prefix + 'Half');
+      const codeEl = document.getElementById(prefix + 'Code');
+      const nameEl = document.getElementById(prefix + 'Name');
+      const flagEl = document.getElementById(prefix + 'Flag');
+      if (!half || !codeEl || !nameEl || !flagEl) return;
+      const team = teamByCode(code);
+      if (team) {
+        half.style.background = team[2];
+        half.style.color = onColor(team[2]);
+        codeEl.textContent = team[0];
+        nameEl.textContent = team[1];
+        const iso = FIFA_ISO[code];
+        if (iso) {
+          flagEl.src = `https://flagcdn.com/w640/${iso}.png`;
+          flagEl.style.display = '';
+        } else {
+          flagEl.style.display = 'none';
         }
+      } else {
+        // Knockout slot not yet decided ("1A", "3*", "TBD")
+        half.style.background = '#2C2118';
+        half.style.color = '#F5EFE0';
+        codeEl.textContent = code === 'TBD' ? 'TBD' : code;
+        nameEl.textContent = SLOT_NAMES[code] || 'To be decided';
+        flagEl.style.display = 'none';
+      }
+    }
 
-        // LEFT half = selected team (always)
-        const homeColor = home[2], homeText = onColor(homeColor);
-        const homeHalf = document.getElementById('kpHomeHalf');
-        homeHalf.style.background = homeColor;
-        homeHalf.style.color = homeText;
-        document.getElementById('kpHomeCode').textContent = home[0];
-        document.getElementById('kpHomeName').textContent = home[1];
-        const homeIso = FIFA_ISO[home[0]];
-        if (homeIso) document.getElementById('kpHomeFlag').src = `https://flagcdn.com/w640/${homeIso}.png`;
+    function renderHeroCard(st, { shimmer = true } = {}) {
+      const { fx, mode } = st;
+      if (!fx) return;
+      const card = document.getElementById('firstWhistleCard');
+      const apply = () => {
+        renderPortraitHalf('kpHome', fx[0]);
+        renderPortraitHalf('kpAway', fx[1]);
+        const t = fxTime(fx);
+        const now = Date.now();
+        const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+        set('kpGroup', fxRoundLabel(fx));
+        set('kpVenue', `${fx[2]} · ${fx[3]}`);
+        const liveEl = document.getElementById('kpLive');
+        const countEl = document.getElementById('kpCountdown');
+        if (mode === 'live') {
+          // The center badge carries "On now"; the eyebrow gives context.
+          const mine = heroTeamCode && (fx[0] === heroTeamCode || fx[1] === heroTeamCode);
+          set('kpLabel', mine ? 'Your side' : fx[5]);
+          set('kpDate', mine ? fx[5] : 'Today');
+          set('kpTz', `Kicked off ${fmtLocalTime(t)}`);
+          if (liveEl) liveEl.hidden = false;
+          if (countEl) countEl.style.display = 'none';
+        } else if (mode === 'done') {
+          set('kpLabel', 'MMXXVI');
+          set('kpDate', 'In the books');
+          set('kpTz', 'Full-time');
+          if (liveEl) liveEl.hidden = true;
+          if (countEl) countEl.style.display = 'none';
+        } else {
+          set('kpLabel', mode === 'team' ? 'Your next match' : 'Next whistle');
+          set('kpDate', `${dayWord(t, now)} · ${fmtLocalTime(t)}`);
+          set('kpTz', 'Until kickoff');
+          if (liveEl) liveEl.hidden = true;
+          if (countEl) countEl.style.display = '';
+        }
+      };
+      if (shimmer && card) {
+        card.classList.add('kp-loading');
+        setTimeout(apply, 380);
+        setTimeout(() => card.classList.remove('kp-loading'), 900);
+      } else {
+        apply();
+      }
+    }
 
-        // RIGHT half = opponent
-        const awayColor = away[2], awayText = onColor(awayColor);
-        const awayHalf = document.getElementById('kpAwayHalf');
-        awayHalf.style.background = awayColor;
-        awayHalf.style.color = awayText;
-        document.getElementById('kpAwayCode').textContent = away[0];
-        document.getElementById('kpAwayName').textContent = away[1];
-        const awayIso = FIFA_ISO[away[0]];
-        if (awayIso) document.getElementById('kpAwayFlag').src = `https://flagcdn.com/w640/${awayIso}.png`;
+    function tickHero() {
+      const now = Date.now();
+      const st = heroState(now);
+      const key = st.fx ? `${st.fx[4]}|${st.fx[0]}|${st.fx[1]}|${st.mode}|${heroTeamCode || ''}` : 'done';
+      if (key !== _heroKey) {
+        renderHeroCard(st, { shimmer: _heroBooted });
+        _heroKey = key;
+        _heroBooted = true;
+      }
+      if (st.fx && (st.mode === 'next' || st.mode === 'team')) {
+        const diff = Math.max(0, fxTime(st.fx) - now);
+        const setK = (k, n) => {
+          const padded = String(n).padStart(2, '0');
+          document.querySelectorAll(`[data-k="${k}"]`).forEach((el) => { el.textContent = padded; });
+        };
+        setK('d', Math.floor(diff / 86400000));
+        setK('h', Math.floor((diff % 86400000) / 3600000));
+        setK('m', Math.floor((diff % 3600000) / 60000));
+        setK('s', Math.floor((diff % 60000) / 1000));
+      }
+    }
 
-        // Group + venue
-        document.getElementById('kpGroup').textContent = `Group ${fx.group || 'A'}`;
-        document.getElementById('kpVenue').textContent = `${fx.venue} · ${fx.city}`;
-      }, 380);
+    // Called when the visitor picks a side (repaint flow).
+    function updateKickoffPortrait(code) {
+      heroTeamCode = code;
+      _heroKey = null;
+      tickHero();
+    }
 
-      // Remove loading state after shimmer + reveal complete.
-      setTimeout(() => { if (card) card.classList.remove('kp-loading'); }, 900);
+    // ── Colophon scoreboard: always the next whistle, tournament-wide ──
+    let _colKey = null;
+    function tickColophon(now) {
+      const set = (id, v, html) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (html) { el.innerHTML = v; } else { el.textContent = v; }
+      };
+      const fx = SCHEDULE.find(f => now < fxTime(f));
+      const num = (id, n) => set(id, String(n).padStart(2, '0'));
+      if (!fx) {
+        if (_colKey !== 'done') {
+          _colKey = 'done';
+          set('kTag', 'Full-Time');
+          set('kMatch', 'MMXXVI · In the books');
+          set('kDate', 'See you in 2030');
+          set('kMatchup', 'That’s the tournament');
+          set('kVenueName', 'MetLife Stadium');
+          set('kVenueCity', 'East Rutherford');
+        }
+        num('kDays', 0); num('kHrs', 0); num('kMin', 0); num('kSec', 0);
+        return;
+      }
+      const t = fxTime(fx);
+      const key = fx[4] + fx[0] + fx[1];
+      if (key !== _colKey) {
+        _colKey = key;
+        set('kTag', 'Next Whistle');
+        set('kMatch', fx[6] ? `${fx[5]} · Group ${fx[6]}` : fx[5]);
+        set('kDate', `${fmtLocalDate(t)} 2026<span>${fmtLocalTime(t)}</span>`, true);
+        set('kMatchup', `${fx[0]} <span style="opacity:0.55;font-weight:400;">vs</span> ${fx[1]}`, true);
+        set('kVenueName', fx[2]);
+        set('kVenueCity', fx[3]);
+      }
+      const diff = Math.max(0, t - now);
+      num('kDays', Math.floor(diff / 86400000));
+      num('kHrs', Math.floor((diff % 86400000) / 3600000));
+      num('kMin', Math.floor((diff % 3600000) / 60000));
+      num('kSec', Math.floor((diff % 60000) / 1000));
     }
 
     // Bench (Nos. 02–06; No. 01 is the starter)
@@ -2826,7 +2977,6 @@
       { id: '03', label: 'You Know Ball', title: 'You Know Ball', blurb: '10 questions of varying difficulty on the tournament’s history. Layups any fan should know, deep cuts only the heads will get. Score reveals your tier, from Full Kit Wanker to You Know Ball.', cta: 'Take the quiz', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/you-know-ball' },
       { id: '04', label: 'Kit Index', title: 'The Kit Index', blurb: 'A block-style catalog of all 48 home kits. Browse the design language of every nation’s tournament kit.', cta: 'Browse all 48', status: 'starter', statusLabel: 'Live', href: 'https://provisions.soccer/kits' },
       { id: '05', label: 'Repaint', title: 'The Repaint', blurb: 'Pick a country and the whole page repaints in their kit. A small widget for the fan who wants their team everywhere they look.', cta: 'Open the repainter', status: 'starter', statusLabel: 'Live', href: '#repaint', onClick: 'openRepaintModal' },
-      { id: '06', label: 'Football Heritage', title: 'Football Heritage', blurb: 'Find the nation you can root for. By the same rule the players use to qualify for a country. Walk out with a team and a crest.', cta: 'Coming soon', status: 'drafted', statusLabel: 'Coming soon', href: '#', onClick: 'showHeritageTeaser' },
     ];
 
     // ── Day-of-the-wait strip ──
@@ -2838,12 +2988,16 @@
       const el = document.getElementById("dayStrip");
       if (!el) return;
       let text;
-      if (now < opener) {
+      // Count days by local calendar date so kickoff morning is already Day 1.
+      const localMidnight = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+      const tournamentDay = Math.round((localMidnight(now) - localMidnight(opener)) / dayMs) + 1;
+      if (tournamentDay < 1) {
         const days = Math.max(1, Math.ceil((opener - now) / dayMs));
         text = `Day ${days} of the wait <span class="dot">·</span> Kickoff Jun 11`;
       } else if (now <= final) {
-        const days = Math.floor((now - opener) / dayMs) + 1;
-        text = `Day ${days} of the tournament`;
+        text = `Day ${tournamentDay} of the tournament`;
+        const todays = fixturesOnLocalDay(localDayKey(now.getTime()));
+        if (todays.length) text += ` <span class="dot">·</span> ${todays[0][5]}`;
       } else {
         text = `MMXXVI <span class="dot">·</span> In the books`;
       }
@@ -3079,24 +3233,6 @@
       el._scrambleRaf = requestAnimationFrame(tick);
     }
 
-    // ── Update the match ticket for a chosen team ──
-    function updateTicket(code) {
-      // Legacy ticket markup was replaced with .kickoff-portrait (see updateKickoffPortrait).
-      // Null-safe: only update elements that still exist on the page.
-      const fx = M1[code];
-      if (!fx) return;
-      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-      set('whistleHomeLbl', 'Your Side');
-      set('whistleAwayLbl', 'Opponent');
-      const home = document.getElementById('whistleHome');
-      if (home) scrambleTo(home, code, 550);
-      const away = document.getElementById('whistleAway');
-      if (away) scrambleTo(away, fx.opp, 700);
-      set('whistleVenue', fx.venue);
-      set('whistleCity', fx.city + ' · Matchday 1');
-      set('whistleKickoff', fx.date + ' · 2026');
-    }
-
     // ── Press overlay (full-screen) ──
     const PRESS_STAGES = ["Loading the press", "Setting the kit", "Inking your photo", "Stamping your number", "Almost there"];
     let _pressStageInterval = null;
@@ -3141,7 +3277,6 @@
       const palette = paletteFromKit(team[2], team[3]);
       applyPalette(palette);
       updateActiveTeamDisplay(team);
-      updateTicket(code);
       updateKickoffPortrait(code);
       renderTeamGrid(code);
       renderTeamGrid(code, 'repaintTeamGrid');
@@ -3185,25 +3320,9 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeRepaintModal();
-        closeHeritageTeaser();
       }
     });
 
-    // ── Heritage teaser modal ──
-    function showHeritageTeaser() {
-      const modal = document.getElementById('heritageTeaser');
-      if (!modal) return;
-      modal.removeAttribute('hidden');
-      requestAnimationFrame(() => modal.classList.add('open'));
-      document.body.style.overflow = 'hidden';
-    }
-    function closeHeritageTeaser() {
-      const modal = document.getElementById('heritageTeaser');
-      if (!modal || modal.hasAttribute('hidden')) return;
-      modal.classList.remove('open');
-      document.body.style.overflow = '';
-      setTimeout(() => modal.setAttribute('hidden', ''), 240);
-    }
 
     // ── Toggle ──
     document.getElementById('teamToggle').addEventListener('click', () => {
@@ -3242,27 +3361,69 @@
     renderLedger();
     // (Legacy first-load scramble removed — old whistle ticket replaced by .kickoff-portrait)
 
-    // ── Kickoff countdown (mutable: updates when user picks a team) ──
-    let KICKOFF = new Date('2026-06-11T19:00:00Z').getTime();
-    function tickKickoff() {
-      const diff = Math.max(0, KICKOFF - Date.now());
-      const d = Math.floor(diff / 86400000);
-      const h = Math.floor((diff % 86400000) / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      const set = (key, n) => {
-        const padded = String(n).padStart(2, '0');
-        document.querySelectorAll(`[data-k="${key}"]`).forEach((el) => {
-          el.textContent = padded;
-        });
+    // ── The Slate: today's fixtures (or the next matchday with one) ──
+    function slateTicketHtml(fx, now) {
+      const t = fxTime(fx);
+      const live = fxIsLive(fx, now);
+      const done = now >= t + MATCH_MS;
+      const side = (code) => {
+        const team = teamByCode(code);
+        if (team) {
+          const iso = FIFA_ISO[code];
+          const flag = iso ? `<img src="https://flagcdn.com/w40/${iso}.png" alt="" loading="lazy">` : '';
+          return `${flag}<b>${code}</b>`;
+        }
+        return `<span class="slate-slot">${SLOT_NAMES[code] || 'TBD'}</span>`;
       };
-      set('d', d);
-      set('h', h);
-      set('m', m);
-      set('s', s);
+      const edge = (code) => {
+        const team = teamByCode(code);
+        return `<i style="background:${team ? team[2] : '#2C2118'}"></i>`;
+      };
+      const status = live
+        ? '<span class="slate-live"><i></i>On now</span>'
+        : done
+          ? '<span class="slate-time">FT</span>'
+          : `<span class="slate-time">${fmtLocalTime(t)}</span>`;
+      return `<a class="slate-ticket${done ? ' is-ft' : ''}" href="https://provisions.soccer/daily">
+        <span class="slate-edge">${edge(fx[0])}${edge(fx[1])}</span>
+        <div class="slate-main">
+          <div class="slate-top">${status}<span class="slate-group">${fxRoundLabel(fx)}</span></div>
+          <div class="slate-sides">${side(fx[0])}<span class="slate-vs">v</span>${side(fx[1])}</div>
+          <div class="slate-city">${fx[2]} · ${fx[3]}</div>
+        </div>
+      </a>`;
     }
-    tickKickoff();
-    setInterval(tickKickoff, 1000);
+
+    function renderSlate() {
+      const row = document.getElementById('slateRow');
+      const section = document.getElementById('today');
+      if (!row || !section) return;
+      const now = Date.now();
+      let list = fixturesOnLocalDay(localDayKey(now));
+      let title = 'Today’s slate.';
+      if (!list.length) {
+        const next = SCHEDULE.find(fx => fxTime(fx) > now);
+        if (!next) { section.style.display = 'none'; return; }
+        const nextKey = localDayKey(fxTime(next));
+        list = fixturesOnLocalDay(nextKey);
+        title = nextKey === localDayKey(now + 86400000)
+          ? 'Tomorrow’s slate.'
+          : `Next up · ${fmtLocalDate(fxTime(next))}.`;
+      }
+      const h = document.getElementById('slateH');
+      if (h && h.textContent !== title) h.textContent = title;
+      const html = list.map(fx => slateTicketHtml(fx, now)).join('');
+      // Compare against the source string, not row.innerHTML (the browser
+      // normalizes it), so periodic re-renders don't reset mobile scroll.
+      if (row._slateHtml !== html) { row.innerHTML = html; row._slateHtml = html; }
+    }
+
+    // ── Tournament-mode render loop ──
+    tickHero();
+    tickColophon(Date.now());
+    renderSlate();
+    setInterval(() => { tickHero(); tickColophon(Date.now()); }, 1000);
+    setInterval(renderSlate, 30000);
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -3283,9 +3444,9 @@
       <a href="https://provisions.soccer/daily" data-route="daily"><span>The Daily</span><span class="wc-arrow">→</span></a>
       <a href="https://provisions.soccer/kits" data-route="kits"><span>The Kit Index</span><span class="wc-arrow">→</span></a>
       <a href="https://provisions.soccer/you-know-ball" data-route="quiz"><span>You Know Ball</span><span class="wc-arrow">→</span></a>
-      <a href="https://provisions.soccer/heritage" data-route="heritage"><span>Football Heritage</span><span class="wc-arrow">→</span></a>
 
       <div class="wc-overlay-section">On this page</div>
+      <a href="https://provisions.soccer#today" class="wc-anchor"><span>The Slate</span><span class="wc-arrow">↓</span></a>
       <a href="https://provisions.soccer#contents" class="wc-anchor"><span>The Team Sheet</span><span class="wc-arrow">↓</span></a>
       <a href="https://provisions.soccer#roll" class="wc-anchor"><span>The Roll</span><span class="wc-arrow">↓</span></a>
       <a href="#" class="wc-anchor" onclick="event.preventDefault(); window.openSongbook && window.openSongbook();"><span>The Songbook</span><span class="wc-arrow">▾</span></a>
