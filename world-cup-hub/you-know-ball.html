@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>You Know Ball · Provisions World Cup Quiz</title>
-  <meta name="description" content="10 questions of World Cup history, from layups to deep cuts. Find out if you actually know ball.">
+  <title>You Know Ball · The Daily Five</title>
+  <meta name="description" content="Five new football questions every day of the tournament, from layups to deep cuts. Score a tier, build a streak, drop the card in the chat.">
   <link rel="canonical" href="https://provisions.soccer/you-know-ball">
 
-  <meta property="og:title" content="You Know Ball · World Cup Quiz">
-  <meta property="og:description" content="10 questions. No Google. Do you actually know ball?">
+  <meta property="og:title" content="You Know Ball · The Daily Five">
+  <meta property="og:description" content="Five new questions every day of the tournament. No Google. Do you actually know ball?">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://provisions.soccer/you-know-ball">
   <meta property="og:image" content="https://provisions.soccer/images/og-quiz.png">
@@ -19,7 +19,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@samdape">
   <meta name="twitter:title" content="You Know Ball · World Cup Quiz">
-  <meta name="twitter:description" content="10 questions. No Google. Do you actually know ball?">
+  <meta name="twitter:description" content="Five new questions every day of the tournament. No Google. Do you actually know ball?">
   <meta name="twitter:image" content="https://provisions.soccer/images/og-quiz.png">
   <meta name="twitter:image:alt" content="Do you know ball? · A Provisions World Cup quiz">
 
@@ -557,6 +557,35 @@
     }
     .wc-burger:hover { color: #A0422A; }
     .wc-burger svg { width: 24px; height: 24px; display: block; }
+    /* ── Daily-five chrome ── */
+    .exam-link {
+      display: block;
+      margin: 14px auto 0;
+      appearance: none; background: none; border: none; cursor: pointer;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-soft);
+      transition: color 0.15s ease;
+    }
+    .exam-link:hover { color: var(--terracotta); }
+    .start-btn:disabled {
+      opacity: 0.55; cursor: default;
+    }
+    .score-card-streak {
+      margin-top: 10px;
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+      font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--terracotta);
+    }
+    .score-card-streak[hidden] { display: none; }
+    .next-five {
+      margin-top: 18px; text-align: center;
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    .next-five[hidden] { display: none; }
+
     .wc-overlay {
       position: fixed; inset: 0; z-index: 9999;
       background: #2C2118;
@@ -650,24 +679,25 @@
         <div class="quiz-hero-card">
           <div class="quiz-hero-eyebrow">
             <span>You Know Ball</span>
-            <span>World Cup History</span>
+            <span id="heroDay">Summer &rsquo;26</span>
           </div>
           <div class="quiz-hero-body">
-            <h1 data-ink>Do you know<br><span class="accent">ball?</span></h1>
-            <p class="lede">Layups any fan should know. Deep cuts only the heads will get. No Google.</p>
+            <h1 data-ink>Today&rsquo;s<br><span class="accent">five.</span></h1>
+            <p class="lede">Five new questions every day of the tournament. Layups to deep cuts. No Google.</p>
             <div class="tier-ladder">
               <div class="tier-ladder-label">★ The Tiers ★</div>
-              <div class="tier-rung"><span>Full Kit Wanker</span><span class="range">0–5</span></div>
-              <div class="tier-rung"><span>Casual</span><span class="range">6–7</span></div>
-              <div class="tier-rung"><span>Footy Head</span><span class="range">8</span></div>
-              <div class="tier-rung tier-rung-top"><span>You Know Ball</span><span class="range">9–10</span></div>
+              <div class="tier-rung"><span>Full Kit Wanker</span><span class="range">0–1</span></div>
+              <div class="tier-rung"><span>Casual</span><span class="range">2</span></div>
+              <div class="tier-rung"><span>Footy Head</span><span class="range">3</span></div>
+              <div class="tier-rung tier-rung-top"><span>You Know Ball</span><span class="range">4–5</span></div>
             </div>
-            <button class="start-btn" id="startBtn">Take the quiz →</button>
+            <button class="start-btn" id="startBtn">Play today&rsquo;s five →</button>
+            <button class="exam-link" id="examBtn">or warm up with the original ten →</button>
           </div>
           <div class="quiz-hero-foot">
-            <span>10 questions</span>
+            <span>5 questions</span>
             <span>★</span>
-            <span>~90 seconds</span>
+            <span id="heroStreak">New every day</span>
           </div>
         </div>
       </section>
@@ -676,10 +706,10 @@
       <section class="quiz" id="quiz">
         <div class="quiz-card">
           <div class="quiz-card-eyebrow">
-            <span>Question <strong id="qIndex">1</strong> / 10</span>
+            <span>Question <strong id="qIndex">1</strong> / <span id="qTotal">5</span></span>
             <span id="qDifficulty">Easy</span>
           </div>
-          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 10%"></div></div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 20%"></div></div>
           <div class="quiz-card-body">
             <div class="question" id="qText">Loading…</div>
             <div class="options" id="qOptions"></div>
@@ -701,16 +731,17 @@
         <div class="score-card" id="scoreCard">
           <div class="score-card-eyebrow">
             <span>You Know Ball</span>
-            <span>World Cup History</span>
+            <span id="rMode">Summer &rsquo;26</span>
           </div>
           <div class="score-card-body">
             <div class="score-card-score">
               <span class="num" id="rScore">––</span>
-              <span class="den">/ 10</span>
+              <span class="den" id="rDen">/ 5</span>
             </div>
             <div class="score-card-divider"><span class="mark">★</span></div>
             <h2 class="score-card-tier" id="rTier" data-stamp>––</h2>
             <p class="score-card-sub" id="rSub">––</p>
+            <p class="score-card-streak" id="rStreak" hidden></p>
             <div class="score-card-dots" id="rDots"></div>
           </div>
           <div class="score-card-foot">
@@ -720,8 +751,10 @@
         </div>
         <div class="result-actions">
           <button class="btn-primary" id="shareBtn">Share to Story</button>
+          <button class="btn-ghost" id="copyBtn">Copy result</button>
           <button class="btn-ghost" id="replayBtn">Play again</button>
         </div>
+        <p class="next-five" id="nextFive" hidden></p>
       </section>
     </div>
   </main>
@@ -731,6 +764,7 @@
     <span><a href="https://provisions.work">provisions.work →</a></span>
   </footer>
 
+  <script src="/you-know-ball-days.js"></script>
   <script>
     // ── QUESTION POOL (50 questions) ──
     // Difficulty: 1 = easy (15), 2 = medium (20), 3 = hard (15)
@@ -951,9 +985,49 @@
       { min: 9, max: 9, title: "You Know Ball",   sub: "Hours of football watched. It shows." },
       { min: 10, max: 10, title: "You Know Ball", sub: "Perfect run. Mute the group chat." },
     ];
+    const TIERS5 = [
+      { min: 0, max: 1, title: "Full Kit Wanker", sub: "All gear, no idea." },
+      { min: 2, max: 2, title: "Casual",          sub: "You tune in for the big ones." },
+      { min: 3, max: 3, title: "Footy Head",      sub: "Friends text you before kickoff." },
+      { min: 4, max: 4, title: "You Know Ball",   sub: "Hours of football watched. It shows." },
+      { min: 5, max: 5, title: "You Know Ball",   sub: "Perfect five. Mute the group chat." },
+    ];
+    function tierFor(mode, score) {
+      const ladder = mode === "daily" ? TIERS5 : TIERS;
+      return ladder.find((t) => score >= t.min && score <= t.max);
+    }
+
+    // ── DAILY: local-day key, day number, store ──
+    const OPENER = new Date(2026, 5, 11); // local June 11
+    function dateKey(d) {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }
+    function dayNumber(d) {
+      const mid = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+      return Math.round((mid(d) - mid(OPENER)) / 86400000) + 1;
+    }
+    const TODAY = new Date();
+    const TODAY_KEY = dateKey(TODAY);
+    const TODAY_NUM = dayNumber(TODAY);
+    const TODAY_BANK = (window.YKB_DAYS || {})[TODAY_KEY] || null;
+    const DAY_LABEL = TODAY_NUM >= 1 && TODAY_NUM <= 39 ? `Day ${TODAY_NUM}` : "Summer ’26";
+
+    function loadStore() {
+      try { return JSON.parse(localStorage.getItem("ykb") || "{}"); } catch { return {}; }
+    }
+    function saveStore(s) {
+      try { localStorage.setItem("ykb", JSON.stringify(s)); } catch {}
+    }
+    // Streak as of today: live if the last played day was today or yesterday.
+    function currentStreak(s) {
+      if (!s.lastDay || !s.streak) return 0;
+      const yest = dateKey(new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() - 1));
+      return (s.lastDay === TODAY_KEY || s.lastDay === yest) ? s.streak : 0;
+    }
 
     // ── STATE ──
     const state = {
+      mode: "daily", // 'daily' | 'exam'
       questions: [],
       idx: 0,
       score: 0,
@@ -980,8 +1054,10 @@
 
     const DIFF_LABEL = { 1: "Easy", 2: "Medium", 3: "Hard" };
 
-    function startQuiz() {
-      state.questions = pickQuestions();
+    function startQuiz(mode) {
+      if (mode === "daily" && !TODAY_BANK) return;
+      state.mode = mode;
+      state.questions = mode === "daily" ? TODAY_BANK.questions : pickQuestions();
       state.idx = 0;
       state.score = 0;
       state.answers = [];
@@ -993,9 +1069,11 @@
 
     function renderQuestion() {
       const q = state.questions[state.idx];
+      const total = state.questions.length;
       document.getElementById("qIndex").textContent = state.idx + 1;
-      document.getElementById("qDifficulty").textContent = DIFF_LABEL[q.d];
-      document.getElementById("progressFill").style.width = ((state.idx + 1) / 10 * 100) + "%";
+      document.getElementById("qTotal").textContent = total;
+      document.getElementById("qDifficulty").textContent = state.mode === "daily" ? DAY_LABEL : DIFF_LABEL[q.d];
+      document.getElementById("progressFill").style.width = ((state.idx + 1) / total * 100) + "%";
       document.getElementById("qText").textContent = q.q;
 
       const opts = document.getElementById("qOptions");
@@ -1035,13 +1113,13 @@
       expl.classList.add("show");
 
       const next = document.getElementById("nextBtn");
-      next.textContent = state.idx === 9 ? "See the verdict →" : "Next →";
+      next.textContent = state.idx === state.questions.length - 1 ? "See the verdict →" : "Next →";
       next.classList.add("show");
       document.getElementById("footHint").style.display = "none";
     }
 
     function nextQuestion() {
-      if (state.idx === 9) {
+      if (state.idx === state.questions.length - 1) {
         showResult();
       } else {
         state.idx++;
@@ -1050,13 +1128,42 @@
     }
 
     function showResult() {
+      // Daily plays lock in: record once, never overwrite.
+      if (state.mode === "daily") {
+        const s = loadStore();
+        if (!s.days) s.days = {};
+        if (!s.days[TODAY_KEY]) {
+          const yest = dateKey(new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() - 1));
+          s.streak = s.lastDay === yest ? (s.streak || 0) + 1 : 1;
+          s.lastDay = TODAY_KEY;
+          s.days[TODAY_KEY] = { score: state.score, answers: state.answers };
+          saveStore(s);
+        }
+      }
+      renderResult();
+    }
+
+    function renderResult() {
       document.getElementById("quiz").classList.remove("active");
       document.getElementById("result").classList.add("active");
       document.getElementById("rScore").textContent = state.score;
 
-      const tier = TIERS.find((t) => state.score >= t.min && state.score <= t.max);
+      const daily = state.mode === "daily";
+      document.getElementById("rDen").textContent = daily ? "/ 5" : "/ 10";
+      document.getElementById("rMode").textContent = daily ? `${DAY_LABEL} · Summer ’26` : "The Original Ten";
+
+      const tier = tierFor(state.mode, state.score);
       document.getElementById("rTier").textContent = tier.title;
       document.getElementById("rSub").textContent = tier.sub;
+
+      const streakEl = document.getElementById("rStreak");
+      const streak = currentStreak(loadStore());
+      if (daily && streak > 1) {
+        streakEl.textContent = `${streak}-day streak`;
+        streakEl.hidden = false;
+      } else {
+        streakEl.hidden = true;
+      }
 
       const dots = document.getElementById("rDots");
       dots.innerHTML = "";
@@ -1065,6 +1172,50 @@
         d.className = "dot " + (c ? "green" : "red");
         dots.appendChild(d);
       });
+
+      // Daily: no replay, copyable token, countdown to the next five.
+      document.getElementById("replayBtn").style.display = daily ? "none" : "";
+      document.getElementById("copyBtn").style.display = daily ? "" : "none";
+      const nextFive = document.getElementById("nextFive");
+      nextFive.hidden = !daily;
+      if (daily) startNextFiveCountdown();
+    }
+
+    let _nextTimer = null;
+    function startNextFiveCountdown() {
+      const el = document.getElementById("nextFive");
+      const tick = () => {
+        const now = new Date();
+        const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        const diff = next - now;
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        el.textContent = `Next five in ${h}h ${String(m).padStart(2, "0")}m`;
+      };
+      tick();
+      if (_nextTimer) clearInterval(_nextTimer);
+      _nextTimer = setInterval(tick, 30000);
+    }
+
+    // ── Copyable result token (pastes clean into iMessage/WhatsApp) ──
+    function buildToken() {
+      const streak = currentStreak(loadStore());
+      const blocks = state.answers.map((c) => (c ? "■" : "□")).join("");
+      return [
+        `You Know Ball · ${DAY_LABEL}`,
+        `${blocks} ${state.score}/5` + (streak > 1 ? ` · ${streak}-day streak` : ""),
+        "provisions.soccer/you-know-ball",
+      ].join("\n");
+    }
+    async function copyResult() {
+      const btn = document.getElementById("copyBtn");
+      try {
+        await navigator.clipboard.writeText(buildToken());
+        btn.textContent = "Copied";
+      } catch {
+        btn.textContent = "Copy failed";
+      }
+      setTimeout(() => { btn.textContent = "Copy result"; }, 1600);
     }
 
     function replay() {
@@ -1076,7 +1227,9 @@
     // ── SHARE: render result card as PNG ──
     // ── Render the on-screen score card as a 1080×1920 IG-Story-ready PNG ──
     async function buildShareBlob() {
-      const tier = TIERS.find((t) => state.score >= t.min && state.score <= t.max);
+      const daily = state.mode === "daily";
+      const tier = tierFor(state.mode, state.score);
+      const streak = daily ? currentStreak(loadStore()) : 0;
 
       // Brand tokens (mirror site CSS variables)
       const PARCHMENT = "#F5F1EB";
@@ -1116,10 +1269,12 @@
       ctx.restore();
 
       // 3) The score card. Inset, centered horizontally, vertically in safe area.
+      // The daily five carries less content than the original ten, so its card
+      // is shorter and re-centered to avoid a dead zone above the squares.
       const cardX = 80;
-      const cardY = 240;
+      const cardY = daily ? 360 : 240;
       const cardW = W - cardX * 2;
-      const cardH = 1340;
+      const cardH = daily ? 1160 : 1340;
       const headerH = 96;
       const footerH = 84;
       const radius = 18;
@@ -1158,7 +1313,7 @@
       ctx.fillText("YOU KNOW BALL", cardX + 36, cardY + headerH / 2);
       ctx.textAlign = "right";
       ctx.fillStyle = PARCHMENT;
-      ctx.fillText("WORLD CUP HISTORY", cardX + cardW - 36, cardY + headerH / 2);
+      ctx.fillText(daily ? `${DAY_LABEL.toUpperCase()} · SUMMER ’26` : "THE ORIGINAL TEN", cardX + cardW - 36, cardY + headerH / 2);
 
       // Body centerline (vertical center of cream body area)
       const bodyTop = cardY + headerH;
@@ -1174,7 +1329,7 @@
       ctx.fillStyle = LEATHER;
       // Measure to center the score + " / 10" group
       const scoreText = String(state.score);
-      const denText = " / 10";
+      const denText = daily ? " / 5" : " / 10";
       const scoreW = ctx.measureText(scoreText).width;
       try { ctx.letterSpacing = "-3px"; } catch {}
       ctx.font = '600 84px "Syne", sans-serif';
@@ -1212,11 +1367,17 @@
       ctx.textBaseline = "middle";
       ctx.fillText("★", W/2, divY);
 
-      // Tier title
+      // Tier title — shrink to fit inside the card padding
       ctx.textBaseline = "alphabetic";
-      ctx.font = '800 78px "Syne", sans-serif';
-      try { ctx.letterSpacing = "-2px"; } catch {}
       ctx.fillStyle = LEATHER;
+      try { ctx.letterSpacing = "-2px"; } catch {}
+      let tierSize = 78;
+      const tierMaxW = cardW - 90;
+      ctx.font = `800 ${tierSize}px "Syne", sans-serif`;
+      while (tierSize > 40 && ctx.measureText(tier.title.toUpperCase()).width > tierMaxW) {
+        tierSize -= 2;
+        ctx.font = `800 ${tierSize}px "Syne", sans-serif`;
+      }
       ctx.fillText(tier.title.toUpperCase(), W/2, divY + 92);
       try { ctx.letterSpacing = "0"; } catch {}
 
@@ -1229,16 +1390,26 @@
         ctx.fillText(line, W/2, subY0 + i * 42);
       });
 
-      // Dot grid (10 squares)
-      const dotSize = 46;
-      const dotGap = 12;
-      const dotsTotalW = 10 * dotSize + 9 * dotGap;
+      // Streak line (daily only)
+      if (daily && streak > 1) {
+        ctx.font = '700 26px "Syne", sans-serif';
+        try { ctx.letterSpacing = "6px"; } catch {}
+        ctx.fillStyle = TERRACOTTA;
+        ctx.fillText(`${streak}-DAY STREAK`.toUpperCase(), W/2, subY0 + lines.length * 42 + 54);
+        try { ctx.letterSpacing = "0"; } catch {}
+      }
+
+      // Result squares (5 large for the daily, 10 small for the exam)
+      const n = state.answers.length || (daily ? 5 : 10);
+      const dotSize = daily ? 76 : 46;
+      const dotGap = daily ? 18 : 12;
+      const dotsTotalW = n * dotSize + (n - 1) * dotGap;
       const dotsX = (W - dotsTotalW) / 2;
-      const dotsY = bodyBottom - 90;
+      const dotsY = bodyBottom - (daily ? 130 : 90);
       state.answers.forEach((c, i) => {
         ctx.fillStyle = c ? "#2E8B57" : "#C13A2B";
         const rx = dotsX + i * (dotSize + dotGap);
-        roundRect(ctx, rx, dotsY, dotSize, dotSize, 6);
+        roundRect(ctx, rx, dotsY, dotSize, dotSize, daily ? 10 : 6);
         ctx.fill();
       });
 
@@ -1315,17 +1486,23 @@
       btn.disabled = true;
       btn.textContent = "Pressing…";
       try {
+        const daily = state.mode === "daily";
+        const den = daily ? 5 : 10;
+        const fname = daily ? `you-know-ball-day-${TODAY_NUM}.png` : `you-know-ball-${state.score}of10.png`;
+        const shareText = daily
+          ? `You Know Ball · ${DAY_LABEL} · ${state.score}/5. Beat me.`
+          : `I scored ${state.score}/10 on the original ten. Beat me.`;
         const blob = await buildShareBlob();
-        const file = new File([blob], `you-know-ball-${state.score}of10.png`, { type: "image/png" });
+        const file = new File([blob], fname, { type: "image/png" });
         const isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
         if (isTouch && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: "You Know Ball", text: `I scored ${state.score}/10 on the World Cup quiz. Beat me.` });
+          await navigator.share({ files: [file], title: "You Know Ball", text: shareText });
         } else {
           // Desktop: download to disk
           const url = URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `you-know-ball-${state.score}of10.png`;
+          a.download = fname;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -1340,10 +1517,34 @@
     }
 
     // Wire it up
-    document.getElementById("startBtn").addEventListener("click", startQuiz);
+    document.getElementById("startBtn").addEventListener("click", () => startQuiz("daily"));
+    document.getElementById("examBtn").addEventListener("click", () => startQuiz("exam"));
     document.getElementById("nextBtn").addEventListener("click", nextQuestion);
     document.getElementById("replayBtn").addEventListener("click", replay);
+    document.getElementById("copyBtn").addEventListener("click", copyResult);
     document.getElementById("shareBtn").addEventListener("click", shareScore);
+
+    // ── Boot: hero chrome + restore a finished daily ──
+    (function initDaily() {
+      document.getElementById("heroDay").textContent = `${DAY_LABEL} · Summer ’26`;
+      const s = loadStore();
+      const streak = currentStreak(s);
+      if (streak > 1) document.getElementById("heroStreak").textContent = `${streak}-day streak`;
+      if (!TODAY_BANK) {
+        const btn = document.getElementById("startBtn");
+        btn.disabled = true;
+        btn.textContent = "Fresh five at midnight";
+      }
+      const played = s.days && s.days[TODAY_KEY];
+      if (played) {
+        state.mode = "daily";
+        state.score = played.score;
+        state.answers = played.answers || [];
+        state.questions = TODAY_BANK ? TODAY_BANK.questions : [];
+        document.getElementById("hero").style.display = "none";
+        renderResult();
+      }
+    })();
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
