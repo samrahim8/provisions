@@ -558,15 +558,15 @@
     }
     .score-band {
       position: absolute;
-      left: -15%; right: -15%;
-      top: 50%; height: 88px;
-      transform: translateY(-58%) rotate(-4deg);
-      background: var(--terracotta);
-      border-top: 2px solid var(--leather);
-      border-bottom: 9px solid var(--leather);
+      left: -8%; right: -8%;
+      top: 50%; height: 150px;
+      transform: translateY(-52%);
       pointer-events: none;
       z-index: 0;
     }
+    .score-band svg { width: 100%; height: 100%; display: block; }
+    .score-band .wave-a { fill: var(--leather); }
+    .score-band .wave-b { fill: var(--terracotta); }
     .score-card-score {
       position: relative;
       display: flex; align-items: baseline; justify-content: center; gap: 10px;
@@ -830,7 +830,7 @@
       .score-card-body { padding: 18px 18px 16px; }
       .score-card-score .num { font-size: 92px; -webkit-text-stroke: 3px var(--leather); text-shadow: 5px 4px 0 var(--terracotta-light); }
       .score-card-score .den { font-size: 24px; -webkit-text-stroke: 1.5px var(--leather); }
-      .score-band { height: 58px; border-bottom-width: 7px; }
+      .score-band { height: 96px; }
       .score-card-dots { margin: 20px 0 0; }
       .score-card-dots .dot { width: 22px; height: 22px; }
       .score-card-divider { margin: 8px auto 10px; }
@@ -851,7 +851,7 @@
       .score-card-body { padding: 22px 28px 20px; }
       .score-card-score .num { font-size: 128px; }
       .score-card-score .den { font-size: 30px; }
-      .score-band { height: 68px; }
+      .score-band { height: 118px; }
       .score-card-dots { margin: 22px 0 0; }
       .score-card-divider { margin: 10px auto 14px; }
       .score-card-sub { margin-bottom: 14px; }
@@ -1121,7 +1121,13 @@
           <div class="stripe-rule" aria-hidden="true"></div>
           <div class="score-card-body">
             <div class="score-card-score">
-              <div class="score-band" aria-hidden="true"></div>
+              <div class="score-band" aria-hidden="true">
+              <svg viewBox="0 0 420 170" preserveAspectRatio="none">
+                <path class="wave-a" d="M -10 60 C 151 11, 252 79, 430 6 L 430 30 C 252 103, 151 35, -10 84 Z"/>
+                <path class="wave-b" d="M -10 98 C 151 49, 252 117, 430 44 L 430 68 C 252 141, 151 73, -10 122 Z"/>
+                <path class="wave-a" d="M -10 136 C 151 87, 252 155, 430 82 L 430 106 C 252 179, 151 111, -10 160 Z"/>
+              </svg>
+            </div>
               <span class="num" id="rScore">––</span>
               <span class="den" id="rDen">/ 5</span>
             </div>
