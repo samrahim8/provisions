@@ -454,7 +454,7 @@
       display: none;
     }
     .next-btn.show:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 rgba(44,33,24,0.38); }
-    .next-btn.show { display: inline-block; }
+    .next-btn.show { display: inline-block; margin-left: auto; }
     .next-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
     /* ── RESULT (designed score card, share-ready) ── */
@@ -642,6 +642,16 @@
     .result-actions .btn-ghost {
       background: var(--parchment); color: var(--leather-mid);
     }
+    .result-actions .btn-text,
+    .result-actions .btn-text:hover {
+      background: none; border: none; box-shadow: none;
+      transform: none;
+      color: var(--text-soft);
+      font-size: 11px; letter-spacing: 0.14em;
+      text-decoration: underline; text-underline-offset: 4px;
+      padding: 8px 12px;
+    }
+    .result-actions .btn-text:hover { color: var(--terracotta); }
 
     /* ── FOOTER ── */
     footer.programme-footer {
@@ -705,6 +715,8 @@
       .score-card-score .den { font-size: 24px; }
       .result-actions { flex-direction: column; }
       .result-actions button { width: 100%; padding: 16px; }
+      .result-actions .btn-text { width: auto; padding: 8px 12px; margin: 0 auto; }
+      .result { padding-bottom: 72px; }
       .option { padding: 14px 16px; }
       .score-card-tier { font-size: 22px; }
       .score-card-sub { font-size: 13px; }
@@ -1586,6 +1598,8 @@
       const replayBtn = document.getElementById("replayBtn");
       replayBtn.style.display = "";
       replayBtn.textContent = daily ? "Retake it" : "Play again";
+      replayBtn.classList.toggle("btn-text", daily);
+      replayBtn.classList.toggle("btn-ghost", !daily);
       document.getElementById("copyBtn").style.display = daily ? "" : "none";
       const nextFive = document.getElementById("nextFive");
       nextFive.hidden = !daily;
