@@ -976,16 +976,16 @@
             <p class="lede">New questions every morning, written for that day&rsquo;s matches. One go. No Google.</p>
             <div class="tier-ladder">
               <div class="tier-ladder-label">★ The Tiers ★</div>
-              <div class="tier-rung"><span>Full Kit Wanker</span><span class="range">0–1</span></div>
-              <div class="tier-rung"><span>Casual</span><span class="range">2</span></div>
-              <div class="tier-rung"><span>Footy Head</span><span class="range">3</span></div>
-              <div class="tier-rung tier-rung-top"><span>You Know Ball</span><span class="range">4–5</span></div>
+              <div class="tier-rung"><span>Full Kit Wanker</span><span class="range">0–5</span></div>
+              <div class="tier-rung"><span>Casual</span><span class="range">6–9</span></div>
+              <div class="tier-rung"><span>Footy Head</span><span class="range">10–12</span></div>
+              <div class="tier-rung tier-rung-top"><span>You Know Ball</span><span class="range">13–15</span></div>
             </div>
             <button class="start-btn" id="startBtn">Play today&rsquo;s five →</button>
             <button class="exam-link" id="examBtn">or warm up with the original ten →</button>
           </div>
           <div class="quiz-hero-foot">
-            <span>5 questions</span>
+            <span>5 rounds · 15 points</span>
             <span>★</span>
             <span id="heroStreak">New every day</span>
           </div>
@@ -1278,16 +1278,16 @@
       { min: 9, max: 9, title: "You Know Ball",   sub: "Hours of football watched. It shows." },
       { min: 10, max: 10, title: "You Know Ball", sub: "Perfect run. Mute the group chat." },
     ];
-    const TIERS5 = [
-      { min: 0, max: 1, title: "Full Kit Wanker", sub: "All gear, no idea." },
-      { min: 2, max: 2, title: "Casual",          sub: "You tune in for the big ones." },
-      { min: 3, max: 3, title: "Footy Head",      sub: "Friends text you before kickoff." },
-      { min: 4, max: 4, title: "You Know Ball",   sub: "Hours of football watched. It shows." },
-      { min: 5, max: 5, title: "You Know Ball",   sub: "Perfect five. Mute the group chat." },
+    const TIERS15 = [
+      { min: 0, max: 5, title: "Full Kit Wanker",  sub: "All gear, no idea." },
+      { min: 6, max: 9, title: "Casual",           sub: "You tune in for the big ones." },
+      { min: 10, max: 12, title: "Footy Head",     sub: "Friends text you before kickoff." },
+      { min: 13, max: 14, title: "You Know Ball",  sub: "Hours of football watched. It shows." },
+      { min: 15, max: 15, title: "You Know Ball",  sub: "Perfect fifteen. Mute the group chat." },
     ];
-    function tierFor(mode, score) {
-      const ladder = mode === "daily" ? TIERS5 : TIERS;
-      return ladder.find((t) => score >= t.min && score <= t.max);
+    function tierFor(mode, value) {
+      const ladder = mode === "daily" ? TIERS15 : TIERS;
+      return ladder.find((t) => value >= t.min && value <= t.max);
     }
 
     // ── DAILY: local-day key, day number, store ──
@@ -1323,7 +1323,8 @@
       mode: "daily", // 'daily' | 'exam'
       questions: [], // normalized rounds
       idx: 0,
-      score: 0,
+      score: 0,  // rounds won clean (the stars)
+      pts: 0,    // points: 3 max per round, clue cost on The Reveal
       answers: [], // array of booleans
       cluesShown: 1, // The Reveal
       orderSeq: [],  // The Order
@@ -1394,6 +1395,7 @@
       state.questions = mode === "daily" ? dayRounds(TODAY_BANK) : pickQuestions().map((q) => ({ t: "five", ...q }));
       state.idx = 0;
       state.score = 0;
+      state.pts = 0;
       state.answers = [];
       document.getElementById("hero").style.display = "none";
       document.getElementById("result").classList.remove("active");
@@ -1467,7 +1469,7 @@
         html += `<div class="clue-plate"><span class="clue-no">Clue ${i + 1}</span><span>${r.clues[i]}</span></div>`;
       }
       if (state.cluesShown < r.clues.length) {
-        html += `<button type="button" class="clue-more" id="clueMore">+ Reveal clue ${state.cluesShown + 1} of ${r.clues.length}</button>`;
+        html += `<button type="button" class="clue-more" id="clueMore">+ Reveal clue ${state.cluesShown + 1} of ${r.clues.length} · costs a point</button>`;
       }
       el.innerHTML = html;
       const more = document.getElementById("clueMore");
@@ -1493,6 +1495,11 @@
       const correct = r.order.every((itemIdx, k) => state.orderSeq[k] === itemIdx);
       state.answers.push(correct);
       if (correct) state.score++;
+      // Perfect order pays 3; one in the right spot salvages 1.
+      const exact = r.order.filter((itemIdx, k) => state.orderSeq[k] === itemIdx).length;
+      const pts = exact === 3 ? 3 : exact === 1 ? 1 : 0;
+      state.pts += pts;
+      state.lastPts = pts;
       document.querySelectorAll(".order-item").forEach((btn, idx) => {
         btn.disabled = true;
         const rightPos = r.order.indexOf(idx);
@@ -1511,6 +1518,10 @@
       const correct = picked === r.a;
       state.answers.push(correct);
       if (correct) state.score++;
+      // The Reveal pays by how early you call it: 3 / 2 / 1 by clue shown.
+      const pts = correct ? (r.t === "reveal" ? Math.max(1, 4 - state.cluesShown) : 3) : 0;
+      state.pts += pts;
+      state.lastPts = pts;
 
       const buttons = document.querySelectorAll(".option");
       buttons.forEach((b, i) => {
@@ -1529,7 +1540,10 @@
       if (more) more.remove();
 
       const expl = document.getElementById("qExplain");
-      document.getElementById("explainLabel").textContent = correct ? "You know ball ★" : "Full kit behavior";
+      const daily = state.mode === "daily";
+      document.getElementById("explainLabel").textContent = correct
+        ? (daily ? `You know ball ★ +${state.lastPts} pts` : "You know ball ★")
+        : (daily && state.lastPts > 0 ? `Half marks · +${state.lastPts} pt` : "Full kit behavior");
       document.getElementById("explainText").textContent = r.e;
       expl.classList.add("show");
       // Keep the next step reachable once the explanation lands (mobile)
@@ -1564,7 +1578,7 @@
           s.streak = s.lastDay === yest ? (s.streak || 0) + 1 : 1;
           s.lastDay = TODAY_KEY;
         }
-        s.days[TODAY_KEY] = { score: state.score, answers: state.answers };
+        s.days[TODAY_KEY] = { score: state.score, pts: state.pts, answers: state.answers };
         saveStore(s);
       }
       renderResult(true);
@@ -1573,13 +1587,12 @@
     function renderResult(animate) {
       document.getElementById("quiz").classList.remove("active");
       document.getElementById("result").classList.add("active");
-      document.getElementById("rScore").textContent = state.score;
-
       const daily = state.mode === "daily";
-      document.getElementById("rDen").textContent = daily ? "/ 5" : "/ 10";
+      document.getElementById("rScore").textContent = daily ? state.pts : state.score;
+      document.getElementById("rDen").textContent = daily ? "/ 15" : "/ 10";
       document.getElementById("rMode").textContent = daily ? `${DAY_LABEL} · Summer ’26` : "The Original Ten";
 
-      const tier = tierFor(state.mode, state.score);
+      const tier = tierFor(state.mode, daily ? state.pts : state.score);
       const tierEl = document.getElementById("rTier");
       tierEl.textContent = tier.title;
       document.getElementById("rSub").textContent = tier.sub;
@@ -1677,7 +1690,7 @@
       const stars = state.answers.map((c) => (c ? "★" : "☆")).join("");
       return [
         `You Know Ball · ${DAY_LABEL}`,
-        `${stars} ${state.score}/5` + (streak > 1 ? ` · ${streak} days running` : ""),
+        `${stars} ${state.pts}/15` + (streak > 1 ? ` · ${streak} days running` : ""),
         "provisions.soccer/you-know-ball",
       ].join("\n");
     }
@@ -1810,7 +1823,7 @@
 
     async function buildShareBlob() {
       const daily = state.mode === "daily";
-      const tier = tierFor(state.mode, state.score);
+      const tier = tierFor(state.mode, daily ? state.pts : state.score);
       const streak = daily ? currentStreak(loadStore()) : 0;
       const ink = posterInk();
       const CREAM = "#F2EBDD";
@@ -1874,8 +1887,8 @@
       }
 
       // The score: slab numeral, off-register print
-      const scoreStr = String(state.score);
-      const denStr = daily ? "/5" : "/10";
+      const scoreStr = String(daily ? state.pts : state.score);
+      const denStr = daily ? "/15" : "/10";
       ctx.font = '400 430px "Alfa Slab One"';
       const sw = ctx.measureText(scoreStr).width;
       ctx.font = '400 120px "Alfa Slab One"';
@@ -2065,7 +2078,7 @@
       const btn = document.getElementById("shareBtn");
       const daily = state.mode === "daily";
       const shareText = daily
-        ? `You Know Ball · ${DAY_LABEL} · ${state.score}/5. Beat me.`
+        ? `You Know Ball · ${DAY_LABEL} · ${state.pts}/15. Beat me.`
         : `I scored ${state.score}/10 on the original ten. Beat me.`;
       const isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
 
@@ -2157,6 +2170,7 @@
       if (played) {
         state.mode = "daily";
         state.score = played.score;
+        state.pts = typeof played.pts === "number" ? played.pts : played.score * 3;
         state.answers = played.answers || [];
         state.questions = dayRounds(TODAY_BANK);
         document.getElementById("hero").style.display = "none";
