@@ -205,6 +205,13 @@
       border-bottom: 2px solid var(--leather);
       padding: 12px 0 14px;
     }
+    .band-ball {
+      position: absolute;
+      left: 16px; top: 50%;
+      width: 38px; height: 38px;
+      transform: translateY(-50%);
+      color: var(--leather);
+    }
     .hero-band span {
       font-family: 'Graduate', serif;
       font-size: clamp(24px, 4vw, 34px);
@@ -591,10 +598,10 @@
       background: var(--border);
     }
     .score-card-divider .mark {
-      font-family: 'Syne', sans-serif; font-weight: 700;
-      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      display: inline-flex;
       color: var(--terracotta);
     }
+    .score-card-divider .mark svg { width: 20px; height: 20px; }
     .score-card-tier {
       font-size: clamp(26px, 3.2vw, 36px); line-height: 1.05;
       margin: 6px 0 14px;
@@ -1021,6 +1028,12 @@
       <symbol id="starSym" viewBox="0 0 20 20">
         <polygon points="10,0.6 12.47,6.6 19.51,6.91 13.99,11.3 15.88,18.09 10,14.2 4.12,18.09 6.01,11.3 0.49,6.91 7.53,6.6"/>
       </symbol>
+      <symbol id="ballSym" viewBox="0 0 20 20">
+        <clipPath id="ykbBallClip"><circle cx="10" cy="10" r="8.6"/></clipPath>
+        <circle cx="10" cy="10" r="8.8" fill="#F2EBDD" stroke="currentColor" stroke-width="1.6"/>
+        <polygon points="10.00,6.10 13.71,8.79 12.29,13.16 7.71,13.16 6.29,8.79" fill="currentColor"/>
+        <polygon points="12.30,1.04 16.11,-0.19 18.45,3.04 16.11,6.28 12.30,5.04" fill="currentColor" clip-path="url(#ykbBallClip)"/><polygon points="19.23,9.42 21.58,12.66 19.23,15.89 15.43,14.66 15.43,10.66" fill="currentColor" clip-path="url(#ykbBallClip)"/><polygon points="13.40,18.60 11.05,21.83 7.25,20.60 7.25,16.60 11.05,15.37" fill="currentColor" clip-path="url(#ykbBallClip)"/><polygon points="2.87,15.89 -0.93,14.66 -0.93,10.66 2.87,9.42 5.22,12.66" fill="currentColor" clip-path="url(#ykbBallClip)"/><polygon points="2.19,5.04 2.19,1.04 6.00,-0.19 8.35,3.04 6.00,6.28" fill="currentColor" clip-path="url(#ykbBallClip)"/>
+      </symbol>
     </defs>
   </svg>
   <div class="grid-bg" aria-hidden="true"></div>
@@ -1051,7 +1064,7 @@
               <use href="#starSym" x="598" y="118" width="34" height="34" class="arch-star"></use>
               <text class="arch-text"><textPath href="#ykbArc" startOffset="50%" text-anchor="middle">YOU KNOW BALL</textPath></text>
             </svg>
-            <div class="hero-band" aria-hidden="true"><span>Today&rsquo;s Five</span></div>
+            <div class="hero-band" aria-hidden="true"><svg class="band-ball"><use href="#ballSym"></use></svg><span>Today&rsquo;s Five</span></div>
             <p class="lede">New questions every morning, written for that day&rsquo;s matches. One go. No Google.</p>
             <p class="hero-record" id="heroRecord" hidden></p>
             <div class="tier-ladder">
@@ -1113,7 +1126,7 @@
               <span class="den" id="rDen">/ 5</span>
             </div>
             <div class="score-card-dots" id="rDots"></div>
-            <div class="score-card-divider"><span class="mark">★</span></div>
+            <div class="score-card-divider"><span class="mark"><svg><use href="#ballSym"></use></svg></span></div>
             <h2 class="score-card-tier"><span class="verdict-stamp" id="rTier">––</span></h2>
             <p class="score-card-sub" id="rSub">––</p>
             <p class="score-card-streak" id="rStreak" hidden></p>
@@ -1933,6 +1946,64 @@
       ctx.closePath();
     }
 
+    // Pentagon-patch ball, drawn flat like the '94 mark: pale ball, ink patches
+    function _ball(ctx, cx, cy, r, ink, paper) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = paper;
+      ctx.fill();
+      ctx.lineWidth = Math.max(2, r * 0.09);
+      ctx.strokeStyle = ink;
+      ctx.stroke();
+      // center pentagon
+      const pent = (radius, rot) => {
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          const a = -Math.PI / 2 + rot + (i * 2 * Math.PI) / 5;
+          const x = cx + radius * Math.cos(a), y = cy + radius * Math.sin(a);
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+      };
+      ctx.fillStyle = ink;
+      pent(r * 0.42, 0);
+      ctx.fill();
+      // five rim patches between the pentagon's vertices
+      for (let k = 0; k < 5; k++) {
+        const a = -Math.PI / 2 + Math.PI / 5 + (k * 2 * Math.PI) / 5;
+        const px = cx + r * 0.86 * Math.cos(a), py = cy + r * 0.86 * Math.sin(a);
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 0.98, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          const b = a + (i * 2 * Math.PI) / 5;
+          const x = px + r * 0.34 * Math.cos(b), y = py + r * 0.34 * Math.sin(b);
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = ink;
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+
+    // One waving flag stripe: a flat S-curve ribbon across the full width
+    function _wave(ctx, yLeft, drop, thick, color) {
+      ctx.beginPath();
+      ctx.moveTo(-60, yLeft);
+      ctx.bezierCurveTo(W_POSTER * 0.36, yLeft - drop * 0.9, W_POSTER * 0.6, yLeft + drop * 0.35, W_POSTER + 60, yLeft - drop);
+      ctx.lineTo(W_POSTER + 60, yLeft - drop + thick);
+      ctx.bezierCurveTo(W_POSTER * 0.6, yLeft + drop * 0.35 + thick, W_POSTER * 0.36, yLeft - drop * 0.9 + thick, -60, yLeft + thick);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+    const W_POSTER = 1080;
+
     function _arcText(ctx, text, cx, cy, radius, spread) {
       const chars = text.split("");
       const step = spread / (chars.length - 1);
@@ -1972,34 +2043,38 @@
       ctx.fillStyle = CREAM;
       ctx.fillRect(0, 0, W, H);
 
-      // Sunburst rays behind the score, barely-there vintage depth
+      // Radiating stripe ground rising from the bottom, '94 poster style
       ctx.save();
-      ctx.globalAlpha = 0.045;
-      ctx.strokeStyle = INK;
-      ctx.lineWidth = 3;
-      for (let i = 0; i < 28; i++) {
-        const ang = (i / 28) * Math.PI * 2;
+      ctx.globalAlpha = 0.1;
+      ctx.fillStyle = ink.accent;
+      const fanCX = W / 2, fanCY = H + 240;
+      for (let i = 0; i < 9; i++) {
+        const a0 = Math.PI + (i * 2 + 0.5) * (Math.PI / 18);
+        const a1 = a0 + Math.PI / 18;
         ctx.beginPath();
-        ctx.moveTo(W / 2 + 150 * Math.cos(ang), 880 + 150 * Math.sin(ang));
-        ctx.lineTo(W / 2 + 720 * Math.cos(ang), 880 + 720 * Math.sin(ang));
-        ctx.stroke();
+        ctx.moveTo(fanCX, fanCY);
+        ctx.arc(fanCX, fanCY, 980, a0, a1);
+        ctx.closePath();
+        ctx.fill();
       }
       ctx.restore();
 
-      // Brush-edged diagonal band behind the score
+      // The flag in motion: three waving stripes flowing up and across
+      _wave(ctx, 812, 130, 58, ink.band);
+      _wave(ctx, 902, 130, 58, ink.accent);
+      _wave(ctx, 992, 130, 58, ink.band);
+
+      // The ball, riding the wave, motion trail running down into the stripes
+      const ballX = 174, ballY = 648, ballR = 86;
       ctx.save();
-      ctx.rotate(-7 * Math.PI / 180);
+      ctx.translate(ballX, ballY);
+      ctx.rotate(0.62); // trail flows down-right into the waves
       ctx.fillStyle = ink.band;
-      ctx.fillRect(-100, 760, W + 260, 240);
-      ctx.fillStyle = ink.accent;
-      ctx.fillRect(-100, 1000, W + 260, 64);
-      ctx.fillStyle = CREAM;
-      for (let i = 0; i < 26; i++) {
-        const bx = -80 + i * 48 + (i % 3) * 9;
-        ctx.fillRect(bx, 760, 7 + (i % 4) * 3, 9 + (i % 3) * 7);
-        ctx.fillRect(bx + 14, 1052, 6 + (i % 3) * 4, 8 + (i % 4) * 5);
-      }
+      ctx.fillRect(-59, ballR * 0.55, 24, 300);
+      ctx.fillRect(-12, ballR * 0.55, 24, 360);
+      ctx.fillRect(35, ballR * 0.55, 24, 250);
       ctx.restore();
+      _ball(ctx, ballX, ballY, ballR, ink.band, CREAM);
 
       // Arched lockup
       ctx.fillStyle = INK;
@@ -2018,6 +2093,12 @@
         daily ? `THE DAILY FIVE · ${DAY_LABEL.toUpperCase()} · SUMMER ’26` : "THE ORIGINAL TEN · SUMMER ’26",
         W / 2, 396
       );
+
+      // Dotted rule under the lockup
+      ctx.fillStyle = ink.band;
+      for (let i = 0; i < 22; i++) {
+        ctx.fillRect(W / 2 - 22 * 9 + i * 18, 424, 7, 7);
+      }
 
       // Team plate (only when the fan repainted)
       if (ink.name) {
