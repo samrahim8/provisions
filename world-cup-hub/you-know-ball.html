@@ -668,6 +668,61 @@
     }
     .wc-burger:hover { color: #A0422A; }
     .wc-burger svg { width: 24px; height: 24px; display: block; }
+    /* ── Above-the-fold guarantees ──
+       Mobile threshold is 780px because Safari's chrome eats ~130px of an
+       844px phone; small laptops compress under 840px. */
+    @media (max-width: 700px) and (max-height: 780px) {
+      main { padding-top: 10px; }
+      .hero { padding-top: 2px; }
+      .hero-arch { width: 72%; margin: 0 auto; }
+      .hero-band { margin: 8px -22px 12px; padding: 8px 0 10px; }
+      .quiz-hero-body { padding: 20px 22px 16px; }
+      .quiz-hero-body .lede { margin-bottom: 10px; font-size: 13px; }
+      .tier-ladder { grid-template-columns: 1fr 1fr; gap: 0 14px; padding: 8px 6px 4px; margin-bottom: 12px; }
+      .tier-rung { flex-direction: row; justify-content: space-between; padding: 6px 2px; font-size: 10px; border-bottom: 1px solid var(--border); }
+      .tier-rung:nth-last-child(-n+2) { border-bottom: none; }
+      .tier-rung-top { font-size: 11px; }
+      .tier-ladder-label { margin-bottom: 2px; }
+      .start-btn { padding: 13px 22px; font-size: 13px; }
+      .exam-link { margin-top: 9px; font-size: 9px; }
+      .quiz-hero-foot { padding: 9px 16px; }
+      /* result */
+      .result-eyebrow { margin-bottom: 8px; font-size: 11px; }
+      .score-card { margin-bottom: 12px; }
+      .score-card-body { padding: 18px 18px 16px; }
+      .score-card-score .num { font-size: 92px; -webkit-text-stroke: 3px var(--leather); text-shadow: 5px 4px 0 var(--terracotta-light); }
+      .score-card-score .den { font-size: 24px; -webkit-text-stroke: 1.5px var(--leather); }
+      .score-band { height: 58px; border-bottom-width: 7px; }
+      .score-card-dots { margin: 20px 0 0; }
+      .score-card-dots .dot { width: 22px; height: 22px; }
+      .score-card-divider { margin: 8px auto 10px; }
+      .score-card-tier { font-size: 20px; margin: 2px 0 8px; }
+      .verdict-stamp { padding: 9px 15px 11px; border-width: 2.5px; }
+      .score-card-sub { margin-bottom: 10px; font-size: 12px; }
+      .score-card-streak { margin-top: 4px; font-size: 10px; }
+      .score-card-eyebrow { padding: 8px 14px; font-size: 10px; }
+      .score-card-foot { padding: 8px 14px; }
+      .result-actions { gap: 8px; }
+      .result-actions button { padding: 12px; font-size: 12px; }
+      .next-five { margin-top: 9px; font-size: 9px; }
+      .ink-hint { margin-top: 5px; font-size: 8px; }
+    }
+    @media (min-width: 701px) and (max-height: 840px) {
+      main { padding-top: 16px; }
+      .result-eyebrow { margin-bottom: 8px; }
+      .score-card-body { padding: 22px 28px 20px; }
+      .score-card-score .num { font-size: 128px; }
+      .score-card-score .den { font-size: 30px; }
+      .score-band { height: 68px; }
+      .score-card-dots { margin: 22px 0 0; }
+      .score-card-divider { margin: 10px auto 14px; }
+      .score-card-sub { margin-bottom: 14px; }
+      .score-card { margin-bottom: 16px; }
+      .hero { padding-top: 8px; }
+      .quiz-hero-body { padding: 16px 28px 16px; }
+      .tier-ladder { margin-bottom: 12px; padding: 8px 0 6px; }
+    }
+
     /* ── Press-and-hold share fallback overlay ── */
     #cardOverlay {
       display: none;
