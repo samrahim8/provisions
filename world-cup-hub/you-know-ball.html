@@ -350,6 +350,64 @@
     .option:disabled { cursor: default; }
     .option.dimmed { opacity: 0.35; }
 
+    .quiz-clues { display: flex; flex-direction: column; gap: 8px; margin: -4px 0 16px; }
+    .quiz-clues[hidden] { display: none; }
+    .clue-plate {
+      display: flex; gap: 12px; align-items: baseline;
+      background: var(--parchment);
+      border: 1.5px dashed var(--leather-mid);
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; line-height: 1.45;
+      color: var(--leather-mid);
+      text-align: left;
+      animation: slideIn 0.25s ease;
+    }
+    .clue-no {
+      font-family: 'Graduate', serif; font-size: 10px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--terracotta); white-space: nowrap;
+    }
+    .clue-more {
+      appearance: none; background: none; border: none; cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--terracotta);
+      padding: 6px 0; text-align: left;
+    }
+    .clue-more:hover { color: var(--terracotta-light); }
+    .options[data-t="ladder"] .option { justify-content: center; padding: 18px 16px; font-family: 'Graduate', serif; font-size: 15px; }
+    .options[data-t="ladder"] .option .option-letter { display: none; }
+    .options[data-t="score"] { display: grid; grid-template-columns: 1fr 1fr; }
+    .options[data-t="score"] .option { justify-content: center; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; }
+    .options[data-t="score"] .option .option-letter { display: none; }
+    .order-slot {
+      width: 26px; height: 26px;
+      border: 2px solid var(--leather-mid); border-radius: 3px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Graduate', serif; font-size: 12px;
+      background: var(--parchment-el);
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .order-item.picked .order-slot { background: var(--leather-mid); color: var(--on-leather); }
+    .order-item.correct .order-slot { background: var(--green); border-color: var(--green); color: #FFF; }
+    .order-item.wrong .order-slot { background: var(--red); border-color: var(--red); color: #FFF; }
+    .order-lock {
+      margin-top: 6px;
+      appearance: none; cursor: pointer;
+      background: var(--terracotta); color: var(--on-accent);
+      border: 2px solid var(--leather); border-radius: 4px;
+      box-shadow: 3px 3px 0 rgba(44,33,24,0.3);
+      font-family: 'Graduate', serif; font-size: 13px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 12px;
+      transition: transform 0.12s, box-shadow 0.12s, opacity 0.15s;
+    }
+    .order-lock:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 rgba(44,33,24,0.38); }
+    .order-lock:disabled { opacity: 0.4; cursor: default; box-shadow: none; }
+
     .explanation {
       margin-top: 14px;
       padding: 12px 16px;
@@ -932,6 +990,7 @@
           <div class="run-tracker" id="runTracker" aria-hidden="true"></div>
           <div class="quiz-card-body">
             <div class="question" id="qText">Loading…</div>
+            <div class="quiz-clues" id="qClues" hidden></div>
             <div class="options" id="qOptions"></div>
             <div class="explanation" id="qExplain">
               <span class="label" id="explainLabel">Did you know</span>
@@ -1250,10 +1309,12 @@
     // ── STATE ──
     const state = {
       mode: "daily", // 'daily' | 'exam'
-      questions: [],
+      questions: [], // normalized rounds
       idx: 0,
       score: 0,
       answers: [], // array of booleans
+      cluesShown: 1, // The Reveal
+      orderSeq: [],  // The Order
     };
 
     function pickQuestions() {
@@ -1275,6 +1336,23 @@
     }
 
     const DIFF_LABEL = { 1: "Easy", 2: "Medium", 3: "Hard" };
+    const ROUND_META = {
+      five: "The Layup",
+      reveal: "The Reveal",
+      score: "The Scoreline",
+      ladder: "The Ladder",
+      order: "The Order",
+    };
+    const FOOT_HINT = {
+      reveal: "Answer when you’re sure",
+      order: "Tap them into order",
+    };
+    // A day bank is either { rounds } (pentathlon) or legacy { questions } (all trivia)
+    function dayRounds(bank) {
+      if (!bank) return [];
+      if (bank.rounds) return bank.rounds;
+      return (bank.questions || []).map((q) => ({ t: "five", ...q }));
+    }
 
     function starSvgHtml(cls) {
       return `<svg class="${cls}" viewBox="0 0 20 20" aria-hidden="true"><use href="#starSym"></use></svg>`;
@@ -1301,7 +1379,7 @@
     function startQuiz(mode) {
       if (mode === "daily" && !TODAY_BANK) return;
       state.mode = mode;
-      state.questions = mode === "daily" ? TODAY_BANK.questions : pickQuestions();
+      state.questions = mode === "daily" ? dayRounds(TODAY_BANK) : pickQuestions().map((q) => ({ t: "five", ...q }));
       state.idx = 0;
       state.score = 0;
       state.answers = [];
@@ -1312,50 +1390,135 @@
     }
 
     function renderQuestion() {
-      const q = state.questions[state.idx];
+      const r = state.questions[state.idx];
       const total = state.questions.length;
       document.getElementById("qIndex").textContent = state.idx + 1;
       document.getElementById("qTotal").textContent = total;
-      document.getElementById("qDifficulty").textContent = state.mode === "daily" ? DAY_LABEL : DIFF_LABEL[q.d];
+      document.getElementById("qDifficulty").textContent =
+        state.mode === "daily" ? (ROUND_META[r.t] || DAY_LABEL) : DIFF_LABEL[r.d];
       renderRunTracker();
-      document.getElementById("qText").textContent = q.q;
+      document.getElementById("qText").textContent = r.q;
+
+      // The Reveal: clues unfold at the player's pace
+      const clues = document.getElementById("qClues");
+      state.cluesShown = 1;
+      if (r.t === "reveal") {
+        renderClues(r);
+        clues.hidden = false;
+      } else {
+        clues.hidden = true;
+        clues.innerHTML = "";
+      }
 
       const opts = document.getElementById("qOptions");
       opts.innerHTML = "";
-      const letters = ["A", "B", "C", "D"];
-      q.o.forEach((label, i) => {
-        const btn = document.createElement("button");
-        btn.className = "option";
-        btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${label}</span>`;
-        btn.addEventListener("click", () => choose(i));
-        opts.appendChild(btn);
-      });
+      opts.dataset.t = r.t || "five";
+      if (r.t === "order") {
+        state.orderSeq = [];
+        r.items.forEach((label, i) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "option order-item";
+          btn.innerHTML = `<span class="order-slot"></span><span>${label}</span>`;
+          btn.addEventListener("click", () => toggleOrder(i));
+          opts.appendChild(btn);
+        });
+        const lock = document.createElement("button");
+        lock.type = "button";
+        lock.id = "orderLock";
+        lock.className = "order-lock";
+        lock.textContent = "Lock it in";
+        lock.disabled = true;
+        lock.addEventListener("click", checkOrder);
+        opts.appendChild(lock);
+      } else {
+        const letters = ["A", "B", "C", "D"];
+        r.o.forEach((label, i) => {
+          const btn = document.createElement("button");
+          btn.className = "option";
+          btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${label}</span>`;
+          btn.addEventListener("click", () => choose(i));
+          opts.appendChild(btn);
+        });
+      }
 
       document.getElementById("qExplain").classList.remove("show");
       document.getElementById("nextBtn").classList.remove("show");
-      document.getElementById("footHint").textContent = "Lock one in";
+      document.getElementById("footHint").textContent = FOOT_HINT[r.t] || "Lock one in";
       document.getElementById("footHint").style.display = "inline";
     }
 
+    function renderClues(r) {
+      const el = document.getElementById("qClues");
+      let html = "";
+      for (let i = 0; i < state.cluesShown; i++) {
+        html += `<div class="clue-plate"><span class="clue-no">Clue ${i + 1}</span><span>${r.clues[i]}</span></div>`;
+      }
+      if (state.cluesShown < r.clues.length) {
+        html += `<button type="button" class="clue-more" id="clueMore">+ Reveal clue ${state.cluesShown + 1} of ${r.clues.length}</button>`;
+      }
+      el.innerHTML = html;
+      const more = document.getElementById("clueMore");
+      if (more) more.addEventListener("click", () => { state.cluesShown++; renderClues(r); });
+    }
+
+    function toggleOrder(i) {
+      const pos = state.orderSeq.indexOf(i);
+      if (pos >= 0) state.orderSeq.splice(pos); // clearing one clears everything after it
+      else state.orderSeq.push(i);
+      document.querySelectorAll(".order-item").forEach((btn, idx) => {
+        const p = state.orderSeq.indexOf(idx);
+        btn.querySelector(".order-slot").textContent = p >= 0 ? String(p + 1) : "";
+        btn.classList.toggle("picked", p >= 0);
+      });
+      const lock = document.getElementById("orderLock");
+      const r = state.questions[state.idx];
+      if (lock) lock.disabled = state.orderSeq.length !== r.items.length;
+    }
+
+    function checkOrder() {
+      const r = state.questions[state.idx];
+      const correct = r.order.every((itemIdx, k) => state.orderSeq[k] === itemIdx);
+      state.answers.push(correct);
+      if (correct) state.score++;
+      document.querySelectorAll(".order-item").forEach((btn, idx) => {
+        btn.disabled = true;
+        const rightPos = r.order.indexOf(idx);
+        const gotPos = state.orderSeq.indexOf(idx);
+        btn.classList.remove("picked");
+        btn.classList.add(gotPos === rightPos ? "correct" : "wrong");
+        btn.querySelector(".order-slot").textContent = String(rightPos + 1);
+      });
+      const lock = document.getElementById("orderLock");
+      if (lock) lock.style.display = "none";
+      finishRound(correct, r);
+    }
+
     function choose(picked) {
-      const q = state.questions[state.idx];
-      const correct = picked === q.a;
+      const r = state.questions[state.idx];
+      const correct = picked === r.a;
       state.answers.push(correct);
       if (correct) state.score++;
 
       const buttons = document.querySelectorAll(".option");
       buttons.forEach((b, i) => {
         b.disabled = true;
-        if (i === q.a) b.classList.add("correct");
+        if (i === r.a) b.classList.add("correct");
         else if (i === picked) b.classList.add("wrong");
         else b.classList.add("dimmed");
       });
 
+      finishRound(correct, r);
+    }
+
+    function finishRound(correct, r) {
       renderRunTracker();
+      const more = document.getElementById("clueMore");
+      if (more) more.remove();
 
       const expl = document.getElementById("qExplain");
       document.getElementById("explainLabel").textContent = correct ? "You know ball ★" : "Full kit behavior";
-      document.getElementById("explainText").textContent = q.e;
+      document.getElementById("explainText").textContent = r.e;
       expl.classList.add("show");
       // Keep the next step reachable once the explanation lands (mobile)
       setTimeout(() => {
@@ -1955,7 +2118,7 @@
         state.mode = "daily";
         state.score = played.score;
         state.answers = played.answers || [];
-        state.questions = TODAY_BANK ? TODAY_BANK.questions : [];
+        state.questions = dayRounds(TODAY_BANK);
         document.getElementById("hero").style.display = "none";
         renderResult();
       }
