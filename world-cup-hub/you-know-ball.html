@@ -1588,8 +1588,8 @@
       if (daily) startNextFiveCountdown();
 
       // Pre-render the share card now so the share tap can fire the native
-      // sheet inside its activation window (iOS kills it after long awaits).
-      _shareBlobPromise = buildShareBlob().catch(() => null);
+      // sheet synchronously (iOS kills it if anything awaits first).
+      prepShareCard();
 
       // ── The verdict reveal: squares punch in, then the stamp lands ──
       const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2020,49 +2020,66 @@
       return lines;
     }
 
-    let _shareBlobPromise = null;
+    let _shareFile = null;   // ready-to-share File
+    let _shareBlob = null;   // same payload for the overlay path
+    let _sharePrep = null;   // in-flight render
 
-    async function shareScore() {
+    function prepShareCard() {
+      const daily = state.mode === "daily";
+      const fname = daily ? `you-know-ball-day-${TODAY_NUM}.png` : `you-know-ball-${state.score}of10.png`;
+      _shareFile = null;
+      _shareBlob = null;
+      _sharePrep = buildShareBlob()
+        .then((blob) => {
+          if (!blob) return;
+          _shareBlob = blob;
+          _shareFile = new File([blob], fname, { type: "image/png" });
+        })
+        .catch((e) => { console.error("card render failed:", e); });
+    }
+
+    function shareScore() {
       const btn = document.getElementById("shareBtn");
+      const daily = state.mode === "daily";
+      const shareText = daily
+        ? `You Know Ball · ${DAY_LABEL} · ${state.score}/5. Beat me.`
+        : `I scored ${state.score}/10 on the original ten. Beat me.`;
+      const isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+
+      // Happy path: the card is ready, fire the sheet inside the tap itself.
+      if (_shareFile && isTouch && navigator.canShare && navigator.canShare({ files: [_shareFile] })) {
+        navigator.share({ files: [_shareFile], title: "You Know Ball", text: shareText })
+          .catch((e) => { if (!e || e.name !== "AbortError") showCardOverlay(_shareBlob); });
+        return;
+      }
+
+      // Card still rendering, or no native file sharing: finish the render,
+      // then press-and-hold overlay on touch / download on desktop.
       const original = btn.textContent;
       btn.disabled = true;
-      try {
-        const daily = state.mode === "daily";
-        const fname = daily ? `you-know-ball-day-${TODAY_NUM}.png` : `you-know-ball-${state.score}of10.png`;
-        const shareText = daily
-          ? `You Know Ball · ${DAY_LABEL} · ${state.score}/5. Beat me.`
-          : `I scored ${state.score}/10 on the original ten. Beat me.`;
-        // Already rendered when the result appeared; this await resolves
-        // in a microtask and keeps the tap's transient activation alive.
-        const blob = (await _shareBlobPromise) || (await buildShareBlob());
-        const file = new File([blob], fname, { type: "image/png" });
-        const isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
-        if (isTouch && navigator.canShare && navigator.canShare({ files: [file] })) {
-          try {
-            await navigator.share({ files: [file], title: "You Know Ball", text: shareText });
-          } catch (e) {
-            if (e && e.name === "AbortError") return; // user closed the sheet
-            showCardOverlay(blob); // activation lost or share refused: press-and-hold path
-          }
-        } else if (isTouch) {
-          showCardOverlay(blob);
+      btn.textContent = "Pressing…";
+      Promise.resolve(_sharePrep).then(() => {
+        btn.disabled = false;
+        btn.textContent = original;
+        if (!_shareBlob) {
+          btn.textContent = "Try again";
+          setTimeout(() => { btn.textContent = original; }, 1800);
+          prepShareCard();
+          return;
+        }
+        if (isTouch) {
+          showCardOverlay(_shareBlob);
         } else {
-          // Desktop: download to disk
-          const url = URL.createObjectURL(blob);
+          const url = URL.createObjectURL(_shareBlob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = fname;
+          a.download = _shareFile ? _shareFile.name : "you-know-ball.png";
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
           setTimeout(() => URL.revokeObjectURL(url), 60000);
         }
-      } catch (e) {
-        if (e && e.name !== "AbortError") console.error("Share failed:", e);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = original;
-      }
+      });
     }
 
     // Fallback that always works on iOS: show the PNG, press and hold to save.
@@ -2097,7 +2114,7 @@
     // Re-print the share card whenever the fan repaints
     document.addEventListener("provisions:repaint", () => {
       if (document.getElementById("result").classList.contains("active")) {
-        _shareBlobPromise = buildShareBlob().catch(() => null);
+        prepShareCard();
       }
     });
     document.getElementById("shareBtn").addEventListener("click", shareScore);
