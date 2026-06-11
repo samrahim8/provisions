@@ -601,6 +601,35 @@
     }
     .wc-burger:hover { color: #A0422A; }
     .wc-burger svg { width: 24px; height: 24px; display: block; }
+    /* ── Press-and-hold share fallback overlay ── */
+    #cardOverlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(26, 19, 13, 0.92);
+      align-items: center; justify-content: center;
+      padding: 28px 20px;
+    }
+    .card-overlay-inner {
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      max-width: 340px; width: 100%;
+    }
+    .card-overlay-inner img {
+      width: 100%; height: auto;
+      border-radius: 10px;
+      box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7);
+    }
+    .card-overlay-inner p {
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(245,241,235,0.85); text-align: center;
+    }
+    .card-overlay-inner button {
+      appearance: none; border: 1.5px solid rgba(245,241,235,0.4); background: transparent;
+      color: #F5F1EB; border-radius: 5px; padding: 10px 26px;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+
     /* ── Daily-five chrome ── */
     .exam-link {
       display: block;
@@ -1222,6 +1251,10 @@
       nextFive.hidden = !daily;
       if (daily) startNextFiveCountdown();
 
+      // Pre-render the share card now so the share tap can fire the native
+      // sheet inside its activation window (iOS kills it after long awaits).
+      _shareBlobPromise = buildShareBlob().catch(() => null);
+
       // ── The verdict reveal: squares punch in, then the stamp lands ──
       const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const live = animate && !reduced;
@@ -1604,23 +1637,32 @@
       return lines;
     }
 
+    let _shareBlobPromise = null;
+
     async function shareScore() {
       const btn = document.getElementById("shareBtn");
       const original = btn.textContent;
       btn.disabled = true;
-      btn.textContent = "Pressing…";
       try {
         const daily = state.mode === "daily";
-        const den = daily ? 5 : 10;
         const fname = daily ? `you-know-ball-day-${TODAY_NUM}.png` : `you-know-ball-${state.score}of10.png`;
         const shareText = daily
           ? `You Know Ball · ${DAY_LABEL} · ${state.score}/5. Beat me.`
           : `I scored ${state.score}/10 on the original ten. Beat me.`;
-        const blob = await buildShareBlob();
+        // Already rendered when the result appeared; this await resolves
+        // in a microtask and keeps the tap's transient activation alive.
+        const blob = (await _shareBlobPromise) || (await buildShareBlob());
         const file = new File([blob], fname, { type: "image/png" });
         const isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
         if (isTouch && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: "You Know Ball", text: shareText });
+          try {
+            await navigator.share({ files: [file], title: "You Know Ball", text: shareText });
+          } catch (e) {
+            if (e && e.name === "AbortError") return; // user closed the sheet
+            showCardOverlay(blob); // activation lost or share refused: press-and-hold path
+          }
+        } else if (isTouch) {
+          showCardOverlay(blob);
         } else {
           // Desktop: download to disk
           const url = URL.createObjectURL(blob);
@@ -1638,6 +1680,26 @@
         btn.disabled = false;
         btn.textContent = original;
       }
+    }
+
+    // Fallback that always works on iOS: show the PNG, press and hold to save.
+    function showCardOverlay(blob) {
+      let ov = document.getElementById("cardOverlay");
+      if (!ov) {
+        ov = document.createElement("div");
+        ov.id = "cardOverlay";
+        ov.innerHTML = `
+          <div class="card-overlay-inner">
+            <img alt="Your result card">
+            <p>Press and hold the card to save or share it</p>
+            <button type="button">Close</button>
+          </div>`;
+        ov.querySelector("button").addEventListener("click", () => { ov.style.display = "none"; });
+        ov.addEventListener("click", (e) => { if (e.target === ov) ov.style.display = "none"; });
+        document.body.appendChild(ov);
+      }
+      ov.querySelector("img").src = URL.createObjectURL(blob);
+      ov.style.display = "flex";
     }
 
     // Wire it up
