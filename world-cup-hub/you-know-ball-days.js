@@ -79,4 +79,74 @@ window.YKB_DAYS = {
       { t: "order", q: "Earliest to latest:", items: ["Suárez's handball denies Ghana", "Modrić wins the Golden Ball", "Zaire's free-kick chaos"], order: [2, 0, 1], e: "1974, 2010, 2018. DR Congo, Ghana, and Croatia all play today." },
     ],
   },
+  "2026-06-24": {
+    theme: "Goal Machines",
+    rounds: [
+      { t: "five", q: "For eight years this man held the record as the World Cup's all-time top scorer with 15 goals, until Miroslav Klose passed him in 2014. Who?", o: ["Pelé", "Ronaldo (Brazil)", "Gerd Müller", "Just Fontaine"], a: 1, e: "Brazil's Ronaldo overtook Müller's 14 with his 15th goal against Ghana in 2006. Klose finally went past him with his 16th in 2014." },
+      { t: "reveal", q: "Name the player.", clues: ["Born in Marrakesh, capped by France.", "Holds a single-tournament record untouched for nearly 70 years.", "Scored 13 goals at one World Cup, in 1958."], o: ["Raymond Kopa", "Just Fontaine", "Michel Platini", "Thierry Henry"], a: 1, e: "Fontaine's 13 in Sweden '58 is the most goals anyone has scored at a single World Cup. Nobody has come within four since." },
+      { t: "score", q: "The highest-scoring match in World Cup history, Austria v Switzerland in the 1954 quarter-final, finished:", o: ["Austria 7-5", "5-5", "Austria 6-4", "Switzerland 6-3"], a: 0, e: "Twelve goals in 40°C heat, the 'Heat Battle of Lausanne.' Austria came back from 3-0 down inside the first half." },
+      { t: "year", q: "Geoff Hurst scores the only hat-trick in a men's World Cup final. Lock the year.", a: 1966, e: "England 4-2 West Germany at Wembley, after extra time. 'They think it's all over...'" },
+      { t: "order", q: "Earliest to latest:", items: ["Just Fontaine scores 13 in one tournament", "Ronaldo breaks the all-time scoring record", "Klose breaks Ronaldo's record"], order: [0, 1, 2], e: "1958, 2006, 2014. The record passes from France to Brazil to Germany." },
+    ],
+  },
+  "2026-06-25": {
+    theme: "The Last Line",
+    rounds: [
+      { t: "five", q: "Who is the only goalkeeper ever to win the World Cup Golden Ball as the tournament's best player?", o: ["Lev Yashin", "Oliver Kahn", "Gianluigi Buffon", "Iker Casillas"], a: 1, e: "Kahn in 2002, even though Brazil beat his Germany in the final, and even though his fumble teed up the winner." },
+      { t: "reveal", q: "Name the player.", clues: ["Kept goal for the Soviet Union.", "Nicknamed the 'Black Spider.'", "The only goalkeeper to win the Ballon d'Or."], o: ["Rinat Dasayev", "Lev Yashin", "Dino Zoff", "Gordon Banks"], a: 1, e: "Yashin took the Ballon d'Or in 1963. No keeper has done it before or since." },
+      { t: "score", q: "Gordon Banks made 'the save of the century' from Pelé in a 1970 group game. Brazil still won it:", o: ["Brazil 1-0", "1-1", "Brazil 2-1", "Brazil 2-0"], a: 0, e: "Jairzinho got the only goal, but it's the save, not the result, that everyone remembers." },
+      { t: "ladder", q: "Who was older on the day he lifted the World Cup as captain?", o: ["Dino Zoff, 1982", "Iker Casillas, 2010"], a: 0, e: "Zoff was 40, still the oldest World Cup winner ever. Casillas was a sprightly 29 in Johannesburg." },
+      { t: "order", q: "Earliest to latest:", items: ["Yashin wins the Ballon d'Or", "Zoff lifts the World Cup at 40", "Casillas captains Spain to the title"], order: [0, 1, 2], e: "1963, 1982, 2010. Three goalkeepers, three kinds of immortality." },
+    ],
+  },
+  "2026-06-26": {
+    theme: "Home Soil",
+    rounds: [
+      { t: "five", q: "How many host nations have gone on to win the World Cup on their own soil?", o: ["Three", "Four", "Six", "Eight"], a: 2, e: "Uruguay (1930), Italy (1934), England (1966), West Germany (1974), Argentina (1978) and France (1998). Six hosts, six trophies." },
+      { t: "reveal", q: "Name the player.", clues: ["Played his club football in Spain at the time.", "Top scorer at the 1978 World Cup with six goals.", "Scored twice in the final for the host nation."], o: ["Daniel Passarella", "Leopoldo Luque", "Mario Kempes", "Osvaldo Ardiles"], a: 2, e: "Kempes, 'El Matador': six goals, two in the final, and the Golden Ball as Argentina won at home in '78." },
+      { t: "score", q: "England's one and only World Cup final, in 1966, finished:", o: ["England 4-2 after extra time", "England 3-2", "2-2", "England 2-0"], a: 0, e: "Hurst's hat-trick saw off West Germany at Wembley. Still the only time England have gone all the way." },
+      { t: "year", q: "Host nation Brazil suffer the 7-1 'Mineirazo' in a home semi-final against Germany. Lock the year.", a: 2014, e: "Belo Horizonte. Five goals in 29 first-half minutes. A nation's worst nightmare on its own soil." },
+      { t: "order", q: "Earliest to latest:", items: ["Uruguay win the first World Cup as hosts", "England win as hosts", "France win as hosts"], order: [0, 1, 2], e: "1930, 1966, 1998. Winning at home is rare, and nobody's done it since France." },
+    ],
+  },
+  "2026-06-27": {
+    theme: "Wonder Goals",
+    rounds: [
+      { t: "five", q: "Whose 24-pass team goal against Serbia and Montenegro in 2006 got labelled 'a monument of geometry'?", o: ["Lionel Messi", "Esteban Cambiasso", "Juan Román Riquelme", "Hernán Crespo"], a: 1, e: "Cambiasso finished a 24-pass move off a Crespo backheel in a 6-0 Argentina rout. Almost the whole team touched it first." },
+      { t: "reveal", q: "Name the player.", clues: ["Played for Saudi Arabia.", "His goal at USA '94 got called the 'Maradona of the Arabs.'", "He carried the ball past half of Belgium to score the winner."], o: ["Majed Abdullah", "Sami Al-Jaber", "Saeed Al-Owairan", "Yasser Al-Qahtani"], a: 2, e: "Al-Owairan's 60-yard solo run beat Belgium 1-0 in 1994 and put Saudi Arabia into the knockouts." },
+      { t: "score", q: "Brazil's 1970 final, capped by Carlos Alberto's perfect team goal, finished against Italy:", o: ["Brazil 4-1", "Brazil 3-1", "Brazil 4-2", "2-2"], a: 0, e: "The greatest team goal by maybe the greatest team. Pelé's lay-off, Carlos Alberto's thunderbolt, 4-1." },
+      { t: "ladder", q: "Whose World Cup wonder goal came first?", o: ["Archie Gemmill v Netherlands, Scotland", "Maxi Rodríguez v Mexico, Argentina"], a: 0, e: "Gemmill's slalom was 1978 (yes, the Trainspotting one). Maxi's extra-time volley came in 2006." },
+      { t: "order", q: "Earliest to latest:", items: ["Carlos Alberto's team goal", "Archie Gemmill's slalom run", "Cambiasso's 24-pass finish"], order: [0, 1, 2], e: "1970, 1978, 2006. Three goals that still get replayed every four years." },
+    ],
+  },
+  "2026-06-28": {
+    theme: "The Bosses",
+    rounds: [
+      { t: "five", q: "Three men have won the World Cup as both a player and a manager. Which of these is NOT one of them?", o: ["Franz Beckenbauer", "Mário Zagallo", "Didier Deschamps", "Johan Cruyff"], a: 3, e: "Beckenbauer, Zagallo and Deschamps did the double. Cruyff, for all his genius, never won a World Cup at all." },
+      { t: "reveal", q: "Name the player.", clues: ["Nicknamed 'Der Kaiser.'", "Captained West Germany to the 1974 title.", "Managed West Germany to the 1990 title."], o: ["Lothar Matthäus", "Franz Beckenbauer", "Paul Breitner", "Uwe Seeler"], a: 1, e: "Beckenbauer lifted it as captain in '74 and again from the dugout in '90, and reinvented the sweeper along the way." },
+      { t: "score", q: "The 1990 final, a bad-tempered rematch of '86, finished West Germany v Argentina:", o: ["West Germany 1-0", "2-1", "1-1", "West Germany 2-0"], a: 0, e: "Brehme's late penalty settled it. Two Argentina players were sent off; nobody calls it a classic." },
+      { t: "ladder", q: "Who won more World Cup titles as a manager?", o: ["Vittorio Pozzo", "Mário Zagallo"], a: 0, e: "Pozzo is the only manager to win two (Italy, 1934 and 1938). Zagallo won one in the dugout, in 1970." },
+      { t: "order", q: "Earliest to latest:", items: ["Pozzo wins back-to-back titles", "Beckenbauer wins as captain", "Deschamps wins as captain"], order: [0, 1, 2], e: "1938, 1974, 1998. Three different ways to put your name on the trophy." },
+    ],
+  },
+  "2026-06-29": {
+    theme: "Twelve Yards",
+    rounds: [
+      { t: "five", q: "Who scored the decisive penalty in the 2006 final shootout to win Italy their fourth World Cup?", o: ["Andrea Pirlo", "Fabio Grosso", "Alessandro Del Piero", "Marco Materazzi"], a: 1, e: "Grosso, who wasn't even on the original list of takers. Lippi told him, 'You're the man for the last minute.'" },
+      { t: "reveal", q: "Name the player.", clues: ["The ponytail, the Buddhism, 'Il Divin Codino.'", "Dragged Italy to the 1994 final almost by himself.", "Then ballooned the penalty that handed Brazil the trophy."], o: ["Paolo Rossi", "Roberto Baggio", "Gianfranco Zola", "Roberto Donadoni"], a: 1, e: "Baggio's miss in Pasadena ended the first World Cup final ever decided on penalties." },
+      { t: "score", q: "Before the shootout, the 2006 final between Italy and France was level at:", o: ["1-1", "2-1", "0-0", "2-2"], a: 0, e: "Materazzi cancelled Zidane's cheeky Panenka, then drew the headbutt that ended Zidane's career." },
+      { t: "ladder", q: "Who has the better World Cup penalty-shootout record?", o: ["Germany", "Argentina"], a: 0, e: "Germany have never lost one: four shootouts, 18 of 18 kicks scored. Argentina have lost one, to (who else) Germany in 2006." },
+      { t: "order", q: "Earliest to latest:", items: ["The first World Cup penalty shootout", "The first final decided on penalties", "Zidane's headbutt final"], order: [0, 1, 2], e: "1982, 1994, 2006. The shootout went from novelty to heartbreak machine fast." },
+    ],
+  },
+  "2026-06-30": {
+    theme: "Teenage Kicks",
+    rounds: [
+      { t: "five", q: "Who is the youngest goalscorer in World Cup history, and the only man to score at one before turning 18?", o: ["Pelé", "Kylian Mbappé", "Michael Owen", "Lionel Messi"], a: 0, e: "Pelé, 17 years 239 days, against Wales in 1958. Days later he scored a semi-final hat-trick, then twice in the final." },
+      { t: "reveal", q: "Name the player.", clues: ["France's spearhead since 2018.", "The second teenager ever to score in a World Cup final, after Pelé.", "Scored a hat-trick in a World Cup final and still lost."], o: ["Antoine Griezmann", "Olivier Giroud", "Kylian Mbappé", "Karim Benzema"], a: 2, e: "Mbappé's three goals in the 2022 final weren't enough; Argentina won the shootout 4-2." },
+      { t: "score", q: "After 120 minutes, the 2022 final between Argentina and France finished:", o: ["3-3", "2-2", "3-2", "4-3"], a: 0, e: "Messi twice, Di María once; Mbappé all three for France. Then Argentina held their nerve from the spot." },
+      { t: "year", q: "Pelé becomes the only man to win three World Cups. Lock the year of his third.", a: 1970, e: "1958, 1962 and 1970, and that '70 Brazil side is still the benchmark for the beautiful game." },
+      { t: "order", q: "Earliest to latest:", items: ["Pelé wins the World Cup as a 17-year-old", "Mbappé scores in a final as a teenager", "Mbappé scores a hat-trick in a final"], order: [0, 1, 2], e: "1958, 2018, 2022. Sixty years apart, the same impossible standard." },
+    ],
+  },
 };
