@@ -1,12 +1,12 @@
-# Provisions — Sam Rahim
+# Provisions · Sam Rahim
 
-> Special projects for founders + operators.
+> Business strategy, organic growth, and custom tools for founders in tech and soccer.
 
 ## About
 
-Provisions is a one-person studio run by Sam Rahim. It makes growth engines, custom tools, and software products for founders and operators who have a special project with no one to run it.
+Provisions is a one-person studio run by Sam Rahim. It makes growth engines, custom tools, and software products for founders in tech and soccer.
 
-Sam Rahim is a full stack operator with over a decade of experience, from Disney to venture-backed startups. He now runs Provisions full-time, making custom software, AI-powered tools, and growth engines for small-to-mid-size businesses.
+Sam Rahim is a full stack operator with over a decade of experience, from Disney to venture-backed startups. He now runs Provisions full-time, making custom software, AI-powered tools, and growth engines for founders in tech and soccer.
 
 ## What Provisions Does
 
@@ -35,4 +35,4 @@ Sam Rahim is a full stack operator with over a decade of experience, from Disney
 - Location: United States
 - Studio type: One-person studio (solo operator)
 - Typical engagement: 1-3 weeks, $1K-$3K
-- Positioning: "Every founder has a special project with no one to run it."
+- Positioning: Works with founders across tech and soccer. Business strategy, organic growth, and custom tools.
