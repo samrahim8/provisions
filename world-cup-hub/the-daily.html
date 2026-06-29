@@ -1563,6 +1563,7 @@
 
     function render() {
       const sched = document.getElementById("schedule");
+      const now = new Date();
       const byRound = {};
       for (const m of SCHEDULE) {
         const round = m[5];
@@ -1572,6 +1573,10 @@
       for (const round of ROUND_ORDER) {
         const matches = (byRound[round] || []).sort((a, b) => new Date(a[4]) - new Date(b[4]));
         if (!matches.length) continue;
+        // The Daily looks forward: once every match in a round has kicked off,
+        // drop the whole section (finished group matchdays, then each knockout
+        // round as it completes) so the live stage always leads.
+        if (matches.every(m => new Date(m[4]) < now)) continue;
         const byDay = {};
         for (const m of matches) {
           const k = dayKey(m[4]);
