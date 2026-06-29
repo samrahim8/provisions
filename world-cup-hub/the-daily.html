@@ -1564,49 +1564,41 @@
     function render() {
       const sched = document.getElementById("schedule");
       const now = new Date();
-      const byRound = {};
-      for (const m of SCHEDULE) {
-        const round = m[5];
-        (byRound[round] = byRound[round] || []).push(m);
-      }
       // A match is "done" ~2.5h after kickoff; until then it's live or upcoming.
       const MATCH_MS = 150 * 60 * 1000;
+      const tk = todayKey();
+      const tmrwKey = dayKey(new Date(now.getTime() + 86400000).toISOString());
+      // One forward-looking list, grouped by day in the viewer's timezone.
+      // Today lives in the featured block above, so the schedule runs from
+      // tomorrow on; games that have already finished drop out.
+      const upcoming = SCHEDULE
+        .filter(m => new Date(m[4]).getTime() + MATCH_MS >= now.getTime())
+        .filter(m => dayKey(m[4]) !== tk)
+        .sort((a, b) => new Date(a[4]) - new Date(b[4]));
+      const byDay = {};
+      for (const m of upcoming) {
+        const k = dayKey(m[4]);
+        (byDay[k] = byDay[k] || []).push(m);
+      }
       let html = "";
-      for (const round of ROUND_ORDER) {
-        // The Daily looks forward: drop matches that have already finished, so
-        // past games (yesterday's, earlier today's) fall away and a round
-        // disappears entirely once its last game is done — the live stage leads.
-        const matches = (byRound[round] || [])
-          .filter(m => new Date(m[4]).getTime() + MATCH_MS >= now.getTime())
-          .sort((a, b) => new Date(a[4]) - new Date(b[4]));
-        if (!matches.length) continue;
-        const byDay = {};
-        for (const m of matches) {
-          const k = dayKey(m[4]);
-          (byDay[k] = byDay[k] || []).push(m);
-        }
+      for (const k of Object.keys(byDay).sort()) {
+        const dayMatches = byDay[k];
+        const iso = dayMatches[0][4];
+        // Big heading is relative — Tomorrow, then the weekday; the date is the
+        // subtitle. (No round headers; each card carries its own round label.)
+        const heading = k === tmrwKey ? "Tomorrow" : formatDate(iso).split(",")[0];
+        const dateLine = formatDate(iso).split(", ").slice(1).join(", ");
         html += `
-          <section class="round" data-round="${round}">
-            <div class="round-head">
-              <div class="round-title" data-stamp>${round}</div>
-              <div class="round-meta">${matches.length} match${matches.length === 1 ? "" : "es"}</div>
+          <section class="day" data-round="${dayMatches[0][5]}">
+            <div class="day-head">
+              <div class="day-num" data-stamp>${heading}</div>
+              <div class="day-meta">${dateLine} · ${dayMatches.length} match${dayMatches.length === 1 ? "" : "es"}</div>
             </div>
+            <div class="matches">
+              ${dayMatches.map(matchCard).join("")}
+            </div>
+          </section>
         `;
-        for (const k of Object.keys(byDay).sort()) {
-          const dayMatches = byDay[k];
-          html += `
-            <section class="day">
-              <div class="day-head">
-                <div class="day-num">${formatDate(dayMatches[0][4]).split(",")[0]}</div>
-                <div class="day-meta">${formatDate(dayMatches[0][4])} · ${dayMatches.length} match${dayMatches.length === 1 ? "" : "es"}</div>
-              </div>
-              <div class="matches">
-                ${dayMatches.map(matchCard).join("")}
-              </div>
-            </section>
-          `;
-        }
-        html += `</section>`;
       }
       sched.innerHTML = html;
     }
@@ -1674,7 +1666,8 @@
       });
       // Update count
       document.getElementById("tfCount").textContent =
-        showAll ? "104 matches" : `${visibleCount} match${visibleCount === 1 ? "" : "es"}`;
+        showAll ? `${document.querySelectorAll(".match").length} matches`
+                : `${visibleCount} match${visibleCount === 1 ? "" : "es"}`;
       // Update the nextup bar to follow the selected team
       renderNextup(getNextupMatchForTeam(code), !showAll);
       updateAllCountdowns();
@@ -2002,6 +1995,8 @@
     buildFilter();
     bindTzTabs();
     paintToday("ALL");
+    document.getElementById("tfCount").textContent =
+      `${document.querySelectorAll(".match").length} matches`;
     updateAllCountdowns();
     setInterval(updateAllCountdowns, 60 * 1000);
     // Re-paint day strip every 5 min so it ticks over midnight properly
