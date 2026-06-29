@@ -2330,25 +2330,25 @@
 
     heroTl.to('.hero-frame', { opacity: 1, scale: 1, duration: 1.0 });
 
+    // Headline decodes first — the hero's lead beat
     if (leadLine) {
       heroTl.to(leadLine, {
-        duration: 1.1,
+        duration: 1.0,
         scrambleText: {
           text: leadLine.dataset.text,
           chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-          speed: 0.6,
-          revealDelay: 0.35
+          speed: 0.7,
+          revealDelay: 0.25
         }
-      }, '<0.1');
+      }, '<');
     }
 
-    // Eyebrow reveals together with the headline decode — never ahead of it
-    heroTl.from('.hero-kicker', { opacity: 0, y: 10, duration: 0.7 }, '<');
-
+    // Eyebrow, tagline + signature follow the headline, together
     heroTl
-      .from('.hero-tagline', { opacity: 0, y: 12, duration: 0.7 }, '-=0.45')
-      .from('.hero-signature', { opacity: 0, duration: 0.8 }, '-=0.5')
-      .from('.hero-scroll', { opacity: 0, duration: 0.6 }, '-=0.3');
+      .from('.hero-kicker', { opacity: 0, y: 10, duration: 0.7 }, '>-0.35')
+      .from('.hero-tagline', { opacity: 0, y: 12, duration: 0.7 }, '<0.08')
+      .from('.hero-signature', { opacity: 0, duration: 0.8 }, '<0.08')
+      .from('.hero-scroll', { opacity: 0, duration: 0.6 }, '<0.1');
 
     // DrawSVG animated scroll chevron — draws itself, pauses, fades, loops
     var chevronPath = document.querySelector('.scroll-chevron path');
