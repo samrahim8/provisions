@@ -149,4 +149,194 @@ window.YKB_DAYS = {
       { t: "order", q: "Earliest to latest:", items: ["Pelé wins the World Cup as a 17-year-old", "Mbappé scores in a final as a teenager", "Mbappé scores a hat-trick in a final"], order: [0, 1, 2], e: "1958, 2018, 2022. Sixty years apart, the same impossible standard." },
     ],
   },
+  "2026-07-01": {
+    theme: "Sudden Death",
+    rounds: [
+      { t: "five", q: "The 'golden goal' meant the first side to score in extra time won on the spot. Who scored the first one in World Cup history?", o: ["Davor Šuker", "Laurent Blanc", "Oliver Bierhoff", "David Trezeguet"], a: 1, e: "Blanc settled France's 1998 Round of 16 tie with Paraguay in the 114th minute, the first golden goal the World Cup had ever seen." },
+      { t: "reveal", q: "Name the player.", clues: ["Co-hosted the 2002 World Cup with his country.", "His golden goal in the Round of 16 dumped out Italy.", "His Italian club Perugia tore up his contract in a rage afterwards."], o: ["Park Ji-sung", "Ahn Jung-hwan", "Cha Bum-kun", "Hong Myung-bo"], a: 1, e: "Ahn's extra-time header beat Italy 2-1 in 2002. Perugia's furious chairman vowed never to play 'a man who ruined Italian football' again." },
+      { t: "score", q: "That South Korea v Italy Round of 16 tie in 2002 finished:", o: ["South Korea 2-1", "1-1", "South Korea 1-0", "South Korea 3-2"], a: 0, e: "Vieri put Italy ahead, Seol equalised with two minutes left, and Ahn won it in extra time amid huge controversy." },
+      { t: "year", q: "FIFA used the golden goal at a World Cup for the very first time. Lock the year.", a: 1998, e: "Brought in to reward attacking extra time, it lasted only two World Cups before being scrapped." },
+      { t: "order", q: "Earliest to latest:", items: ["The first World Cup golden goal", "Ahn's golden goal sinks Italy", "FIFA abolishes the golden goal"], order: [0, 1, 2], e: "1998, 2002, 2004. A neat idea that didn't last." },
+    ],
+  },
+  "2026-07-02": {
+    theme: "Giant Killers",
+    rounds: [
+      { t: "five", q: "One of the great World Cup shocks: which team beat England 1-0 in the 1950 group stage?", o: ["United States", "Chile", "Spain", "Uruguay"], a: 0, e: "A part-time US side won in Belo Horizonte through Joe Gaetjens. Some English papers reportedly assumed the 1-0 was a misprint for 10-1." },
+      { t: "reveal", q: "Name the nation.", clues: ["Opened the 1990 World Cup against the holders.", "Won it 1-0 while finishing the match with nine men.", "Roger Milla and his corner-flag dance lit up the same tournament."], o: ["Senegal", "Cameroon", "Nigeria", "Ghana"], a: 1, e: "Cameroon stunned Maradona's Argentina in the 1990 opener; Omam-Biyik's header squirmed under the keeper." },
+      { t: "score", q: "Senegal's shock over defending champions France in the 2002 opener finished:", o: ["Senegal 1-0", "1-1", "Senegal 2-1", "Senegal 2-0"], a: 0, e: "Papa Bouba Diop bundled in the winner. France went home pointless, scoreless and bottom of the group." },
+      { t: "year", q: "North Korea beat Italy 1-0 to reach the quarter-finals. Lock the year.", a: 1966, e: "Pak Doo-ik's strike at Middlesbrough is still one of the World Cup's biggest upsets." },
+      { t: "order", q: "Earliest to latest:", items: ["USA beat England", "North Korea beat Italy", "Cameroon beat Argentina"], order: [0, 1, 2], e: "1950, 1966, 1990. Favourites felled by part-timers and debutants." },
+    ],
+  },
+  "2026-07-03": {
+    theme: "Last Sixteen",
+    rounds: [
+      { t: "five", q: "Whose 119th-minute volley sent England past Belgium in the 1990 second round, seconds from a shootout?", o: ["Gary Lineker", "David Platt", "Paul Gascoigne", "Peter Beardsley"], a: 1, e: "Platt swivelled onto Gascoigne's lofted free kick and volleyed in with almost the last touch of extra time." },
+      { t: "reveal", q: "Name the player.", clues: ["An 18-year-old Liverpool striker.", "Ran from inside his own half and beat two Argentina defenders.", "His 1998 finish announced him to the world."], o: ["Robbie Fowler", "Michael Owen", "Emile Heskey", "Teddy Sheringham"], a: 1, e: "Owen's wonder goal lit up the 1998 Round of 16, though England still went out on penalties after Beckham's red card." },
+      { t: "score", q: "England v Argentina in the 1998 Round of 16 finished, after extra time:", o: ["2-2", "1-1", "3-2", "2-1"], a: 0, e: "Batistuta and Zanetti for Argentina; Shearer and Owen for England. Argentina won the shootout 4-3 after Beckham was sent off." },
+      { t: "year", q: "Maxi Rodríguez ends an Argentina v Mexico second-round classic with an extra-time volley. Lock the year.", a: 2006, e: "A left-footed thunderbolt into the top corner in Leipzig, one of the goals of the tournament." },
+      { t: "order", q: "Earliest to latest:", items: ["Platt's last-gasp volley v Belgium", "Owen's solo run v Argentina", "Maxi's extra-time volley v Mexico"], order: [0, 1, 2], e: "1990, 1998, 2006. The Round of 16 does drama better than anyone." },
+    ],
+  },
+  "2026-07-04": {
+    theme: "The Comeback",
+    rounds: [
+      { t: "five", q: "Portugal came from 3-0 down to win 5-3 at the 1966 World Cup, with one man scoring four. Against whom?", o: ["North Korea", "Brazil", "Hungary", "Bulgaria"], a: 0, e: "North Korea raced 3-0 ahead inside 25 minutes; Eusébio answered with four goals to turn the quarter-final around." },
+      { t: "reveal", q: "Name the player.", clues: ["Born in Mozambique, the 'Black Panther.'", "Won the 1966 Golden Boot with nine goals.", "Scored four in one knockout game to complete a 3-0 comeback."], o: ["Mário Coluna", "Eusébio", "José Torres", "Pelé"], a: 1, e: "Eusébio left the field in tears when Portugal lost the semi-final to hosts England days later." },
+      { t: "score", q: "That Portugal comeback against North Korea in the 1966 quarter-final finished:", o: ["Portugal 5-3", "4-3", "Portugal 5-2", "4-2"], a: 0, e: "Down 3-0 after 25 minutes, Portugal scored five, four of them from Eusébio." },
+      { t: "ladder", q: "Which was the steeper World Cup knockout comeback?", o: ["Portugal from 3-0 down v North Korea, 1966", "West Germany from 2-0 down v England, 1970"], a: 0, e: "Both stunned the favourites, but climbing back from three goals down is the rarer feat." },
+      { t: "order", q: "Earliest to latest:", items: ["Eusébio drags Portugal back from 3-0", "West Germany recover to beat England", "Belgium come from 2-0 down to beat Japan"], order: [0, 1, 2], e: "1966, 1970, 2018. The knockouts reward whoever keeps believing." },
+    ],
+  },
+  "2026-07-05": {
+    theme: "Seeing Red",
+    rounds: [
+      { t: "five", q: "Who received the first red card ever shown in a World Cup final, in 1990?", o: ["Pedro Monzón (Argentina)", "Diego Maradona (Argentina)", "Marco Materazzi (Italy)", "Frank Rijkaard (Netherlands)"], a: 0, e: "Argentina's Monzón was dismissed against West Germany; team-mate Dezotti soon joined him. The first final to see red, twice over." },
+      { t: "reveal", q: "Name the player.", clues: ["England's young talisman in 2006.", "Stamped on Ricardo Carvalho in the quarter-final.", "Ronaldo's wink to the bench followed his red card."], o: ["Steven Gerrard", "Wayne Rooney", "Frank Lampard", "Michael Owen"], a: 1, e: "Rooney saw red against Portugal in 2006; England lost on penalties, and the Rooney-Ronaldo club rivalry got a new chapter." },
+      { t: "score", q: "That 2006 England v Portugal quarter-final, Rooney's red and all, finished after extra time:", o: ["0-0", "1-1", "1-0 Portugal", "2-1 Portugal"], a: 0, e: "Goalless, then Portugal won the shootout 3-1 as England missed three penalties." },
+      { t: "year", q: "Referee Valentin Ivanov shows 16 yellows and four reds in the 'Battle of Nuremberg.' Lock the year.", a: 2006, e: "Portugal beat the Netherlands 1-0 in a Round of 16 tie that set a World Cup record for cards." },
+      { t: "order", q: "Earliest to latest:", items: ["First red card in a World Cup final", "The Battle of Nuremberg", "Rooney's stamp gets him sent off"], order: [0, 1, 2], e: "1990, then two ugly afternoons in 2006. The knockouts bring out the temper." },
+    ],
+  },
+  "2026-07-06": {
+    theme: "Off the Bench",
+    rounds: [
+      { t: "five", q: "Who came on as a substitute and scored the winning goal in the 2014 World Cup final?", o: ["Thomas Müller", "André Schürrle", "Mario Götze", "Miroslav Klose"], a: 2, e: "Götze, on for Klose, chested down Schürrle's cross and volleyed past Romero in extra time. Germany 1-0 Argentina." },
+      { t: "reveal", q: "Name the player.", clues: ["Australia's midfield talisman.", "Came off the bench at the 2006 World Cup against Japan.", "Scored twice in the last eight minutes for his country's first-ever World Cup win."], o: ["Harry Kewell", "Tim Cahill", "Mark Viduka", "Mark Bresciano"], a: 1, e: "Cahill's double in 2006 turned a 1-0 deficit into a 3-1 win, Australia's first victory at a World Cup finals." },
+      { t: "score", q: "Tim Cahill's super-sub double turned Australia's 2006 opener against Japan into:", o: ["Australia 3-1", "2-1 Australia", "1-1", "3-2 Australia"], a: 0, e: "Three goals in the last eight minutes: two from Cahill, one from Aloisi." },
+      { t: "year", q: "Mario Götze's substitute's volley wins the World Cup final for Germany. Lock the year.", a: 2014, e: "Seven minutes from a shootout, the 22-year-old settled it against Argentina at the Maracanã." },
+      { t: "order", q: "Earliest to latest:", items: ["Roger Milla dances at the corner flag, aged 38", "Tim Cahill's super-sub double", "Götze wins the final off the bench"], order: [0, 1, 2], e: "1990, 2006, 2014. Games are won by whoever's freshest at the end." },
+    ],
+  },
+  "2026-07-07": {
+    theme: "The Magicians",
+    rounds: [
+      { t: "five", q: "Whose two goals in four minutes against England in 1986 included both the 'Hand of God' and the 'Goal of the Century'?", o: ["Diego Maradona", "Jorge Valdano", "Jorge Burruchaga", "Daniel Passarella"], a: 0, e: "Maradona punched the first past Shilton, then slalomed through half of England for the second. Same man, same six minutes." },
+      { t: "reveal", q: "Name the player.", clues: ["Argentina's captain and talisman.", "Won the World Cup Golden Ball as best player at two different tournaments.", "Finally lifted the trophy in 2022, at the fifth attempt."], o: ["Ángel Di María", "Lionel Messi", "Sergio Agüero", "Paulo Dybala"], a: 1, e: "Messi's 2022 was the coronation: seven goals, two career Golden Balls, and the trophy at last." },
+      { t: "score", q: "The 1986 quarter-final between Argentina and England, settled by Maradona's two goals, finished:", o: ["Argentina 2-1", "2-2", "Argentina 2-0", "Argentina 3-1"], a: 0, e: "Lineker pulled one back late, but Maradona's double had already decided it." },
+      { t: "ladder", q: "Who won more World Cup Golden Balls (player of the tournament)?", o: ["Diego Maradona", "Lionel Messi"], a: 1, e: "Messi took it in 2014 and 2022; Maradona won it once, in 1986. Two icons, one shared number." },
+      { t: "order", q: "Earliest to latest:", items: ["Maradona's two goals beat England", "Zidane's France win on home soil", "Messi lifts the World Cup at last"], order: [0, 1, 2], e: "1986, 1998, 2022. Three number 10s, three eras." },
+    ],
+  },
+  "2026-07-08": {
+    theme: "Brazil, the Benchmark",
+    rounds: [
+      { t: "five", q: "How many times have Brazil won the World Cup, more than any other nation?", o: ["Four", "Five", "Six", "Three"], a: 1, e: "Five: 1958, 1962, 1970, 1994 and 2002. They are also the only nation to play at every finals." },
+      { t: "reveal", q: "Name the player.", clues: ["Born with a curved spine and bowed legs.", "Brazil never lost a match while he and Pelé both started.", "Carried Brazil to the 1962 title with Pelé injured early."], o: ["Garrincha", "Didi", "Vavá", "Jairzinho"], a: 0, e: "Garrincha, the 'Little Bird,' was the player of the 1962 tournament, dragging Brazil to the title almost single-handedly after Pelé got hurt." },
+      { t: "score", q: "Brazil's 1958 final win over hosts Sweden, with a 17-year-old Pelé scoring twice, finished:", o: ["Brazil 5-2", "4-1", "Brazil 5-1", "3-2"], a: 0, e: "Pelé's two and Vavá's two saw Brazil win 5-2 in Stockholm, their first world title." },
+      { t: "year", q: "Brazil win their fifth World Cup, beating Germany in the final. Lock the year.", a: 2002, e: "Ronaldo scored both goals in Yokohama, redemption after his nightmare 1998 final." },
+      { t: "order", q: "Earliest to latest:", items: ["Brazil's first title, in Sweden", "Garrincha carries Brazil with Pelé hurt", "Brazil's fifth star, in Japan"], order: [0, 1, 2], e: "1958, 1962, 2002. Nobody wears the crown more often." },
+    ],
+  },
+  "2026-07-09": {
+    theme: "The Final Eight",
+    rounds: [
+      { t: "five", q: "Whose last-minute touch, turn and finish knocked Argentina out of the 1998 quarter-finals?", o: ["Dennis Bergkamp", "Marc Overmars", "Patrick Kluivert", "Edgar Davids"], a: 0, e: "Bergkamp killed a long de Boer pass dead, spun his marker and finished, all in three touches, in the 90th minute at Marseille." },
+      { t: "reveal", q: "Name the player.", clues: ["Dutch playmaker, all left foot.", "Tied for top scorer at the 2010 World Cup with five goals.", "Drove the Netherlands to the final, scoring in the quarter and the semi."], o: ["Arjen Robben", "Wesley Sneijder", "Rafael van der Vaart", "Robin van Persie"], a: 1, e: "Sneijder's five goals took the Dutch to the 2010 final, where they lost to Spain." },
+      { t: "score", q: "The Netherlands knocked favourites Brazil out of the 2010 quarter-finals, coming from a goal down to win:", o: ["2-1", "1-0", "3-1", "2-0"], a: 0, e: "Sneijder scored twice after Robinho's opener, the first deflecting in off Felipe Melo, who then got himself sent off as Brazil fell apart." },
+      { t: "ladder", q: "Which country has reached more World Cup semi-finals?", o: ["Germany", "Brazil"], a: 0, e: "Germany, including West Germany, have reached the last four a record 13 times, just ahead of Brazil." },
+      { t: "order", q: "Earliest to latest:", items: ["Bergkamp's touch beats Argentina", "The Netherlands knock out Brazil", "Croatia stun Brazil on penalties"], order: [0, 1, 2], e: "1998, 2010, 2022. The quarter-finals are where favourites get found out." },
+    ],
+  },
+  "2026-07-10": {
+    theme: "Penalty Kings",
+    rounds: [
+      { t: "five", q: "Which goalkeeper saved two penalties in the 2006 quarter-final shootout to send Germany through against Argentina?", o: ["Jens Lehmann", "Oliver Kahn", "Manuel Neuer", "Robert Enke"], a: 0, e: "Lehmann, with a crib note tucked in his sock, saved from Ayala and Cambiasso. Germany's penalty mythology grew again." },
+      { t: "reveal", q: "Name the player.", clues: ["A Ghanaian striker.", "Smashed a last-minute penalty off the bar in the 2010 quarter-final.", "Then bravely took, and scored, in the shootout his country still lost."], o: ["Sulley Muntari", "Asamoah Gyan", "Kevin-Prince Boateng", "André Ayew"], a: 1, e: "Gyan's 120th-minute miss came right after Suárez's goal-line handball; Ghana's heartbreak was complete in the shootout." },
+      { t: "score", q: "Before that shootout, Uruguay v Ghana in the 2010 quarter-final was level at:", o: ["1-1", "0-0", "2-2", "2-1"], a: 0, e: "Muntari for Ghana, Forlán for Uruguay; then Suárez's handball and Gyan's miss made it a shootout." },
+      { t: "year", q: "Goalkeeper Jens Lehmann's sock note helps Germany beat Argentina on penalties. Lock the year.", a: 2006, e: "The note listed where each Argentine liked to aim. It worked." },
+      { t: "order", q: "Earliest to latest:", items: ["The first World Cup penalty shootout", "Lehmann's sock note beats Argentina", "Gyan's miss breaks Ghana's heart"], order: [0, 1, 2], e: "1982, 2006, 2010. No format breaks more hearts." },
+    ],
+  },
+  "2026-07-11": {
+    theme: "Heavyweight Bouts",
+    rounds: [
+      { t: "five", q: "Italy beat West Germany 4-3 in a 1970 semi-final with five extra-time goals. It is remembered as the 'Game of the...'?", o: ["Century", "Ages", "Gods", "Giants"], a: 0, e: "A plaque at the Azteca still marks it: five goals in extra time, Italy edging it 4-3 to reach the final." },
+      { t: "reveal", q: "Name the player.", clues: ["Italian striker, just back from a betting ban.", "Scored a hat-trick to knock out the great Brazil side of 1982.", "Finished that World Cup as top scorer, and a winner."], o: ["Paolo Rossi", "Bruno Conti", "Marco Tardelli", "Francesco Graziani"], a: 0, e: "Rossi's hat-trick beat Brazil 3-2 in one of the most celebrated knockout games ever, and he didn't stop there." },
+      { t: "score", q: "Italy's classic 1982 second-round win over Brazil, Rossi's hat-trick and all, finished:", o: ["Italy 3-2", "2-1 Italy", "3-1 Italy", "2-2"], a: 0, e: "Brazil only needed a draw; they kept attacking, and Rossi punished them three times." },
+      { t: "year", q: "Italy and West Germany play out the 'Game of the Century.' Lock the year.", a: 1970, e: "Played in the thin air of Mexico City; both sides were running on empty by the end." },
+      { t: "order", q: "Earliest to latest:", items: ["The Game of the Century", "Rossi's hat-trick sinks Brazil", "Italy lift the trophy in Spain"], order: [0, 1, 2], e: "1970, then two steps of Italy's 1982 fairytale." },
+    ],
+  },
+  "2026-07-12": {
+    theme: "The Long Wait",
+    rounds: [
+      { t: "five", q: "Which country waited until 2010 to win their first World Cup, beating the Netherlands in the final?", o: ["Spain", "Portugal", "Belgium", "Croatia"], a: 0, e: "Iniesta's extra-time goal in Johannesburg gave Spain a first World Cup at the 19th attempt." },
+      { t: "reveal", q: "Name the player.", clues: ["Spain's quiet midfield genius.", "Scored the only goal of the 2010 final.", "Revealed a shirt reading 'Dani Jarque, siempre con nosotros.'"], o: ["Xavi", "Andrés Iniesta", "David Villa", "Cesc Fàbregas"], a: 1, e: "Iniesta's 116th-minute volley won Spain their first World Cup and honoured his late friend." },
+      { t: "score", q: "Spain's first World Cup final, against the Netherlands in 2010, finished after extra time:", o: ["Spain 1-0", "2-1 Spain", "1-1", "2-0 Spain"], a: 0, e: "A bruising, card-strewn final settled by Iniesta with four minutes left." },
+      { t: "year", q: "France win their first World Cup, on home soil. Lock the year.", a: 1998, e: "Zidane's two headers beat Brazil 3-0 in Paris; les Bleus had finally arrived." },
+      { t: "order", q: "Earliest to latest:", items: ["England win their first and only title", "France win their first title", "Spain win their first title"], order: [0, 1, 2], e: "1966, 1998, 2010. Some nations wait generations for one." },
+    ],
+  },
+  "2026-07-13": {
+    theme: "Old Enemies",
+    rounds: [
+      { t: "five", q: "The 'Battle of Santiago' in 1962 was a brutal group game between Chile and which country?", o: ["Italy", "Brazil", "Argentina", "Spain"], a: 0, e: "Two Italians were sent off and police came onto the pitch three times; Chile won 2-0 in one of football's ugliest matches." },
+      { t: "reveal", q: "Name the player.", clues: ["A Dutch midfielder.", "Spat in Rudi Völler's perm during a 1990 grudge match.", "Both he and the German were sent off for it."], o: ["Ruud Gullit", "Frank Rijkaard", "Ronald Koeman", "Jan Wouters"], a: 1, e: "Rijkaard's spat at Völler in the 1990 Netherlands v West Germany tie is one of the World Cup's nastiest moments." },
+      { t: "score", q: "West Germany beat the Netherlands in that bad-tempered 1990 second-round tie:", o: ["2-1", "1-0", "2-0", "3-1"], a: 0, e: "Klinsmann and Brehme scored; the Dutch, the reigning European champions, went home early." },
+      { t: "year", q: "Maradona's two goals beat England at the World Cup, four years after the Falklands War. Lock the year.", a: 1986, e: "Politics and football collided in Mexico City; Maradona never hid that it felt like more than a game." },
+      { t: "order", q: "Earliest to latest:", items: ["The Battle of Santiago", "Maradona's two goals beat England", "Rijkaard spits at Völler"], order: [0, 1, 2], e: "1962, 1986, 1990. The World Cup keeps its grudges." },
+    ],
+  },
+  "2026-07-14": {
+    theme: "One Game From Glory",
+    rounds: [
+      { t: "five", q: "Germany's 7-1 demolition of hosts Brazil came at which stage of the 2014 World Cup?", o: ["Semi-final", "Quarter-final", "Final", "Round of 16"], a: 0, e: "The 'Mineirazo': five goals in 29 first-half minutes ended Brazil's dream in the last four." },
+      { t: "reveal", q: "Name the player.", clues: ["West Germany's goalkeeper in 1982.", "Flattened France's Patrick Battiston with a brutal challenge in the semi-final.", "Wasn't even booked, then saved two penalties in the shootout."], o: ["Sepp Maier", "Harald Schumacher", "Bodo Illgner", "Eike Immel"], a: 1, e: "Schumacher's assault on Battiston went unpunished; West Germany won the shootout to reach the 1982 final." },
+      { t: "score", q: "France and West Germany were level after extra time in that 1982 semi-final, the first World Cup knockout decided on penalties. The shootout went:", o: ["West Germany 5-4", "5-3", "4-3", "4-2"], a: 0, e: "Seville, 1982: France led 3-1 in extra time and still lost the first World Cup shootout, 5-4." },
+      { t: "year", q: "Germany humiliate hosts Brazil 7-1 in a World Cup semi-final. Lock the year.", a: 2014, e: "Belo Horizonte fell silent, then started applauding Germany. A nation's worst night." },
+      { t: "order", q: "Earliest to latest:", items: ["Schumacher flattens Battiston in Seville", "Italy beat Germany in Dortmund", "Germany's 7-1 over Brazil"], order: [0, 1, 2], e: "1982, 2006, 2014. The semi-finals make and break legends." },
+    ],
+  },
+  "2026-07-15": {
+    theme: "So Near",
+    rounds: [
+      { t: "five", q: "The Netherlands have lost three World Cup finals without ever winning. In which years?", o: ["1974, 1978, 2010", "1974, 1990, 2010", "1978, 1998, 2010", "1974, 1978, 1998"], a: 0, e: "Beaten by West Germany (1974), Argentina (1978) and Spain (2010). Total Football's nearly men." },
+      { t: "reveal", q: "Name the player.", clues: ["The face of Total Football.", "Won the Ballon d'Or three times but never a World Cup.", "Sat out the 1978 tournament his country reached the final of."], o: ["Johan Neeskens", "Johan Cruyff", "Rob Rensenbrink", "Ruud Krol"], a: 1, e: "Cruyff's Netherlands lost the 1974 final to West Germany; he stayed home in 1978, and his country lost that final too." },
+      { t: "score", q: "The 1974 final, West Germany v the Netherlands, finished:", o: ["West Germany 2-1", "2-0", "1-1", "2-2"], a: 0, e: "The Dutch scored a penalty before a German had even touched the ball, then lost; Breitner and Müller turned it around." },
+      { t: "year", q: "The Netherlands lose the World Cup final to hosts Argentina. Lock the year.", a: 1978, e: "Rensenbrink hit the post in the last minute of normal time; Argentina won in extra time, 3-1." },
+      { t: "order", q: "Earliest to latest:", items: ["Holland lose the final to West Germany", "Holland lose again to host Argentina", "Holland lose a third final to Spain"], order: [0, 1, 2], e: "1974, 1978, 2010. The best team never to win it, three times over." },
+    ],
+  },
+  "2026-07-16": {
+    theme: "The Golden Boot",
+    rounds: [
+      { t: "five", q: "Who won the Golden Boot at the 2022 World Cup with eight goals?", o: ["Lionel Messi", "Kylian Mbappé", "Julián Álvarez", "Olivier Giroud"], a: 1, e: "Mbappé's eight included a hat-trick in the final, and he still finished on the losing side." },
+      { t: "reveal", q: "Name the player.", clues: ["An Italian striker barely known before 1990.", "Came from nowhere to win the Golden Boot at his home World Cup.", "His wide-eyed celebrations defined Italia '90."], o: ["Roberto Baggio", "Salvatore Schillaci", "Gianluca Vialli", "Andrea Carnevale"], a: 1, e: "Schillaci's six goals won the 1990 Golden Boot, though Italy fell in the semi-finals." },
+      { t: "score", q: "Italy beat England in the 1990 third-place playoff, Schillaci scoring from the spot:", o: ["Italy 2-1", "1-0 Italy", "2-0 Italy", "1-1"], a: 0, e: "Baggio and Schillaci (penalty) for the hosts; small consolation for the semi-final hurt." },
+      { t: "year", q: "Harry Kane wins the World Cup Golden Boot with six goals. Lock the year.", a: 2018, e: "England reached the semis; Kane's six included a hat-trick, two of them penalties, against Panama." },
+      { t: "order", q: "Earliest to latest:", items: ["Schillaci's surprise Golden Boot", "Kane wins the Golden Boot", "Mbappé wins the Golden Boot"], order: [0, 1, 2], e: "1990, 2018, 2022. Six or eight goals, and the trophy still isn't guaranteed." },
+    ],
+  },
+  "2026-07-17": {
+    theme: "The Trophy",
+    rounds: [
+      { t: "five", q: "The original World Cup trophy was renamed in 1946 after which FIFA president?", o: ["Jules Rimet", "João Havelange", "Stanley Rous", "Sepp Blatter"], a: 0, e: "The Jules Rimet Trophy was won outright by Brazil in 1970 for a third title, then stolen and never recovered." },
+      { t: "reveal", q: "Name the hero.", clues: ["The Jules Rimet trophy was stolen in England in 1966.", "It was found a week later, wrapped in newspaper under a hedge.", "The one who found it was a dog."], o: ["Pickles", "Bobby", "Rex", "Nipper"], a: 0, e: "Pickles the collie sniffed out the stolen trophy in March 1966, months before the tournament, and became a national hero." },
+      { t: "score", q: "Brazil won the Jules Rimet trophy outright by taking their third title in 1970, beating Italy:", o: ["Brazil 4-1", "3-1", "Brazil 4-2", "2-1"], a: 0, e: "Three titles meant Brazil kept the trophy for good. It was later stolen from their federation and, most believe, melted down." },
+      { t: "year", q: "A brand-new FIFA World Cup Trophy is used for the first time, after Brazil kept the old one. Lock the year.", a: 1974, e: "Designed by Italian Silvio Gazzaniga, it's the one captains have lifted ever since." },
+      { t: "order", q: "Earliest to latest:", items: ["Pickles finds the stolen trophy", "Brazil win the Jules Rimet outright", "The current trophy is lifted for the first time"], order: [0, 1, 2], e: "1966, 1970, 1974. Even the trophy has a wild backstory." },
+    ],
+  },
+  "2026-07-18": {
+    theme: "The Bronze",
+    rounds: [
+      { t: "five", q: "Croatia finished third at the 2022 World Cup. Who did they beat in the playoff?", o: ["Morocco", "Belgium", "France", "Argentina"], a: 0, e: "Croatia won 2-1; Morocco's run to fourth was the best ever by an African or Arab nation." },
+      { t: "reveal", q: "Name the player.", clues: ["Croatia's midfield metronome and captain.", "Won the 2018 World Cup Golden Ball.", "Led a small nation to a final and, four years on, a third-place finish."], o: ["Ivan Rakitić", "Luka Modrić", "Mateo Kovačić", "Ivan Perišić"], a: 1, e: "Modrić's 2018 Golden Ball came even as Croatia lost the final to France." },
+      { t: "score", q: "Croatia's run to the 2018 final ended against France, who won:", o: ["France 4-2", "3-1", "France 3-2", "2-1"], a: 0, e: "Griezmann, Pogba, Mbappé and an own goal; Mandžukić scored at both ends in a six-goal final." },
+      { t: "year", q: "Morocco become the first African or Arab nation to reach a World Cup semi-final. Lock the year.", a: 2022, e: "Regragui's side beat Spain and Portugal before losing to France in the last four." },
+      { t: "order", q: "Earliest to latest:", items: ["Croatia reach their first World Cup final", "Morocco reach the semi-finals", "Croatia finish third"], order: [0, 1, 2], e: "2018 and 2022: the nearly-men and the history-makers." },
+    ],
+  },
+  "2026-07-19": {
+    theme: "The Final",
+    rounds: [
+      { t: "five", q: "How many World Cup finals have been decided by a penalty shootout?", o: ["Two", "Three", "One", "Four"], a: 1, e: "Three: 1994 (Brazil beat Italy), 2006 (Italy beat France) and 2022 (Argentina beat France)." },
+      { t: "reveal", q: "Name the player.", clues: ["French playmaker, son of Algerian immigrants.", "Scored two headers in the 1998 final.", "Ended his career with a red card in the 2006 final."], o: ["Thierry Henry", "Zinedine Zidane", "David Trezeguet", "Patrick Vieira"], a: 1, e: "Zidane's two headers beat Brazil in 1998; eight years later, the headbutt on Materazzi was his last act in football." },
+      { t: "score", q: "Zidane's two headers won the 1998 World Cup final for France against Brazil:", o: ["France 3-0", "2-0 France", "3-1 France", "2-1 France"], a: 0, e: "Two Zidane headers from corners and a late Petit goal; Ronaldo, mysteriously off-colour, never got going." },
+      { t: "year", q: "Andrés Iniesta scores in extra time to win Spain their first World Cup. Lock the year.", a: 2010, e: "Spain 1-0 the Netherlands in Johannesburg, the first all-European final held outside Europe." },
+      { t: "order", q: "Earliest to latest:", items: ["England win the World Cup at Wembley", "Zidane's France win at home", "Messi's Argentina win in Qatar"], order: [0, 1, 2], e: "1966, 1998, 2022. The day that makes everything else worth it." },
+    ],
+  },
 };
