@@ -1569,14 +1569,17 @@
         const round = m[5];
         (byRound[round] = byRound[round] || []).push(m);
       }
+      // A match is "done" ~2.5h after kickoff; until then it's live or upcoming.
+      const MATCH_MS = 150 * 60 * 1000;
       let html = "";
       for (const round of ROUND_ORDER) {
-        const matches = (byRound[round] || []).sort((a, b) => new Date(a[4]) - new Date(b[4]));
+        // The Daily looks forward: drop matches that have already finished, so
+        // past games (yesterday's, earlier today's) fall away and a round
+        // disappears entirely once its last game is done — the live stage leads.
+        const matches = (byRound[round] || [])
+          .filter(m => new Date(m[4]).getTime() + MATCH_MS >= now.getTime())
+          .sort((a, b) => new Date(a[4]) - new Date(b[4]));
         if (!matches.length) continue;
-        // The Daily looks forward: once every match in a round has kicked off,
-        // drop the whole section (finished group matchdays, then each knockout
-        // round as it completes) so the live stage always leads.
-        if (matches.every(m => new Date(m[4]) < now)) continue;
         const byDay = {};
         for (const m of matches) {
           const k = dayKey(m[4]);
