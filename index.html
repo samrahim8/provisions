@@ -2330,8 +2330,6 @@
 
     heroTl.to('.hero-frame', { opacity: 1, scale: 1, duration: 1.0 });
 
-    heroTl.from('.hero-kicker', { opacity: 0, y: 10, duration: 0.7 }, '<0.1');
-
     if (leadLine) {
       heroTl.to(leadLine, {
         duration: 1.1,
@@ -2341,8 +2339,11 @@
           speed: 0.6,
           revealDelay: 0.35
         }
-      }, '<0.2');
+      }, '<0.1');
     }
+
+    // Eyebrow reveals together with the headline decode — never ahead of it
+    heroTl.from('.hero-kicker', { opacity: 0, y: 10, duration: 0.7 }, '<');
 
     heroTl
       .from('.hero-tagline', { opacity: 0, y: 12, duration: 0.7 }, '-=0.45')
