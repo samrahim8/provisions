@@ -69,8 +69,8 @@
   <meta name="theme-color" content="#2C2118">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" as="style">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #F5F1EB;
@@ -86,6 +86,7 @@
       --border: #DDD7CC;
       --display: 'Syne', sans-serif;
       --sans: 'Inter', -apple-system, sans-serif;
+      --mono: 'IBM Plex Mono', ui-monospace, monospace;
     }
 
 
@@ -136,6 +137,130 @@
     .divider-svg line {
       stroke: var(--border);
       stroke-width: 1;
+    }
+
+    /* ── CREDENTIAL LEDGER ── */
+    .cred-ribbon {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 2.6rem;
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+    .cl-headline {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(2rem, 3.6vw, 2.8rem);
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      color: var(--leather);
+      margin-bottom: 1.4rem;
+    }
+    .cl-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 0.6rem;
+    }
+    .cl-head .cl-range { color: var(--text-soft); letter-spacing: 0.16em; }
+
+    .cl-rows { list-style: none; margin: 0; padding: 0; }
+    .cl-row {
+      display: grid;
+      grid-template-columns: 2.1rem minmax(0, 1fr) 14.5rem;
+      align-items: center;
+      column-gap: 1rem;
+      padding: 0.8rem 0.9rem;
+      margin: 0 -0.9rem;
+      border-top: 1px solid var(--border);
+      color: var(--leather);
+      transition: background 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease, padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: default;
+    }
+    .cl-row:last-child { border-bottom: 1px solid var(--border); }
+
+    .cl-idx {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--terracotta);
+      letter-spacing: 0.05em;
+      transition: color 0.4s ease;
+    }
+    .cl-namecell {
+      display: flex;
+      align-items: baseline;
+      min-width: 0;
+    }
+    .cl-name {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 2.6rem; /* fitted by JS to the column width */
+      line-height: 0.95;
+      letter-spacing: -0.015em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .cl-lead {
+      flex: 1 1 auto;
+      min-width: 2rem;
+      margin-left: 0.9rem;
+      border-bottom: 1px dotted var(--border);
+      transform: translateY(-0.28em);
+      transition: border-color 0.4s ease;
+    }
+    .cl-meta {
+      text-align: right;
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--text-soft);
+      line-height: 1.5;
+      transition: color 0.4s ease;
+    }
+    .cl-meta .cl-role { display: block; text-transform: uppercase; color: var(--leather-mid); }
+    .cl-meta .cl-years { display: block; }
+
+    /* hover: row fills terracotta, type inverts */
+    .cl-row:hover {
+      background: var(--terracotta);
+      color: var(--bg);
+      padding-left: 1.5rem;
+    }
+    .cl-row:hover .cl-idx,
+    .cl-row:hover .cl-meta,
+    .cl-row:hover .cl-meta .cl-role,
+    .cl-row:hover .cl-meta .cl-years { color: var(--bg); }
+    .cl-row:hover .cl-lead { border-color: rgba(245, 241, 235, 0.4); }
+
+    @media (max-width: 720px) {
+      .cred-ribbon { padding: 2.3rem 1.4rem 2rem; }
+      .cl-row {
+        grid-template-columns: 1.6rem 1fr;
+        row-gap: 0.25rem;
+        align-items: baseline;
+        padding: 0.9rem;
+      }
+      .cl-idx { grid-column: 1; grid-row: 1; }
+      .cl-namecell { grid-column: 2; grid-row: 1; }
+      .cl-name { font-size: clamp(1.55rem, 9vw, 2.4rem) !important; white-space: normal; }
+      .cl-lead { display: none; }
+      .cl-meta {
+        grid-column: 2; grid-row: 2;
+        text-align: left;
+        display: flex;
+        gap: 0.9rem;
+      }
+      .cl-meta .cl-role, .cl-meta .cl-years { display: inline; }
+      .cl-row:hover { padding-left: 0.9rem; }
     }
 
     /* ── GRID BACKGROUND ── */
@@ -1854,6 +1979,37 @@
     </div>
   </section>
 
+  <!-- CREDENTIAL LEDGER -->
+  <section class="cred-ribbon" aria-label="Background">
+    <h2 class="cl-headline" id="clHeadline">I've been around the block.</h2>
+    <div class="cl-head">
+      <span class="cl-eyebrow">Previously</span>
+      <span class="cl-range">01&ndash;04</span>
+    </div>
+    <ul class="cl-rows" id="credLedger">
+      <li class="cl-row">
+        <span class="cl-idx">01</span>
+        <span class="cl-namecell"><span class="cl-name">Switchyards</span><span class="cl-lead" aria-hidden="true"></span></span>
+        <span class="cl-meta"><span class="cl-role">GTM + Special Projects</span><span class="cl-years">2025</span></span>
+      </li>
+      <li class="cl-row">
+        <span class="cl-idx">02</span>
+        <span class="cl-namecell"><span class="cl-name">Street FC</span><span class="cl-lead" aria-hidden="true"></span></span>
+        <span class="cl-meta"><span class="cl-role">Head of Operations</span><span class="cl-years">2021&ndash;2025</span></span>
+      </li>
+      <li class="cl-row">
+        <span class="cl-idx">03</span>
+        <span class="cl-namecell"><span class="cl-name">Guild</span><span class="cl-lead" aria-hidden="true"></span></span>
+        <span class="cl-meta"><span class="cl-role">Assoc., Product Operations</span><span class="cl-years">2021&ndash;2022</span></span>
+      </li>
+      <li class="cl-row">
+        <span class="cl-idx">04</span>
+        <span class="cl-namecell"><span class="cl-name">The Walt Disney Company</span><span class="cl-lead" aria-hidden="true"></span></span>
+        <span class="cl-meta"><span class="cl-role">Operations Manager</span><span class="cl-years">2019&ndash;2021</span></span>
+      </li>
+    </ul>
+  </section>
+
   <!-- OFFER -->
   <section class="offer" id="offer">
     <h2 class="scroll-reveal" style="font-family: var(--display); font-size: clamp(2rem, 3.6vw, 2.8rem); font-weight: 700; color: var(--leather); margin-bottom: 0.75rem; line-height: 1.1;">What you can hire me for.</h2>
@@ -2431,6 +2587,71 @@
       document.fonts.ready.then(runLineMasks);
     } else {
       runLineMasks();
+    }
+
+    // ── CREDENTIAL LEDGER: fit big names to the column width ──
+    function fitLedger() {
+      var names = document.querySelectorAll('#credLedger .cl-name');
+      if (!names.length) return;
+      if (window.innerWidth <= 720) { names.forEach(function(n){ n.style.fontSize = ''; }); return; }
+      var size = 46; // max cap in px
+      names.forEach(function(n) {
+        var cell = n.parentElement;                  // .cl-namecell
+        n.style.fontSize = '100px';
+        var natural = n.scrollWidth;
+        var avail = cell.clientWidth - 44;           // reserve room for the dotted leader
+        if (avail > 20 && natural > 0) size = Math.min(size, 100 * avail / natural);
+      });
+      names.forEach(function(n){ n.style.fontSize = size + 'px'; });
+    }
+    fitLedger();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLedger);
+    window.addEventListener('resize', function(){ clearTimeout(window.__ledgerFit); window.__ledgerFit = setTimeout(fitLedger, 150); });
+
+    // ── LEDGER HEADLINE: scramble-decode on scroll ──
+    var clHeadline = document.getElementById('clHeadline');
+    if (clHeadline && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var clText = clHeadline.textContent;
+      clHeadline.textContent = ' ';
+      ScrollTrigger.create({
+        trigger: clHeadline,
+        start: 'top 82%',
+        once: true,
+        onEnter: function() {
+          gsap.to(clHeadline, {
+            duration: 1.0,
+            scrambleText: {
+              text: clText,
+              chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+              speed: 0.7,
+              revealDelay: 0.25
+            }
+          });
+        }
+      });
+    }
+
+    // ── CREDENTIAL LEDGER: rows wipe up on scroll ──
+    var credRows = document.querySelectorAll('#credLedger .cl-row');
+    if (credRows.length) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsap.set(credRows, { opacity: 1, clipPath: 'none' });
+      } else {
+        gsap.set(credRows, { clipPath: 'inset(0 0 100% 0)', opacity: 0, y: 14 });
+        gsap.to(credRows, {
+          clipPath: 'inset(0 0 0% 0)',
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.11,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '#credLedger',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        });
+      }
     }
 
     // ── OFFER LEDGER: simple stagger fade-in for the rows ──
