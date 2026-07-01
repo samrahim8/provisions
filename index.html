@@ -157,6 +157,21 @@
       color: var(--leather);
       margin-bottom: 1.4rem;
     }
+    .cl-word {
+      position: relative;
+      display: inline-block;
+    }
+    .cl-bar {
+      position: absolute;
+      left: -0.04em;
+      right: -0.04em;
+      top: 0.1em;
+      bottom: 0.12em;
+      background: var(--terracotta);
+      transform: scaleX(0);
+      transform-origin: right center;
+      pointer-events: none;
+    }
     .cl-head {
       display: flex;
       align-items: baseline;
@@ -1979,37 +1994,6 @@
     </div>
   </section>
 
-  <!-- CREDENTIAL LEDGER -->
-  <section class="cred-ribbon" aria-label="Background">
-    <h2 class="cl-headline" id="clHeadline">I've been around the block.</h2>
-    <div class="cl-head">
-      <span class="cl-eyebrow">Previously</span>
-      <span class="cl-range">01&ndash;04</span>
-    </div>
-    <ul class="cl-rows" id="credLedger">
-      <li class="cl-row">
-        <span class="cl-idx">01</span>
-        <span class="cl-namecell"><span class="cl-name">Switchyards</span><span class="cl-lead" aria-hidden="true"></span></span>
-        <span class="cl-meta"><span class="cl-role">GTM + Special Projects</span><span class="cl-years">2025</span></span>
-      </li>
-      <li class="cl-row">
-        <span class="cl-idx">02</span>
-        <span class="cl-namecell"><span class="cl-name">Street FC</span><span class="cl-lead" aria-hidden="true"></span></span>
-        <span class="cl-meta"><span class="cl-role">Head of Operations</span><span class="cl-years">2021&ndash;2025</span></span>
-      </li>
-      <li class="cl-row">
-        <span class="cl-idx">03</span>
-        <span class="cl-namecell"><span class="cl-name">Guild</span><span class="cl-lead" aria-hidden="true"></span></span>
-        <span class="cl-meta"><span class="cl-role">Assoc., Product Operations</span><span class="cl-years">2021&ndash;2022</span></span>
-      </li>
-      <li class="cl-row">
-        <span class="cl-idx">04</span>
-        <span class="cl-namecell"><span class="cl-name">The Walt Disney Company</span><span class="cl-lead" aria-hidden="true"></span></span>
-        <span class="cl-meta"><span class="cl-role">Operations Manager</span><span class="cl-years">2019&ndash;2021</span></span>
-      </li>
-    </ul>
-  </section>
-
   <!-- OFFER -->
   <section class="offer" id="offer">
     <h2 class="scroll-reveal" style="font-family: var(--display); font-size: clamp(2rem, 3.6vw, 2.8rem); font-weight: 700; color: var(--leather); margin-bottom: 0.75rem; line-height: 1.1;">What you can hire me for.</h2>
@@ -2037,6 +2021,37 @@
         <p class="lane-body">AI agents + automations, internal tools + dashboards, custom MVPs. AI-leveraged. Made to order.</p>
       </div>
     </div>
+  </section>
+
+  <!-- CREDENTIAL LEDGER -->
+  <section class="cred-ribbon" aria-label="Background">
+    <h2 class="cl-headline" id="clHeadline"><span class="cl-word"><span class="cl-word-text">I've</span><span class="cl-bar" aria-hidden="true"></span></span> <span class="cl-word"><span class="cl-word-text">been</span><span class="cl-bar" aria-hidden="true"></span></span> <span class="cl-word"><span class="cl-word-text">around</span><span class="cl-bar" aria-hidden="true"></span></span> <span class="cl-word"><span class="cl-word-text">the</span><span class="cl-bar" aria-hidden="true"></span></span> <span class="cl-word"><span class="cl-word-text">block.</span><span class="cl-bar" aria-hidden="true"></span></span></h2>
+    <div class="cl-head">
+      <span class="cl-eyebrow">Previously</span>
+      <span class="cl-range">01&ndash;04</span>
+    </div>
+    <ul class="cl-rows" id="credLedger">
+      <li class="cl-row">
+        <span class="cl-idx">01</span>
+        <span class="cl-namecell"><span class="cl-name">Switchyards</span><span class="cl-lead" aria-hidden="true"></span></span>
+        <span class="cl-meta"><span class="cl-role">GTM + Special Projects</span><span class="cl-years">2025</span></span>
+      </li>
+      <li class="cl-row">
+        <span class="cl-idx">02</span>
+        <span class="cl-namecell"><span class="cl-name">Street FC</span><span class="cl-lead" aria-hidden="true"></span></span>
+        <span class="cl-meta"><span class="cl-role">Head of Operations</span><span class="cl-years">2021&ndash;2025</span></span>
+      </li>
+      <li class="cl-row">
+        <span class="cl-idx">03</span>
+        <span class="cl-namecell"><span class="cl-name">Guild</span><span class="cl-lead" aria-hidden="true"></span></span>
+        <span class="cl-meta"><span class="cl-role">Assoc., Product Operations</span><span class="cl-years">2021&ndash;2022</span></span>
+      </li>
+      <li class="cl-row">
+        <span class="cl-idx">04</span>
+        <span class="cl-namecell"><span class="cl-name">The Walt Disney Company</span><span class="cl-lead" aria-hidden="true"></span></span>
+        <span class="cl-meta"><span class="cl-role">Operations Manager</span><span class="cl-years">2019&ndash;2021</span></span>
+      </li>
+    </ul>
   </section>
 
   <!-- WHAT IT'S LIKE -->
@@ -2608,27 +2623,26 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLedger);
     window.addEventListener('resize', function(){ clearTimeout(window.__ledgerFit); window.__ledgerFit = setTimeout(fitLedger, 150); });
 
-    // ── LEDGER HEADLINE: scramble-decode on scroll ──
+    // ── LEDGER HEADLINE: redacted → revealed on scroll ──
     var clHeadline = document.getElementById('clHeadline');
-    if (clHeadline && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      var clText = clHeadline.textContent;
-      clHeadline.textContent = ' ';
-      ScrollTrigger.create({
-        trigger: clHeadline,
-        start: 'top 82%',
-        once: true,
-        onEnter: function() {
-          gsap.to(clHeadline, {
-            duration: 1.0,
-            scrambleText: {
-              text: clText,
-              chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-              speed: 0.7,
-              revealDelay: 0.25
-            }
-          });
-        }
-      });
+    if (clHeadline) {
+      var clBars = clHeadline.querySelectorAll('.cl-bar');
+      if (clBars.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsap.set(clBars, { scaleX: 1, transformOrigin: 'right center' });
+        ScrollTrigger.create({
+          trigger: clHeadline,
+          start: 'top 82%',
+          once: true,
+          onEnter: function() {
+            gsap.to(clBars, {
+              scaleX: 0,
+              duration: 0.5,
+              stagger: 0.12,
+              ease: 'power3.inOut'
+            });
+          }
+        });
+      }
     }
 
     // ── CREDENTIAL LEDGER: rows wipe up on scroll ──
